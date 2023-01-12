@@ -1,0 +1,42 @@
+﻿@model HomeViewModel
+<form class="form" id="create-project" method="post">
+    <label><h2>Создание проекта</h2></label>
+    @if (ViewBag.ErrorMassage != "")
+    {<label><h2>@ViewBag.ErrorMassage</h2></label>}
+</form>
+<form class="form" id="create-task" method="post">
+
+    <label>Планируемая дата завершения</label>
+    <input name="plannedFinishDate" asp-for="nullProject.plannedFinishDate" class="form-control" value="@DateTime.Now.Date" />
+
+    <label>Облако</label>
+    <input name="link" asp-for="nullProject.link" class="form-control" />
+
+    <label>Шифр проекта</label>
+    <input name="code" asp-for="nullProject.code" class="form-control" />
+
+    <label>Ответственный</label>
+    <select name="supervisor" asp-for="nullProject.supervisor" class="form-control">
+        @foreach (var staff in Model.staffs.Where(p => p.roleId == 5))
+        {
+            <option>@staff.name</option>
+        }
+    </select>
+
+    <label>Приоритет</label>
+    <input name="priority" asp-for="nullProject.priority" class="form-control" />
+
+    <label>Краткое описание</label>
+    <textarea name="shortName" asp-for="nullProject.shortName" class="form-control"></textarea>
+
+    <label>Полное описание</label>
+    <textarea name="name" asp-for="nullProject.name" class="form-control"></textarea>
+
+    <label>Стадии проекта (через запятую)</label>
+    <textarea name="allStages" asp-for="nullProject.allStages" class="form-control"></textarea>
+
+
+
+    <input class="btn-white" type="submit" value="Сохранить"
+           asp-controller="Home" asp-action="addProjectToDB" />
+</form>

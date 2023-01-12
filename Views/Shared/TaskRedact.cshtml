@@ -1,0 +1,153 @@
+﻿@model HomeViewModel
+<form class="form" id="create-task" method="post">
+    <label><h2>Редактирование задачи</h2></label>
+    @if (ViewBag.ErrorMassage != "")
+    {<label><h2>@ViewBag.ErrorMassage</h2></label>}
+</form>
+
+<form class="form" id="form-redaction-task" method="post">
+
+    <input class="btn-white btn-top" type="submit" value="Отменить редактирование"
+           asp-controller="Home" asp-action="TaskTable"
+           asp-route-Taskid="@Model.redactedTask.id" />
+    @{
+        var roleSessionId = Model.roles.FirstOrDefault(p => p.name == ViewBag.Role).id;
+        var staffPost = Model.staffs.FirstOrDefault(p => p.name == Model.redactedTask.supervisor).post;
+        var supervisorRoleCode = Model.posts.FirstOrDefault(p => p.name == staffPost).roleCod;
+        var supervisorRoleId = Model.roles.FirstOrDefault(p => p.code == supervisorRoleCode).id;
+    }
+
+    @if (Model.redactedTask.date.Date >= DateTime.Now.Date &&
+roleSessionId >= supervisorRoleId)
+    {<label>Дата</label>
+        <input name="date" asp-for="@Model.redactedTask.date" type="date" class="form-control">
+        @Model.redactedTask.date.Date
+    }
+    else
+    {
+        <label>Дата (только для чтения)</label>
+        <input readonly name="date" asp-for="@Model.redactedTask.date" type="date" class="form-control"> @Model.redactedTask.date.Date
+    }
+
+    <label>Статус задачи</label>
+    <select name="status" asp-for="@Model.redactedTask.status">
+        <option value="@Model.redactedTask.status" selected hidden>@Model.redactedTask.status</option>
+        <option asp-for="stat">Создана</option>
+        <option asp-for="stat">В работе</option>
+        <option asp-for="stat">На паузе</option>
+        <option asp-for="stat">Выполнена</option>
+    </select>
+
+    <label>Комментарий</label>
+    <textarea name="comment" asp-for="@Model.redactedTask.comment" class="form-control">@Model.redactedTask.comment</textarea>
+
+
+    @if (roleSessionId > supervisorRoleId)
+    {<label>Ответственный</label>
+        @if (ViewBag.Role == "Директор")
+        {
+            @foreach (var staff in Model.staffs.Where(p => p.roleId == 5 || p.roleId == 3))
+            {
+                <option>@staff.name</option>
+            }
+        }
+        else if (ViewBag.Role == "ГИП")
+        {
+            @foreach (var staff in Model.staffs.Where(p => p.roleId == 4 || p.roleId == 3))
+            {
+                <option>@staff.name</option>
+            }
+        }
+        else if (ViewBag.Role == "Помощник ГИПа")
+        {
+            @foreach (var staff in Model.staffs.Where(p => p.roleId == 3))
+            {
+                <option>@staff.name</option>
+            }
+        }
+        else if (ViewBag.Role == "НО")
+        {
+            @foreach (var staff in Model.staffs.Where(p => p.roleId == 5 || p.roleId == 2 || p.roleId == 1))
+            {
+                <option>@staff.name</option>
+            }
+        }
+        else if (ViewBag.Role == "РГ")
+        {
+            @foreach (var staff in Model.staffs.Where(p => p.roleId == 1))
+            {
+                <option>@staff.name</option>
+            }
+        }
+    }
+    else
+    {<label>Ответственный  (только для чтения)</label>
+        <input readonly name="supervisor" asp-for="@Model.redactedTask.supervisor" class="form-control" value="@Model.redactedTask.supervisor">
+    }
+
+
+    @if (roleSessionId >= supervisorRoleId)
+    {<label>Исполнитель</label>
+     <select name="recipient" asp-for="@Model.redactedTask.recipient">
+         @if (ViewBag.Role == "Директор")
+         {
+             @foreach (var staff in Model.staffs.Where(p => p.roleId == 4 || p.roleId == 3))
+             {
+                 <option>@staff.name</option>
+             }
+         }
+         else if (ViewBag.Role == "ГИП")
+         {
+             @foreach (var staff in Model.staffs.Where(p => p.roleId == 3))
+             {
+                 <option>@staff.name</option>
+             }
+         }
+         else if (ViewBag.Role == "Помощник ГИПа")
+         {
+             @foreach (var staff in Model.staffs.Where(p => p.roleId == 5 || p.roleId == 2 || p.roleId == 1))
+             {
+                 <option>@staff.name</option>
+             }
+         }
+         else if (ViewBag.Role == "НО")
+         {
+             @foreach (var staff in Model.staffs.Where(p => p.roleId == 1))
+             {
+                 <option>@staff.name</option>
+             }
+         }
+     </select>
+    }
+    else
+    { <label>Исполнитель (только для чтения)</label>
+        <input readonly name="recipient" asp-for="@Model.redactedTask.recipient" class="form-control" value="@Model.redactedTask.recipient">
+    }
+
+
+    <label>Приоритет (только для чтения)</label>
+    <input readonly name="pririty" class="form-control" value="@Model.projects.FirstOrDefault(p => p.code == Model.redactedTask.projectCode).priority" />
+
+    @if (roleSessionId >= supervisorRoleId)
+    {<label>Планируемое время исполнения</label>
+        <input name="plannedTime" asp-for="@Model.redactedTask.plannedTime" class="form-control">
+        @Model.redactedTask.plannedTime
+    }
+    else
+    { <label>Планируемое время исполнения (только для чтения)</label>
+        <input readonly name="plannedTime" asp-for="@Model.redactedTask.plannedTime" class="form-control" value="@Model.redactedTask.plannedTime">
+    }
+
+    <label>Начало работы над задачей</label>
+    <input name="start" asp-for="@Model.redactedTask.start" class="form-control">@Model.redactedTask.start</input>
+
+    <label>Задача завершена</label>
+    <input name="finish" asp-for="@Model.redactedTask.finish" class="form-control">@Model.redactedTask.finish</input>
+
+
+
+    <input class="btn-white btn-top" type="submit" value="Сохранить"
+           asp-controller="Home" asp-action="RedactTaskToDB"
+           asp-route-iid="@Model.redactedTask.id" />
+
+</form>

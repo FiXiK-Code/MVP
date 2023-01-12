@@ -1,0 +1,125 @@
+﻿@model HomeViewModel
+<form class="form" id="create-task" method="post">
+    <label><h2>Создание задачи</h2></label>
+    @if (ViewBag.ErrorMassage != "")
+    {<label><h2>@ViewBag.ErrorMassage</h2></label>}
+</form>
+<form class="form" id="create-task" method="post">
+
+    <select name="liteTask">
+        <option asp-for="liteTask">Задача</option>
+        <option asp-for="liteTask">Подзадача</option>
+    </select>
+
+
+    <label>Дата</label>
+    <input name="date" id="statusId" asp-for="@Model.nullTask.date.Date" class="form-control" value="@DateTime.Now.Date" />
+
+    <label>Шифр задачи</label>
+    <input name="code" asp-for="@Model.nullTask.code" class="form-control" />
+
+    <label>Шифр проека</label>
+    <select name="projectCode" asp-for="@Model.nullTask.projectCode" class="form-control">
+        @foreach (var projCod in Model.projects)
+        {
+            <option asp-for="@Model.nullTask.projectCode">@projCod.code</option>
+        }
+    </select>
+
+    <label>Относится к (стадия проекта или шифр задачи)</label>
+    <input name="Stage" asp-for="@Model.nullTask.Stage" class="form-control" />
+
+    <label>Формулировка</label>
+    <textarea name="desc" asp-for="@Model.nullTask.desc" class="form-control"></textarea>
+
+    <label>Комментарий</label>
+    <textarea name="comment" asp-for="@Model.nullTask.comment" class="form-control"></textarea>
+
+
+
+    <label>Ответственный </label>
+    <select name="supervisor" asp-for="@Model.nullTask.supervisor" class="form-control">
+        <option value="@Model.nullTask.supervisor" selected hidden>@ViewBag.RoleName</option>
+        @if (ViewBag.Role == "Директор")
+        {
+            @foreach (var staff in Model.staffs.Where(p => p.roleId == 5 || p.roleId == 3))
+            {
+                <option>@staff.name</option>
+            }
+        }
+        else if (ViewBag.Role == "ГИП")
+        {
+            @foreach (var staff in Model.staffs.Where(p => p.roleId == 4 || p.roleId == 3))
+            {
+                <option>@staff.name</option>
+            }
+        }
+        else if (ViewBag.Role == "Помощник ГИПа")
+        {
+            @foreach (var staff in Model.staffs.Where(p => p.roleId == 3))
+            {
+                <option>@staff.name</option>
+            }
+        }
+        else if (ViewBag.Role == "НО")
+        {
+            @foreach (var staff in Model.staffs.Where(p => p.roleId == 5 || p.roleId == 2 || p.roleId == 1))
+            {
+                <option>@staff.name</option>
+            }
+        }
+        else if (ViewBag.Role == "РГ")
+        {
+            @foreach (var staff in Model.staffs.Where(p => p.roleId == 1))
+            {
+                <option>@staff.name</option>
+            }
+        }
+    </select>
+
+
+
+    <label>Исполнитель</label>
+    <select name="recipient" asp-for="@Model.nullTask.recipient" class="form-control">
+        <option value="@Model.nullTask.recipient" selected hidden></option>
+        @if (ViewBag.Role == "Директор")
+        {
+            @foreach (var staff in Model.staffs.Where(p => p.roleId == 4 || p.roleId == 3))
+            {
+                <option>@staff.name</option>
+            }
+        }
+        else if (ViewBag.Role == "ГИП")
+        {
+            @foreach (var staff in Model.staffs.Where(p => p.roleId == 3))
+            {
+                <option>@staff.name</option>
+            }
+        }
+        else if (ViewBag.Role == "Помощник ГИПа")
+        {
+            @foreach (var staff in Model.staffs.Where(p => p.roleId == 5 || p.roleId == 2 || p.roleId == 1))
+            {
+                <option>@staff.name</option>
+            }
+        }
+        else if (ViewBag.Role == "НО")
+        {
+            @foreach (var staff in Model.staffs.Where(p => p.roleId == 1))
+            {
+                <option>@staff.name</option>
+            }
+        }
+    </select>
+    <input  class="form-control" />
+
+
+
+
+    <label>Планируемое время исполнения</label>
+    <input name="plannedTime" asp-for="@Model.nullTask.plannedTime" class="form-control" />
+
+
+    <input class="btn-white" type="submit" value="Сохранить"
+           asp-controller="Home" asp-action="addTaskToDB" />
+</form>

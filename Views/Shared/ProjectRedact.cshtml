@@ -1,0 +1,47 @@
+﻿@model HomeViewModel
+<form class="form" id="create-task" method="post">
+    <label><h2>Редактирование проекта</h2></label>
+    @if (ViewBag.ErrorMassage != "")
+    {<label><h2>@ViewBag.ErrorMassage</h2></label>}
+</form>
+<form class="form" id="form-redaction-project" method="post">
+
+    <input class="btn-white btn-top" type="submit" value="Отменить редактирование"
+           asp-controller="Home" asp-action="TaskTable"
+           asp-route-Projid="@Model.redactedProject.id" />
+
+    <label>В архиве</label>
+    <input name="arhive" asp-for="@Model.redactedProject.archive" class="form-control" value="@Model.redactedProject.archive" />
+
+    <label>Облако</label>
+    <input name="link" asp-for="@Model.redactedProject.link" class="form-control" value="@Model.redactedProject.link" />
+
+    @if (ViewBag.Role == "Директор")
+    {<label>Ответственный</label>
+     <select name="supervisor" asp-for="nullProject.supervisor" class="form-control">
+         @foreach (var staff in Model.staffs.Where(p => p.roleId == 5))
+         {
+             <option>@staff.name</option>
+         }
+     </select>     
+    }
+    else
+    { <label>Ответственный (только для чтения)</label>
+                        <input readonly name="supervisor" asp-for="@Model.redactedProject.supervisor" class="form-control" value="@Model.redactedProject.supervisor">
+    }
+
+    <label>Приоритет</label>
+    <input name="priority" asp-for="@Model.redactedProject.priority" class="form-control">@Model.redactedProject.priority
+
+    <label>Стадии проекта</label>
+    <textarea name="allStages" asp-for="@Model.redactedProject.allStages" class="form-control">@Model.redactedProject.allStages</textarea>
+
+    <label>Комментарий к редактированию</label>
+    <textarea name="comment" class="form-control"></textarea>
+
+
+    <input class="btn-white btn-top" type="submit" value="Сохранить"
+           asp-controller="Home" asp-action="RedactProjectToDB"
+           asp-route-iid="@Model.redactedProject.id" />
+
+</form>

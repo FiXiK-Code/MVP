@@ -1,0 +1,140 @@
+﻿@model HomeViewModel
+
+<table class="table-project">
+    <colgroup>
+        <col span="1" id="row-title">
+    </colgroup>
+    <tr>
+        <th>Дата</th>
+        <th>Шифр</th>
+        <th>Шифр проекта</th>
+        <th>Задача</th>
+        <th>Статус</th>
+        <th>Ответственный</th>
+        <th>Переназначить</th>
+        <th>Приоритет</th>
+        <th>Комментарий</th>
+        <th>План время</th>
+        <th>Факт время</th>
+        <th>Начал</th>
+        <th>Завершил</th>
+    </tr>
+
+    @for (int i = 0; i < 3; i++)
+    {
+
+        if (i == 0)
+        {
+            <tr id="title"><th style="text-align:left" colspan="13">Выполненные задачи</th></tr>
+            foreach (Task task in Model.tasks.Where(p => p.status == "Выполнена").OrderBy(p => p.date))
+            {
+                <tr id="task">
+                    <th>@task.date.ToShortDateString()</th>
+                    <td>@task.code</td>
+                    <td>@task.projectCode</td>
+                    <td>
+                        <a asp-controller="Home" asp-action="TaskTable" asp-route-Taskid="@task.id">
+                            <button type="submit">@task.desc</button>
+                        </a>
+                    </td>
+                    <td>
+                        <form class="form" method="post">
+                            <select name="stat" asp-for="@task.status">
+                                <option value="@task.status" selected hidden>@task.status</option>
+                                <option asp-for="stat">Создана</option>
+                                <option asp-for="stat">В работе</option>
+                                <option asp-for="stat">На паузе</option>
+                                <option asp-for="stat">Выполнена</option>
+                            </select>
+                            <input class="btn-white" type="submit" value="Сохранить"
+                                   asp-controller="Home" asp-action="RedactSatusTask" asp-route-id="@task.id" />
+                        </form>
+                    </td>
+                    <td>@task.supervisor</td>
+                    <td>@task.recipient</td>
+                    <td>@task.priority</td>
+                    <td>@task.comment</td>
+                    <td>@task.plannedTime</td>
+                    <td>@task.actualTime</td>
+                    <td>@task.start</td>
+                    <td>@task.finish</td>
+                </tr>
+            }
+        }
+        if (i == 1)
+        {
+            <tr id="title"><th style="text-align:left" colspan="13">Задачи на сегодня</th></tr>
+            foreach (Task task in Model.tasks.Where(p => p.status != "Выполнена").Where(p => p.date.Date <= DateTime.Now.Date).OrderBy(p => p.date))
+            {
+                <tr id="task">
+                    <th>@task.date.Date.ToShortDateString()</th>
+                    <td>@task.code</td>
+                    <td>@task.projectCode</td>
+                    <td>
+                        <a asp-controller="Home" asp-action="TaskTable" asp-route-Taskid="@task.id">
+                            <button type="submit">@task.desc</button>
+                        </a>
+                    </td>
+                    <td><form class="form" method="post">
+                     <select name="stat" asp-for="@task.status">
+                            <option value="@task.status" selected hidden>@task.status</option>
+                            <option asp-for="stat">Создана</option>
+                            <option asp-for="stat">В работе</option>
+                            <option asp-for="stat">На паузе</option>
+                            <option asp-for="stat">Выполнена</option>
+                        </select>
+                     <input class="btn-white" type="submit" value="Сохранить"
+                            asp-controller="Home" asp-action="RedactSatusTask" asp-route-id="@task.id" />
+                    </form></td>
+                    <td>@task.supervisor</td>
+                    <td>@task.recipient</td>
+                    <td>@task.priority</td>
+                    <td>@task.comment</td>
+                    <td>@task.plannedTime</td>
+                    <td>@task.actualTime</td>
+                    <td>@task.start</td>
+                    <td>@task.finish</td>
+                </tr>
+            }
+        }
+        if (i == 2)
+        {
+            <tr id="title"><th style="text-align:left" colspan="13">Предстоящие задачи</th></tr>
+            foreach (Task task in Model.tasks.Where(p => p.date.Date > DateTime.Now.Date).OrderBy(p => p.date))
+            {
+                <tr id="task">
+                    <th>@task.date.ToShortDateString()</th>
+                    <td>@task.code</td>
+                    <td>@task.projectCode</td>
+                    <td>
+                        <a asp-controller="Home" asp-action="TaskTable" asp-route-Taskid="@task.id">
+                            <button type="submit">@task.desc</button>
+                        </a>
+                    </td>
+                    <td>
+                        <form class="form" method="post">
+                            <select name="stat" asp-for="@task.status">
+                                <option value="@task.status" selected hidden>@task.status</option>
+                                <option asp-for="stat">Создана</option>
+                                <option asp-for="stat">В работе</option>
+                                <option asp-for="stat">На паузе</option>
+                                <option asp-for="stat">Выполнена</option>
+                            </select>
+                            <input class="btn-white" type="submit" value="Сохранить"
+                                   asp-controller="Home" asp-action="RedactSatusTask" asp-route-id="@task.id" />
+                        </form>
+                    </td>
+                    <td>@task.supervisor</td>
+                    <td>@task.recipient</td>
+                    <td>@task.priority</td>
+                    <td>@task.comment</td>
+                    <td>@task.plannedTime</td>
+                    <td>@task.actualTime</td>
+                    <td>@task.start</td>
+                    <td>@task.finish</td>
+                </tr>
+            }
+        }
+    }
+
+</table>

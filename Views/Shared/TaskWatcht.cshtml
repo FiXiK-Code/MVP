@@ -1,0 +1,54 @@
+﻿@model Task
+<form class="form" id="create-task" method="post">
+    <label><h2>Просмотр задачи</h2></label>
+    @if (ViewBag.ErrorMassage != "")
+    {<label><h2>@ViewBag.ErrorMassage</h2></label>}
+</form>
+
+<form class="form" id="form-info-task" method="post">
+    <input class="btn-white btn-top" type="submit" value="Редактировать"
+           asp-controller="Home" asp-action="TaskTable"
+           asp-route-Taskid="@Model.id"
+           asp-route-TaskRed="@true" />
+
+    <label>Дата</label>
+    <input id="statusId" disabled class="form-control" value="@Model.date.ToShortDateString()" />
+
+    <label>Шифр задачи</label>
+    <input id="statusId" disabled class="form-control" value="@Model.code" />
+
+    <label>Шифр проека</label>
+    <input id="statusId" disabled class="form-control" value="@Model.projectCode" />
+
+    <label>Относится к</label>
+    <input id="statusId" disabled class="form-control" value="@Model.Stage" />
+
+    <label>Статус задачи</label>
+    <input id="statusId" disabled class="form-control" value="@Model.status" />
+
+    <label>Формулировка</label>
+    <textarea disabled>@Model.desc</textarea>
+
+    <label>Комментарий</label>
+    <textarea disabled>@Model.comment</textarea>
+
+    <label>Ответственный</label>
+    <input id="statusId" disabled class="form-control" value="@Model.supervisor" />
+
+    <label>Исполнитель</label>
+    <input id="statusId" disabled class="form-control" value="@Model.recipient" />
+
+    <label>Приоритет</label>
+    <input id="statusId" disabled class="form-control" value="@Model.priority" />
+
+    <label>Планируемое время исполнения</label>
+    <input id="statusId" disabled class="form-control" value="@Model.plannedTime" />
+
+    <label>Начало работы над задачей</label>
+    <input id="statusId" disabled class="form-control" value="@Model.start" />
+
+    <label>Задача завершена</label>
+    <input id="statusId" disabled class="form-control" value="@Model.finish" />
+
+
+</form>

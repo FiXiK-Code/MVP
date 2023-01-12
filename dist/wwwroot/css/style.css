@@ -1,0 +1,296 @@
+body {
+    background-color: #3a3a3a;
+    margin: 0;
+    font-size: 15px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+a {
+    text-decoration: none;
+
+}
+
+#link-aside {
+    color: #fff;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+select:hover {
+    cursor: pointer;
+}
+
+.main {
+    display: flex;
+}
+
+.post {
+    color: #fff;
+    border-bottom: 1px solid #fff;
+    padding-left: 10px;
+    padding-bottom: 20px;
+    padding-top: 10px;
+    margin: 0;
+}
+
+.task-menu {
+    width: 10%;
+    background-color: #000;
+}
+
+.task {
+    border-bottom: 1px solid #fff;
+    padding-left: 10px;
+    color: #fff;
+}
+
+.task:hover {
+    cursor: pointer;
+}
+
+.task p {
+    margin: 0;
+    padding: 15px 0;
+}
+
+.task-active {
+    border-bottom: 1px solid #fff;
+    padding-left: 10px;
+    background-color: #fff;
+    color: #000;
+}
+
+.task:hover {
+    background-color: #fff;
+    color: #000;
+}
+
+.content {
+    background-color: #eee;
+    width: 90%;
+    display: flex;
+}
+
+.top-bar {
+    display: flex;
+    justify-content: space-around;
+
+}
+
+.btn {
+    padding: 10px;
+    background-color: #000;
+    color: #fff;
+}
+
+.btn:hover {
+    background-color: #fff;
+    color: #000;
+}
+
+#select {
+    background-color: #000;
+    color: #fff;
+}
+
+.first-table {
+    display: none;
+    overflow-y: scroll;
+}
+
+.second-table {
+    display: none;
+    overflow-y: scroll;
+}
+
+.third-table {
+    display: none;
+    overflow-y: scroll;
+}
+
+.first-box {
+    width: 80%;
+    padding: 10px;
+}
+
+.second-box {
+    width: 20%;
+    background-color: #000;
+}
+
+.form {
+    display: grid;
+    padding: 25px;
+}
+
+label {
+    color: #fff;
+}
+
+
+.form-registartion {
+    width: 30%;
+    background-color: #FFFFFF;
+    margin: 0 auto;
+    padding: 100px 0;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    transform: translate(0, -50%);
+}
+
+.title {
+    text-align: center;
+    margin-bottom: 50px;
+}
+.btn-reg{
+    margin-top: 50px;
+}
+.form-autorithation {
+    display: grid;
+    padding: 0 137px;
+}
+
+.form-autorithation input {
+    margin-bottom: 20px;
+    height: 36px;
+    padding-left: 11px;
+    border: 2px solid #000000;
+    font-size: 16px;
+}
+
+.table {
+    padding: 0 10px;
+}
+
+.table-project {
+    border-collapse: collapse;
+    border: 1px solid #000;
+    line-height: 23px;
+    width: 100%;
+}
+
+.table-emploee {
+    border-collapse: collapse;
+    border: 1px solid #000;
+    line-height: 23px;
+    width: 100%;
+}
+
+.table-emploeey {
+    border-collapse: collapse;
+    border: 1px solid #000;
+    line-height: 23px;
+    width: 100%;
+}
+
+th,
+td {
+    border: 1px solid #000;
+    text-align: center;
+    padding: 10px;
+}
+
+#row-title {
+    background-color: #b1b1b1;
+}
+
+.select {
+    padding: 10px;
+}
+
+#select:hover {
+    background-color: #fff;
+    color: #000;
+}
+
+.data {
+    padding: 10px;
+    background-color: #000;
+    color: #fff;
+}
+
+.data:hover {
+    background-color: #fff;
+    color: #000;
+}
+
+.top-menu {
+    margin-bottom: 10px;
+}
+
+.table-emploee tbody td:nth-child(2n+2) {
+    background: #CCC;
+}
+
+.table-emploee tbody th:nth-child(2n+2) {
+    background: #CCC;
+}
+
+.table-emploeey tbody td:nth-child(2n+2) {
+    background: #CCC;
+}
+
+.table-emploeey tbody th:nth-child(2n+2) {
+    background: #CCC;
+}
+
+.form select {
+    margin-bottom: 20px;
+    padding: 5px;
+}
+
+.form label {
+    margin-bottom: 5px;
+}
+
+.form input {
+    line-height: 23px;
+    margin-bottom: 10px;
+}
+
+.btn-white {
+    margin-top: 10px;
+    padding: 10px;
+}
+
+.btn-white:hover {
+    background-color: #000;
+    border: 1px solid #fff;
+    color: #fff;
+    cursor: pointer;
+}
+
+.btn-top {
+    width: 40%;
+    margin: 0 0 10px 0;
+}
+
+.btn-top2 {
+    width: 70%;
+}
+
+#link-table {
+    color: #000;
+
+}
+
+#link-table:hover {
+    border-bottom: 2px solid #000;
+    font-weight: bold;
+}
+
+
+
+
+
+
+
+
