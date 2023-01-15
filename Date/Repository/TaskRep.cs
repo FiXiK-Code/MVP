@@ -51,7 +51,6 @@ namespace MVP.Date.Repository
                 task.recipient = recipient;
                 task.comment = comment;
                 task.plannedTime = plannedTime;
-                task.date = date;
                 task.priority = pririty;
                 if (task.status == "Создана" && status == "В работе")
                     task.start = DateTime.Now;

@@ -6,56 +6,84 @@
     </tr>
     <tr>
         <th>Шрифт</th>
-
-        @{foreach (Project project in Model.projects.OrderBy(p => p.code))
+        @{ List<string> projCod = new List<string>();
+            if (Model.filterResProj != "Все ответственные") {
+                foreach(var tast in Model.tasks.Where(p => p.supervisor == Model.filterResProj))
+                {
+                    if(!projCod.Contains(tast.projectCode))projCod.Add(tast.projectCode);
+                }
+            }else
             {
-                <th> <a asp-controller="Home" asp-action="TaskTable" asp-route-Projid="@project.id">@project.code</a></th>
+                foreach (var tast in Model.tasks)
+                {
+                    if (!projCod.Contains(tast.projectCode)) projCod.Add(tast.projectCode);
+                }
             }
         }
+        @foreach (Project project in Model.filterResProj != "Все ответственные" ? Model.projects.Where(p => projCod.Contains(p.code)).OrderBy(p => p.code) : Model.projects.OrderBy(p => p.code))
+        {
+                <th> <a asp-controller="Home" asp-action="TaskTable" asp-route-Projid="@project.id">@project.code</a></th>
+         }
+            
     </tr>
     <tr>
         <th>Срок</th>
 
-        @{foreach (Project project in Model.projects.OrderBy(p => p.code))
+        @foreach (Project project in Model.filterResProj != "Все ответственные" ? Model.projects.Where(p => projCod.Contains(p.code)).OrderBy(p => p.code) : Model.projects.OrderBy(p => p.code))
+        {
+            var date = project.plannedFinishDate.Date;
+            var day = date - DateTime.Now.Date;
+            if (day >= TimeSpan.Zero)
             {
-                var date = project.plannedFinishDate.Date;
-                var day = date - DateTime.Now.Date;
-                if (day >= TimeSpan.Zero && project.archive == "Нет")
+                if (project.archive == "Нет")
                 {
-                    <th style="background-color:green">
-                        <p>@date.ToShortDateString()</p>
-                        <p>Дней осталось: @day.Days </p>
-                    </th>
-                }
-                if (project.archive == "Нет" && day < TimeSpan.Zero)
-                {
-                    <th style="background-color:red">
-                        <p>@date.ToShortDateString()</p>
-                        <p>Дней Просрочено: @(day.Days*-1) </p>
-                    </th>
-                }
-                if (project.archive == "Да")
-                {
-                    <th style="background-color:orange">
-                        <p>Проект в архиве</p>
-                    </th>
+                <th style="background-color:green">
+                <p>@date.ToShortDateString()</p>
+                <p>Дней осталось: @day.Days </p>
+                </th>
+                }else { 
+                <th style="background-color:orange">
+                <p>Проект в архиве</p>
+                </th>
                 }
 
             }
-        }
+            else
+            {
+                if(project.archive == "Нет") {
+                <th style="background-color:red">
+                <p>@date.ToShortDateString()</p>
+                <p>Дней Просрочено: @(day.Days * -1) </p>
+                </th>
+                }else
+                {
+                <th style="background-color:orange">
+                <p>Проект в архиве</p>
+                </th>
+                }
+            
+            }
+         }
+            
+          
     </tr>
     <tr>
         <th>Облако</th>
 
-        @foreach (Project project in Model.projects.OrderBy(p => p.code))
+        @foreach (Project project in Model.filterResProj != "Все ответственные" ? Model.projects.Where(p => projCod.Contains(p.code)).OrderBy(p => p.code) : Model.projects.OrderBy(p => p.code))
         {
             <th>
                 <a href="@project.link">
-                    @for (int i = 0; i < 3; i++)
-                    {@project.link.Split('/')[i]; <text>/</text>}
+                    @if (project.link != null)
+                    {
+                        for (int i = 0; i < 3; i++)
+                        {
+                        @project.link.Split('/')[i]; <text>/</text>
+                        }
+                    }
                 </a>
             </th>
-        }
+            }
     </tr>
 
     @for (int i = 0; i < 3; i++)
@@ -63,7 +91,7 @@
         if (i == 0)
         {
             <tr id="title">
-                <th colspan="12" style="text-align:left ;background-color:#cccccc">Выполненные задачи</th>
+                <th colspan="@(Model.projects.Count()+2)" style="text-align:left ;background-color:#cccccc">Выполненные задачи</th>
             </tr>
             List<Task> Taskss = Model.projectTasks.Where(p => p.status == "Выполнена").OrderBy(p => p.date).ToList();
             for ( int j = 0; j < Taskss.Count(); j++)
@@ -71,7 +99,7 @@
                 if (j + 1 != Taskss.Count() && Taskss[j + 1].date.Date == Taskss[j].date.Date) continue;
                 <tr id="task">
                     <th colspan="2">@Taskss[j].date.ToShortDateString()</th>
-                    @foreach (Project project in Model.projects.OrderBy(p => p.code))
+                    @foreach (Project project in Model.filterResProj != "Все ответственные" ? Model.projects.Where(p => projCod.Contains(p.code)).OrderBy(p => p.code) : Model.projects.OrderBy(p => p.code))
                     {
                         if (Model.projectTasks.Where(p => p.projectCode == project.code).Where(p => p.date == Taskss[j].date).Where(p => p.status == "Выполнена").Count() == 0)
                         {
@@ -95,7 +123,7 @@
         if (i == 1)
         {
             <tr id="title">
-                <th colspan="12" style="text-align:left ;background-color:#cccccc">Задачи на сегодня</th>
+                <th colspan="@(Model.projects.Count()+2)" style="text-align:left ;background-color:#cccccc">Задачи на сегодня</th>
             </tr>
             List<Task> Taskss = Model.projectTasks.Where(p => p.status != "Выполнена").Where(p => p.date.Date <= DateTime.Now.Date).OrderBy(p => p.date).ToList();
             for(int j = 0; j < Taskss.Count(); j++)
@@ -103,7 +131,7 @@
                 if (j + 1 != Taskss.Count() && Taskss[j].date.Date == Taskss[j + 1].date.Date) continue;
                 <tr id="task">
                     <th colspan="2">@Taskss[j].date.ToShortDateString()</th>
-                    @foreach (Project project in Model.projects.OrderBy(p => p.code))
+                    @foreach (Project project in Model.filterResProj != "Все ответственные" ? Model.projects.Where(p => projCod.Contains(p.code)).OrderBy(p => p.code) : Model.projects.OrderBy(p => p.code))
                     {
                         if (Model.projectTasks.Where(p => p.projectCode == project.code).Where(p => p.date.Date == Taskss[j].date.Date).Where(p => p.status != "Выполнена").Count() == 0)
                         {
@@ -127,7 +155,7 @@
         if (i == 2)
         {
             <tr id="title">
-                <th colspan="12" style="text-align:left ;background-color:#cccccc">Предстоящие задачи</th>
+                <th colspan="@(Model.projects.Count()+2)" style="text-align:left ;background-color:#cccccc">Предстоящие задачи</th>
             </tr>
             List<Task> Taskss = Model.projectTasks.Where(p => p.status != "Выполнена").Where(p => p.date.Date > DateTime.Now.Date).OrderBy(p => p.date).ToList();
             for(int j = 0; j < Taskss.Count(); j++)
@@ -135,14 +163,14 @@
                 if (j + 1 != Taskss.Count() && Taskss[j].date.Date == Taskss[j + 1].date.Date) continue;
                 <tr id="task">
                     <th colspan="2">@Taskss[j].date.ToShortDateString()</th>
-                    @foreach (Project project in Model.projects.OrderBy(p => p.code))
+                    @foreach (Project project in Model.filterResProj != "Все ответственные" ? Model.projects.Where(p => projCod.Contains(p.code)).OrderBy(p => p.code) : Model.projects.OrderBy(p => p.code))
                     {
                         if (Model.projectTasks.Where(p => p.projectCode == project.code).Where(p => p.date.Date == Taskss[j].date.Date).Where(p => p.status != "Выполнена").Count() == 0)
                         {
                             <td>Нет задач</td>
-                        }
-                        else
-                        {
+                            }
+                            else
+                            {
                 <td>
                     @foreach (Task task1 in Model.projectTasks.Where(p => p.status != "Выполнена").Where(p => p.date.Date == Taskss[j].date.Date).Where(p => p.projectCode == project.code))
                     {
@@ -151,8 +179,9 @@
                         </a>
                     }
                 </td>
+                            }
                         }
-                    }
+                    
                 </tr>
             }
         }

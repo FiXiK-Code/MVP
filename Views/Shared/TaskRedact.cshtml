@@ -42,75 +42,39 @@ roleSessionId >= supervisorRoleId)
     <textarea name="comment" asp-for="@Model.redactedTask.comment" class="form-control">@Model.redactedTask.comment</textarea>
 
 
-    @if (roleSessionId > supervisorRoleId)
-    {<label>Ответственный</label>
-        @if (ViewBag.Role == "Директор")
-        {
-            @foreach (var staff in Model.staffs.Where(p => p.roleId == 5 || p.roleId == 3))
-            {
-                <option>@staff.name</option>
-            }
-        }
-        else if (ViewBag.Role == "ГИП")
-        {
-            @foreach (var staff in Model.staffs.Where(p => p.roleId == 4 || p.roleId == 3))
-            {
-                <option>@staff.name</option>
-            }
-        }
-        else if (ViewBag.Role == "Помощник ГИПа")
-        {
-            @foreach (var staff in Model.staffs.Where(p => p.roleId == 3))
-            {
-                <option>@staff.name</option>
-            }
-        }
-        else if (ViewBag.Role == "НО")
-        {
-            @foreach (var staff in Model.staffs.Where(p => p.roleId == 5 || p.roleId == 2 || p.roleId == 1))
-            {
-                <option>@staff.name</option>
-            }
-        }
-        else if (ViewBag.Role == "РГ")
-        {
-            @foreach (var staff in Model.staffs.Where(p => p.roleId == 1))
-            {
-                <option>@staff.name</option>
-            }
-        }
-    }
-    else
-    {<label>Ответственный  (только для чтения)</label>
-        <input readonly name="supervisor" asp-for="@Model.redactedTask.supervisor" class="form-control" value="@Model.redactedTask.supervisor">
-    }
-
-
     @if (roleSessionId >= supervisorRoleId)
-    {<label>Исполнитель</label>
-     <select name="recipient" asp-for="@Model.redactedTask.recipient">
+    {<label>Ответственный</label>
+     <select name="supervisor" asp-for="@Model.redactedTask.supervisor">
+         <option asp-for="@Model.redactedTask.supervisor" selected hidden>@Model.redactedTask.supervisor</option>
          @if (ViewBag.Role == "Директор")
          {
-             @foreach (var staff in Model.staffs.Where(p => p.roleId == 4 || p.roleId == 3))
+             @foreach (var staff in Model.staffs.Where(p => p.roleId == 5 || p.roleId == 3))
              {
                  <option>@staff.name</option>
              }
          }
          else if (ViewBag.Role == "ГИП")
          {
-             @foreach (var staff in Model.staffs.Where(p => p.roleId == 3))
+             @foreach (var staff in Model.staffs.Where(p => p.roleId == 4 || p.roleId == 3))
              {
                  <option>@staff.name</option>
              }
          }
          else if (ViewBag.Role == "Помощник ГИПа")
          {
-             @foreach (var staff in Model.staffs.Where(p => p.roleId == 5 || p.roleId == 2 || p.roleId == 1))
+             @foreach (var staff in Model.staffs.Where(p => p.roleId == 3))
              {
                  <option>@staff.name</option>
              }
          }
          else if (ViewBag.Role == "НО")
+         {
+             @foreach (var staff in Model.staffs.Where(p => p.roleId == 5 || p.roleId == 2 || p.roleId == 1))
+             {
+                 <option>@staff.name</option>
+             }
+         }
+         else if (ViewBag.Role == "РГ")
          {
              @foreach (var staff in Model.staffs.Where(p => p.roleId == 1))
              {
@@ -120,29 +84,79 @@ roleSessionId >= supervisorRoleId)
      </select>
     }
     else
-    { <label>Исполнитель (только для чтения)</label>
-        <input readonly name="recipient" asp-for="@Model.redactedTask.recipient" class="form-control" value="@Model.redactedTask.recipient">
+    {
+        <label>Ответственный  (только для чтения)</label>
+        <input readonly name="supervisor" asp-for="@Model.redactedTask.supervisor" class="form-control" value="@Model.redactedTask.supervisor">
     }
 
 
+    @if (roleSessionId >= supervisorRoleId)
+    {
+        <label>Исполнитель</label>
+        <select name="recipient" asp-for="@Model.redactedTask.recipient">
+            <option asp-for="@Model.redactedTask.recipient" selected hidden>@Model.redactedTask.recipient</option>
+            @if (ViewBag.Role == "Директор")
+            {
+                @foreach (var staff in Model.staffs.Where(p => p.roleId == 4 || p.roleId == 3))
+                {
+                    <option>@staff.name</option>
+                }
+            }
+            else if (ViewBag.Role == "ГИП")
+            {
+                @foreach (var staff in Model.staffs.Where(p => p.roleId == 3))
+                {
+                    <option>@staff.name</option>
+                }
+            }
+            else if (ViewBag.Role == "Помощник ГИПа")
+            {
+                @foreach (var staff in Model.staffs.Where(p => p.roleId == 5 || p.roleId == 2 || p.roleId == 1))
+                {
+                    <option>@staff.name</option>
+                }
+            }
+            else if (ViewBag.Role == "НО")
+            {
+                @foreach (var staff in Model.staffs.Where(p => p.roleId == 1))
+                {
+                    <option>@staff.name</option>
+                }
+            }
+        </select>
+    }
+    else
+    {
+        <label>Исполнитель (только для чтения)</label>
+        <input readonly name="recipient" asp-for="@Model.redactedTask.recipient" class="form-control" value="@Model.redactedTask.recipient">
+    }
+
+    @{
+        int priority = 0;
+        if (Model.projects.FirstOrDefault(p => p.code == Model.redactedTask.projectCode) != null) priority = Model.projects.FirstOrDefault(p => p.code == Model.redactedTask.projectCode).priority;
+    }
     <label>Приоритет (только для чтения)</label>
-    <input readonly name="pririty" class="form-control" value="@Model.projects.FirstOrDefault(p => p.code == Model.redactedTask.projectCode).priority" />
+    <input readonly name="pririty" class="form-control" value="@priority" />
 
     @if (roleSessionId >= supervisorRoleId)
-    {<label>Планируемое время исполнения</label>
+    {
+        <label>Планируемое время исполнения</label>
         <input name="plannedTime" asp-for="@Model.redactedTask.plannedTime" class="form-control">
         @Model.redactedTask.plannedTime
     }
     else
-    { <label>Планируемое время исполнения (только для чтения)</label>
+    {
+        <label>Планируемое время исполнения (только для чтения)</label>
         <input readonly name="plannedTime" asp-for="@Model.redactedTask.plannedTime" class="form-control" value="@Model.redactedTask.plannedTime">
     }
 
     <label>Начало работы над задачей</label>
-    <input name="start" asp-for="@Model.redactedTask.start" class="form-control">@Model.redactedTask.start</input>
+    <input name="start" asp-for="@Model.redactedTask.start" class="form-control">
+    @Model.redactedTask.start</input>
 
     <label>Задача завершена</label>
-    <input name="finish" asp-for="@Model.redactedTask.finish" class="form-control">@Model.redactedTask.finish</input>
+    <input name="finish" asp-for="@Model.redactedTask.finish" class="form-control">
+    @Model.redactedTask.finish</input>
 
 
 

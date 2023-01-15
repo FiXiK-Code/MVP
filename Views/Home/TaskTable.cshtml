@@ -63,7 +63,7 @@
                     @Html.Partial("TaskTableTest")
                 </div>
                 <div class="second-table">
-                    <form class="top-menu" asp-controller="Home" asp-action="TaskTable">
+                    <form class="top-menu" asp-controller="Home" asp-action="TaskTable" >
                         @if (ViewBag.Role != "Сотрудник")
                         {
                             <a asp-controller="Home" asp-action="TaskTable">
@@ -84,7 +84,7 @@
                         <select class="select" id="select" name="supervisorProjectFilter">
                             <option value="@Model.filterSupProj" selected hidden>@Model.filterSupProj</option>
                             <option>Все ГИПы</option>
-                            @foreach (Staff staff in Model.staffs.Where(p => p.post == "ГИП").OrderBy(p => p.name))
+                            @foreach (Staff staff in Model.staffs.Where(p => p.roleId == 5).OrderBy(p => p.name))
                             {
                                 <option>@staff.name</option>
                             }
@@ -92,12 +92,15 @@
 
                         <select class="select" id="select" name="recipientProjectFilter">
                             <option value="@Model.filterResProj" selected hidden>@Model.filterResProj</option>
-                            <option>Все исполнители</option>
-                            @{List<Task> task = Model.tasks.ToList();
-                                for (int i = 0; i < task.Count(); i++)
+                            <option>Все ответственные</option>
+                            @{List<string> taskSuper = new List<string>();
+                                foreach (var task in Model.tasks)
                                 {
-                                    if (i + 1 != task.Count() && task[i + 1].recipient == task[i].recipient) continue;
-                                    <option>@task[i].recipient</option>
+                                    if (!taskSuper.Contains(task.supervisor))
+                                    {
+                                        <option>@task.supervisor</option>
+                                        taskSuper.Add(task.supervisor);
+                                    }
                                 }
 
                             }

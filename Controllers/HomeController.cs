@@ -92,8 +92,10 @@ namespace MVP.Controllers
                 return RedirectToAction("TaskTable", new { Taskid = iid, meesage = msg, TaskRed = true });
             }
             else
-            {
-                _project.NextStage(_appDB.DBProject.FirstOrDefault(p => p.code == _appDB.DBTask.FirstOrDefault(p => p.id == iid).projectCode).id);
+            { 
+                var projCod = _appDB.DBTask.FirstOrDefault(p => p.id == iid).projectCode;
+                var projId = _appDB.DBProject.FirstOrDefault(p => p.code == projCod) != null ? _appDB.DBProject.FirstOrDefault(p => p.code == projCod).id : -1;
+                _project.NextStage(projId);
 
                 var roleSession = JsonConvert.DeserializeObject<SessionRoles>(HttpContext.Session.GetString("Session"));
 
@@ -103,14 +105,13 @@ namespace MVP.Controllers
                     TaskId = iid,
                     descTask = _appDB.DBTask.FirstOrDefault(p => p.id == iid).desc,
                     supervisorId = _appDB.DBStaff.FirstOrDefault(p => p.name == supervisor).id,
-                    resipienId = _appDB.DBStaff.FirstOrDefault(p => p.name == recipient).id,
+                    resipienId = recipient != null? _appDB.DBStaff.FirstOrDefault(p => p.name == recipient).id : -1,
                     dateRedaction = DateTime.Now,
                     planedTime = plannedTime,
                     actualTime = new TimeSpan(),
                     CommitorId = _appDB.DBStaff.FirstOrDefault(p => p.name == roleSession.SessionName).id,
                     taskStatusId = _appDB.DBTaskStatus.FirstOrDefault(p => p.name == status).id,
                     comment = comment
-
                 };
                 _logistickTask.addToDB(item);
                 if (status == "Создана") await TimerPauseTask(iid);
@@ -151,8 +152,8 @@ namespace MVP.Controllers
                 supervisor = supervisor,
                 link = link,
                 archive = "Нет",
-                nowStage = allStages.Split(',')[0],
-                allStages =allStages,
+                nowStage = allStages == null? "" : allStages.Split(',')[0],
+                allStages = allStages,
                 history = $"{DateTime.Now} - Проект создан"
             };
             _project.addToDB(item);
@@ -173,63 +174,54 @@ namespace MVP.Controllers
             )
         {
             var roleSession = JsonConvert.DeserializeObject<SessionRoles>(HttpContext.Session.GetString("Session"));
-            var staff = _staff.AllStaffs.FirstOrDefault(p => p.name == recipient).post;
-            var cod = _post.AllPosts.FirstOrDefault(p => p.name == staff).roleCod;
-            var staffRoleId = _role.AllRoles.FirstOrDefault(p => p.code == cod).id;
-            if (_role.AllRoles.FirstOrDefault(p => p.name == roleSession.SessionRole).id <= staffRoleId)
+
+            try
             {
-                return RedirectToAction("TaskTable", new { meesage = "Можно выбрать подчиненного только в соответсвии с вашей ролью!"});
-            }
-            else
-            {
-                try
-                {
-                    if (projectCode != _appDB.DBProject.FirstOrDefault(p => p.code == projectCode).code)
-                    {
-                        return RedirectToAction("TaskTable", new { meesage = "Не коррестный код проекта!" });
-                    }
-                }
-                catch (Exception)
+                if (projectCode != _appDB.DBProject.FirstOrDefault(p => p.code == projectCode).code)
                 {
                     return RedirectToAction("TaskTable", new { meesage = "Не коррестный код проекта!" });
                 }
-                var item = new Tasks
-                {
-                    code = code,
-                    desc = desc,
-                    projectCode = projectCode,
-                    supervisor = supervisor,
-                    recipient = recipient,
-                    priority = _appDB.DBProject.FirstOrDefault(p => p.code == projectCode).priority,
-                    comment = comment,
-                    plannedTime = plannedTime,
-                    date = date,
-                    Stage = Stage,
-                    status = "Создана",
-                    liteTask = liteTask == "Подзадача" ? true : false
-                };
-                _task.addToDB(item);
-
-                var iid = _appDB.DBTask.FirstOrDefault(p => p.code == code).id;
-                LogistickTask log = new LogistickTask()
-                {
-                    ProjectCode = _appDB.DBTask.FirstOrDefault(p => p.id == iid).projectCode,
-                    TaskId = iid,
-                    descTask = _appDB.DBTask.FirstOrDefault(p => p.id == iid).desc,
-                    supervisorId = _appDB.DBStaff.FirstOrDefault(p => p.name == supervisor).id,
-                    resipienId = _appDB.DBStaff.FirstOrDefault(p => p.name == recipient).id,
-                    dateRedaction = DateTime.Now,
-                    planedTime = plannedTime,
-                    actualTime = new TimeSpan(),
-                    CommitorId = _appDB.DBStaff.FirstOrDefault(p => p.name == roleSession.SessionName).id,
-                    taskStatusId = _appDB.DBTaskStatus.FirstOrDefault(p => p.name == "Создана").id,
-                    comment = comment
-                };
-                _logistickTask.addToDB(log);
-
-
-                return RedirectToAction("TaskTable");
             }
+            catch (Exception)
+            {
+                return RedirectToAction("TaskTable", new { meesage = "Не коррестный код проекта!" });
+            }
+            var item = new Tasks
+            {
+                desc = desc,
+                projectCode = projectCode,
+                supervisor = supervisor,
+                recipient = recipient,
+                priority = _appDB.DBProject.FirstOrDefault(p => p.code == projectCode).priority,
+                comment = comment,
+                plannedTime = plannedTime,
+                date = date,
+                Stage = Stage,
+                status = "Создана",
+                liteTask = liteTask == "Подзадача" ? true : false
+            };
+            _task.addToDB(item);
+
+            var iid = _appDB.DBTask.FirstOrDefault(p => p.desc == desc).id;
+            LogistickTask log = new LogistickTask()
+            {
+                ProjectCode = _appDB.DBTask.FirstOrDefault(p => p.id == iid).projectCode,
+                TaskId = iid,
+                descTask = _appDB.DBTask.FirstOrDefault(p => p.id == iid).desc,
+                supervisorId = _appDB.DBStaff.FirstOrDefault(p => p.name == supervisor).id,
+                resipienId = recipient != null ? _appDB.DBStaff.FirstOrDefault(p => p.name == recipient).id : -1,
+                dateRedaction = DateTime.Now,
+                planedTime = plannedTime,
+                actualTime = new TimeSpan(),
+                CommitorId = _appDB.DBStaff.FirstOrDefault(p => p.name == roleSession.SessionName).id,
+                taskStatusId = _appDB.DBTaskStatus.FirstOrDefault(p => p.name == "Создана").id,
+                comment = comment
+            };
+            _logistickTask.addToDB(log);
+
+
+            return RedirectToAction("TaskTable");
+
         }
 
 
@@ -267,9 +259,9 @@ namespace MVP.Controllers
             {
                 projects = projects.Where(p => p.supervisor == supervisorProjectFilter);
             }
-            if(recipientProjectFilter != "Все исполнители" && recipientProjectFilter != "")
+            if(recipientProjectFilter != "Все ответственные" && recipientProjectFilter != "")
             {
-                tasks = tasks.Where(p => p.recipient == recipientProjectFilter);
+                tasks = tasks.Where(p => p.supervisor == recipientProjectFilter);
             }
 
             HomeViewModel homeTasks = new HomeViewModel
@@ -280,7 +272,7 @@ namespace MVP.Controllers
                 filterStaff = staffTableFilter == "" ? "Все должности" : staffTableFilter,
                 filterProj = porjectFiltr == "" ? "Все проекты" : porjectFiltr,
                 filterSupProj = supervisorProjectFilter == "" ? "Все ГИПы" : supervisorProjectFilter,
-                filterResProj = recipientProjectFilter == "" ? "Все исполнители" : recipientProjectFilter,
+                filterResProj = recipientProjectFilter == "" ? "Все ответственные" : recipientProjectFilter,
 
                 projectTasks = tasks,
                 projects = projects,

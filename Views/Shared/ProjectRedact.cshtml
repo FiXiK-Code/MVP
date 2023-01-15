@@ -16,9 +16,10 @@
     <label>Облако</label>
     <input name="link" asp-for="@Model.redactedProject.link" class="form-control" value="@Model.redactedProject.link" />
 
-    @if (ViewBag.Role == "Директор")
+    @if (ViewBag.Role == "Директор" || ViewBag.Role == "ГИП")
     {<label>Ответственный</label>
-     <select name="supervisor" asp-for="nullProject.supervisor" class="form-control">
+     <select name="supervisor" asp-for="redactedProject.supervisor" class="form-control">
+         <option asp-for="@Model.redactedProject.supervisor" selected hidden>@Model.redactedProject.supervisor</option>
          @foreach (var staff in Model.staffs.Where(p => p.roleId == 5))
          {
              <option>@staff.name</option>
@@ -27,7 +28,7 @@
     }
     else
     { <label>Ответственный (только для чтения)</label>
-                        <input readonly name="supervisor" asp-for="@Model.redactedProject.supervisor" class="form-control" value="@Model.redactedProject.supervisor">
+        <input readonly name="supervisor" asp-for="@Model.redactedProject.supervisor" class="form-control" value="@Model.redactedProject.supervisor">
     }
 
     <label>Приоритет</label>

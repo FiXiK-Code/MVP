@@ -27,7 +27,7 @@ namespace MVP.Date.Repository
         {
             if (_appDB.DBTask.Where(p=>p.liteTask == false)
                 .Where(i => i.Stage == _appDB.DBProject.FirstOrDefault(p => p.id == projectId).nowStage)
-                .Where(i => i.status != "Выполнена").Count() == 0)
+                .Where(i => i.status != "Выполнена").Count() == 0 && projectId != -1)
             {
                 Project proj = _appDB.DBProject.FirstOrDefault(p => p.id == projectId);
                 if (_appDB.DBStage.Where(p => p.stageId == projectId)
@@ -60,18 +60,22 @@ namespace MVP.Date.Repository
             _appDB.DBProject.Add(project);
             _appDB.SaveChanges();
             var i = 0;
-            foreach(var stage in project.allStages.Split(','))
+            if(project.allStages != null)
             {
-                var elem = new Stage()
+                foreach (var stage in project.allStages.Split(','))
                 {
-                    stageId = i,
-                    name = stage,
-                    projectId = project.id
-                };
-                _appDB.DBStage.Add(elem);
-                _appDB.SaveChanges();
-                i++;
+                    var elem = new Stage()
+                    {
+                        stageId = i,
+                        name = stage,
+                        projectId = project.id
+                    };
+                    _appDB.DBStage.Add(elem);
+                    _appDB.SaveChanges();
+                    i++;
+                }
             }
+            
             
         }
 
