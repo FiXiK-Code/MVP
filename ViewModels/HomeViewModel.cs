@@ -38,5 +38,12 @@ namespace MVP.ViewModels
         public bool ProjectCreate { get; set; }
 
         public SessionRoles session { get; set; }
+
+
+        public string activeTable1 { get; set; }
+        public string activeTable2 { get; set; }
+        public string activeTable3 { get; set; }
+
+        public int activeTableIndex { get; set; }
     }
 }

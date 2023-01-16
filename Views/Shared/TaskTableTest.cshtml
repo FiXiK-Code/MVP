@@ -33,7 +33,7 @@
                     <td>@task.code</td>
                     <td>@task.projectCode</td>
                     <td>
-                        <a asp-controller="Home" asp-action="TaskTable" asp-route-Taskid="@task.id">
+                        <a asp-controller="Home" asp-action="TaskTable" asp-route-activTable="0" asp-route-Taskid="@task.id">
                             <button type="submit">@task.desc</button>
                         </a>
                     </td>
@@ -47,7 +47,7 @@
                                 <option asp-for="stat">Выполнена</option>
                             </select>
                             <input class="btn-white" type="submit" value="Сохранить"
-                                   asp-controller="Home" asp-action="RedactSatusTask" asp-route-id="@task.id" />
+                                   asp-controller="Home" asp-action="RedactSatusTask" asp-route-activTable="0" asp-route-id="@task.id" />
                         </form>
                     </td>
                     <td>@task.supervisor</td>
@@ -71,21 +71,23 @@
                     <td>@task.code</td>
                     <td>@task.projectCode</td>
                     <td>
-                        <a asp-controller="Home" asp-action="TaskTable" asp-route-Taskid="@task.id">
+                        <a asp-controller="Home" asp-action="TaskTable" asp-route-activTable="0" asp-route-Taskid="@task.id">
                             <button type="submit">@task.desc</button>
                         </a>
                     </td>
-                    <td><form class="form" method="post">
-                     <select name="stat" asp-for="@task.status">
-                            <option value="@task.status" selected hidden>@task.status</option>
-                            <option asp-for="stat">Создана</option>
-                            <option asp-for="stat">В работе</option>
-                            <option asp-for="stat">На паузе</option>
-                            <option asp-for="stat">Выполнена</option>
-                        </select>
-                     <input class="btn-white" type="submit" value="Сохранить"
-                            asp-controller="Home" asp-action="RedactSatusTask" asp-route-id="@task.id" />
-                    </form></td>
+                    <td>
+                        <form class="form" method="post">
+                            <select name="stat" asp-for="@task.status">
+                                <option value="@task.status" selected hidden>@task.status</option>
+                                <option asp-for="stat">Создана</option>
+                                <option asp-for="stat">В работе</option>
+                                <option asp-for="stat">На паузе</option>
+                                <option asp-for="stat">Выполнена</option>
+                            </select>
+                            <input class="btn-white" type="submit" value="Сохранить"
+                                   asp-controller="Home" asp-action="RedactSatusTask" asp-route-activTable="0" asp-route-id="@task.id" />
+                        </form>
+                    </td>
                     <td>@task.supervisor</td>
                     <td>@task.recipient</td>
                     <td>@task.priority</td>
@@ -107,7 +109,7 @@
                     <td>@task.code</td>
                     <td>@task.projectCode</td>
                     <td>
-                        <a asp-controller="Home" asp-action="TaskTable" asp-route-Taskid="@task.id">
+                        <a asp-controller="Home" asp-action="TaskTable" asp-route-activTable="0" asp-route-Taskid="@task.id">
                             <button type="submit">@task.desc</button>
                         </a>
                     </td>
@@ -121,7 +123,7 @@
                                 <option asp-for="stat">Выполнена</option>
                             </select>
                             <input class="btn-white" type="submit" value="Сохранить"
-                                   asp-controller="Home" asp-action="RedactSatusTask" asp-route-id="@task.id" />
+                                   asp-controller="Home" asp-action="RedactSatusTask" asp-route-activTable="0" asp-route-id="@task.id" />
                         </form>
                     </td>
                     <td>@task.supervisor</td>

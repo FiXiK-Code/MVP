@@ -16,7 +16,7 @@
     <input name="date" asp-for="@Model.nullTask.date.Date" class="form-control" value="@DateTime.Now.Date" />
 
     <label>Шифр задачи</label>
-    <input name="code" asp-for="@Model.nullTask.code" class="form-control"/>
+    <input name="code" asp-for="@Model.nullTask.code" class="form-control" />
 
     <label>Шифр проека</label>
     <select name="projectCode" asp-for="@Model.nullTask.projectCode" class="form-control">
@@ -112,12 +112,11 @@
         }
     </select>
 
-
-
-
     <label>Планируемое время исполнения</label>
     <input name="plannedTime" asp-for="@Model.nullTask.plannedTime" class="form-control" />
 
+
+    <input name="activTable" asp-for="@Model.activeTableIndex" class="form-control" hidden>@Model.activeTableIndex
 
     <input class="btn-white" type="submit" value="Сохранить"
            asp-controller="Home" asp-action="addTaskToDB" />

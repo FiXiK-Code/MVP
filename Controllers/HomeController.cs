@@ -35,10 +35,10 @@ namespace MVP.Controllers
             _logistickProject = logistickProject;
         }
 
-        public RedirectToActionResult RedactSatusTask(int id, string stat)
+        public RedirectToActionResult RedactSatusTask(int id, string stat,int activTable)
         {
             _task.redactStatus(id, stat);
-            return RedirectToAction("TaskTable");
+            return RedirectToAction("TaskTable", new { activTable = activTable });
         }
 
         public RedirectToActionResult RedactProjectToDB(
@@ -48,7 +48,8 @@ namespace MVP.Controllers
             string supervisor,
             int priority,
             string allStages,
-            string comment
+            string comment,
+            int activTable
             )
         {
             _project.redactToDB(iid, arhive,link,supervisor,priority,allStages);
@@ -69,7 +70,7 @@ namespace MVP.Controllers
             };
 
             _logistickProject.addToDB(item);
-            return RedirectToAction("TaskTable", new { Projid = iid});
+            return RedirectToAction("TaskTable", new { activTable = activTable ,Projid = iid});
 
         }
         public async Task<RedirectToActionResult> RedactTaskToDB(
@@ -82,14 +83,15 @@ namespace MVP.Controllers
             int pririty,
             TimeSpan plannedTime,
             DateTime start,
-            DateTime finish
+            DateTime finish,
+            int activTable
 )
         {
 
             if (!_task.redactToDB(iid, date, status, comment, supervisor, recipient, pririty, plannedTime, start, finish))
             {
                 var msg = "Только одна задача может быть в работе! Проверьте статусы своих задачь!";
-                return RedirectToAction("TaskTable", new { Taskid = iid, meesage = msg, TaskRed = true });
+                return RedirectToAction("TaskTable", new { activTable = activTable, Taskid = iid, meesage = msg, TaskRed = true });
             }
             else
             { 
@@ -115,7 +117,7 @@ namespace MVP.Controllers
                 };
                 _logistickTask.addToDB(item);
                 if (status == "Создана") await TimerPauseTask(iid);
-                return RedirectToAction("TaskTable", new { Taskid = iid });
+                return RedirectToAction("TaskTable", new { activTable = activTable, Taskid = iid });
             }
 
         }
@@ -136,8 +138,8 @@ namespace MVP.Controllers
              DateTime plannedFinishDate,
             string shortName,
             string name,
-            string allStages
-           
+            string allStages,
+            int activTable
             )
         {
 
@@ -157,7 +159,7 @@ namespace MVP.Controllers
                 history = $"{DateTime.Now} - Проект создан"
             };
             _project.addToDB(item);
-            return RedirectToAction("TaskTable");
+            return RedirectToAction("TaskTable", new { activTable = activTable});
         }
 
         public RedirectToActionResult addTaskToDB(
@@ -170,7 +172,8 @@ namespace MVP.Controllers
             TimeSpan plannedTime,
             DateTime date,
             string Stage,
-            string liteTask
+            string liteTask,
+            int activTable
             )
         {
             var roleSession = JsonConvert.DeserializeObject<SessionRoles>(HttpContext.Session.GetString("Session"));
@@ -179,12 +182,12 @@ namespace MVP.Controllers
             {
                 if (projectCode != _appDB.DBProject.FirstOrDefault(p => p.code == projectCode).code)
                 {
-                    return RedirectToAction("TaskTable", new { meesage = "Не коррестный код проекта!" });
+                    return RedirectToAction("TaskTable", new { activTable = activTable, meesage = "Не коррестный код проекта!" });
                 }
             }
             catch (Exception)
             {
-                return RedirectToAction("TaskTable", new { meesage = "Не коррестный код проекта!" });
+                return RedirectToAction("TaskTable", new { activTable = activTable, meesage = "Не коррестный код проекта!" });
             }
             var item = new Tasks
             {
@@ -220,7 +223,7 @@ namespace MVP.Controllers
             _logistickTask.addToDB(log);
 
 
-            return RedirectToAction("TaskTable");
+            return RedirectToAction("TaskTable", new { activTable = activTable });
 
         }
 
@@ -230,7 +233,7 @@ namespace MVP.Controllers
         public ViewResult TaskTable(int Taskid = -1, int Projid = -1, string meesage = "",
             bool TaskRed = false, bool ProjectRed = false, bool ProjectCreate = false,
              string porjectFiltr = "", string supervisorProjectFilter ="",
-             string recipientProjectFilter ="", string staffTableFilter ="")
+             string recipientProjectFilter ="", string staffTableFilter ="", int activTable = 0 )
         {
             var roleSession = new SessionRoles();
             try
@@ -264,6 +267,28 @@ namespace MVP.Controllers
                 tasks = tasks.Where(p => p.supervisor == recipientProjectFilter);
             }
 
+            string table1 = "";
+            string table2 = "";
+            string table3 = "";
+            switch (activTable)
+            {
+                case 0:
+                    table1 = "block";
+                    table2 = "none";
+                    table3 = "none";
+                    break;
+                case 1:
+                    table1 = "none";
+                    table2 = "block";
+                    table3 = "none";
+                    break;
+                case 2:
+                    table1 = "none";
+                    table2 = "none";
+                    table3 = "block";
+                    break;
+            }
+
             HomeViewModel homeTasks = new HomeViewModel
             {
                 session = roleSession,
@@ -293,7 +318,15 @@ namespace MVP.Controllers
 
                 nullProject = new Project(),
                 nullTask = new Tasks(),
-                nullStaff = new Staff()
+                nullStaff = new Staff(),
+
+                
+                activeTable1 = table1,
+                activeTable2 = table2,
+                activeTable3 = table3,
+
+                activeTableIndex = activTable
+
             };
 
             ViewBag.Role = roleSession.SessionRole;

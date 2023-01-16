@@ -1,4 +1,4 @@
-﻿@model Task
+﻿@model HomeViewModel
 <form class="form" id="create-task" method="post">
     <label><h2>Просмотр задачи</h2></label>
     @if (ViewBag.ErrorMassage != "")
@@ -8,47 +8,49 @@
 <form class="form" id="form-info-task" method="post">
     <input class="btn-white btn-top" type="submit" value="Редактировать"
            asp-controller="Home" asp-action="TaskTable"
-           asp-route-Taskid="@Model.id"
+           asp-route-Taskid="@Model.redactedTask.id"
            asp-route-TaskRed="@true" />
 
+    <input name="activTable" asp-for="@Model.activeTableIndex" class="form-control" hidden>@Model.activeTableIndex
+
     <label>Дата</label>
-    <input id="statusId" disabled class="form-control" value="@Model.date.ToShortDateString()" />
+    <input id="statusId" disabled class="form-control" value="@Model.redactedTask.date.ToShortDateString()" />
 
     <label>Шифр задачи</label>
-    <input id="statusId" disabled class="form-control" value="@Model.code" />
+    <input id="statusId" disabled class="form-control" value="@Model.redactedTask.code" />
 
     <label>Шифр проека</label>
-    <input id="statusId" disabled class="form-control" value="@Model.projectCode" />
+    <input id="statusId" disabled class="form-control" value="@Model.redactedTask.projectCode" />
 
     <label>Относится к</label>
-    <input id="statusId" disabled class="form-control" value="@Model.Stage" />
+    <input id="statusId" disabled class="form-control" value="@Model.redactedTask.Stage" />
 
     <label>Статус задачи</label>
-    <input id="statusId" disabled class="form-control" value="@Model.status" />
+    <input id="statusId" disabled class="form-control" value="@Model.redactedTask.status" />
 
     <label>Формулировка</label>
-    <textarea disabled>@Model.desc</textarea>
+    <textarea disabled>@Model.redactedTask.desc</textarea>
 
     <label>Комментарий</label>
-    <textarea disabled>@Model.comment</textarea>
+    <textarea disabled>@Model.redactedTask.comment</textarea>
 
     <label>Ответственный</label>
-    <input id="statusId" disabled class="form-control" value="@Model.supervisor" />
+    <input id="statusId" disabled class="form-control" value="@Model.redactedTask.supervisor" />
 
     <label>Исполнитель</label>
-    <input id="statusId" disabled class="form-control" value="@Model.recipient" />
+    <input id="statusId" disabled class="form-control" value="@Model.redactedTask.recipient" />
 
     <label>Приоритет</label>
-    <input id="statusId" disabled class="form-control" value="@Model.priority" />
+    <input id="statusId" disabled class="form-control" value="@Model.redactedTask.priority" />
 
     <label>Планируемое время исполнения</label>
-    <input id="statusId" disabled class="form-control" value="@Model.plannedTime" />
+    <input id="statusId" disabled class="form-control" value="@Model.redactedTask.plannedTime" />
 
     <label>Начало работы над задачей</label>
-    <input id="statusId" disabled class="form-control" value="@Model.start" />
+    <input id="statusId" disabled class="form-control" value="@Model.redactedTask.start" />
 
     <label>Задача завершена</label>
-    <input id="statusId" disabled class="form-control" value="@Model.finish" />
+    <input id="statusId" disabled class="form-control" value="@Model.redactedTask.finish" />
 
 
 </form>

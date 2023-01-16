@@ -7,6 +7,8 @@
 
 <form class="form" id="form-redaction-task" method="post">
 
+    <input name="activTable" asp-for="@Model.activeTableIndex" class="form-control" hidden>@Model.activeTableIndex
+
     <input class="btn-white btn-top" type="submit" value="Отменить редактирование"
            asp-controller="Home" asp-action="TaskTable"
            asp-route-Taskid="@Model.redactedTask.id" />
@@ -44,44 +46,44 @@ roleSessionId >= supervisorRoleId)
 
     @if (roleSessionId >= supervisorRoleId)
     {<label>Ответственный</label>
-     <select name="supervisor" asp-for="@Model.redactedTask.supervisor">
-         <option asp-for="@Model.redactedTask.supervisor" selected hidden>@Model.redactedTask.supervisor</option>
-         @if (ViewBag.Role == "Директор")
-         {
-             @foreach (var staff in Model.staffs.Where(p => p.roleId == 5 || p.roleId == 3))
-             {
-                 <option>@staff.name</option>
-             }
-         }
-         else if (ViewBag.Role == "ГИП")
-         {
-             @foreach (var staff in Model.staffs.Where(p => p.roleId == 4 || p.roleId == 3))
-             {
-                 <option>@staff.name</option>
-             }
-         }
-         else if (ViewBag.Role == "Помощник ГИПа")
-         {
-             @foreach (var staff in Model.staffs.Where(p => p.roleId == 3))
-             {
-                 <option>@staff.name</option>
-             }
-         }
-         else if (ViewBag.Role == "НО")
-         {
-             @foreach (var staff in Model.staffs.Where(p => p.roleId == 5 || p.roleId == 2 || p.roleId == 1))
-             {
-                 <option>@staff.name</option>
-             }
-         }
-         else if (ViewBag.Role == "РГ")
-         {
-             @foreach (var staff in Model.staffs.Where(p => p.roleId == 1))
-             {
-                 <option>@staff.name</option>
-             }
-         }
-     </select>
+        <select name="supervisor" asp-for="@Model.redactedTask.supervisor">
+            <option asp-for="@Model.redactedTask.supervisor" selected hidden>@Model.redactedTask.supervisor</option>
+            @if (ViewBag.Role == "Директор")
+            {
+                @foreach (var staff in Model.staffs.Where(p => p.roleId == 5 || p.roleId == 3))
+                {
+                    <option>@staff.name</option>
+                }
+            }
+            else if (ViewBag.Role == "ГИП")
+            {
+                @foreach (var staff in Model.staffs.Where(p => p.roleId == 4 || p.roleId == 3))
+                {
+                    <option>@staff.name</option>
+                }
+            }
+            else if (ViewBag.Role == "Помощник ГИПа")
+            {
+                @foreach (var staff in Model.staffs.Where(p => p.roleId == 3))
+                {
+                    <option>@staff.name</option>
+                }
+            }
+            else if (ViewBag.Role == "НО")
+            {
+                @foreach (var staff in Model.staffs.Where(p => p.roleId == 5 || p.roleId == 2 || p.roleId == 1))
+                {
+                    <option>@staff.name</option>
+                }
+            }
+            else if (ViewBag.Role == "РГ")
+            {
+                @foreach (var staff in Model.staffs.Where(p => p.roleId == 1))
+                {
+                    <option>@staff.name</option>
+                }
+            }
+        </select>
     }
     else
     {

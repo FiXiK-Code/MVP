@@ -11,23 +11,24 @@
     <title>App</title>
 </head>
 
+
 <body>
     <main class="main">
         <aside class="task-menu">
             @if (@ViewBag.Role == null)
             {
-                <a  asp-controller="Login" asp-action="Index" >
-                    <button style="width:100%" class="btn btn__top-bar"  type="button">Войти в сессию</button>
+                <a asp-controller="Login" asp-action="Index">
+                    <button style="width:100%" class="btn btn__top-bar" type="button">Войти в сессию</button>
                 </a>
             }
             else
             { <h4 class="post"> @ViewBag.Role </h4>}
 
 
+
             <div class="task">
                 <p>Задачи</p>
             </div>
-
 
             <div class="task">
                 <p>Проекты</p>
@@ -43,102 +44,102 @@
             <div class="first-box">
                 @if (@ViewBag.Role != null)
                 {
-                <div class="first-table" style="display:block">
-                    <form class="top-menu" action="" method="post">
-                        @if (ViewBag.Role != "Сотрудник")
-                        {
-                            <a asp-controller="Home" asp-action="TaskTable">
-                                <button class="btn btn__top-bar" type="button">Добавить задачу</button>
-                            </a>
-                        }
-
-                        @if (ViewBag.Role == "Директор" || ViewBag.Role == "ГИП")
-                        {<a asp-controller="Home" asp-action="TaskTable" asp-route-ProjectCreate="@true">
-                                <button class="btn btn__top-bar" type="button">Добавить проект</button>
-                            </a>}
-
-
-
-                    </form>
-                    @Html.Partial("TaskTableTest")
-                </div>
-                <div class="second-table">
-                    <form class="top-menu" asp-controller="Home" asp-action="TaskTable" >
-                        @if (ViewBag.Role != "Сотрудник")
-                        {
-                            <a asp-controller="Home" asp-action="TaskTable">
-                                <button class="btn btn__top-bar" type="button">Добавить задачу</button>
-                            </a>}
-
-                        @if (ViewBag.Role == "Директор" || ViewBag.Role == "ГИП")
-                        {<a asp-controller="Home" asp-action="TaskTable" asp-route-ProjectCreate="@true">
-                                <button class="btn btn__top-bar" type="button">Добавить проект</button>
-                            </a>}
-
-
-                        <select class="select" id="select" name="porjectFiltr">
-                            <option value="@Model.filterProj" selected hidden>@Model.filterProj</option>
-                            <option>Все проекты</option>
-                            <option>Проекты в архиве</option>
-                        </select>
-                        <select class="select" id="select" name="supervisorProjectFilter">
-                            <option value="@Model.filterSupProj" selected hidden>@Model.filterSupProj</option>
-                            <option>Все ГИПы</option>
-                            @foreach (Staff staff in Model.staffs.Where(p => p.roleId == 5).OrderBy(p => p.name))
+                    <div id="fistTable" class="first-table" style="display:@Model.activeTable1">
+                        <form class="top-menu" action="" method="post">
+                            @if (ViewBag.Role != "Сотрудник")
                             {
-                                <option>@staff.name</option>
+                                <a asp-controller="Home" asp-action="TaskTable" asp-route-activTable="0">
+                                    <button class="btn btn__top-bar" type="button">Добавить задачу</button>
+                                </a>
                             }
-                        </select>
 
-                        <select class="select" id="select" name="recipientProjectFilter">
-                            <option value="@Model.filterResProj" selected hidden>@Model.filterResProj</option>
-                            <option>Все ответственные</option>
-                            @{List<string> taskSuper = new List<string>();
-                                foreach (var task in Model.tasks)
+                            @if (ViewBag.Role == "Директор" || ViewBag.Role == "ГИП")
+                            {<a asp-controller="Home" asp-action="TaskTable" asp-route-activTable="0" asp-route-ProjectCreate="@true">
+                                    <button class="btn btn__top-bar" type="button">Добавить проект</button>
+                                </a>}
+
+
+
+                        </form>
+                        @Html.Partial("TaskTableTest")
+                    </div>
+                    <div class="second-table" style="display:@Model.activeTable2">
+                        <form class="top-menu" asp-controller="Home" asp-action="TaskTable" asp-route-activTable="1">
+                            @if (ViewBag.Role != "Сотрудник")
+                            {
+                                <a asp-controller="Home" asp-action="TaskTable" asp-route-activTable="1">
+                                    <button class="btn btn__top-bar" type="button">Добавить задачу</button>
+                                </a>}
+
+                            @if (ViewBag.Role == "Директор" || ViewBag.Role == "ГИП")
+                            {<a asp-controller="Home" asp-action="TaskTable" asp-route-ProjectCreate="@true" asp-route-activTable="1">
+                                    <button class="btn btn__top-bar" type="button">Добавить проект</button>
+                                </a>}
+
+
+                            <select class="select" id="select" name="porjectFiltr">
+                                <option value="@Model.filterProj" selected hidden>@Model.filterProj</option>
+                                <option>Все проекты</option>
+                                <option>Проекты в архиве</option>
+                            </select>
+                            <select class="select" id="select" name="supervisorProjectFilter">
+                                <option value="@Model.filterSupProj" selected hidden>@Model.filterSupProj</option>
+                                <option>Все ГИПы</option>
+                                @foreach (Staff staff in Model.staffs.Where(p => p.roleId == 5).OrderBy(p => p.name))
                                 {
-                                    if (!taskSuper.Contains(task.supervisor))
-                                    {
-                                        <option>@task.supervisor</option>
-                                        taskSuper.Add(task.supervisor);
-                                    }
+                                    <option>@staff.name</option>
                                 }
+                            </select>
 
-                            }
-                        </select>
-                        <a>
-                            <button class="btn btn__top-bar" type="submit">Отфильтровать</button>
-                        </a>
-                    </form>
-                    @Html.Partial("ProjectTableTest")
-                </div>
-                <div class="third-table">
-                    <form class="top-menu" method="post" asp-controller="Home" asp-action="TaskTable">
-                        @if (ViewBag.Role != "Сотрудник")
-                        {
-                            <a asp-controller="Home" asp-action="TaskTable">
-                                <button class="btn btn__top-bar" type="button">Добавить задачу</button>
-                            </a>}
+                            <select class="select" id="select" name="recipientProjectFilter">
+                                <option value="@Model.filterResProj" selected hidden>@Model.filterResProj</option>
+                                <option>Все ответственные</option>
+                                @{List<string> taskSuper = new List<string>();
+                                    foreach (var task in Model.tasks)
+                                    {
+                                        if (!taskSuper.Contains(task.supervisor))
+                                        {
+                                            <option>@task.supervisor</option>
+                                            taskSuper.Add(task.supervisor);
+                                        }
+                                    }
 
-                        @if (ViewBag.Role == "Директор" || ViewBag.Role == "ГИП")
-                        {<a asp-controller="Home" asp-action="TaskTable" asp-route-ProjectCreate="@true">
-                                <button class="btn btn__top-bar" type="button">Добавить проект</button>
-                            </a>}
-
-
-                        <select class="select" id="select" name="staffTableFilter">
-                            <option value="@Model.filterStaff" selected hidden>@Model.filterStaff</option>
-                            <option>Все должности</option>
-                            @foreach (Role role in Model.roles.OrderBy(p => p.id))
+                                }
+                            </select>
+                            <a>
+                                <button class="btn btn__top-bar" type="submit">Отфильтровать</button>
+                            </a>
+                        </form>
+                        @Html.Partial("ProjectTableTest")
+                    </div>
+                    <div class="third-table" style="display:@Model.activeTable3">
+                        <form class="top-menu" method="post" asp-controller="Home" asp-action="TaskTable" asp-route-activTable="2">
+                            @if (ViewBag.Role != "Сотрудник")
                             {
-                                <option>@role.name</option>
-                            }
-                        </select>
-                        <a>
-                            <button class="btn btn__top-bar" type="submit">Отфильтровать</button>
-                        </a>
-                    </form>
-                    @Html.Partial("StaffTableTest")
-                </div>
+                                <a asp-controller="Home" asp-action="TaskTable" asp-route-activTable="2">
+                                    <button class="btn btn__top-bar" type="button">Добавить задачу</button>
+                                </a>}
+
+                            @if (ViewBag.Role == "Директор" || ViewBag.Role == "ГИП")
+                            {<a asp-controller="Home" asp-action="TaskTable" asp-route-ProjectCreate="@true" asp-route-activTable="2">
+                                    <button class="btn btn__top-bar" type="button">Добавить проект</button>
+                                </a>}
+
+
+                            <select class="select" id="select" name="staffTableFilter">
+                                <option value="@Model.filterStaff" selected hidden>@Model.filterStaff</option>
+                                <option>Все должности</option>
+                                @foreach (Role role in Model.roles.OrderBy(p => p.id))
+                                {
+                                    <option>@role.name</option>
+                                }
+                            </select>
+                            <a>
+                                <button class="btn btn__top-bar" type="submit">Отфильтровать</button>
+                            </a>
+                        </form>
+                        @Html.Partial("StaffTableTest")
+                    </div>
                 }
             </div>
             <div class="second-box">
@@ -146,25 +147,64 @@
                 {
                     @if (Model.taskId != -1 && Model.projectId == -1)
                     {
-                        if (Model.TaskRed)@Html.Partial("TaskRedact",Model)
-                        else @Html.Partial("TaskWatcht", Model.redactedTask)
+                        if (Model.TaskRed)@Html.Partial("TaskRedact", Model)
+                        else @Html.Partial("TaskWatcht", Model)
 
                     }
                     @if (Model.projectId != -1 && Model.taskId == -1)
                     {
-                        if (Model.ProjectRed)@Html.Partial("ProjectRedact",Model)
-                        else @Html.Partial("ProjectWatcht", Model.redactedProject)
+                        if (Model.ProjectRed)@Html.Partial("ProjectRedact", Model)
+                        else @Html.Partial("ProjectWatcht", Model)
                     }
                     @if (Model.projectId == -1 && Model.taskId == -1)
                     {
                         @if (Model.ProjectCreate)@Html.Partial("ProjectCreate", Model)
-                        else @Html.Partial("TaskCreate",Model)
+                        else @Html.Partial("TaskCreate", Model)
                     }
                 }
-                </div>
+            </div>
         </div>
 
     </main>
-    <script src="~/js/script.js"></script>
+    <script>
+            var task = document.querySelectorAll(".task p");
+            var table1 = document.querySelector(".first-table");
+            var table2 = document.querySelector(".second-table");
+            var table3 = document.querySelector(".third-table");
+
+            task[0].addEventListener('click', function () {
+                table1.style.display = "block";
+                table2.style.display = "none";
+                table3.style.display = "none";
+                @{
+                    Model.activeTable1 = "block";
+                    Model.activeTable2 = "none";
+                    Model.activeTable3 = "none";
+                    Model.activeTableIndex = 0;
+                    }
+            })
+            task[1].addEventListener('click', function () {
+                table1.style.display = "none";
+                table2.style.display = "block";
+                table3.style.display = "none";
+                @{
+                    Model.activeTable1 = "none";
+                    Model.activeTable2 = "block";
+                    Model.activeTable3 = "none";
+                    Model.activeTableIndex = 1;
+                    }
+            })
+            task[2].addEventListener('click', function () {
+                table1.style.display = "none";
+                table2.style.display = "none";
+                table3.style.display = "block";
+                @{
+                    Model.activeTable1 = "none";
+                    Model.activeTable2 = "none";
+                    Model.activeTable3 = "block";
+                    Model.activeTableIndex = 2;
+                    }
+            })
+    </script>
 </body>
 </html>

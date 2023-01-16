@@ -1,4 +1,4 @@
-﻿@model Project
+﻿@model HomeViewModel
 <form class="form" id="create-task" method="post">
     <label><h2>Просмотр проекта</h2></label>
     @if (ViewBag.ErrorMassage != "")
@@ -8,53 +8,54 @@
 
     @if (ViewBag.Role == "Директор" || ViewBag.Role == "ГИП")
     {<input class="btn-white btn-top" type="submit" value="Редактировать"
-       asp-controller="Home" asp-action="TaskTable"
-       asp-route-Projid="@Model.id"
-       asp-route-ProjectRed="@true" />}
+            asp-controller="Home" asp-action="TaskTable"
+            asp-route-Projid="@Model.redactedProject.id"
+            asp-route-ProjectRed="@true" />}
     else
     { <input class="btn-white btn-top" type="submit" value="Редактировать"
-       asp-controller="Home" asp-action="TaskTable"
-       asp-route-Projid="@Model.id"
-       asp-route-meesage="Редактировать проект могут только ГИП и Директор!"/>}
-    
+             asp-controller="Home" asp-action="TaskTable"
+             asp-route-Projid="@Model.redactedProject.id"
+             asp-route-meesage="Редактировать проект могут только ГИП и Директор!" />}
+
+    <input name="activTable" asp-for="@Model.activeTableIndex" class="form-control" hidden>@Model.activeTableIndex
 
     <label>В архиве</label>
-    <input id="statusId" disabled class="form-control" value="@Model.archive" />
+    <input id="statusId" disabled class="form-control" value="@Model.redactedProject.archive" />
 
     <label>Облако</label>
-    <input id="statusId" disabled class="form-control" value="@Model.link" />
+    <input id="statusId" disabled class="form-control" value="@Model.redactedProject.link" />
 
     <label>Дата создания проекта</label>
-    <input id="statusId" disabled class="form-control" value="@Model.dateStart.ToShortDateString()" />
+    <input id="statusId" disabled class="form-control" value="@Model.redactedProject.dateStart.ToShortDateString()" />
 
     <label>Шифр проекта</label>
-    <input id="statusId" disabled class="form-control" value="@Model.code" />
+    <input id="statusId" disabled class="form-control" value="@Model.redactedProject.code" />
 
     <label>Ответственный</label>
-    <input id="statusId" disabled class="form-control" value="@Model.supervisor" />
+    <input id="statusId" disabled class="form-control" value="@Model.redactedProject.supervisor" />
 
     <label>Приоритет</label>
-    <input id="statusId" disabled class="form-control" value="@Model.priority" />
+    <input id="statusId" disabled class="form-control" value="@Model.redactedProject.priority" />
 
     <label>Краткое описание</label>
-    <textarea disabled>@Model.shortName</textarea>
+    <textarea disabled>@Model.redactedProject.shortName</textarea>
 
     <label>Полное описание</label>
-    <textarea disabled>@Model.name</textarea>
+    <textarea disabled>@Model.redactedProject.name</textarea>
 
     <label>Стадии проекта</label>
-    <textarea disabled>@Model.allStages</textarea>
+    <textarea disabled>@Model.redactedProject.allStages</textarea>
 
     <label>Текущая стадия</label>
-    <input id="statusId" disabled class="form-control" value="@Model.nowStage" />
+    <input id="statusId" disabled class="form-control" value="@Model.redactedProject.nowStage" />
 
     <label>Планируемая дата завершения</label>
-    <input id="statusId" disabled class="form-control" value="@Model.plannedFinishDate.ToShortDateString()" />
+    <input id="statusId" disabled class="form-control" value="@Model.redactedProject.plannedFinishDate.ToShortDateString()" />
 
     <label>Дата завершения</label>
-    <input id="statusId" disabled class="form-control" value="@Model.actualFinishDate.ToShortDateString()" />
+    <input id="statusId" disabled class="form-control" value="@Model.redactedProject.actualFinishDate.ToShortDateString()" />
 
     <label>История действий по проету</label>
-    <textarea disabled>@Model.history</textarea>
+    <textarea disabled>@Model.redactedProject.history</textarea>
 
 </form>

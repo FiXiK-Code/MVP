@@ -10,6 +10,8 @@
            asp-controller="Home" asp-action="TaskTable"
            asp-route-Projid="@Model.redactedProject.id" />
 
+    <input name="activTable" asp-for="@Model.activeTableIndex" class="form-control" hidden>@Model.activeTableIndex
+
     <label>В архиве</label>
     <input name="arhive" asp-for="@Model.redactedProject.archive" class="form-control" value="@Model.redactedProject.archive" />
 
@@ -18,13 +20,13 @@
 
     @if (ViewBag.Role == "Директор" || ViewBag.Role == "ГИП")
     {<label>Ответственный</label>
-     <select name="supervisor" asp-for="redactedProject.supervisor" class="form-control">
-         <option asp-for="@Model.redactedProject.supervisor" selected hidden>@Model.redactedProject.supervisor</option>
-         @foreach (var staff in Model.staffs.Where(p => p.roleId == 5))
-         {
-             <option>@staff.name</option>
-         }
-     </select>     
+        <select name="supervisor" asp-for="redactedProject.supervisor" class="form-control">
+            <option asp-for="@Model.redactedProject.supervisor" selected hidden>@Model.redactedProject.supervisor</option>
+            @foreach (var staff in Model.staffs.Where(p => p.roleId == 5))
+            {
+                <option>@staff.name</option>
+            }
+        </select>
     }
     else
     { <label>Ответственный (только для чтения)</label>
