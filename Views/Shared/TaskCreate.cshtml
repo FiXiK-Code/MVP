@@ -42,14 +42,22 @@
         <option asp-for="@Model.nullTask.supervisor" selected hidden>@ViewBag.RoleName</option>
         @if (ViewBag.Role == "Директор")
         {
-            @foreach (var staff in Model.staffs.Where(p => p.roleId == 5 || p.roleId == 3))
+            @foreach (var staff in Model.staffs.Where(p => p.roleId == 5))
+            {
+                <option asp-for="@Model.nullTask.supervisor">@staff.name</option>
+            }
+            @foreach (var staff in Model.staffs.Where(p => p.roleId == 3))
             {
                 <option asp-for="@Model.nullTask.supervisor">@staff.name</option>
             }
         }
         else if (ViewBag.Role == "ГИП")
         {
-            @foreach (var staff in Model.staffs.Where(p => p.roleId == 6 || p.roleId == 3))
+            @foreach (var staff in Model.staffs.Where(p => p.roleId == 6))
+            {
+                <option asp-for="@Model.nullTask.supervisor">@staff.name</option>
+            }
+            @foreach (var staff in Model.staffs.Where(p => p.roleId == 3))
             {
                 <option asp-for="@Model.nullTask.supervisor">@staff.name</option>
             }
@@ -63,7 +71,15 @@
         }
         else if (ViewBag.Role == "НО")
         {
-            @foreach (var staff in Model.staffs.Where(p => p.roleId == 5 || p.roleId == 2 || p.roleId == 1))
+            @foreach (var staff in Model.staffs.Where(p =>p.roleId == 5))
+            {
+                <option asp-for="@Model.nullTask.supervisor">@staff.name</option>
+            }
+            @foreach (var staff in Model.staffs.Where(p => p.roleId == 1))
+            {
+                <option asp-for="@Model.nullTask.supervisor">@staff.name</option>
+            }
+            @foreach (var staff in Model.staffs.Where(p => p.roleId == 2 ))
             {
                 <option asp-for="@Model.nullTask.supervisor">@staff.name</option>
             }
@@ -84,7 +100,11 @@
         <option value="@Model.nullTask.recipient" selected hidden></option>
         @if (ViewBag.Role == "Директор")
         {
-            @foreach (var staff in Model.staffs.Where(p => p.roleId == 4 || p.roleId == 3))
+            @foreach (var staff in Model.staffs.Where(p => p.roleId == 4))
+            {
+                <option>@staff.name</option>
+            }
+            @foreach (var staff in Model.staffs.Where(p => p.roleId == 3))
             {
                 <option>@staff.name</option>
             }
@@ -98,7 +118,15 @@
         }
         else if (ViewBag.Role == "Помощник ГИПа")
         {
-            @foreach (var staff in Model.staffs.Where(p => p.roleId == 5 || p.roleId == 2 || p.roleId == 1))
+            @foreach (var staff in Model.staffs.Where(p => p.roleId == 5 ))
+            {
+                <option>@staff.name</option>
+            }
+            @foreach (var staff in Model.staffs.Where(p => p.roleId == 2 ))
+            {
+                <option>@staff.name</option>
+            }
+            @foreach (var staff in Model.staffs.Where(p => p.roleId == 1))
             {
                 <option>@staff.name</option>
             }

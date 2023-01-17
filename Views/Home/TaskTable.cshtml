@@ -129,9 +129,9 @@
                             <select class="select" id="select" name="staffTableFilter">
                                 <option value="@Model.filterStaff" selected hidden>@Model.filterStaff</option>
                                 <option>Все должности</option>
-                                @foreach (Role role in Model.roles.OrderBy(p => p.id))
+                                @foreach (Post post in Model.posts.OrderBy(p => p.id))
                                 {
-                                    <option>@role.name</option>
+                                    <option>@post.name</option>
                                 }
                             </select>
                             <a>
