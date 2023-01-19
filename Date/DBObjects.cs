@@ -2135,6 +2135,7 @@ passvord = "123456"
 new Staff {
 code = "08",
 name = "Лесина Ольга Сергеевна",
+supervisorCod = "07",
 divisionId = 2,
 roleId = 1,
 post = "Руководитель группы проектирования",
@@ -2145,6 +2146,7 @@ passvord = "123456"
 new Staff {
 code = "09",
 name = "Хамитова Анна Федоровна",
+supervisorCod = "08",
 divisionId = 2,
 roleId = 2,
 post = "Ведущий инженер отдела проектирования",
@@ -2155,6 +2157,7 @@ passvord = "123456"
 new Staff {
 code = "10",
 name = "Власюк Анастасия Олеговна",
+supervisorCod = "08",
 divisionId = 2,
 roleId = 2,
 post = "Инженер – проектировщик 2 категории отдела проектирования",
@@ -2165,6 +2168,7 @@ passvord = "123456"
 new Staff {
 code = "11",
 name = "Сергеева Анастасия Андреевна",
+supervisorCod = "08",
 divisionId = 2,
 roleId = 2,
 post = "Инженер – проектировщик 2 категории отдела проектирования",
@@ -2175,6 +2179,7 @@ passvord = "123456"
 new Staff {
 code = "12",
 name = "Сидоров Артем Сергеевич",
+supervisorCod = "08",
 divisionId = 2,
 roleId = 2,
 post = "Инженер – проектировщик 2 категории отдела проектирования",
@@ -2186,6 +2191,7 @@ passvord = "123456"
 new Staff {
 code = "13",
 name = "Хамитова Анна Федоровна",
+supervisorCod = "07",
 divisionId = 2,
 roleId = 1,
 post = "Руководитель группы проектирования",
@@ -2196,6 +2202,7 @@ passvord = "123456"
 new Staff {
 code = "14",
 name = "Домрачева Наталья Николаевна",
+supervisorCod = "13",
 divisionId = 2,
 roleId = 2,
 post = "Ведущий инженер отдела проектирования",
@@ -2206,6 +2213,7 @@ passvord = "123456"
 new Staff {
 code = "15",
 name = "Хицунова Неонила Юрьевна",
+supervisorCod = "13",
 divisionId = 2,
 roleId = 2,
 post = "Инженер – проектировщик 1 категории отдела проектирования",
@@ -2216,6 +2224,7 @@ passvord = "123456"
 new Staff {
 code = "16",
 name = "Кузнецова Инна Владимировна",
+supervisorCod = "13",
 divisionId = 2,
 roleId = 2,
 post = "Инженер – проектировщик 1 категории отдела проектирования",
@@ -2227,6 +2236,7 @@ passvord = "123456"
 new Staff {
 code = "17",
 name = "Лялина Ксения Евгеньевна",
+supervisorCod = "07",
 divisionId = 2,
 roleId = 1,
 post = "Руководитель группы проектирования",
@@ -2237,6 +2247,7 @@ passvord = "123456"
 new Staff {
 code = "18",
 name = "Тимофеев Георгий Павлович",
+supervisorCod = "17",
 divisionId = 2,
 roleId = 2,
 post = "Инженер – проектировщик 1 категории отдела проектирования",
@@ -2247,6 +2258,7 @@ passvord = "123456"
 new Staff {
 code = "19",
 name = "Габайдулина Ильнара Итиясовна",
+supervisorCod = "17",
 divisionId = 2,
 roleId = 2,
 post = "Инженер – проектировщик 2 категории отдела проектирования",
@@ -2257,6 +2269,7 @@ passvord = "123456"
 new Staff {
 code = "20",
 name = "Третьякова Жанна Викторовна",
+supervisorCod = "17",
 divisionId = 2,
 roleId = 2,
 post = "Инженер – проектировщик 2 категории отдела проектирования",
@@ -2267,6 +2280,7 @@ passvord = "123456"
 new Staff {
 code = "21",
 name = "Колмогоров Максим Андреевич",
+supervisorCod = "17",
 divisionId = 2,
 roleId = 2,
 post = "Инженер – проектировщик 3 категории отдела проектирования",

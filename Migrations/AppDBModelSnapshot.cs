@@ -256,8 +256,8 @@ namespace MVP.Migrations
                     b.Property<int>("roleId")
                         .HasColumnType("int");
 
-                    b.Property<int>("supervisorId")
-                        .HasColumnType("int");
+                    b.Property<string>("supervisorCod")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.HasKey("id");
 
@@ -344,6 +344,9 @@ namespace MVP.Migrations
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<DateTime>("start")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("startWork")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("status")

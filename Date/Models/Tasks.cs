@@ -24,5 +24,6 @@ namespace MVP.Date.Models
         public string Stage { get; set; }
         public bool liteTask { get; set; }
         public string status { get; set; }
+        public DateTime startWork { get; set; }
     }
 }

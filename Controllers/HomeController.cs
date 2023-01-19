@@ -191,6 +191,7 @@ namespace MVP.Controllers
             }
             var item = new Tasks
             {
+                actualTime = TimeSpan.Zero,
                 desc = desc,
                 projectCode = projectCode,
                 supervisor = supervisor,
