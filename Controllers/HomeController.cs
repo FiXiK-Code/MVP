@@ -6,6 +6,7 @@ using MVP.Date.Models;
 using MVP.ViewModels;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TaskStatus = MVP.Date.Models.TaskStatus;
@@ -245,15 +246,77 @@ namespace MVP.Controllers
             {
                 roleSession = new SessionRoles();
             }
-            
 
-            
+            var sessionCod = _appDB.DBStaff.FirstOrDefault(p => p.name == roleSession.SessionName).code;
+
+            List<Staff> StaffTable = new List<Staff>();
+            List<Staff> RG = new List<Staff>();
+            if (roleSession.SessionRole == "Директор")
+            {
+                foreach (var staffs in _appDB.DBStaff.Where(p => p.roleId == 5))
+                {
+                    StaffTable.Add(staffs);
+                }
+                foreach (var staffs in _appDB.DBStaff.Where(p => p.roleId == 3))
+                {
+                    StaffTable.Add(staffs);
+                }
+            }
+            else if (roleSession.SessionRole == "ГИП")
+            {
+                foreach (var staffs in _appDB.DBStaff.Where(p => p.roleId == 6))
+                {
+                    StaffTable.Add(staffs);
+                }
+                foreach (var staffs in _appDB.DBStaff.Where(p => p.roleId == 3))
+                {
+                    StaffTable.Add(staffs);
+                }
+            }
+            else if (roleSession.SessionRole == "Помощник ГИПа")
+            {
+                foreach (var staffs in _appDB.DBStaff.Where(p => p.roleId == 3))
+                {
+                    StaffTable.Add(staffs);
+                }
+            }
+            else if (roleSession.SessionRole == "НО")
+            {
+                foreach (var staffs in _appDB.DBStaff.Where(p => p.roleId == 5))
+                {
+                    StaffTable.Add(staffs);
+                }
+
+                foreach (var staffs in _appDB.DBStaff.Where(p => p.supervisorCod == sessionCod && p.roleId == 1))
+                {
+                    StaffTable.Add(staffs);
+                    RG.Add(staffs);
+                }
+                foreach (var staffs in RG)
+                {
+                    foreach (var staff1 in _appDB.DBStaff.Where(p => p.supervisorCod == staffs.code && p.roleId == 2))
+                    {
+                        StaffTable.Add(staff1);
+                    }
+                }
+            }
+            else if (roleSession.SessionRole == "РГ")
+            {
+                foreach (var staffs in _appDB.DBStaff.Where(p => p.supervisorCod == sessionCod && p.roleId == 2))
+                {
+                    StaffTable.Add(staffs);
+                }
+            }
+
             var projects = _project.AllProjects;
             var tasks = _task.AllTasks;
-            var staff = _staff.AllStaffs;
+            var staff = StaffTable;
+
+
+
             if (staffTableFilter!="" && staffTableFilter != "Все должности")
             {
-                staff = staff.Where(p => p.post == staffTableFilter);
+                staff = StaffTable.Where(p => p.post == staffTableFilter).ToList();
             }
             if (porjectFiltr == "Проекты в архиве")
             {
@@ -329,7 +392,7 @@ namespace MVP.Controllers
                 activeTableIndex = activTable
 
             };
-
+            ViewBag.RoleCod = _appDB.DBStaff.FirstOrDefault(p => p.name == roleSession.SessionName).code;
             ViewBag.Role = roleSession.SessionRole;
             ViewBag.RoleName = roleSession.SessionName;
             ViewBag.ErrorMassage = meesage;

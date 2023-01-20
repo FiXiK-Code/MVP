@@ -138,12 +138,74 @@
                                     <button class="btn btn__top-bar" type="button">Добавить проект</button>
                                 </a>}
 
+                            @{
+                                List<string> post = new List<string>();
+                                List<Staff> RG = new List<Staff>();
+                            }
+                            @if (ViewBag.Role == "Директор")
+                            {
+                                foreach (var staff in Model.staffs.Where(p => p.roleId == 5))
+                                {
+                                    if (!post.Contains(staff.post)) post.Add(staff.post);
+                                }
+                                foreach (var staff in Model.staffs.Where(p => p.roleId == 3))
+                                {
+                                    if (!post.Contains(staff.post)) post.Add(staff.post);
+                                }
+                            }
+                            else if (ViewBag.Role == "ГИП")
+                            {
+                                foreach (var staff in Model.staffs.Where(p => p.roleId == 6))
+                                {
+                                    if (!post.Contains(staff.post)) post.Add(staff.post);
+                                }
+                                foreach (var staff in Model.staffs.Where(p => p.roleId == 3))
+                                {
+                                    if (!post.Contains(staff.post)) post.Add(staff.post);
+                                }
+                            }
+                            else if (ViewBag.Role == "Помощник ГИПа")
+                            {
+                                foreach (var staff in Model.staffs.Where(p => p.roleId == 3))
+                                {
+                                    if (!post.Contains(staff.post)) post.Add(staff.post);
+                                }
+                            }
+                            else if (ViewBag.Role == "НО")
+                            {
+                                foreach (var staff in Model.staffs.Where(p => p.roleId == 5))
+                                {
+                                    if (!post.Contains(staff.post)) post.Add(staff.post);
+                                }
+
+                                foreach (var staff in Model.staffs.Where(p => p.supervisorCod == ViewBag.RoleCod && p.roleId == 1))
+                                {
+                                    if (!post.Contains(staff.post)) post.Add(staff.post);
+                                    RG.Add(staff);
+                                }
+                                foreach (var staff in RG)
+                                {
+                                    foreach (var staff1 in Model.staffs.Where(p => p.supervisorCod == staff.code && p.roleId == 2))
+                                    {
+                                        if (!post.Contains(staff1.post)) post.Add(staff1.post);
+                                    }
+                                }
+                            }
+                            else if (ViewBag.Role == "РГ")
+                            {
+                                foreach (var staff in Model.staffs.Where(p => p.supervisorCod == ViewBag.RoleCod && p.roleId == 2))
+                                {
+                                    if (!post.Contains(staff.post)) post.Add(staff.post);
+                                }
+                            }
+
+
                             <select class="select" id="select" name="staffTableFilter">
                                 <option value="@Model.filterStaff" selected hidden>@Model.filterStaff</option>
                                 <option>Все должности</option>
-                                @foreach (Post post in Model.posts.OrderBy(p => p.id))
+                                @foreach (string elem in post)
                                 {
-                                    <option>@post.name</option>
+                                    <option>@elem</option>
                                 }
                             </select>
 
