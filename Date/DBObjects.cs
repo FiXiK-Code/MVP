@@ -30,63 +30,14 @@ namespace MVP.Date
                 content.AddRange(
                     new Project
                     {
-                        code = "31/18 - ТСП",
-                        shortName = "Департамент. РЕК ул. Щербакова от ул. 2-я Луговая до ул. Дружбы",
+                        code = "12/20 - ТСП",
+                        shortName = "ГКУ ТО «УАД». СТР жб моста чз р. Барсук (Вик. р-он)",
                         dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
                         plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
                         actualFinishDate = new DateTime(2023),
                         history = null,
                         archive = "Нет",
                     },
-
-new Project
-{
-    code = "14/19 - ТСП",
-    shortName = "Брусника. СТР улиц в ЖЗ (Газовиков-Профсоюзная). Коррективы.",
-    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
-    actualFinishDate = new DateTime(2023),
-    history = null,
-    archive = "Нет",
-},
-
-
-
-new Project
-{
-    code = "27/19 - ТСП",
-    shortName = "Департамент. СТР ад в жр Березняковский",
-    priority = 1,
-    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
-    actualFinishDate = new DateTime(2023),
-    history = null,
-    archive = "Нет",
-},
-
-
-
-new Project
-{
-    code = "10/20 - ТСП",
-    shortName = "Н. Уренгой. РЕК.  ул. Геологоразведчиков",
-    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
-    actualFinishDate = new DateTime(2023),
-    history = null,
-    archive = "Нет",
-},
-
-new Project
-{
-    code = "12/20 - ТСП",
-    shortName = "ГКУ ТО «УАД». СТР жб моста чз р. Барсук (Вик. р-он)",
-    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
-    actualFinishDate = new DateTime(2023),
-    history = null,
-    archive = "Нет",
-},
 
 new Project
 {
@@ -98,31 +49,6 @@ new Project
     history = null,
     archive = "Нет",
 },
-
-new Project
-{
-    code = "16/20 - ТСП",
-    shortName = "Департамент. КОРР. ПД «СТР ад в д. Казарово»",
-    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
-    actualFinishDate = new DateTime(2023),
-    history = null,
-    archive = "Нет",
-},
-
-
-
-new Project
-{
-    code = "18/20 - ТСП",
-    shortName = "Департамент. ПД «КРЕМ ул. Ставропольская»",
-    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
-    actualFinishDate = new DateTime(2023),
-    history = null,
-    archive = "Да",
-},
-
 new Project
 {
     code = "19/20 - ТСП",
@@ -133,29 +59,6 @@ new Project
     history = null,
     archive = "Нет",
 },
-
-new Project
-{
-    code = "24/20 - ТСП",
-    shortName = "ДКС Н. Уренгой КОРР ПСД «РЕК пр. Губкина»",
-    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
-    actualFinishDate = new DateTime(2023),
-    history = null,
-    archive = "Нет",
-},
-
-new Project
-{
-    code = "27/20 - ТСП",
-    shortName = "ООО «Уренгойдорстрой». Н. Уренгой КОРР ПСД «РЕК пр. Губкина»",
-    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
-    actualFinishDate = new DateTime(2023),
-    history = null,
-    archive = "Нет",
-},
-
 new Project
 {
     code = "32/20 - ТСП",
@@ -177,28 +80,6 @@ new Project
     history = null,
     archive = "Нет",
 },
-
-new Project
-{
-    code = "40/20 - ТСП",
-    shortName = "ГКУ СО «УАД». РЕК ад подъезд к с.Коменки",
-    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
-    actualFinishDate = new DateTime(2023),
-    history = null,
-    archive = "Нет",
-},
-
-new Project
-{
-    code = "41/20 - ТСП",
-    shortName = "ООО «Брусника». Р-ка транс-пеш концепц. ул. Профсоюзная и ул. Госпаровская",
-    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
-    actualFinishDate = new DateTime(2023),
-    history = null,
-    archive = "Нет",
-},
 new Project
 {
     code = "00/00 - ТСП",
@@ -209,18 +90,6 @@ new Project
     history = null,
     archive = "Нет",
 },
-
-new Project
-{
-    code = "45/20 - ТСП",
-    shortName = "ГКУ СО «УАД». РЕК ад д. Кокуй – д. Серкова ТГО",
-    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
-    actualFinishDate = new DateTime(2023),
-    history = null,
-    archive = "Нет",
-},
-
 new Project
 {
     code = "46/20 - ТСП",
@@ -231,18 +100,6 @@ new Project
     history = null,
     archive = "Нет",
 },
-
-new Project
-{
-    code = "47/20 - ТСП",
-    shortName = "Департамент. ПД «СТР ул. в р-не Комаровский 2 очередь»",
-    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
-    actualFinishDate = new DateTime(2023),
-    history = null,
-    archive = "Нет",
-},
-
 new Project
 {
     code = "01/21 - ТСП",
@@ -264,7 +121,6 @@ new Project
     history = null,
     archive = "Нет",
 },
-
 new Project
 {
     code = "03/21 - ТСП",
@@ -319,46 +175,6 @@ new Project
     history = null,
     archive = "Нет",
 },
-
-new Project
-{
-    code = "19/21 - ТСП",
-    shortName = "СЗ Тюм. р-на. СТР подъезда к ФАД",
-    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
-    actualFinishDate = new DateTime(2023),
-    history = null,
-    archive = "Нет",
-},
-
-
-
-new Project
-{
-    code = "27/21 - ТСП",
-    shortName = "ГКУ ТО УАД. СТР ад Обход д. Ожогина. Корректировка",
-    priority = 1,
-    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
-    actualFinishDate = new DateTime(2023),
-    history = null,
-    archive = "Нет",
-},
-
-
-
-
-new Project
-{
-    code = "28/21 - ТСП",
-    shortName = "Ставрополь. ПП развязка на 63 км",
-    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
-    actualFinishDate = new DateTime(2023),
-    history = null,
-    archive = "Нет",
-},
-
 new Project
 {
     code = "29/21 - ТСП",
@@ -369,73 +185,6 @@ new Project
     history = null,
     archive = "Нет",
 },
-
-new Project
-{
-    code = "31/22 - ТСП",
-    shortName = "СОГУ. СТР пп чз жд на км 37 ад Богданович-Покровское (КОРРЕКТИРОВКА)",
-    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
-    actualFinishDate = new DateTime(2023),
-    history = null,
-    archive = "Нет",
-},
-
-new Project
-{
-    code = "32/21 - ТСП",
-    shortName = "Автомобильные дороги пгт. Пангоды (ПИР)",
-    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
-    actualFinishDate = new DateTime(2023),
-    history = null,
-    archive = "Нет",
-},
-
-new Project
-{
-    code = "33/21 - ТСП",
-    shortName = "СОГУ. РЕК мп чз р. Пышму",
-    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
-    actualFinishDate = new DateTime(2023),
-    history = null,
-    archive = "Нет",
-},
-
-new Project
-{
-    code = "36/21 - ТСП",
-    shortName = "Сургут. Ул. Киртбая",
-    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
-    actualFinishDate = new DateTime(2023),
-    history = null,
-    archive = "Нет",
-},
-
-new Project
-{
-    code = "37/21 - ТСП",
-    shortName = "Навигатор. Девелопмент. СТР. дорог в жк по ул. В. Полякова. 5-6-й этап — ПД,РД",
-    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
-    actualFinishDate = new DateTime(2023),
-    history = null,
-    archive = "Да",
-},
-
-new Project
-{
-    code = "38/21 - ТСП",
-    shortName = "Лабытнанги. ИО участок 01_01_01",
-    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
-    actualFinishDate = new DateTime(2023),
-    history = null,
-    archive = "Нет",
-},
-
 new Project
 {
     code = "39/21 - ТСП",
@@ -446,16 +195,357 @@ new Project
     history = null,
     archive = "Нет",
 },
+new Project
+{
+    code = "01/22 - ТСП",
+    shortName = "Лабытнанги. Биатлонный комплекс",
+    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
+    plannedFinishDate = new DateTime(2023, 02, 25, 0, 0, 0),
+    actualFinishDate = new DateTime(2023),
+    history = null,
+    archive = "Нет",
+    supervisor = "Прокопьев С.М."
+},
+new Project
+{
+    code = "37/22 - ТСП",
+    shortName = "ООО «СК «РЕАЛИСТ». Разработка РД «СТР ад в д. Казарово»",
+    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
+    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
+    actualFinishDate = new DateTime(2023),
+    history = null,
+    archive = "Нет"
+}, 
+new Project
+{
+    code = "32/22 - ТСП",
+    shortName = "ООО «СЗ Зеленые аллеи». Светофоры",
+    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
+    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
+    actualFinishDate = new DateTime(2023),
+    history = null,
+    archive = "Нет"
+},
+new Project
+{
+    code = "22/22 - ТСП",
+    shortName = "ООО «Бридж». Изменения в РД пп чз жд на км 37 ад Богданович-Покровское",
+    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
+    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
+    actualFinishDate = new DateTime(2023),
+    history = null,
+    archive = "Нет"
+},
+
+new Project
+{
+    code = "21/22 - ТСП",
+    shortName = "СОГУ. К. РЕМ. ад Северский-Полевской (КОРРЕКТИРОВКА)",
+    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
+    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
+    actualFinishDate = new DateTime(2023),
+    history = null,
+    archive = "Нет"
+},
+new Project
+{
+    code = "19/22 - ТСП",
+    shortName = "Ишим, племзавод Юбилейный. Подъездная дорога",
+    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
+    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
+    actualFinishDate = new DateTime(2023),
+    history = null,
+    archive = "Нет"
+},
+ //////
+ new Project
+ {
+     code = "31/18 - ТСП",
+     shortName = "Департамент. РЕК ул. Щербакова от ул. 2-я Луговая до ул. Дружбы",
+     dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
+     plannedFinishDate = new DateTime(2019, 06, 26, 0, 0, 0),
+     actualFinishDate = new DateTime(2023),
+     history = null,
+     archive = "Нет",
+     supervisor = "Григорьев Виктор Александрович"
+ },
+
+new Project
+{
+    code = "14/19 - ТСП",
+    shortName = "Брусника. СТР улиц в ЖЗ (Газовиков-Профсоюзная). Коррективы.",
+    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
+    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
+    actualFinishDate = new DateTime(2023),
+    history = null,
+    archive = "Нет",
+
+},
+
+
+
+new Project
+{
+    code = "27/19 - ТСП",
+    shortName = "Департамент. СТР ад в жр Березняковский",
+    priority = 2,
+    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
+    plannedFinishDate = new DateTime(2020, 03, 01, 0, 0, 0),
+    actualFinishDate = new DateTime(2023),
+    history = null,
+    archive = "Нет",
+    supervisor = "Мочалов Александр Николаевич"
+},
+
+
+
+ new Project
+ {
+     code = "10/20 - ТСП",
+     shortName = "Н. Уренгой. РЕК.  ул. Геологоразведчиков",
+     dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
+     plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
+     actualFinishDate = new DateTime(2023),
+     history = null,
+     archive = "Нет",
+ },
+
+
+
+new Project
+{
+    code = "16/20 - ТСП",
+    shortName = "Департамент. КОРР. ПД «СТР ад в д. Казарово»",
+    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
+    plannedFinishDate = new DateTime(2020, 12, 17, 0, 0, 0),
+    actualFinishDate = new DateTime(2023),
+    history = null,
+    archive = "Нет",
+    supervisor = "Дегтярёв М.Н."
+},
+
+
+
+new Project
+{
+    code = "18/20 - ТСП",
+    shortName = "Департамент. ПД «КРЕМ ул. Ставропольская»",
+    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
+    plannedFinishDate = new DateTime(2022, 12, 31, 0, 0, 0),
+    actualFinishDate = new DateTime(2023),
+    history = null,
+    archive = "Да",
+    supervisor = "Мочалов Александр Николаевич"
+},
+
+
+
+new Project
+{
+    code = "24/20 - ТСП",
+    shortName = "ДКС Н. Уренгой КОРР ПСД «РЕК пр. Губкина»",
+    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
+    plannedFinishDate = new DateTime(2020, 12, 01, 0, 0, 0),
+    actualFinishDate = new DateTime(2023),
+    history = null,
+    archive = "Нет",
+    supervisor = "Дегтярёв М.Н."
+},
+
+new Project
+{
+    code = "27/20 - ТСП",
+    shortName = "ООО «Уренгойдорстрой». Н. Уренгой КОРР ПСД «РЕК пр. Губкина»",
+    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
+    plannedFinishDate = new DateTime(2021, 03, 01, 0, 0, 0),
+    actualFinishDate = new DateTime(2023),
+    history = null,
+    archive = "Нет",
+    supervisor = "Дегтярёв М.Н."
+},
+
+
+
+new Project
+{
+    code = "40/20 - ТСП",
+    shortName = "ГКУ СО «УАД». РЕК ад подъезд к с.Коменки",
+    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
+    plannedFinishDate = new DateTime(2023, 12, 08, 0, 0, 0),
+    actualFinishDate = new DateTime(2023),
+    history = null,
+    archive = "Нет",
+},
+
+new Project
+{
+    code = "41/20 - ТСП",
+    shortName = "ООО «Брусника». Р-ка транс-пеш концепц. ул. Профсоюзная и ул. Госпаровская",
+    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
+    plannedFinishDate = new DateTime(2020, 12, 30, 0, 0, 0),
+    actualFinishDate = new DateTime(2023),
+    history = null,
+    archive = "Нет",
+    supervisor = "Прокопьев С.М."
+},
+
+
+
+new Project
+{
+    code = "45/20 - ТСП",
+    shortName = "ГКУ СО «УАД». РЕК ад д. Кокуй – д. Серкова ТГО",
+    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
+    plannedFinishDate = new DateTime(2023, 12, 08, 0, 0, 0),
+    actualFinishDate = new DateTime(2023),
+    history = null,
+    archive = "Нет",
+    supervisor = "Домрачев Алексей Юрьевич"
+},
+
+
+
+new Project
+{
+    code = "47/20 - ТСП",
+    shortName = "Департамент. ПД «СТР ул. в р-не Комаровский 2 очередь»",
+    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
+    plannedFinishDate = new DateTime(2021, 07, 01, 0, 0, 0),
+    actualFinishDate = new DateTime(2023),
+    history = null,
+    archive = "Нет",
+    supervisor = "Терехова Нина Михайловна"
+},
+
+
+new Project
+{
+    code = "19/21 - ТСП",
+    shortName = "СЗ Тюм. р-на. СТР подъезда к ФАД",
+    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
+    plannedFinishDate = new DateTime(2022, 06, 01, 0, 0, 0),
+    actualFinishDate = new DateTime(2023),
+    history = null,
+    archive = "Нет",
+    supervisor = "Терехова Нина Михайловна"
+},
+
+
+
+new Project
+{
+    code = "27/21 - ТСП",
+    shortName = "ГКУ ТО УАД. СТР ад Обход д. Ожогина. Корректировка",
+    priority = 1,
+    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
+    plannedFinishDate = new DateTime(2022, 09, 15, 0, 0, 0),
+    actualFinishDate = new DateTime(2023),
+    history = null,
+    archive = "Нет",
+    supervisor = "Мочалов Александр Николаевич"
+},
+
+
+
+
+new Project
+{
+    code = "28/21 - ТСП",
+    shortName = "Ставрополь. ПП развязка на 63 км",
+    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
+    plannedFinishDate = new DateTime(2021, 11, 30, 0, 0, 0),
+    actualFinishDate = new DateTime(2023),
+    history = null,
+    archive = "Нет",
+    supervisor = "Прокопьев С.М."
+},
+
+
+
+new Project
+{
+    code = "31/22 - ТСП",
+    shortName = "СОГУ. СТР пп чз жд на км 37 ад Богданович-Покровское (КОРРЕКТИРОВКА)",
+    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
+    plannedFinishDate = new DateTime(2022, 12, 05, 0, 0, 0),
+    actualFinishDate = new DateTime(2023),
+    history = null,
+    archive = "Нет",
+    supervisor = "Домрачев Алексей Юрьевич"
+},
+
+new Project
+{
+    code = "32/21 - ТСП",
+    shortName = "Автомобильные дороги пгт. Пангоды (ПИР)",
+    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
+    plannedFinishDate = new DateTime(2021, 12, 10, 0, 0, 0),
+    actualFinishDate = new DateTime(2023),
+    history = null,
+    archive = "Нет",
+    supervisor = "Дегтярёв М.Н"
+},
+
+new Project
+{
+    code = "33/21 - ТСП",
+    shortName = "СОГУ. РЕК мп чз р. Пышму",
+    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
+    plannedFinishDate = new DateTime(2023, 10, 25, 0, 0, 0),
+    actualFinishDate = new DateTime(2023),
+    history = null,
+    archive = "Нет",
+    supervisor = "Домрачев Алексей Юрьевич"
+},
+
+new Project
+{
+    code = "36/21 - ТСП",
+    shortName = "Сургут. Ул. Киртбая",
+    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
+    plannedFinishDate = new DateTime(2022, 09, 30, 0, 0, 0),
+    actualFinishDate = new DateTime(2023),
+    history = null,
+    archive = "Нет",
+    supervisor = "Григорьев Виктор Александрович"
+},
+
+new Project
+{
+    code = "37/21 - ТСП",
+    shortName = "Навигатор. Девелопмент. СТР. дорог в жк по ул. В. Полякова. 5-6-й этап — ПД,РД",
+    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
+    plannedFinishDate = new DateTime(2022, 12, 31, 0, 0, 0),
+    actualFinishDate = new DateTime(2023),
+    history = null,
+    archive = "Да",
+    supervisor = "Мочалов Александр Николаевич"
+},
+
+new Project
+{
+    code = "38/21 - ТСП",
+    shortName = "Лабытнанги. ИО участок 01_01_01",
+    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
+    plannedFinishDate = new DateTime(2022, 02, 28, 0, 0, 0),
+    actualFinishDate = new DateTime(2023),
+    history = null,
+    archive = "Нет",
+    supervisor = "Дегтярёв М.Н"
+},
+
+
 
 new Project
 {
     code = "41/21 - ТСП",
     shortName = "Нефтеюганск. АН. ИО вдоль ул. Нефтяников",
     dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
+    plannedFinishDate = new DateTime(2022, 12, 31, 0, 0, 0),
     actualFinishDate = new DateTime(2023),
     history = null,
     archive = "Да",
+    supervisor = "Мочалов Александр Николаевич"
 },
 
 new Project
@@ -463,404 +553,370 @@ new Project
     code = "42/21 - ТСП",
     shortName = "Нефтеюганск. АН. ИО 4 мкр",
     dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
+    plannedFinishDate = new DateTime(2022, 12, 31, 0, 0, 0),
     actualFinishDate = new DateTime(2023),
     history = null,
     archive = "Да",
-},
-
-
-
-
-
-////////
-new Project
-{
-    code = "01/22 - ТСП", 
-shortName = "Лабытнанги. Биатлонный комплекс",
-    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
-    actualFinishDate = new DateTime(2023),
-    history = null,
-    archive = "Нет"
+    supervisor = "Мочалов Александр Николаевич"
 },
 
 new Project
 {
-    code = "50/21 - ТСП", 
-shortName = "ООО «Сибинтел-Холдинг». КРЕМ ул. Даудельная",
+    code = "50/21 - ТСП",
+    shortName = "ООО «Сибинтел-Холдинг». КРЕМ ул. Даудельная",
     dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
+    plannedFinishDate = new DateTime(2022, 08, 27, 0, 0, 0),
     actualFinishDate = new DateTime(2023),
     history = null,
     priority = 2,
-    archive = "Нет"
+    archive = "Нет",
+supervisor = "Мочалов Александр Николаевич"
 },
 
 new Project
 {
-    code = "49/21 - ТСП", 
-shortName = "ООО «Сибинтел-Холдинг». СТР ул. Софьи Ковалевской",
+    code = "49/21 - ТСП",
+    shortName = "ООО «Сибинтел-Холдинг». СТР ул. Софьи Ковалевской",
     dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
+    plannedFinishDate = new DateTime(2022, 08, 27, 0, 0, 0),
     actualFinishDate = new DateTime(2023),
     history = null,
     priority = 2,
-    archive = "Нет"
+    archive = "Нет",
+supervisor = "Мочалов Александр Николаевич"
 },
 
 new Project
 {
-    code = "48/21 - ТСП", 
-shortName = "ООО «Сибинтел-Холдинг». КРЕМ ул. Станкостроителей",
+    code = "48/21 - ТСП",
+    shortName = "ООО «Сибинтел-Холдинг». КРЕМ ул. Станкостроителей",
     dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
+    plannedFinishDate = new DateTime(2022, 08, 27, 0, 0, 0),
+    actualFinishDate = new DateTime(2023),
+    history = null,
+    priority = 2,
+    archive = "Нет",
+supervisor = "Мочалов Александр Николаевич"
+},
+
+new Project
+{
+    code = "45/21 - ТСП",
+    shortName = "Н. Девелопмент. СТР. дорог в жк по ул. В. Полякова, 4 этап — корр. 2",
+    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
+    plannedFinishDate = new DateTime(2022, 12, 31, 0, 0, 0),
+    actualFinishDate = new DateTime(2023),
+    history = null,
+    archive = "Да",
+supervisor = "Мочалов Александр Николаевич"
+},
+
+new Project
+{
+    code = "43/21 - ТСП",
+    shortName = "Тюмень. УАДТО. СТР ТПУ с. Щетково",
+    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
+    plannedFinishDate = new DateTime(2022, 09, 15, 0, 0, 0),
+    actualFinishDate = new DateTime(2023),
+    history = null,
+    archive = "Нет",
+supervisor = "Файзуллин Давид Эдуардович"
+},
+
+
+new Project
+{
+    code = "36/22 - ТСП",
+    shortName = "СЗ Тюм. р-на. СТР ад Ожогина-Патрушева",
+    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
+    plannedFinishDate = new DateTime(2024, 09, 01, 0, 0, 0),
+    actualFinishDate = new DateTime(2023),
+    history = null,
+    archive = "Нет",
+supervisor = "Терехова Нина Михайловна"
+},
+
+new Project
+{
+    code = "35/22 - ТСП",
+    shortName = "ТОДЭП. Разработка РД ул. А. Бушуева",
+    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
+    plannedFinishDate = new DateTime(2022, 12, 15, 0, 0, 0),
+    actualFinishDate = new DateTime(2023),
+    history = null,
+    archive = "Нет",
+supervisor = "Терехова Нина Михайловна"
+},
+
+new Project
+{
+    code = "34/22 - ТСП",
+    shortName = "Н. Уренгой. РЕК ул. Подшибякина",
+    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
+    plannedFinishDate = new DateTime(2023, 10, 15, 0, 0, 0),
+    actualFinishDate = new DateTime(2023),
+    history = null,
+    archive = "Нет",
+supervisor = "Дегтярёв М.Н"
+},
+
+new Project
+{
+    code = "33/22 - ТСП",
+    shortName = "Н. Уренгой. РЕК ул. И. Подовжнего",
+    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
+    plannedFinishDate = new DateTime(2023, 10, 15, 0, 0, 0),
+    actualFinishDate = new DateTime(2023),
+    history = null,
+    archive = "Нет",
+supervisor = "Дегтярёв М.Н"
+},
+
+
+new Project
+{
+    code = "31/22 - ТСП",
+    shortName = "СОГУ. СТР пп чз жд на км 37 ад Богданович-Покровское (КОРРЕКТИРОВКА)",
+    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
+    plannedFinishDate = new DateTime(2022, 12, 05, 0, 0, 0),
+    actualFinishDate = new DateTime(2023),
+    history = null,
+    archive = "Нет",
+supervisor = "Домрачев Алексей Юрьевич"
+},
+
+new Project
+{
+    code = "30/22 - ТСП",
+    shortName = "Салехард. ИО застройки правого берега р. Шайтанка ",
+    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
+    plannedFinishDate = new DateTime(2023, 02, 01, 0, 0, 0),
+    actualFinishDate = new DateTime(2023),
+    history = null,
+    archive = "Нет",
+supervisor = "Файзуллин Давид Эдуардович"
+},
+
+new Project
+{
+    code = "29/22 - ТСП",
+    shortName = "Н. Уренгой. 2 моста Западная магистраль",
+    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
+    plannedFinishDate = new DateTime(2023, 04, 30, 0, 0, 0),
+    actualFinishDate = new DateTime(2023),
+    history = null,
+    archive = "Нет",
+supervisor = "Дегтярёв М.Н"
+},
+
+new Project
+{
+    code = "27/22 - ТСП",
+    shortName = "ПД на устройство ККС (Обход д. Ожогина)",
+    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
+    plannedFinishDate = new DateTime(2022, 11, 30, 0, 0, 0),
+    actualFinishDate = new DateTime(2023),
+    history = null,
+    priority = 3,
+    archive = "Нет",
+supervisor = "Мочалов Александр Николаевич"
+},
+
+new Project
+{
+    code = "26/22 - ТСП",
+    shortName = "Н. Уренгой. КРЕМ ул. 26 съезда КПСС",
+    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
+    plannedFinishDate = new DateTime(2023, 04, 30, 0, 0, 0),
+    actualFinishDate = new DateTime(2023),
+    history = null,
+    archive = "Нет",
+supervisor = "Дегтярёв М.Н"
+},
+
+new Project
+{
+    code = "25/22 - ТСП",
+    shortName = "Н. Уренгой. КРЕМ проездов мкр. Советский",
+    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
+    plannedFinishDate = new DateTime(2023, 04, 30, 0, 0, 0),
+    actualFinishDate = new DateTime(2023),
+    history = null,
+    archive = "Нет",
+supervisor = "Дегтярёв М.Н"
+},
+
+new Project
+{
+    code = "24/22 - ТСП",
+    shortName = "РД «СТР ул. Розы Трениной»",
+    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
+    plannedFinishDate = new DateTime(2022, 11, 17, 0, 0, 0),
+    actualFinishDate = new DateTime(2023),
+    history = null,
+    archive = "Нет",
+supervisor = "Григорьев Виктор Александрович"
+},
+
+new Project
+{
+    code = "23/22 - ТСП",
+    shortName = "Н. Уренгой. 2 моста Центральная магистраль",
+    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
+    plannedFinishDate = new DateTime(2023, 04, 30, 0, 0, 0),
+    actualFinishDate = new DateTime(2023),
+    history = null,
+    archive = "Нет",
+supervisor = "Дегтярёв М.Н"
+},
+
+
+
+new Project
+{
+    code = "20/22 - ТСП",
+    shortName = "Н. Уренгой «Реконструкция проспекта Губкина» (АН)",
+    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
+    plannedFinishDate = new DateTime(2022, 11, 01, 0, 0, 0),
+    actualFinishDate = new DateTime(2023),
+    history = null,
+    archive = "Нет",
+supervisor = "Дегтярёв М.Н"
+},
+
+
+
+new Project
+{
+    code = "18/22 - ТСП",
+    shortName = "АН «Улица Нововартовская. 2 этап»",
+    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
+    plannedFinishDate = new DateTime(2022, 12, 31, 0, 0, 0),
+    actualFinishDate = new DateTime(2023),
+    history = null,
+    archive = "Да",
+supervisor = "Мочалов Александр Николаевич"
+},
+
+new Project
+{
+    code = "17/22 - ТСП",
+    shortName = "ООО «Валла-Тунтури». СТР ад от примык. к ад Р-21 «Кола»",
+    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
+    plannedFinishDate = new DateTime(2023, 04, 30, 0, 0, 0),
     actualFinishDate = new DateTime(2023),
     history = null,
     priority = 1,
-    archive = "Нет"
+    archive = "Нет",
+supervisor = "Мочалов Александр Николаевич"
 },
 
 new Project
 {
-    code = "45/21 - ТСП", 
-shortName = "Н. Девелопмент. СТР. дорог в жк по ул. В. Полякова, 4 этап — корр. 2",
+    code = "14/22 - ТСП",
+    shortName = "Н. Уренгой. РЕК. ул. Новая",
     dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
+    plannedFinishDate = new DateTime(2023, 05, 31, 0, 0, 0),
     actualFinishDate = new DateTime(2023),
     history = null,
-    archive = "Да"
+    archive = "Нет",
+supervisor = "Дегтярёв М.Н"
 },
 
 new Project
 {
-    code = "43/21 - ТСП", 
-shortName = "Тюмень. УАДТО. СТР ТПУ с. Щетково",
+    code = "12/22 - ТСП",
+    shortName = "ТОДЭП. Разработка РД ул. Т. Кармацкого",
     dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
+    plannedFinishDate = new DateTime(2023, 09, 01, 0, 0, 0),
     actualFinishDate = new DateTime(2023),
     history = null,
-    archive = "Нет"
+    archive = "Нет",
+supervisor = "Григорьев Виктор Александрович"
 },
 
 new Project
 {
-    code = "37/22 - ТСП", 
-shortName = "ООО «СК «РЕАЛИСТ». Разработка РД «СТР ад в д. Казарово»",
+    code = "11/22 - ТСП",
+    shortName = "СОГУ. СТР пп чз жд на км 37 ад Богданович-Покровское (АН)",
     dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
+    plannedFinishDate = new DateTime(2023, 10, 20, 0, 0, 0),
     actualFinishDate = new DateTime(2023),
     history = null,
-    archive = "Нет"
+    archive = "Нет",
+supervisor = "Домрачев Алексей Юрьевич"
 },
 
 new Project
 {
-    code = "36/22 - ТСП", 
-shortName = "СЗ Тюм. р-на. СТР ад Ожогина-Патрушева",
+    code = "10/22 - ТСП",
+    shortName = "СОГУ. СТР пп чз жд на км 12 ад Глубокое-Бобровский (АН)",
     dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
+    plannedFinishDate = new DateTime(2023, 12, 20, 0, 0, 0),
     actualFinishDate = new DateTime(2023),
     history = null,
-    archive = "Нет"
+    archive = "Нет",
+supervisor = "Домрачев Алексей Юрьевич"
 },
 
 new Project
 {
-    code = "35/22 - ТСП", 
-shortName = "ТОДЭП. Разработка РД ул. А. Бушуева",
+    code = "09/22 - ТСП",
+    shortName = "Н. Уренгой. РЕК ул. Железнодорожной",
     dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
+    plannedFinishDate = new DateTime(2023, 02, 28, 0, 0, 0),
     actualFinishDate = new DateTime(2023),
     history = null,
-    archive = "Нет"
+    archive = "Нет",
+supervisor = "Дегтярёв М.Н"
 },
 
 new Project
 {
-    code = "34/22 - ТСП", 
-shortName = "Н. Уренгой. РЕК ул. Подшибякина",
+    code = "08/22 - ТСП",
+    shortName = "Тобольск. СТР дорог в мкр. Усадьба",
     dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
+    plannedFinishDate = new DateTime(2022, 11, 28, 0, 0, 0),
     actualFinishDate = new DateTime(2023),
     history = null,
-    archive = "Нет"
+    archive = "Нет",
+supervisor = "Терехова Нина Михайловна"
 },
 
 new Project
 {
-    code = "33/22 - ТСП", 
-shortName = "Н. Уренгой. РЕК ул. И. Подовжнего",
+    code = "07/22 - ТСП",
+    shortName = "Тобольск. РЕК ул. Алябьева",
     dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
+    plannedFinishDate = new DateTime(2022, 12, 28, 0, 0, 0),
     actualFinishDate = new DateTime(2023),
     history = null,
-    archive = "Нет"
+    archive = "Нет",
+supervisor = "Григорьев Виктор Александрович"
 },
 
 new Project
 {
-    code = "32/22 - ТСП", 
-shortName = "ООО «СЗ Зеленые аллеи». Светофоры",
+    code = "05/22 - ТСП",
+    shortName = "Тобольск. СТР дорог в 19 мкр",
     dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
+    plannedFinishDate = new DateTime(2022, 11, 28, 0, 0, 0),
     actualFinishDate = new DateTime(2023),
     history = null,
-    archive = "Нет"
+    archive = "Нет",
+supervisor = "Домрачев Алексей Юрьевич"
 },
 
 new Project
 {
-    code = "31/22 - ТСП", 
-shortName = "СОГУ. СТР пп чз жд на км 37 ад Богданович-Покровское (КОРРЕКТИРОВКА)",
+    code = "04/22 - ТСП",
+    shortName = "Департамент. ПД «КРЕМ ад от ул. Авторемонтная до ул. Ямская»",
     dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
+    plannedFinishDate = new DateTime(2023, 10, 02, 0, 0, 0),
     actualFinishDate = new DateTime(2023),
     history = null,
-    archive = "Нет"
-},
-
-new Project
-{
-    code = "30/22 - ТСП", 
-shortName = "Салехард. ИО застройки правого берега р. Шайтанка ",
-    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
-    actualFinishDate = new DateTime(2023),
-    history = null,
-    archive = "Нет"
-},
-
-new Project
-{
-    code = "29/22 - ТСП", 
-shortName = "Н. Уренгой. 2 моста Западная магистраль",
-    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
-    actualFinishDate = new DateTime(2023),
-    history = null,
-    archive = "Нет"
-},
-
-new Project
-{
-    code = "27/22 - ТСП", 
-shortName = "ПД на устройство ККС (Обход д. Ожогина)",
-    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
-    actualFinishDate = new DateTime(2023),
-    history = null,
-    archive = "Нет"
-},
-
-new Project
-{
-    code = "26/22 - ТСП", 
-shortName = "Н. Уренгой. КРЕМ ул. 26 съезда КПСС",
-    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
-    actualFinishDate = new DateTime(2023),
-    history = null,
-    archive = "Нет"
-},
-
-new Project
-{
-    code = "25/22 - ТСП", 
-shortName = "Н. Уренгой. КРЕМ проездов мкр. Советский",
-    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
-    actualFinishDate = new DateTime(2023),
-    history = null,
-    archive = "Нет"
-},
-
-new Project
-{
-    code = "24/22 - ТСП", 
-shortName = "РД «СТР ул. Розы Трениной»",
-    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
-    actualFinishDate = new DateTime(2023),
-    history = null,
-    archive = "Нет"
-},
-
-new Project
-{
-    code = "23/22 - ТСП", 
-shortName = "Н. Уренгой. 2 моста Центральная магистраль",
-    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
-    actualFinishDate = new DateTime(2023),
-    history = null,
-    archive = "Нет"
-},
-
-new Project
-{
-    code = "22/22 - ТСП", 
-shortName = "ООО «Бридж». Изменения в РД пп чз жд на км 37 ад Богданович-Покровское",
-    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
-    actualFinishDate = new DateTime(2023),
-    history = null,
-    archive = "Нет"
-},
-
-new Project
-{
-    code = "21/22 - ТСП", 
-shortName = "СОГУ. К. РЕМ. ад Северский-Полевской (КОРРЕКТИРОВКА)",
-    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
-    actualFinishDate = new DateTime(2023),
-    history = null,
-    archive = "Нет"
-},
-
-new Project
-{
-    code = "20/22 - ТСП", 
-shortName = "Н. Уренгой «Реконструкция проспекта Губкина» (АН)",
-    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
-    actualFinishDate = new DateTime(2023),
-    history = null,
-    archive = "Нет"
-},
-
-new Project
-{
-    code = "19/22 - ТСП", 
-shortName = "Ишим, племзавод Юбилейный. Подъездная дорога",
-    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
-    actualFinishDate = new DateTime(2023),
-    history = null,
-    archive = "Нет"
-},
-
-new Project
-{
-    code = "18/22 - ТСП", 
-shortName = "АН «Улица Нововартовская. 2 этап»",
-    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
-    actualFinishDate = new DateTime(2023),
-    history = null,
-    archive = "Да"
-},
-
-new Project
-{
-    code = "17/22 - ТСП", 
-shortName = "ООО «Валла-Тунтури». СТР ад от примык. к ад Р-21 «Кола»",
-    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
-    actualFinishDate = new DateTime(2023),
-    history = null,
-    priority = 1,
-    archive = "Нет"
-},
-
-new Project
-{
-    code = "14/22 - ТСП", 
-shortName = "Н. Уренгой. РЕК. ул. Новая",
-    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
-    actualFinishDate = new DateTime(2023),
-    history = null,
-    archive = "Нет"
-},
-
-new Project
-{
-    code = "12/22 - ТСП", 
-shortName = "ТОДЭП. Разработка РД ул. Т. Кармацкого",
-    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
-    actualFinishDate = new DateTime(2023),
-    history = null,
-    archive = "Нет"
-},
-
-new Project
-{
-    code = "11/22 - ТСП", 
-shortName = "СОГУ. СТР пп чз жд на км 37 ад Богданович-Покровское (АН)",
-    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
-    actualFinishDate = new DateTime(2023),
-    history = null,
-    archive = "Нет"
-},
-
-new Project
-{
-    code = "10/22 - ТСП", 
-shortName = "СОГУ. СТР пп чз жд на км 12 ад Глубокое-Бобровский (АН)",
-    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
-    actualFinishDate = new DateTime(2023),
-    history = null,
-    archive = "Нет"
-},
-
-new Project
-{
-    code = "09/22 - ТСП", 
-shortName = "Н. Уренгой. РЕК ул. Железнодорожной",
-    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
-    actualFinishDate = new DateTime(2023),
-    history = null,
-    archive = "Нет"
-},
-
-new Project
-{
-    code = "08/22 - ТСП", 
-shortName = "Тобольск. СТР дорог в мкр. Усадьба",
-    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
-    actualFinishDate = new DateTime(2023),
-    history = null,
-    archive = "Нет"
-},
-
-new Project
-{
-    code = "07/22 - ТСП", 
-shortName = "Тобольск. РЕК ул. Алябьева",
-    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
-    actualFinishDate = new DateTime(2023),
-    history = null,
-    archive = "Нет"
-},
-
-new Project
-{
-    code = "05/22 - ТСП", 
-shortName = "Тобольск. СТР дорог в 19 мкр",
-    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
-    actualFinishDate = new DateTime(2023),
-    history = null,
-    archive = "Нет"
-},
-
-new Project
-{
-    code = "04/22 - ТСП", 
-shortName = "Департамент. ПД «КРЕМ ад от ул. Авторемонтная до ул. Ямская»",
-    dateStart = new DateTime(2023, 1, 14, 15, 0, 0),
-    plannedFinishDate = new DateTime(2023, 01, 25, 0, 0, 0),
-    actualFinishDate = new DateTime(2023),
-    history = null,
-    archive = "Нет"
+    archive = "Нет",
+supervisor = "Терехова Нина Михайловна"
 }
                 );
             }
@@ -2062,10 +2118,19 @@ new Task
                     var list = new Staff[]
                     {
                         new Staff {
+code = "00",
+name = "Прокопьев Сергей Михайлович",
+divisionId = 1,
+roleId = 5,
+post = "Директор",
+login = "ПрокопьевСМ",
+passvord = "123456"
+},
+new Staff {
 code = "01",
 name = "Григорьев Виктор Александрович",
 divisionId = 1,
-roleId = 5,
+roleId = 6,
 post = "Главный инженер проектов",
 login = "ГригорьевВА",
 passvord = "123456"
@@ -2075,7 +2140,7 @@ new Staff {
 code = "02",
 name = "Домрачев Алексей Юрьевич",
 divisionId = 1,
-roleId = 5,
+roleId = 6,
 post = "Главный инженер проектов",
 login = "ДомрачевАЮ",
 passvord = "123456"
@@ -2085,7 +2150,7 @@ new Staff {
 code = "03",
 name = "Мочалов Александр Николаевич",
 divisionId = 1,
-roleId = 5,
+roleId = 6,
 post = "Главный инженер проектов",
 login = "МочаловАН",
 passvord = "123456"
@@ -2095,7 +2160,7 @@ new Staff {
 code = "04",
 name = "Терехова Нина Михайловна",
 divisionId = 1,
-roleId = 5,
+roleId = 6,
 post = "Главный инженер проектов",
 login = "ТереховаНМ",
 passvord = "123456"
@@ -2105,7 +2170,7 @@ new Staff {
 code = "05",
 name = "Менщиков Андрей Игоревич",
 divisionId = 1,
-roleId = 6,
+roleId = 4,
 post = "Помощник главного инженера проекта",
 login = "МенщиковАИ",
 passvord = "123456"
@@ -2115,7 +2180,7 @@ new Staff {
 code = "06",
 name = "Файзуллин Давид Эдуардович",
 divisionId = 1,
-roleId = 6,
+roleId = 4,
 post = "Помощник главного инженера проекта",
 login = "ФайзуллинДЭ",
 passvord = "123456"
@@ -2126,7 +2191,7 @@ new Staff {
 code = "07",
 name = "Мухортова Светлана Ивановна",
 divisionId = 2,
-roleId = 3,
+roleId = 1,
 post = "Начальник отдела проектирования",
 login = "МухортоваСИ",
 passvord = "123456"
@@ -2137,7 +2202,7 @@ code = "08",
 name = "Лесина Ольга Сергеевна",
 supervisorCod = "07",
 divisionId = 2,
-roleId = 1,
+roleId = 3,
 post = "Руководитель группы проектирования",
 login = "ЛесинаОС",
 passvord = "123456"
@@ -2190,19 +2255,18 @@ passvord = "123456"
 /////
 new Staff {
 code = "13",
-name = "Хамитова Анна Федоровна",
-supervisorCod = "07",
+name = "Кузнецова Инна Владимировна",
+supervisorCod = "08",
 divisionId = 2,
-roleId = 1,
-post = "Руководитель группы проектирования",
-login = "ХамитоваАФ",
+roleId = 2,
+post = "Главный специалист отдела проектирования",
+login = "КузнецоваИВ",
 passvord = "123456"
 },
-
 new Staff {
 code = "14",
 name = "Домрачева Наталья Николаевна",
-supervisorCod = "13",
+supervisorCod = "08",
 divisionId = 2,
 roleId = 2,
 post = "Ведущий инженер отдела проектирования",
@@ -2213,24 +2277,14 @@ passvord = "123456"
 new Staff {
 code = "15",
 name = "Хицунова Неонила Юрьевна",
-supervisorCod = "13",
+supervisorCod = "08",
 divisionId = 2,
 roleId = 2,
-post = "Инженер – проектировщик 1 категории отдела проектирования",
+post = "Ведущий инженер отдела проектирования",
 login = "ХицуноваНЮ",
 passvord = "123456"
 },
 
-new Staff {
-code = "16",
-name = "Кузнецова Инна Владимировна",
-supervisorCod = "13",
-divisionId = 2,
-roleId = 2,
-post = "Инженер – проектировщик 1 категории отдела проектирования",
-login = "КузнецоваИВ",
-passvord = "123456"
-},
 
 //////
 new Staff {
@@ -2238,7 +2292,7 @@ code = "17",
 name = "Лялина Ксения Евгеньевна",
 supervisorCod = "07",
 divisionId = 2,
-roleId = 1,
+roleId = 3,
 post = "Руководитель группы проектирования",
 login = "ЛялинаКЕ",
 passvord = "123456"
@@ -2285,6 +2339,138 @@ divisionId = 2,
 roleId = 2,
 post = "Инженер – проектировщик 3 категории отдела проектирования",
 login = "КолмогоровМА",
+passvord = "123456"
+},
+////
+new Staff {
+code = "22",
+name = "Лукьянова Евгения Леонтьевна",
+supervisorCod = "07",
+divisionId = 2,
+roleId = 2,
+post = "Главный специалист – эколог",
+login = "ЛукьяноваЕЛ",
+passvord = "123456"
+},
+new Staff {
+code = "23",
+name = "Титова Елена Валерьевна",
+supervisorCod = "07",
+divisionId = 2,
+roleId = 2,
+post = "Ведущий инженер отдела проектирования",
+login = "ТитоваЕВ",
+passvord = "123456"
+},
+////
+new Staff {
+code = "24",
+name = "Чурилова Ирина Юрьевна",
+supervisorCod = "07",
+divisionId = 2,
+roleId = 2,
+post = "Кадастровый инженер",
+login = "ЧуриловаИЮ",
+passvord = "123456"
+},
+new Staff {
+code = "25",
+name = "Прокопьева Марина Игоревна",
+supervisorCod = "07",
+divisionId = 2,
+roleId = 2,
+post = "Ведущий инженер (сметчик)",
+login = "ПрокопьеваМИ",
+passvord = "123456"
+},
+new Staff {
+code = "26",
+name = "Секисова Ольга Александровна",
+supervisorCod = "07",
+divisionId = 2,
+roleId = 2,
+post = "Инженер - сметчик",
+login = "СекисоваОА",
+passvord = "123456"
+},
+/////
+new Staff {
+code = "27",
+name = "Прокопьев Иван Михайлович",
+divisionId = 3,
+roleId = 1,
+post = "Начальник отдела инженерных изысканий",
+login = "ПрокопьевИМ",
+passvord = "123456"
+},
+new Staff {
+code = "28",
+name = "Коваленко Андрей Иванович",
+supervisorCod = "27",
+divisionId = 3,
+roleId = 2,
+post = "Ведущий инженер-геолог",
+login = "КоваленкоАИ",
+passvord = "123456"
+},
+new Staff {
+code = "29",
+name = "Макеев Алексей Андреевич",
+supervisorCod = "27",
+divisionId = 3,
+roleId = 2,
+post = "Инженер-геолог",
+login = "МакеевАА",
+passvord = "123456"
+},
+new Staff {
+code = "30",
+name = "Приданников Юрий Александрович",
+supervisorCod = "27",
+divisionId = 3,
+roleId = 2,
+post = "Главный специалист отдела инженерных изысканий",
+login = "ПриданниковЮА",
+passvord = "123456"
+},
+new Staff {
+code = "31",
+name = "Иванников Виталий Михайлович",
+supervisorCod = "27",
+divisionId = 3,
+roleId = 2,
+post = "Главный специалист отдела инженерных изысканий",
+login = "ИванниковВМ",
+passvord = "123456"
+},
+new Staff {
+code = "32",
+name = "Мазуров Александр Андреевич",
+supervisorCod = "27",
+divisionId = 3,
+roleId = 2,
+post = "Главный специалист отдела инженерных изысканий",
+login = "МазуровАА",
+passvord = "123456"
+},
+new Staff {
+code = "33",
+name = "Дидигов Руслан Хамзатович",
+supervisorCod = "27",
+divisionId = 3,
+roleId = 2,
+post = "Ведущий инженер отдела инженерных изысканий",
+login = "ДидиговРХ",
+passvord = "123456"
+},
+new Staff {
+code = "34",
+name = "Ерофеев Алексей Павлович",
+supervisorCod = "27",
+divisionId = 3,
+roleId = 2,
+post = "Инженера-топограф 1 категории отдела инженерных изысканий",
+login = "ЕрофеевАП",
 passvord = "123456"
 },
                     };

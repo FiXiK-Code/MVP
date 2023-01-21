@@ -22,7 +22,7 @@
     {<label>Ответственный</label>
         <select name="supervisor" asp-for="redactedProject.supervisor" class="form-control">
             <option asp-for="@Model.redactedProject.supervisor" selected hidden>@Model.redactedProject.supervisor</option>
-            @foreach (var staff in Model.staffs.Where(p => p.roleId == 5))
+            @foreach (var staff in Model.staffs.Where(p => p.roleId == 6))
             {
                 <option>@staff.name</option>
             }

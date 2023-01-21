@@ -39,19 +39,23 @@
                 <p>Сотрудники</p>
             </div>
 
+            <div class="task">
+                <p>Справочник</p>
+            </div>
+
             <div>
                 <a asp-controller="Login" asp-action="Index">
                     <button style="width:100%" class="btn btn__top-bar" type="button">Выйти</button>
                 </a>
             </div>
-           
+
 
         </aside>
         <div class="content">
             <div class="first-box">
                 @if (@ViewBag.Role != null)
                 {
-                    <div id="fistTable" class="first-table" style="display:@Model.activeTable1">
+                    <div class="first-table" style="display:@Model.activeTable1">
                         <form class="top-menu" action="" method="post">
                             @if (ViewBag.Role != "Сотрудник")
                             {
@@ -216,6 +220,11 @@
                         </form>
                         @Html.Partial("StaffTableTest")
                     </div>
+
+                    <div class="forth-table" style="display:@Model.activeTable4">
+                        
+                        @Html.Partial("ManualTableTest")
+                    </div>
                 }
             </div>
             <div class="second-box">
@@ -247,15 +256,18 @@
             var table1 = document.querySelector(".first-table");
             var table2 = document.querySelector(".second-table");
             var table3 = document.querySelector(".third-table");
+            var table4 = document.querySelector(".forth-table");
 
             task[0].addEventListener('click', function () {
                 table1.style.display = "block";
                 table2.style.display = "none";
                 table3.style.display = "none";
+                table4.style.display = "none";
                 @{
                     Model.activeTable1 = "block";
                     Model.activeTable2 = "none";
                     Model.activeTable3 = "none";
+                    Model.activeTable4 = "none";
                     Model.activeTableIndex = 0;
                     }
             })
@@ -263,10 +275,12 @@
                 table1.style.display = "none";
                 table2.style.display = "block";
                 table3.style.display = "none";
+                table4.style.display = "none";
                 @{
                     Model.activeTable1 = "none";
                     Model.activeTable2 = "block";
                     Model.activeTable3 = "none";
+                    Model.activeTable4 = "none";
                     Model.activeTableIndex = 1;
                     }
             })
@@ -274,11 +288,26 @@
                 table1.style.display = "none";
                 table2.style.display = "none";
                 table3.style.display = "block";
+                table4.style.display = "none";
                 @{
                     Model.activeTable1 = "none";
                     Model.activeTable2 = "none";
                     Model.activeTable3 = "block";
+                    Model.activeTable4 = "none";
                     Model.activeTableIndex = 2;
+                    }
+            })
+            task[3].addEventListener('click', function () {
+                table1.style.display = "none";
+                table2.style.display = "none";
+                table3.style.display = "none";
+                table4.style.display = "block";
+                @{
+                    Model.activeTable1 = "none";
+                    Model.activeTable2 = "none";
+                    Model.activeTable4 = "block";
+                    Model.activeTable3 = "none";
+                    Model.activeTableIndex = 3;
                     }
             })
     </script>

@@ -334,22 +334,32 @@ namespace MVP.Controllers
             string table1 = "";
             string table2 = "";
             string table3 = "";
+            string table4 = "";
             switch (activTable)
             {
                 case 0:
                     table1 = "block";
                     table2 = "none";
                     table3 = "none";
+                    table4 = "none";
                     break;
                 case 1:
                     table1 = "none";
                     table2 = "block";
                     table3 = "none";
+                    table4 = "none";
                     break;
                 case 2:
                     table1 = "none";
                     table2 = "none";
                     table3 = "block";
+                    table4 = "none";
+                    break;
+                case 3:
+                    table1 = "none";
+                    table2 = "none";
+                    table3 = "none";
+                    table4 = "block";
                     break;
             }
 
@@ -388,6 +398,7 @@ namespace MVP.Controllers
                 activeTable1 = table1,
                 activeTable2 = table2,
                 activeTable3 = table3,
+                activeTable4 = table4,
 
                 activeTableIndex = activTable
 

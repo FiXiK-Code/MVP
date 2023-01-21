@@ -114,6 +114,11 @@ select:hover {
     overflow-y: scroll;
 }
 
+.forth-table {
+    display: none;
+    overflow-y: scroll;
+}
+
 .first-box {
     width: 80%;
     padding: 10px;

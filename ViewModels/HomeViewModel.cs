@@ -44,6 +44,8 @@ namespace MVP.ViewModels
         public string activeTable2 { get; set; }
         public string activeTable3 { get; set; }
 
+        public string activeTable4 { get; set; }
+
         public int activeTableIndex { get; set; }
     }
 }
