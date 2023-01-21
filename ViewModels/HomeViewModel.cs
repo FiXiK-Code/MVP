@@ -36,6 +36,7 @@ namespace MVP.ViewModels
         public bool TaskRed { get; set; }
         public bool ProjectRed { get; set; }
         public bool ProjectCreate { get; set; }
+        
 
         public SessionRoles session { get; set; }
 
@@ -47,5 +48,7 @@ namespace MVP.ViewModels
         public string activeTable4 { get; set; }
 
         public int activeTableIndex { get; set; }
+
+        public List<string> ollGip { get; set; }
     }
 }

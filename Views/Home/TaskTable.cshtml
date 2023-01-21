@@ -98,9 +98,9 @@
                             <select class="select" id="select" name="supervisorProjectFilter">
                                 <option value="@Model.filterSupProj" selected hidden>@Model.filterSupProj</option>
                                 <option>Все ГИПы</option>
-                                @foreach (Staff staff in Model.staffs.Where(p => p.roleId == 5).OrderBy(p => p.name))
+                                @foreach (string staff in Model.ollGip)
                                 {
-                                    <option>@staff.name</option>
+                                    <option>@staff</option>
                                 }
                             </select>
 

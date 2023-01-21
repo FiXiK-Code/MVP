@@ -247,6 +247,8 @@ namespace MVP.Controllers
                 roleSession = new SessionRoles();
             }
 
+
+
             var sessionCod = _appDB.DBStaff.FirstOrDefault(p => p.name == roleSession.SessionName).code;
 
             List<Staff> StaffTable = new List<Staff>();
@@ -311,8 +313,11 @@ namespace MVP.Controllers
             var projects = _project.AllProjects;
             var tasks = _task.AllTasks;
             var staff = StaffTable;
-
-
+            List<string> ollGip = new List<string>();
+            foreach(Project proj in projects.OrderBy(p => p.supervisor))
+            {
+                if(!ollGip.Contains(proj.supervisor)) ollGip.Add(proj.supervisor);
+            }
 
             if (staffTableFilter!="" && staffTableFilter != "Все должности")
             {
@@ -400,7 +405,9 @@ namespace MVP.Controllers
                 activeTable3 = table3,
                 activeTable4 = table4,
 
-                activeTableIndex = activTable
+                activeTableIndex = activTable,
+
+                ollGip = ollGip
 
             };
             ViewBag.RoleCod = _appDB.DBStaff.FirstOrDefault(p => p.name == roleSession.SessionName).code;
