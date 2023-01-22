@@ -313,6 +313,9 @@ namespace MVP.Controllers
             var projects = _project.AllProjects;
             var tasks = _task.AllTasks;
             var staff = StaffTable;
+
+            
+
             List<string> ollGip = new List<string>();
             foreach(Project proj in projects.OrderBy(p => p.supervisor))
             {
@@ -335,6 +338,13 @@ namespace MVP.Controllers
             {
                 tasks = tasks.Where(p => p.supervisor == recipientProjectFilter);
             }
+            List<string> projCod = new List<string>();
+            foreach (Project proj in projects)
+            {
+                if (!projCod.Contains(proj.code)) projCod.Add(proj.code);
+            }
+            tasks = tasks.Where(p => projCod.Contains(p.projectCode));
+            
 
             string table1 = "";
             string table2 = "";
