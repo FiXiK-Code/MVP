@@ -148,7 +148,7 @@ namespace MVP.Migrations
                     divisionId = table.Column<int>(nullable: false),
                     post = table.Column<string>(nullable: true),
                     roleId = table.Column<int>(nullable: false),
-                    supervisorId = table.Column<int>(nullable: false),
+                    supervisorCod = table.Column<string>(nullable: true),
                     login = table.Column<string>(nullable: true),
                     passvord = table.Column<string>(nullable: true)
                 },
@@ -193,7 +193,8 @@ namespace MVP.Migrations
                     date = table.Column<DateTime>(nullable: false),
                     Stage = table.Column<string>(nullable: true),
                     liteTask = table.Column<bool>(nullable: false),
-                    status = table.Column<string>(nullable: true)
+                    status = table.Column<string>(nullable: true),
+                    startWork = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
