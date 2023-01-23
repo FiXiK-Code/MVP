@@ -6,9 +6,6 @@
 </form>
 
 <form class="form" id="form-redaction-task" method="post">
-
-    <input name="activTable" asp-for="@Model.activeTableIndex" class="form-control" hidden>@Model.activeTableIndex
-
     <input class="btn-white btn-top" type="submit" value="Отменить редактирование"
            asp-controller="Home" asp-action="TaskTable"
            asp-route-Taskid="@Model.redactedTask.id" />
@@ -24,12 +21,11 @@
 roleSessionId >= supervisorRoleId)
     {<label>Дата</label>
         <input name="date" asp-for="@Model.redactedTask.date" type="date" class="form-control">
-        @Model.redactedTask.date.Date
     }
     else
     {
         <label>Дата (только для чтения)</label>
-        <input readonly name="date" asp-for="@Model.redactedTask.date" type="date" class="form-control"> @Model.redactedTask.date.Date
+        <input readonly name="date" asp-for="@Model.redactedTask.date" type="date" class="form-control">
     }
 
     <label>Статус задачи</label>
@@ -192,7 +188,6 @@ roleSessionId >= supervisorRoleId)
     {
         <label>Планируемое время исполнения</label>
         <input name="plannedTime" asp-for="@Model.redactedTask.plannedTime" class="form-control">
-        @Model.redactedTask.plannedTime
     }
     else
     {
@@ -202,11 +197,9 @@ roleSessionId >= supervisorRoleId)
 
     <label>Начало работы над задачей</label>
     <input name="start" asp-for="@Model.redactedTask.start" class="form-control">
-    @Model.redactedTask.start</input>
 
     <label>Задача завершена</label>
     <input name="finish" asp-for="@Model.redactedTask.finish" class="form-control">
-    @Model.redactedTask.finish</input>
 
 
 

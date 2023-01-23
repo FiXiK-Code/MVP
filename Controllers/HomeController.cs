@@ -270,41 +270,41 @@ namespace MVP.Controllers
             List<Staff> RG = new List<Staff>();
             if (roleSession.SessionRole == "Директор")
             {
-                foreach (var staffs in _appDB.DBStaff.Where(p => p.roleId == 5))
+                foreach (var staffs in _appDB.DBStaff.Where(p => p.roleId == 6))
                 {
                     StaffTable.Add(staffs);
                 }
-                foreach (var staffs in _appDB.DBStaff.Where(p => p.roleId == 3))
+                foreach (var staffs in _appDB.DBStaff.Where(p => p.roleId == 1))
                 {
                     StaffTable.Add(staffs);
                 }
             }
             else if (roleSession.SessionRole == "ГИП")
             {
-                foreach (var staffs in _appDB.DBStaff.Where(p => p.roleId == 6))
+                foreach (var staffs in _appDB.DBStaff.Where(p => p.roleId == 4))
                 {
                     StaffTable.Add(staffs);
                 }
-                foreach (var staffs in _appDB.DBStaff.Where(p => p.roleId == 3))
+                foreach (var staffs in _appDB.DBStaff.Where(p => p.roleId == 1))
                 {
                     StaffTable.Add(staffs);
                 }
             }
             else if (roleSession.SessionRole == "Помощник ГИПа")
             {
-                foreach (var staffs in _appDB.DBStaff.Where(p => p.roleId == 3))
+                foreach (var staffs in _appDB.DBStaff.Where(p => p.roleId == 1))
                 {
                     StaffTable.Add(staffs);
                 }
             }
             else if (roleSession.SessionRole == "НО")
             {
-                foreach (var staffs in _appDB.DBStaff.Where(p => p.roleId == 5))
+                foreach (var staffs in _appDB.DBStaff.Where(p => p.roleId == 6))
                 {
                     StaffTable.Add(staffs);
                 }
 
-                foreach (var staffs in _appDB.DBStaff.Where(p => p.supervisorCod == sessionCod && p.roleId == 1))
+                foreach (var staffs in _appDB.DBStaff.Where(p => p.supervisorCod == sessionCod && p.roleId == 3))
                 {
                     StaffTable.Add(staffs);
                     RG.Add(staffs);

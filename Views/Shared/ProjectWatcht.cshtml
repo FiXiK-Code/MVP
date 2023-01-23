@@ -17,8 +17,6 @@
              asp-route-Projid="@Model.redactedProject.id"
              asp-route-meesage="Редактировать проект могут только ГИП и Директор!" />}
 
-    <input name="activTable" asp-for="@Model.activeTableIndex" class="form-control" hidden>@Model.activeTableIndex
-
     <label>В архиве</label>
     <input id="statusId" disabled class="form-control" value="@Model.redactedProject.archive" />
 

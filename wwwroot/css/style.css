@@ -85,7 +85,7 @@ select:hover {
 
 .btn {
     padding: 10px;
-    background-color: #000;
+    background-color: #000096;
     color: #fff;
 }
 
@@ -95,23 +95,26 @@ select:hover {
 }
 
 #select {
-    background-color: #000;
+    background-color: #000096;
     color: #fff;
 }
 
 .first-table {
     display: none;
     overflow-y: scroll;
+    height: 96vh;
 }
 
 .second-table {
     display: none;
     overflow-y: scroll;
+    height:96vh;
 }
 
 .third-table {
     display: none;
     overflow-y: scroll;
+    height: 96vh;
 }
 
 .forth-table {
@@ -126,7 +129,7 @@ select:hover {
 
 .second-box {
     width: 20%;
-    background-color: #000;
+    background-color: #000096;
 }
 
 .form {

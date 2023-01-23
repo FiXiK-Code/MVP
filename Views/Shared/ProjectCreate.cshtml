@@ -35,8 +35,6 @@
     <label>Стадии проекта (через запятую)</label>
     <textarea name="allStages" asp-for="nullProject.allStages" class="form-control"></textarea>
 
-    <input name="activTable" asp-for="@Model.activeTableIndex" class="form-control" hidden>@Model.activeTableIndex
-
     <input class="btn-white" type="submit" value="Сохранить"
            asp-controller="Home" asp-action="addProjectToDB" />
 </form>

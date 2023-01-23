@@ -11,8 +11,6 @@
            asp-route-Taskid="@Model.redactedTask.id"
            asp-route-TaskRed="@true" />
 
-    <input name="activTable" asp-for="@Model.activeTableIndex" class="form-control" hidden>@Model.activeTableIndex
-
     <label>Дата</label>
     <input id="statusId" disabled class="form-control" value="@Model.redactedTask.date.ToShortDateString()" />
 

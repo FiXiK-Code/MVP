@@ -165,8 +165,6 @@
     <input name="plannedTime" asp-for="@Model.nullTask.plannedTime" class="form-control" />
 
 
-    <input name="activTable" asp-for="@Model.activeTableIndex" class="form-control" hidden>@Model.activeTableIndex
-
     <input class="btn-white" type="submit" value="Сохранить"
            asp-controller="Home" asp-action="addTaskToDB" />
 </form>

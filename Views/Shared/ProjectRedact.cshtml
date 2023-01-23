@@ -10,8 +10,6 @@
            asp-controller="Home" asp-action="TaskTable"
            asp-route-Projid="@Model.redactedProject.id" />
 
-    <input name="activTable" asp-for="@Model.activeTableIndex" class="form-control" hidden>@Model.activeTableIndex
-
     <label>В архиве</label>
     <input name="arhive" asp-for="@Model.redactedProject.archive" class="form-control" value="@Model.redactedProject.archive" />
 
@@ -34,7 +32,7 @@
     }
 
     <label>Приоритет</label>
-    <input name="priority" asp-for="@Model.redactedProject.priority" class="form-control">@Model.redactedProject.priority
+    <input name="priority" asp-for="@Model.redactedProject.priority" class="form-control" value="@Model.redactedProject.priority">
 
     <label>Стадии проекта</label>
     <textarea name="allStages" asp-for="@Model.redactedProject.allStages" class="form-control">@Model.redactedProject.allStages</textarea>
