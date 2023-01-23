@@ -108,7 +108,7 @@ namespace MVP.Controllers
                     TaskId = iid,
                     descTask = _appDB.DBTask.FirstOrDefault(p => p.id == iid).desc,
                     supervisorId = _appDB.DBStaff.FirstOrDefault(p => p.name == supervisor).id,
-                    resipienId = recipient != null? _appDB.DBStaff.FirstOrDefault(p => p.name == recipient).id : -1,
+                    resipienId = supervisor != null? _appDB.DBStaff.FirstOrDefault(p => p.name == supervisor).id : -1,
                     dateRedaction = DateTime.Now,
                     planedTime = plannedTime,
                     actualTime = new TimeSpan(),
@@ -143,6 +143,7 @@ namespace MVP.Controllers
             int activTable
             )
         {
+            var roleSession = JsonConvert.DeserializeObject<SessionRoles>(HttpContext.Session.GetString("Session"));
 
             var item = new Project
             {
@@ -159,6 +160,20 @@ namespace MVP.Controllers
                 allStages = allStages,
                 history = $"{DateTime.Now} - Проект создан"
             };
+
+            LogisticProject log = new LogisticProject()
+            {
+                arhive = "Нет",
+                projectId = item.id,
+                link = link,
+                supervisor = supervisor,
+                priority = priority,
+                allStages = allStages,
+                CommitorId = _appDB.DBStaff.FirstOrDefault(p => p.name == roleSession.SessionName).id,
+                dateRedaction = DateTime.Now,
+                comment = "Проект создан"
+            };
+            _logistickProject.addToDB(log);
             _project.addToDB(item);
             return RedirectToAction("TaskTable", new { activTable = activTable});
         }
@@ -214,7 +229,7 @@ namespace MVP.Controllers
                 TaskId = iid,
                 descTask = _appDB.DBTask.FirstOrDefault(p => p.id == iid).desc,
                 supervisorId = _appDB.DBStaff.FirstOrDefault(p => p.name == supervisor).id,
-                resipienId = recipient != null ? _appDB.DBStaff.FirstOrDefault(p => p.name == recipient).id : -1,
+                resipienId = supervisor != null ? _appDB.DBStaff.FirstOrDefault(p => p.name == supervisor).id : -1,
                 dateRedaction = DateTime.Now,
                 planedTime = plannedTime,
                 actualTime = new TimeSpan(),
