@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MVP.Migrations
 {
-    public partial class init_pravki : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -148,7 +148,7 @@ namespace MVP.Migrations
                     divisionId = table.Column<int>(nullable: false),
                     post = table.Column<string>(nullable: true),
                     roleId = table.Column<int>(nullable: false),
-                    supervisorCod = table.Column<string>(nullable: true),
+                    supervisorId = table.Column<int>(nullable: false),
                     login = table.Column<string>(nullable: true),
                     passvord = table.Column<string>(nullable: true)
                 },
@@ -193,8 +193,7 @@ namespace MVP.Migrations
                     date = table.Column<DateTime>(nullable: false),
                     Stage = table.Column<string>(nullable: true),
                     liteTask = table.Column<bool>(nullable: false),
-                    status = table.Column<string>(nullable: true),
-                    startWork = table.Column<DateTime>(nullable: false)
+                    status = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
