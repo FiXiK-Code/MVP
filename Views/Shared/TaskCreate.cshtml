@@ -6,10 +6,10 @@
 </form>
 <form class="form" id="create-task" method="post">
 
-    <select name="liteTask">
+    @*<select name="liteTask">
         <option asp-for="liteTask">Задача</option>
         <option asp-for="liteTask">Подзадача</option>
-    </select>
+    </select>*@
 
 
     <label>Дата</label>
@@ -18,7 +18,7 @@
     <label>Шифр задачи</label>
     <input name="code" asp-for="@Model.nullTask.code" class="form-control" />
 
-    <label>Шифр проека</label>
+    <label>Шифр проекта</label>
     <select name="projectCode" asp-for="@Model.nullTask.projectCode" class="form-control">
         @foreach (var projCod in Model.projects)
         {
@@ -26,18 +26,14 @@
         }
     </select>
 
-    <label>Относится к (стадия проекта или шифр задачи)</label>
+    <label>Относится к стадии проекта</label>
     <input name="Stage" asp-for="@Model.nullTask.Stage" class="form-control" />
 
     <label>Формулировка</label>
     <textarea name="desc" asp-for="@Model.nullTask.desc" class="form-control"></textarea>
 
     <label>Комментарий</label>
-    <textarea name="comment" asp-for="@Model.nullTask.comment" class="form-control"></textarea>
-
-    @{ 
-        List<Staff> RG = new List<Staff>();
-    }
+    <textarea name="comment" class="form-control"></textarea>
 
     <label>Ответственный </label>
     <select name="supervisor">
@@ -80,14 +76,10 @@
             @foreach (var staff in Model.staffs.Where(p => p.supervisorCod == ViewBag.RoleCod && p.roleId == 3))
             {
                 <option>@staff.name</option>
-                RG.Add(staff);
             }
-            foreach (var staff in RG)
+            foreach (var staff1 in Model.staffs.Where(p => p.supervisorCod == ViewBag.RoleCod && p.roleId == 2))
             {
-                foreach (var staff1 in Model.staffs.Where(p => p.supervisorCod == staff.code && p.roleId == 2))
-                {
                     <option>@staff1.name</option>
-                }
             }
         }
         else if (ViewBag.Role == "РГ")
@@ -142,14 +134,10 @@
             @foreach (var staff in Model.staffs.Where(p => p.supervisorCod == ViewBag.RoleCod && p.roleId == 3))
             {
                 <option>@staff.name</option>
-                RG.Add(staff);
             }
-            foreach (var staff in RG)
+            foreach (var staff1 in Model.staffs.Where(p => p.supervisorCod == ViewBag.RoleCod && p.roleId == 2))
             {
-                foreach (var staff1 in Model.staffs.Where(p => p.supervisorCod == staff.code && p.roleId == 2))
-                {
                     <option>@staff1.name</option>
-                }
             }
         }
         else if (ViewBag.Role == "РГ")

@@ -1,6 +1,7 @@
 ﻿@model HomeViewModel
 <form class="form" id="create-task" method="post">
     <label><h2>Редактирование задачи</h2></label>
+    <label><h2>@Model.redactedTask.desc</h2></label>
     @if (ViewBag.ErrorMassage != "")
     {<label><h2>@ViewBag.ErrorMassage</h2></label>}
 </form>
@@ -14,7 +15,6 @@
         var staffPost = Model.staffs.FirstOrDefault(p => p.name == Model.redactedTask.supervisor).post;
         var supervisorRoleCode = Model.posts.FirstOrDefault(p => p.name == staffPost).roleCod;
         var supervisorRoleId = Model.roles.FirstOrDefault(p => p.code == supervisorRoleCode).id;
-        List<Staff> RG = new List<Staff>();
     }
 
     @if (Model.redactedTask.date.Date >= DateTime.Now.Date &&
@@ -31,76 +31,71 @@ roleSessionId >= supervisorRoleId)
     <label>Статус задачи</label>
     <select name="status" asp-for="@Model.redactedTask.status">
         <option value="@Model.redactedTask.status" selected hidden>@Model.redactedTask.status</option>
-        <option asp-for="stat">Создана</option>
         <option asp-for="stat">В работе</option>
         <option asp-for="stat">На паузе</option>
         <option asp-for="stat">Выполнена</option>
     </select>
 
     <label>Комментарий</label>
-    <textarea name="comment" asp-for="@Model.redactedTask.comment" class="form-control">@Model.redactedTask.comment</textarea>
+    <textarea name="comment" class="form-control"></textarea>
 
 
     @if (roleSessionId >= supervisorRoleId)
     {<label>Ответственный</label>
-     <select name="supervisor" asp-for="@Model.redactedTask.supervisor">
-         <option asp-for="@Model.redactedTask.supervisor" selected hidden>@Model.redactedTask.supervisor</option>
-         @if (ViewBag.Role == "Директор")
-         {
-             @foreach (var staff in Model.staffs.Where(p => p.roleId == 6))
-             {
-                 <option asp-for="@Model.nullTask.supervisor">@staff.name</option>
-             }
-             @foreach (var staff in Model.staffs.Where(p => p.roleId == 1))
-             {
-                 <option asp-for="@Model.nullTask.supervisor">@staff.name</option>
-             }
-         }
-         else if (ViewBag.Role == "ГИП")
-         {
-             @foreach (var staff in Model.staffs.Where(p => p.roleId == 4))
-             {
-                 <option asp-for="@Model.nullTask.supervisor">@staff.name</option>
-             }
-             @foreach (var staff in Model.staffs.Where(p => p.roleId == 1))
-             {
-                 <option asp-for="@Model.nullTask.supervisor">@staff.name</option>
-             }
-         }
-         else if (ViewBag.Role == "Помощник ГИПа")
-         {
-             @foreach (var staff in Model.staffs.Where(p => p.roleId == 1))
-             {
-                 <option asp-for="@Model.nullTask.supervisor">@staff.name</option>
-             }
-         }
-         else if (ViewBag.Role == "НО")
-         {
-             @foreach (var staff in Model.staffs.Where(p => p.roleId == 6))
-             {
-                 <option>@staff.name</option>
-             }
-             @foreach (var staff in Model.staffs.Where(p => p.supervisorCod == ViewBag.RoleCod && p.roleId == 3))
-             {
-                 <option>@staff.name</option>
-                 RG.Add(staff);
-             }
-             foreach (var staff in RG)
-             {
-                 foreach (var staff1 in Model.staffs.Where(p => p.supervisorCod == staff.code && p.roleId == 2))
-                 {
-                     <option>@staff1.name</option>
-                 }
-             }
-         }
-         else if (ViewBag.Role == "РГ")
-         {
-             @foreach (var staff in Model.staffs.Where(p => p.supervisorCod == ViewBag.RoleCod && p.roleId == 2))
-             {
-                 <option>@staff.name</option>
-             }
-         }
-     </select>
+        <select name="supervisor" asp-for="@Model.redactedTask.supervisor">
+            <option asp-for="@Model.redactedTask.supervisor" selected hidden>@Model.redactedTask.supervisor</option>
+            @if (ViewBag.Role == "Директор")
+            {
+                @foreach (var staff in Model.staffs.Where(p => p.roleId == 6))
+                {
+                    <option asp-for="@Model.nullTask.supervisor">@staff.name</option>
+                }
+                @foreach (var staff in Model.staffs.Where(p => p.roleId == 1))
+                {
+                    <option asp-for="@Model.nullTask.supervisor">@staff.name</option>
+                }
+            }
+            else if (ViewBag.Role == "ГИП")
+            {
+                @foreach (var staff in Model.staffs.Where(p => p.roleId == 4))
+                {
+                    <option asp-for="@Model.nullTask.supervisor">@staff.name</option>
+                }
+                @foreach (var staff in Model.staffs.Where(p => p.roleId == 1))
+                {
+                    <option asp-for="@Model.nullTask.supervisor">@staff.name</option>
+                }
+            }
+            else if (ViewBag.Role == "Помощник ГИПа")
+            {
+                @foreach (var staff in Model.staffs.Where(p => p.roleId == 1))
+                {
+                    <option asp-for="@Model.nullTask.supervisor">@staff.name</option>
+                }
+            }
+            else if (ViewBag.Role == "НО")
+            {
+                @foreach (var staff in Model.staffs.Where(p => p.roleId == 6))
+                {
+                    <option>@staff.name</option>
+                }
+                @foreach (var staff in Model.staffs.Where(p => p.supervisorCod == ViewBag.RoleCod && p.roleId == 3))
+                {
+                    <option>@staff.name</option>
+                }
+                foreach (var staff1 in Model.staffs.Where(p => p.supervisorCod == ViewBag.RoleCod && p.roleId == 2))
+                {
+                    <option>@staff1.name</option>
+                }
+            }
+            else if (ViewBag.Role == "РГ")
+            {
+                @foreach (var staff in Model.staffs.Where(p => p.supervisorCod == ViewBag.RoleCod && p.roleId == 2))
+                {
+                    <option>@staff.name</option>
+                }
+            }
+        </select>
     }
     else
     {
@@ -152,14 +147,10 @@ roleSessionId >= supervisorRoleId)
                 @foreach (var staff in Model.staffs.Where(p => p.supervisorCod == ViewBag.RoleCod && p.roleId == 3))
                 {
                     <option>@staff.name</option>
-                    RG.Add(staff);
                 }
-                foreach (var staff in RG)
+                foreach (var staff1 in Model.staffs.Where(p => p.supervisorCod == ViewBag.RoleCod && p.roleId == 2))
                 {
-                    foreach (var staff1 in Model.staffs.Where(p => p.supervisorCod == staff.code && p.roleId == 2))
-                    {
-                        <option>@staff1.name</option>
-                    }
+                    <option>@staff1.name</option>
                 }
             }
             else if (ViewBag.Role == "РГ")

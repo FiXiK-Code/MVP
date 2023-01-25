@@ -23,6 +23,6 @@ namespace MVP.Date.Interfaces
             TimeSpan plannedTime,
             DateTime start,
             DateTime finish);
-        void redactStatus(int id, string stat);
+        bool redactStatus(int id, string stat, string supervisor);
     }
 }

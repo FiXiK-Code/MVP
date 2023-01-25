@@ -6,10 +6,13 @@
 </form>
 
 <form class="form" id="form-info-task" method="post">
+    @if (Model.redactedTask.status != "Выполнена") { 
     <input class="btn-white btn-top" type="submit" value="Редактировать"
            asp-controller="Home" asp-action="TaskTable"
            asp-route-Taskid="@Model.redactedTask.id"
-           asp-route-TaskRed="@true" />
+           asp-route-TaskRed="@true" />   
+    }
+    
 
     <label>Дата</label>
     <input id="statusId" disabled class="form-control" value="@Model.redactedTask.date.ToShortDateString()" />
@@ -29,7 +32,7 @@
     <label>Формулировка</label>
     <textarea disabled>@Model.redactedTask.desc</textarea>
 
-    <label>Комментарий</label>
+    <label>Комментарии</label>
     <textarea disabled>@Model.redactedTask.comment</textarea>
 
     <label>Ответственный</label>

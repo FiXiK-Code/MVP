@@ -36,9 +36,15 @@ namespace MVP.Controllers
             _logistickProject = logistickProject;
         }
 
-        public RedirectToActionResult RedactSatusTask(int id, string stat,int activTable)
+        public RedirectToActionResult RedactSatusTask(int id, string stat,int activTable, string supervisor)
         {
-            _task.redactStatus(id, stat);
+            
+            if (!_task.redactStatus(id, stat, supervisor))
+            {
+                var msg = "Только одна задача может быть в работе! Проверьте статусы своих задачь!";
+                return RedirectToAction("TaskTable", new { activTable = activTable, Taskid = id, meesage = msg, TaskRed = true });
+            }
+
             return RedirectToAction("TaskTable", new { activTable = activTable });
         }
 
@@ -88,8 +94,9 @@ namespace MVP.Controllers
             int activTable
 )
         {
+            var roleSession = JsonConvert.DeserializeObject<SessionRoles>(HttpContext.Session.GetString("Session"));
 
-            if (!_task.redactToDB(iid, date, status, comment, supervisor, recipient, pririty, plannedTime, start, finish))
+            if (!_task.redactToDB(iid, date, status, comment != null?$"{roleSession.SessionName}: {comment}":null, supervisor, recipient, pririty, plannedTime, start, finish))
             {
                 var msg = "Только одна задача может быть в работе! Проверьте статусы своих задачь!";
                 return RedirectToAction("TaskTable", new { activTable = activTable, Taskid = iid, meesage = msg, TaskRed = true });
@@ -100,8 +107,7 @@ namespace MVP.Controllers
                 var projId = _appDB.DBProject.FirstOrDefault(p => p.code == projCod) != null ? _appDB.DBProject.FirstOrDefault(p => p.code == projCod).id : -1;
                 _project.NextStage(projId);
 
-                var roleSession = JsonConvert.DeserializeObject<SessionRoles>(HttpContext.Session.GetString("Session"));
-
+                
                 LogistickTask item = new LogistickTask()
                 {
                     ProjectCode = _appDB.DBTask.FirstOrDefault(p => p.id == iid).projectCode,
@@ -205,6 +211,10 @@ namespace MVP.Controllers
             {
                 return RedirectToAction("TaskTable", new { activTable = activTable, meesage = "Не коррестный код проекта!" });
             }
+            //if (plannedTime == TimeSpan.Zero)
+            //{
+            //    return RedirectToAction("TaskCreate", new { activTable = activTable, meesage = "Не указан срок исполнения задачи!" });
+            //}
             var item = new Tasks
             {
                 actualTime = TimeSpan.Zero,
@@ -213,7 +223,7 @@ namespace MVP.Controllers
                 supervisor = supervisor,
                 recipient = recipient,
                 priority = _appDB.DBProject.FirstOrDefault(p => p.code == projectCode).priority,
-                comment = comment,
+                comment = $"{roleSession.SessionName}: {comment}\n",
                 plannedTime = plannedTime,
                 date = date,
                 Stage = Stage,
@@ -267,7 +277,6 @@ namespace MVP.Controllers
             var sessionCod = _appDB.DBStaff.FirstOrDefault(p => p.name == roleSession.SessionName).code;
 
             List<Staff> StaffTable = new List<Staff>();
-            List<Staff> RG = new List<Staff>();
             if (roleSession.SessionRole == "Директор")
             {
                 foreach (var staffs in _appDB.DBStaff.Where(p => p.roleId == 6))
@@ -307,14 +316,10 @@ namespace MVP.Controllers
                 foreach (var staffs in _appDB.DBStaff.Where(p => p.supervisorCod == sessionCod && p.roleId == 3))
                 {
                     StaffTable.Add(staffs);
-                    RG.Add(staffs);
                 }
-                foreach (var staffs in RG)
+                foreach (var staff1 in _appDB.DBStaff.Where(p => p.supervisorCod == sessionCod && p.roleId == 2))
                 {
-                    foreach (var staff1 in _appDB.DBStaff.Where(p => p.supervisorCod == staffs.code && p.roleId == 2))
-                    {
-                        StaffTable.Add(staff1);
-                    }
+                    StaffTable.Add(staff1);
                 }
             }
             else if (roleSession.SessionRole == "РГ")

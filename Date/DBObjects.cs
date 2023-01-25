@@ -204,7 +204,7 @@ new Project
     actualFinishDate = new DateTime(2023),
     history = null,
     archive = "Нет",
-    supervisor = "Прокопьев С.М."
+    supervisor = "Прокопьев С.М"
 },
 new Project
 {
@@ -321,7 +321,7 @@ new Project
     actualFinishDate = new DateTime(2023),
     history = null,
     archive = "Нет",
-    supervisor = "Дегтярёв М.Н."
+    supervisor = "Дегтярёв М.Н"
 },
 
 
@@ -349,7 +349,7 @@ new Project
     actualFinishDate = new DateTime(2023),
     history = null,
     archive = "Нет",
-    supervisor = "Дегтярёв М.Н."
+    supervisor = "Дегтярёв М.Н"
 },
 
 new Project
@@ -361,7 +361,7 @@ new Project
     actualFinishDate = new DateTime(2023),
     history = null,
     archive = "Нет",
-    supervisor = "Дегтярёв М.Н."
+    supervisor = "Дегтярёв М.Н"
 },
 
 
@@ -2253,10 +2253,11 @@ passvord = "123456"
 },
 
 /////
+///
 new Staff {
 code = "13",
 name = "Кузнецова Инна Владимировна",
-supervisorCod = "08",
+supervisorCod = "07",
 divisionId = 2,
 roleId = 2,
 post = "Главный специалист отдела проектирования",
@@ -2266,7 +2267,7 @@ passvord = "123456"
 new Staff {
 code = "14",
 name = "Домрачева Наталья Николаевна",
-supervisorCod = "08",
+supervisorCod = "07",
 divisionId = 2,
 roleId = 2,
 post = "Ведущий инженер отдела проектирования",
@@ -2277,7 +2278,7 @@ passvord = "123456"
 new Staff {
 code = "15",
 name = "Хицунова Неонила Юрьевна",
-supervisorCod = "08",
+supervisorCod = "07",
 divisionId = 2,
 roleId = 2,
 post = "Ведущий инженер отдела проектирования",

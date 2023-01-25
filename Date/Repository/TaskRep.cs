@@ -43,7 +43,7 @@ namespace MVP.Date.Repository
             DateTime start,
             DateTime finish)
         {
-            if (_appDB.DBTask.Where(p => p.recipient == recipient).Where(p => p.status == "В работе").Count() <= 1 || status != "В работе")
+            if (_appDB.DBTask.Where(p => p.supervisor == supervisor).Where(p => p.status == "В работе").Count() <= 1 || status != "В работе")
             {
                 Tasks task = _appDB.DBTask.FirstOrDefault(p => p.id == iid);
                 if (task.status == "В работе" && (status == "Выполнена" || status == "На паузе"))
@@ -57,7 +57,7 @@ namespace MVP.Date.Repository
                 task.supervisor = supervisor;
                 task.date = date;
                 task.recipient = recipient;
-                task.comment = comment;
+                task.comment += comment != null? comment+ "\n": null;
                 task.plannedTime = plannedTime;
                 task.priority = pririty;
                 if (task.status == "Создана" && status == "В работе")
@@ -75,20 +75,27 @@ namespace MVP.Date.Repository
             else return false;
         }
 
-        public void redactStatus(int id, string stat)
+        public bool redactStatus(int id, string stat, string supervisor)
         {
-            Tasks task = _appDB.DBTask.FirstOrDefault(p => p.id == id);
-            if (task.status == "В работе" && (stat == "Выполнена" || stat == "На паузе"))
+            if (_appDB.DBTask.Where(p => p.supervisor == supervisor).Where(p => p.status == "В работе").Count() == 0 || stat != "В работе")
             {
-                task.actualTime += (TimeSpan)(DateTime.Now - task.startWork);
+                Tasks task = _appDB.DBTask.FirstOrDefault(p => p.id == id);
+                if (task.status == "В работе" && (stat == "Выполнена" || stat == "На паузе"))
+                {
+                    task.actualTime += (TimeSpan)(DateTime.Now - task.startWork);
+                }
+                if (stat == "В работе")
+                {
+                    task.startWork = DateTime.Now;
+                }
+                if (task.status == "Создана" && stat == "В работе")
+                    task.start = DateTime.Now;
+                task.status = stat;
+                if (stat == "Выполнена") task.finish = DateTime.Now;
+                _appDB.SaveChanges();
+                return true;
             }
-            if (stat == "В работе")
-            {
-                task.startWork = DateTime.Now;
-            }
-            task.status = stat;
-            if (stat == "Выполнена") task.finish = DateTime.Now;
-            _appDB.SaveChanges();
+            return false;
         }
     }
 }
