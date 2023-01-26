@@ -6,17 +6,17 @@
 </form>
 <form class="form" id="create-task" method="post">
 
-    @*<select name="liteTask">
+    <select name="liteTask">
         <option asp-for="liteTask">Задача</option>
-        <option asp-for="liteTask">Подзадача</option>
-    </select>*@
+        <option asp-for="liteTask">Задача вне очереди</option>
+    </select>
 
-
+    @{ Model.nullTask.date = DateTime.Now.Date;}
     <label>Дата</label>
-    <input name="date" asp-for="@Model.nullTask.date.Date" class="form-control" value="@DateTime.Now.Date" />
+    <input name="date" asp-for="@Model.nullTask.date" type="date" class="form-control"/>
 
-    <label>Шифр задачи</label>
-    <input name="code" asp-for="@Model.nullTask.code" class="form-control" />
+    @*<label>Шифр задачи</label>
+    <input name="code" asp-for="@Model.nullTask.code" class="form-control" />*@
 
     <label>Шифр проекта</label>
     <select name="projectCode" asp-for="@Model.nullTask.projectCode" class="form-control">

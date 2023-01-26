@@ -33,7 +33,10 @@ roleSessionId >= supervisorRoleId)
         <option value="@Model.redactedTask.status" selected hidden>@Model.redactedTask.status</option>
         <option asp-for="stat">В работе</option>
         <option asp-for="stat">На паузе</option>
-        <option asp-for="stat">Выполнена</option>
+        @if (Model.redactedTask.status != "Создана")
+        {
+            <option asp-for="stat">Выполнена</option>
+        }
     </select>
 
     <label>Комментарий</label>

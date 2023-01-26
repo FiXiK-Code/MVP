@@ -213,8 +213,18 @@ namespace MVP.Controllers
             }
             //if (plannedTime == TimeSpan.Zero)
             //{
-            //    return RedirectToAction("TaskCreate", new { activTable = activTable, meesage = "Не указан срок исполнения задачи!" });
+            //    return RedirectToAction("TaskTable", new { activTable = activTable, meesage = "Не указан срок исполнения задачи!" });
             //}
+
+            TimeSpan SumTimeTaskToDay = plannedTime;
+            foreach(var task in _appDB.DBTask.Where(p => p.supervisor == supervisor).Where(p => p.date.Date == date.Date))
+            {
+                SumTimeTaskToDay += task.plannedTime;
+            }
+            if(SumTimeTaskToDay > new TimeSpan(8, 0, 0))
+            {
+                return RedirectToAction("TaskTable", new { activTable = activTable, meesage = "Сумма времени задач на этот день превышает 8 часов!\nВыберите другой день." });
+            }
             var item = new Tasks
             {
                 actualTime = TimeSpan.Zero,
@@ -222,13 +232,13 @@ namespace MVP.Controllers
                 projectCode = projectCode,
                 supervisor = supervisor,
                 recipient = recipient,
-                priority = _appDB.DBProject.FirstOrDefault(p => p.code == projectCode).priority,
+                priority = liteTask == "Задача"? _appDB.DBProject.FirstOrDefault(p => p.code == projectCode).priority : 0,
                 comment = $"{roleSession.SessionName}: {comment}\n",
                 plannedTime = plannedTime,
                 date = date,
                 Stage = Stage,
                 status = "Создана",
-                liteTask = liteTask == "Подзадача" ? true : false
+                liteTask = liteTask == "Задача" ? false : true
             };
             _task.addToDB(item);
 

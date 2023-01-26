@@ -17,7 +17,7 @@ namespace MVP.Date.Models
         public int priority { get; set; }
         public string comment { get; set; }
         public TimeSpan plannedTime { get; set; } //only time
-        public TimeSpan actualTime { get; set; }//only time
+        public TimeSpan actualTime { get; set; } //only time
         public DateTime start { get; set; }
         public DateTime finish { get; set; }
         public DateTime date { get; set; }

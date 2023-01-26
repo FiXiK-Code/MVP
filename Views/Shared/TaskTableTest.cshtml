@@ -27,74 +27,148 @@
         {
             <tr id="title"><th style="text-align:left" colspan="13">Выполненные задачи</th></tr>
 
-            foreach (Task task in Model.tasks.Where(p => p.status == "Выполнена").OrderBy(p => p.date))
+            foreach (Task task in Model.tasks.Where(p => p.status == "Выполнена").OrderBy(p => p.date.Date).OrderBy(p => p.priority))
             {
-                <tr id="finish-task">
-                    <th>@task.date.Date.ToString(@"dd\.MM\.yyyy")</th>
-                    <td>@task.code</td>
-                    <td>@task.projectCode</td>
-                    <td>
-                        <a asp-controller="Home" asp-action="TaskTable" asp-route-activTable="0" asp-route-Taskid="@task.id">
-                            <button type="submit">@task.desc</button>
-                        </a>
-                    </td>
-                    <td>
-                        Выполнена
-                    </td>
-                    <td>@task.supervisor</td>
-                    <td>@task.recipient</td>
-                    <td>@task.priority</td>
-                    <td>@task.comment</td>
-                    <td>@task.plannedTime</td>
-                    <td>@task.actualTime.ToString(@"hh\:mm")</td>
-                    <td>@task.start.Date.ToString(@"dd\.MM\.yyyy hh\:mm\:ss")</td>
-                    <td>@task.finish.Date.ToString(@"dd\.MM\.yyyy hh\:mm\:ss")</td>
-                </tr>
+                @if (task.liteTask == true)
+                {
+                    <tr style="background-color:green" id="finish-task">
+                        <th>@task.date.Date.ToString(@"dd\.MM\.yyyy")</th>
+                        <td>@task.code</td>
+                        <td>@task.projectCode</td>
+                        <td>
+                            <a asp-controller="Home" asp-action="TaskTable" asp-route-activTable="0" asp-route-Taskid="@task.id">
+                                <button type="submit">@task.desc</button>
+                            </a>
+                        </td>
+                        <td>
+                            Выполнена
+                        </td>
+                        <td>@task.supervisor</td>
+                        <td>@task.recipient</td>
+                        <td>@task.priority</td>
+                        <td>@task.comment</td>
+                        <td>@task.plannedTime.ToString(@"hh\:mm")</td>
+                        <td>@task.actualTime.ToString(@"hh\:mm")</td>
+                        <td>@task.start.Date.ToString(@"dd\.MM\.yyyy hh\:mm\:ss")</td>
+                        <td>@task.finish.Date.ToString(@"dd\.MM\.yyyy hh\:mm\:ss")</td>
+                    </tr>
+                }
+                else
+                {
+                    <tr id="finish-task">
+                        <th>@task.date.Date.ToString(@"dd\.MM\.yyyy")</th>
+                        <td>@task.code</td>
+                        <td>@task.projectCode</td>
+                        <td>
+                            <a asp-controller="Home" asp-action="TaskTable" asp-route-activTable="0" asp-route-Taskid="@task.id">
+                                <button type="submit">@task.desc</button>
+                            </a>
+                        </td>
+                        <td>
+                            Выполнена
+                        </td>
+                        <td>@task.supervisor</td>
+                        <td>@task.recipient</td>
+                        <td>@task.priority</td>
+                        <td>@task.comment</td>
+                        <td>@task.plannedTime.ToString(@"hh\:mm")</td>
+                        <td>@task.actualTime.ToString(@"hh\:mm")</td>
+                        <td>@task.start.Date.ToString(@"dd\.MM\.yyyy hh\:mm\:ss")</td>
+                        <td>@task.finish.Date.ToString(@"dd\.MM\.yyyy hh\:mm\:ss")</td>
+                    </tr>
+                }
+
             }
         }
         if (i == 1)
         {
             <tr id="title"><th style="text-align:left" colspan="13">Задачи на сегодня</th></tr>
-            foreach (Task task in Model.tasks.Where(p => p.status != "Выполнена").Where(p => p.date.Date <= DateTime.Now.Date).OrderBy(p => p.priority))
+            foreach (Task task in Model.tasks.Where(p => p.status != "Выполнена").Where(p => p.date.Date <= DateTime.Now.Date).OrderBy(p => p.date.Date).OrderBy(p => p.priority))
             {
-                <tr id="task">
-                    <th>@task.date.Date.ToString(@"dd\.MM\.yyyy")</th>
-                    <td>@task.code</td>
-                    <td>@task.projectCode</td>
-                    <td>
-                        <a asp-controller="Home" asp-action="TaskTable" asp-route-activTable="0" asp-route-Taskid="@task.id">
-                            <button type="submit">@task.desc</button>
-                        </a>
-                    </td>
-                    <td>
-                        <form class="form" method="post">
-                            <select name="stat" asp-for="@task.status">
-                                <option value="@task.status" selected hidden>@task.status</option>
-                                <option asp-for="stat">В работе</option>
-                                <option asp-for="stat">На паузе</option>
-                                <option asp-for="stat">Выполнена</option>
-                            </select>
-                            <input class="btn-white" type="submit" value="Сохранить"
-                                   asp-controller="Home" asp-action="RedactSatusTask" asp-route-activTable="0" asp-route-id="@task.id" />
-                        </form>
-                    </td>
-                    <td>@task.supervisor</td>
-                    <td>@task.recipient</td>
-                    <td>@task.priority</td>
-                    <td>@task.comment</td>
-                    <td>@task.plannedTime</td>
-                    <td>@task.actualTime.ToString(@"hh\:mm")</td>
-                    <td>@task.start.Date.ToString(@"dd\.MM\.yyyy hh\:mm\:ss")</td>
-                    <td>@task.finish.Date.ToString(@"dd\.MM\.yyyy hh\:mm\:ss")</td>
-                </tr>
+
+                @if (task.liteTask == true)
+                {
+                    <tr style="background-color:green" id="task">
+                        <th>@task.date.Date.ToString(@"dd\.MM\.yyyy")</th>
+                        <td>@task.code</td>
+                        <td>@task.projectCode</td>
+                        <td>
+                            <a asp-controller="Home" asp-action="TaskTable" asp-route-activTable="0" asp-route-Taskid="@task.id">
+                                <button type="submit">@task.desc</button>
+                            </a>
+                        </td>
+                        <td>
+                            <form class="form" method="post">
+                                <select name="stat" asp-for="@task.status">
+                                    <option value="@task.status" selected hidden>@task.status</option>
+                                    <option asp-for="stat">В работе</option>
+                                    <option asp-for="stat">На паузе</option>
+                                    @if (task.status != "Создана")
+                                    {
+                                        <option asp-for="stat">Выполнена</option>
+                                    }
+                                </select>
+                                <input class="btn-white" type="submit" value="Сохранить"
+                                       asp-controller="Home" asp-action="RedactSatusTask" asp-route-activTable="0" asp-route-id="@task.id" />
+                            </form>
+                        </td>
+                        <td>@task.supervisor</td>
+                        <td>@task.recipient</td>
+                        <td>@task.priority</td>
+                        <td>@task.comment</td>
+                        <td>@task.plannedTime.ToString(@"hh\:mm")</td>
+                        <td>@task.actualTime.ToString(@"hh\:mm")</td>
+                        <td>@task.start.Date.ToString(@"dd\.MM\.yyyy hh\:mm\:ss")</td>
+                        <td>@task.finish.Date.ToString(@"dd\.MM\.yyyy hh\:mm\:ss")</td>
+                    </tr>
+                }
+                else
+                {
+                    <tr id="task">
+                        <th>@task.date.Date.ToString(@"dd\.MM\.yyyy")</th>
+                        <td>@task.code</td>
+                        <td>@task.projectCode</td>
+                        <td>
+                            <a asp-controller="Home" asp-action="TaskTable" asp-route-activTable="0" asp-route-Taskid="@task.id">
+                                <button type="submit">@task.desc</button>
+                            </a>
+                        </td>
+                        <td>
+                            <form class="form" method="post">
+                                <select name="stat" asp-for="@task.status">
+                                    <option value="@task.status" selected hidden>@task.status</option>
+                                    <option asp-for="stat">В работе</option>
+                                    <option asp-for="stat">На паузе</option>
+                                    @if (task.status != "Создана")
+                                    {
+                                        <option asp-for="stat">Выполнена</option>
+                                    }
+                                </select>
+                                <input class="btn-white" type="submit" value="Сохранить"
+                                       asp-controller="Home" asp-action="RedactSatusTask" asp-route-activTable="0" asp-route-id="@task.id" />
+                            </form>
+                        </td>
+                        <td>@task.supervisor</td>
+                        <td>@task.recipient</td>
+                        <td>@task.priority</td>
+                        <td>@task.comment</td>
+                        <td>@task.plannedTime.ToString(@"hh\:mm")</td>
+                        <td>@task.actualTime.ToString(@"hh\:mm")</td>
+                        <td>@task.start.Date.ToString(@"dd\.MM\.yyyy hh\:mm\:ss")</td>
+                        <td>@task.finish.Date.ToString(@"dd\.MM\.yyyy hh\:mm\:ss")</td>
+                    </tr>
+                }
+
             }
         }
         if (i == 2)
         {
             <tr id="title"><th style="text-align:left" colspan="13">Предстоящие задачи</th></tr>
-            foreach (Task task in Model.tasks.Where(p => p.date.Date > DateTime.Now.Date).OrderBy(p => p.date))
+            foreach (Task task in Model.tasks.Where(p => p.date.Date > DateTime.Now.Date).OrderBy(p => p.date.Date).OrderBy(p => p.priority))
             {
-                <tr id="task">
+                @if (task.liteTask == true)
+                {
+                    <tr style="background-color:green" id="task">
                     <th>@task.date.Date.ToString(@"dd\.MM\.yyyy")</th>
                     <td>@task.code</td>
                     <td>@task.projectCode</td>
@@ -109,7 +183,10 @@
                                 <option value="@task.status" selected hidden>@task.status</option>
                                 <option asp-for="stat">В работе</option>
                                 <option asp-for="stat">На паузе</option>
-                                <option asp-for="stat">Выполнена</option>
+                                @if (task.status != "Создана")
+                                {
+                                    <option asp-for="stat">Выполнена</option>
+                                }
                             </select>
                             <input class="btn-white" type="submit" value="Сохранить"
                                    asp-controller="Home" asp-action="RedactSatusTask" asp-route-supervisor="@task.supervisor" asp-route-activTable="0" asp-route-id="@task.id" />
@@ -119,11 +196,48 @@
                     <td>@task.recipient</td>
                     <td>@task.priority</td>
                     <td>@task.comment</td>
-                    <td>@task.plannedTime</td>
+                    <td>@task.plannedTime.ToString(@"hh\:mm")</td>
+                    <td>@task.actualTime.ToString(@"hh\:mm")</td>
+                    <td>@task.start.Date.ToString(@"dd\.MM\.yyyy hh\:mm\:ss")</td>
+                    <td>@task.finish.Date.ToString(@"dd\.MM\.yyyy hh\:mm\:ss")</td>
+                    </tr>
+                }
+                else
+                { 
+                <tr id="task">
+                    <th>@task.date.Date.ToString(@"dd\.MM\.yyyy")</th>
+                    <td>@task.code</td>
+                    <td>@task.projectCode</td>
+                    <td>
+                        <a asp-controller="Home" asp-action="TaskTable" asp-route-activTable="0" asp-route-Taskid="@task.id">
+                            <button type="submit">@task.desc</button>
+                        </a>
+                    </td>
+                    <td>
+                        <form class="form" method="post">
+                            <select name="stat" asp-for="@task.status">
+                                <option value="@task.status" selected hidden>@task.status</option>
+                                <option asp-for="stat">В работе</option>
+                                <option asp-for="stat">На паузе</option>
+                                @if (task.status != "Создана")
+                                {
+                                    <option asp-for="stat">Выполнена</option>
+                                }
+                            </select>
+                            <input class="btn-white" type="submit" value="Сохранить"
+                                   asp-controller="Home" asp-action="RedactSatusTask" asp-route-supervisor="@task.supervisor" asp-route-activTable="0" asp-route-id="@task.id" />
+                        </form>
+                    </td>
+                    <td>@task.supervisor</td>
+                    <td>@task.recipient</td>
+                    <td>@task.priority</td>
+                    <td>@task.comment</td>
+                    <td>@task.plannedTime.ToString(@"hh\:mm")</td>
                     <td>@task.actualTime.ToString(@"hh\:mm")</td>
                     <td>@task.start.Date.ToString(@"dd\.MM\.yyyy hh\:mm\:ss")</td>
                     <td>@task.finish.Date.ToString(@"dd\.MM\.yyyy hh\:mm\:ss")</td>
                 </tr>
+                }
             }
         }
     }
