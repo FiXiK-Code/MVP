@@ -36,5 +36,10 @@
     <textarea name="allStages" asp-for="nullProject.allStages" class="form-control"></textarea>
 
     <input class="btn-white" type="submit" value="Сохранить"
-           asp-controller="Home" asp-action="addProjectToDB" />
+           asp-controller="Home" asp-action="addProjectToDB" 
+           asp-route-activTable="@Model.activeTableIndex"
+           asp-route-staffTableFilter="@Model.filterStaff"
+             asp-route-recipientProjectFilter="@Model.filterResProj"
+            asp-route-supervisorProjectFilter="@Model.filterSupProj"
+            asp-route-porjectFiltr="@Model.filterProj"/>
 </form>

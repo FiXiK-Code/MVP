@@ -36,16 +36,29 @@ namespace MVP.Controllers
             _logistickProject = logistickProject;
         }
 
-        public RedirectToActionResult RedactSatusTask(int id, string stat,int activTable, string supervisor)
+        public RedirectToActionResult RedactSatusTask(int id, string stat,int activTable, string supervisor, string staffTableFilter,
+            string recipientProjectFilter,
+            string supervisorProjectFilter,
+            string porjectFiltr)
         {
             
             if (!_task.redactStatus(id, stat, supervisor))
             {
                 var msg = "Только одна задача может быть в работе! Проверьте статусы своих задачь!";
-                return RedirectToAction("TaskTable", new { activTable = activTable, Taskid = id, meesage = msg, TaskRed = true });
+                return RedirectToAction("TaskTable", new { activTable = activTable, Taskid = id, meesage = msg, TaskRed = true,
+                    staffTableFilter = staffTableFilter,
+                    recipientProjectFilter = recipientProjectFilter,
+                    supervisorProjectFilter = supervisorProjectFilter,
+                    porjectFiltr = porjectFiltr
+                });
             }
 
-            return RedirectToAction("TaskTable", new { activTable = activTable });
+            return RedirectToAction("TaskTable", new { activTable = activTable,
+                staffTableFilter = staffTableFilter,
+                recipientProjectFilter = recipientProjectFilter,
+                supervisorProjectFilter = supervisorProjectFilter,
+                porjectFiltr = porjectFiltr
+            });
         }
 
         public RedirectToActionResult RedactProjectToDB(
@@ -56,7 +69,11 @@ namespace MVP.Controllers
             int priority,
             string allStages,
             string comment,
-            int activTable
+            int activTable,
+            string staffTableFilter,
+            string recipientProjectFilter,
+            string supervisorProjectFilter,
+            string porjectFiltr
             )
         {
             _project.redactToDB(iid, arhive,link,supervisor,priority,allStages);
@@ -77,7 +94,12 @@ namespace MVP.Controllers
             };
 
             _logistickProject.addToDB(item);
-            return RedirectToAction("TaskTable", new { activTable = activTable ,Projid = iid});
+            return RedirectToAction("TaskTable", new { activTable = activTable ,Projid = iid,
+                staffTableFilter = staffTableFilter,
+                recipientProjectFilter = recipientProjectFilter,
+                supervisorProjectFilter = supervisorProjectFilter,
+                porjectFiltr = porjectFiltr
+            });
 
         }
         public async Task<RedirectToActionResult> RedactTaskToDB(
@@ -91,7 +113,11 @@ namespace MVP.Controllers
             TimeSpan plannedTime,
             DateTime start,
             DateTime finish,
-            int activTable
+            int activTable,
+            string staffTableFilter,
+            string recipientProjectFilter,
+            string supervisorProjectFilter,
+            string porjectFiltr
 )
         {
             var roleSession = JsonConvert.DeserializeObject<SessionRoles>(HttpContext.Session.GetString("Session"));
@@ -99,7 +125,12 @@ namespace MVP.Controllers
             if (!_task.redactToDB(iid, date, status, comment != null?$"{roleSession.SessionName}: {comment}":null, supervisor, recipient, pririty, plannedTime, start, finish))
             {
                 var msg = "Только одна задача может быть в работе! Проверьте статусы своих задачь!";
-                return RedirectToAction("TaskTable", new { activTable = activTable, Taskid = iid, meesage = msg, TaskRed = true });
+                return RedirectToAction("TaskTable", new { activTable = activTable, Taskid = iid, meesage = msg, TaskRed = true,
+                    staffTableFilter = staffTableFilter,
+                    recipientProjectFilter = recipientProjectFilter,
+                    supervisorProjectFilter = supervisorProjectFilter,
+                    porjectFiltr = porjectFiltr
+                });
             }
             else
             { 
@@ -124,7 +155,12 @@ namespace MVP.Controllers
                 };
                 _logistickTask.addToDB(item);
                 if (status == "Создана") await TimerPauseTask(iid);
-                return RedirectToAction("TaskTable", new { activTable = activTable, Taskid = iid });
+                return RedirectToAction("TaskTable", new { activTable = activTable, Taskid = iid,
+                    staffTableFilter = staffTableFilter,
+                    recipientProjectFilter = recipientProjectFilter,
+                    supervisorProjectFilter = supervisorProjectFilter,
+                    porjectFiltr = porjectFiltr
+                });
             }
 
         }
@@ -146,7 +182,11 @@ namespace MVP.Controllers
             string shortName,
             string name,
             string allStages,
-            int activTable
+            int activTable,
+            string staffTableFilter,
+            string recipientProjectFilter,
+            string supervisorProjectFilter,
+            string porjectFiltr
             )
         {
             var roleSession = JsonConvert.DeserializeObject<SessionRoles>(HttpContext.Session.GetString("Session"));
@@ -181,7 +221,12 @@ namespace MVP.Controllers
             };
             _logistickProject.addToDB(log);
             _project.addToDB(item);
-            return RedirectToAction("TaskTable", new { activTable = activTable});
+            return RedirectToAction("TaskTable", new { activTable = activTable,
+                staffTableFilter = staffTableFilter,
+                recipientProjectFilter = recipientProjectFilter,
+                supervisorProjectFilter = supervisorProjectFilter,
+                porjectFiltr = porjectFiltr
+            });
         }
 
         public RedirectToActionResult addTaskToDB(
@@ -195,7 +240,11 @@ namespace MVP.Controllers
             DateTime date,
             string Stage,
             string liteTask,
-            int activTable
+            int activTable,
+            string staffTableFilter,
+            string recipientProjectFilter,
+            string supervisorProjectFilter,
+            string porjectFiltr
             )
         {
             var roleSession = JsonConvert.DeserializeObject<SessionRoles>(HttpContext.Session.GetString("Session"));
@@ -204,17 +253,33 @@ namespace MVP.Controllers
             {
                 if (projectCode != _appDB.DBProject.FirstOrDefault(p => p.code == projectCode).code)
                 {
-                    return RedirectToAction("TaskTable", new { activTable = activTable, meesage = "Не коррестный код проекта!" });
+                    return RedirectToAction("TaskTable", new { activTable = activTable, meesage = "Не коррестный код проекта!",
+                        staffTableFilter = staffTableFilter,
+                        recipientProjectFilter = recipientProjectFilter,
+                        supervisorProjectFilter = supervisorProjectFilter,
+                        porjectFiltr = porjectFiltr
+                    });
                 }
             }
             catch (Exception)
             {
-                return RedirectToAction("TaskTable", new { activTable = activTable, meesage = "Не коррестный код проекта!" });
+                return RedirectToAction("TaskTable", new { activTable = activTable, meesage = "Не коррестный код проекта!",
+                    staffTableFilter = staffTableFilter,
+                    recipientProjectFilter = recipientProjectFilter,
+                    supervisorProjectFilter = supervisorProjectFilter,
+                    porjectFiltr = porjectFiltr
+                });
             }
-            //if (plannedTime == TimeSpan.Zero)
-            //{
-            //    return RedirectToAction("TaskTable", new { activTable = activTable, meesage = "Не указан срок исполнения задачи!" });
-            //}
+
+            if (plannedTime == TimeSpan.Zero)
+            {
+                return RedirectToAction("TaskTable", new { activTable = activTable, meesage = "Не указан срок исполнения задачи!",
+                    staffTableFilter = staffTableFilter,
+                    recipientProjectFilter = recipientProjectFilter,
+                    supervisorProjectFilter = supervisorProjectFilter,
+                    porjectFiltr = porjectFiltr
+                });
+            }
 
             TimeSpan SumTimeTaskToDay = plannedTime;
             foreach(var task in _appDB.DBTask.Where(p => p.supervisor == supervisor).Where(p => p.date.Date == date.Date))
@@ -223,7 +288,12 @@ namespace MVP.Controllers
             }
             if(SumTimeTaskToDay > new TimeSpan(8, 0, 0))
             {
-                return RedirectToAction("TaskTable", new { activTable = activTable, meesage = "Сумма времени задач на этот день превышает 8 часов!\nВыберите другой день." });
+                return RedirectToAction("TaskTable", new { activTable = activTable, meesage = "Сумма времени задач на этот день превышает 8 часов!\nВыберите другой день.",
+                staffTableFilter = staffTableFilter,
+                    recipientProjectFilter = recipientProjectFilter,
+                    supervisorProjectFilter = supervisorProjectFilter,
+                    porjectFiltr = porjectFiltr
+                });
             }
             var item = new Tasks
             {
@@ -232,13 +302,15 @@ namespace MVP.Controllers
                 projectCode = projectCode,
                 supervisor = supervisor,
                 recipient = recipient,
-                priority = liteTask == "Задача"? _appDB.DBProject.FirstOrDefault(p => p.code == projectCode).priority : 0,
+                priority = liteTask == "Задача" ? _appDB.DBProject.FirstOrDefault(p => p.code == projectCode).priority : 0,
                 comment = $"{roleSession.SessionName}: {comment}\n",
                 plannedTime = plannedTime,
                 date = date,
                 Stage = Stage,
                 status = "Создана",
-                liteTask = liteTask == "Задача" ? false : true
+                liteTask = liteTask == "Задача" ? false : true,
+                creator = roleSession.SessionName
+
             };
             _task.addToDB(item);
 
@@ -260,7 +332,10 @@ namespace MVP.Controllers
             _logistickTask.addToDB(log);
 
 
-            return RedirectToAction("TaskTable", new { activTable = activTable });
+            return RedirectToAction("TaskTable", new { activTable = activTable, staffTableFilter = staffTableFilter, 
+                recipientProjectFilter= recipientProjectFilter,
+                supervisorProjectFilter = supervisorProjectFilter,
+                porjectFiltr = porjectFiltr});
 
         }
 

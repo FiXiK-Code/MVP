@@ -9,7 +9,12 @@
 <form class="form" id="form-redaction-task" method="post">
     <input class="btn-white btn-top" type="submit" value="Отменить редактирование"
            asp-controller="Home" asp-action="TaskTable"
-           asp-route-Taskid="@Model.redactedTask.id" />
+           asp-route-Taskid="@Model.redactedTask.id"
+           asp-route-activTable="@Model.activeTableIndex"
+           asp-route-staffTableFilter="@Model.filterStaff"
+             asp-route-recipientProjectFilter="@Model.filterResProj"
+            asp-route-supervisorProjectFilter="@Model.filterSupProj"
+            asp-route-porjectFiltr="@Model.filterProj"/>
     @{
         var roleSessionId = Model.roles.FirstOrDefault(p => p.name == ViewBag.Role).id;
         var staffPost = Model.staffs.FirstOrDefault(p => p.name == Model.redactedTask.supervisor).post;
@@ -17,7 +22,7 @@
         var supervisorRoleId = Model.roles.FirstOrDefault(p => p.code == supervisorRoleCode).id;
     }
 
-    @if (Model.redactedTask.date.Date >= DateTime.Now.Date &&
+    @if (Model.redactedTask.date.Date >= DateTime.Now.Date && 
 roleSessionId >= supervisorRoleId)
     {<label>Дата</label>
         <input name="date" asp-for="@Model.redactedTask.date" type="date" class="form-control">
@@ -199,6 +204,11 @@ roleSessionId >= supervisorRoleId)
 
     <input class="btn-white btn-top" type="submit" value="Сохранить"
            asp-controller="Home" asp-action="RedactTaskToDB"
-           asp-route-iid="@Model.redactedTask.id" />
+           asp-route-iid="@Model.redactedTask.id"
+           asp-route-activTable="@Model.activeTableIndex"
+           asp-route-staffTableFilter="@Model.filterStaff"
+             asp-route-recipientProjectFilter="@Model.filterResProj"
+            asp-route-supervisorProjectFilter="@Model.filterSupProj"
+            asp-route-porjectFiltr="@Model.filterProj"/>
 
 </form>

@@ -59,13 +59,21 @@
                         <form class="top-menu" action="" method="post">
                             @if (ViewBag.Role != "Сотрудник")
                             {
-                                <a asp-controller="Home" asp-action="TaskTable" asp-route-activTable="0">
+                                <a asp-controller="Home" asp-action="TaskTable" asp-route-activTable="0"
+                                   asp-route-staffTableFilter="@Model.filterStaff"
+             asp-route-recipientProjectFilter="@Model.filterResProj"
+            asp-route-supervisorProjectFilter="@Model.filterSupProj"
+            asp-route-porjectFiltr="@Model.filterProj">
                                     <button class="btn btn__top-bar" type="button">Добавить задачу</button>
                                 </a>
                             }
 
                             @if (ViewBag.Role == "Директор" || ViewBag.Role == "ГИП")
-                            {<a asp-controller="Home" asp-action="TaskTable" asp-route-activTable="0" asp-route-ProjectCreate="@true">
+                            {<a asp-controller="Home" asp-action="TaskTable" asp-route-activTable="0" asp-route-ProjectCreate="@true"
+                                asp-route-staffTableFilter="@Model.filterStaff"
+             asp-route-recipientProjectFilter="@Model.filterResProj"
+            asp-route-supervisorProjectFilter="@Model.filterSupProj"
+            asp-route-porjectFiltr="@Model.filterProj">
                                     <button class="btn btn__top-bar" type="button">Добавить проект</button>
                                 </a>}
 
@@ -78,12 +86,20 @@
                         <form class="top-menu" asp-controller="Home" asp-action="TaskTable" asp-route-activTable="1">
                             @if (ViewBag.Role != "Сотрудник")
                             {
-                                <a asp-controller="Home" asp-action="TaskTable" asp-route-activTable="1">
+                                <a asp-controller="Home" asp-action="TaskTable" asp-route-activTable="1"
+                                   asp-route-staffTableFilter="@Model.filterStaff"
+             asp-route-recipientProjectFilter="@Model.filterResProj"
+            asp-route-supervisorProjectFilter="@Model.filterSupProj"
+            asp-route-porjectFiltr="@Model.filterProj">
                                     <button class="btn btn__top-bar" type="button">Добавить задачу</button>
                                 </a>}
 
                             @if (ViewBag.Role == "Директор" || ViewBag.Role == "ГИП")
-                            {<a asp-controller="Home" asp-action="TaskTable" asp-route-ProjectCreate="@true" asp-route-activTable="1">
+                            {<a asp-controller="Home" asp-action="TaskTable" asp-route-ProjectCreate="@true" asp-route-activTable="1"
+                                asp-route-staffTableFilter="@Model.filterStaff"
+             asp-route-recipientProjectFilter="@Model.filterResProj"
+            asp-route-supervisorProjectFilter="@Model.filterSupProj"
+            asp-route-porjectFiltr="@Model.filterProj">
                                     <button class="btn btn__top-bar" type="button">Добавить проект</button>
                                 </a>}
 
@@ -130,15 +146,27 @@
                         @Html.Partial("ProjectTableTest")
                     </div>
                     <div class="third-table" style="display:@Model.activeTable3">
-                        <form class="top-menu" method="post" asp-controller="Home" asp-action="TaskTable" asp-route-activTable="2">
+                        <form class="top-menu" method="post" asp-controller="Home" asp-action="TaskTable" asp-route-activTable="2"
+                              asp-route-staffTableFilter="@Model.filterStaff"
+             asp-route-recipientProjectFilter="@Model.filterResProj"
+            asp-route-supervisorProjectFilter="@Model.filterSupProj"
+            asp-route-porjectFiltr="@Model.filterProj">
                             @if (ViewBag.Role != "Сотрудник")
                             {
-                                <a asp-controller="Home" asp-action="TaskTable" asp-route-activTable="2">
+                                <a asp-controller="Home" asp-action="TaskTable" asp-route-activTable="2"
+                                   asp-route-staffTableFilter="@Model.filterStaff"
+             asp-route-recipientProjectFilter="@Model.filterResProj"
+            asp-route-supervisorProjectFilter="@Model.filterSupProj"
+            asp-route-porjectFiltr="@Model.filterProj">
                                     <button class="btn btn__top-bar" type="button">Добавить задачу</button>
                                 </a>}
 
                             @if (ViewBag.Role == "Директор" || ViewBag.Role == "ГИП")
-                            {<a asp-controller="Home" asp-action="TaskTable" asp-route-ProjectCreate="@true" asp-route-activTable="2">
+                            {<a asp-controller="Home" asp-action="TaskTable" asp-route-ProjectCreate="@true" asp-route-activTable="2"
+                                asp-route-staffTableFilter="@Model.filterStaff"
+             asp-route-recipientProjectFilter="@Model.filterResProj"
+            asp-route-supervisorProjectFilter="@Model.filterSupProj"
+            asp-route-porjectFiltr="@Model.filterProj">
                                     <button class="btn btn__top-bar" type="button">Добавить проект</button>
                                 </a>}
 

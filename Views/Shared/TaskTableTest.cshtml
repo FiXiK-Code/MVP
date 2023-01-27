@@ -36,7 +36,11 @@
                         <td>@task.code</td>
                         <td>@task.projectCode</td>
                         <td>
-                            <a asp-controller="Home" asp-action="TaskTable" asp-route-activTable="0" asp-route-Taskid="@task.id">
+                            <a asp-controller="Home" asp-action="TaskTable" asp-route-activTable="0" asp-route-Taskid="@task.id"
+                               asp-route-staffTableFilter="@Model.filterStaff"
+             asp-route-recipientProjectFilter="@Model.filterResProj"
+            asp-route-supervisorProjectFilter="@Model.filterSupProj"
+            asp-route-porjectFiltr="@Model.filterProj">
                                 <button type="submit">@task.desc</button>
                             </a>
                         </td>
@@ -60,7 +64,11 @@
                         <td>@task.code</td>
                         <td>@task.projectCode</td>
                         <td>
-                            <a asp-controller="Home" asp-action="TaskTable" asp-route-activTable="0" asp-route-Taskid="@task.id">
+                            <a asp-controller="Home" asp-action="TaskTable" asp-route-activTable="0" asp-route-Taskid="@task.id"
+                               asp-route-staffTableFilter="@Model.filterStaff"
+             asp-route-recipientProjectFilter="@Model.filterResProj"
+            asp-route-supervisorProjectFilter="@Model.filterSupProj"
+            asp-route-porjectFiltr="@Model.filterProj">
                                 <button type="submit">@task.desc</button>
                             </a>
                         </td>
@@ -93,7 +101,11 @@
                         <td>@task.code</td>
                         <td>@task.projectCode</td>
                         <td>
-                            <a asp-controller="Home" asp-action="TaskTable" asp-route-activTable="0" asp-route-Taskid="@task.id">
+                            <a asp-controller="Home" asp-action="TaskTable" asp-route-activTable="0" asp-route-Taskid="@task.id"
+                               asp-route-staffTableFilter="@Model.filterStaff"
+             asp-route-recipientProjectFilter="@Model.filterResProj"
+            asp-route-supervisorProjectFilter="@Model.filterSupProj"
+            asp-route-porjectFiltr="@Model.filterProj">
                                 <button type="submit">@task.desc</button>
                             </a>
                         </td>
@@ -109,7 +121,11 @@
                                     }
                                 </select>
                                 <input class="btn-white" type="submit" value="Сохранить"
-                                       asp-controller="Home" asp-action="RedactSatusTask" asp-route-activTable="0" asp-route-id="@task.id" />
+                                       asp-controller="Home" asp-action="RedactSatusTask" asp-route-activTable="0" asp-route-id="@task.id"
+                                       asp-route-staffTableFilter="@Model.filterStaff"
+             asp-route-recipientProjectFilter="@Model.filterResProj"
+            asp-route-supervisorProjectFilter="@Model.filterSupProj"
+            asp-route-porjectFiltr="@Model.filterProj"/>
                             </form>
                         </td>
                         <td>@task.supervisor</td>
@@ -129,7 +145,11 @@
                         <td>@task.code</td>
                         <td>@task.projectCode</td>
                         <td>
-                            <a asp-controller="Home" asp-action="TaskTable" asp-route-activTable="0" asp-route-Taskid="@task.id">
+                            <a asp-controller="Home" asp-action="TaskTable" asp-route-activTable="0" asp-route-Taskid="@task.id"
+                               asp-route-staffTableFilter="@Model.filterStaff"
+             asp-route-recipientProjectFilter="@Model.filterResProj"
+            asp-route-supervisorProjectFilter="@Model.filterSupProj"
+            asp-route-porjectFiltr="@Model.filterProj">
                                 <button type="submit">@task.desc</button>
                             </a>
                         </td>
@@ -145,7 +165,11 @@
                                     }
                                 </select>
                                 <input class="btn-white" type="submit" value="Сохранить"
-                                       asp-controller="Home" asp-action="RedactSatusTask" asp-route-activTable="0" asp-route-id="@task.id" />
+                                       asp-controller="Home" asp-action="RedactSatusTask" asp-route-activTable="0" asp-route-id="@task.id" 
+                                       asp-route-staffTableFilter="@Model.filterStaff"
+             asp-route-recipientProjectFilter="@Model.filterResProj"
+            asp-route-supervisorProjectFilter="@Model.filterSupProj"
+            asp-route-porjectFiltr="@Model.filterProj"/>
                             </form>
                         </td>
                         <td>@task.supervisor</td>
@@ -173,7 +197,11 @@
                     <td>@task.code</td>
                     <td>@task.projectCode</td>
                     <td>
-                        <a asp-controller="Home" asp-action="TaskTable" asp-route-activTable="0" asp-route-Taskid="@task.id">
+                        <a asp-controller="Home" asp-action="TaskTable" asp-route-activTable="0" asp-route-Taskid="@task.id"
+                           asp-route-staffTableFilter="@Model.filterStaff"
+             asp-route-recipientProjectFilter="@Model.filterResProj"
+            asp-route-supervisorProjectFilter="@Model.filterSupProj"
+            asp-route-porjectFiltr="@Model.filterProj">
                             <button type="submit">@task.desc</button>
                         </a>
                     </td>
@@ -189,7 +217,12 @@
                                 }
                             </select>
                             <input class="btn-white" type="submit" value="Сохранить"
-                                   asp-controller="Home" asp-action="RedactSatusTask" asp-route-supervisor="@task.supervisor" asp-route-activTable="0" asp-route-id="@task.id" />
+                                   asp-controller="Home" asp-action="RedactSatusTask" asp-route-supervisor="@task.supervisor"
+                                   asp-route-activTable="0" asp-route-id="@task.id"
+                                   asp-route-staffTableFilter="@Model.filterStaff"
+             asp-route-recipientProjectFilter="@Model.filterResProj"
+            asp-route-supervisorProjectFilter="@Model.filterSupProj"
+            asp-route-porjectFiltr="@Model.filterProj"/>
                         </form>
                     </td>
                     <td>@task.supervisor</td>
@@ -209,7 +242,11 @@
                     <td>@task.code</td>
                     <td>@task.projectCode</td>
                     <td>
-                        <a asp-controller="Home" asp-action="TaskTable" asp-route-activTable="0" asp-route-Taskid="@task.id">
+                        <a asp-controller="Home" asp-action="TaskTable" asp-route-activTable="0" asp-route-Taskid="@task.id"
+                           asp-route-staffTableFilter="@Model.filterStaff"
+             asp-route-recipientProjectFilter="@Model.filterResProj"
+            asp-route-supervisorProjectFilter="@Model.filterSupProj"
+            asp-route-porjectFiltr="@Model.filterProj">
                             <button type="submit">@task.desc</button>
                         </a>
                     </td>
@@ -225,7 +262,12 @@
                                 }
                             </select>
                             <input class="btn-white" type="submit" value="Сохранить"
-                                   asp-controller="Home" asp-action="RedactSatusTask" asp-route-supervisor="@task.supervisor" asp-route-activTable="0" asp-route-id="@task.id" />
+                                   asp-controller="Home" asp-action="RedactSatusTask" asp-route-supervisor="@task.supervisor"
+                                   asp-route-activTable="0" asp-route-id="@task.id"
+                                   asp-route-staffTableFilter="@Model.filterStaff"
+             asp-route-recipientProjectFilter="@Model.filterResProj"
+            asp-route-supervisorProjectFilter="@Model.filterSupProj"
+            asp-route-porjectFiltr="@Model.filterProj"/>
                         </form>
                     </td>
                     <td>@task.supervisor</td>

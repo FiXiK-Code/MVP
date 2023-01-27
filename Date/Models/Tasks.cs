@@ -25,5 +25,6 @@ namespace MVP.Date.Models
         public bool liteTask { get; set; }
         public string status { get; set; }
         public DateTime startWork { get; set; }
+        public string creator { get; set; }
     }
 }

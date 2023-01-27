@@ -10,7 +10,12 @@
     <input class="btn-white btn-top" type="submit" value="Редактировать"
            asp-controller="Home" asp-action="TaskTable"
            asp-route-Taskid="@Model.redactedTask.id"
-           asp-route-TaskRed="@true" />   
+           asp-route-TaskRed="@true"
+           asp-route-activTable="@Model.activeTableIndex"
+           asp-route-staffTableFilter="@Model.filterStaff"
+             asp-route-recipientProjectFilter="@Model.filterResProj"
+            asp-route-supervisorProjectFilter="@Model.filterSupProj"
+            asp-route-porjectFiltr="@Model.filterProj"/>   
     }
     
 

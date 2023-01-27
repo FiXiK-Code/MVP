@@ -20,7 +20,7 @@
 
     <label>Шифр проекта</label>
     <select name="projectCode" asp-for="@Model.nullTask.projectCode" class="form-control">
-        @foreach (var projCod in Model.projects)
+        @foreach (var projCod in Model.projects.OrderBy(p => p.code.Split('/')[0]).OrderBy(p => p.code.Split('/').Last().Split('-')[0]))
         {
             <option asp-for="@Model.nullTask.projectCode">@projCod.code</option>
         }
@@ -154,5 +154,9 @@
 
 
     <input class="btn-white" type="submit" value="Сохранить"
-           asp-controller="Home" asp-action="addTaskToDB" />
+           asp-controller="Home" asp-action="addTaskToDB" asp-route-activTable="@Model.activeTableIndex"
+           asp-route-staffTableFilter="@Model.filterStaff"
+             asp-route-recipientProjectFilter="@Model.filterResProj"
+            asp-route-supervisorProjectFilter="@Model.filterSupProj"
+            asp-route-porjectFiltr="@Model.filterProj"/>
 </form>
