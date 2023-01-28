@@ -52,6 +52,30 @@ namespace MVP.Controllers
                     porjectFiltr = porjectFiltr
                 });
             }
+            var roleSession = new SessionRoles();
+            try
+            {
+                roleSession = JsonConvert.DeserializeObject<SessionRoles>(HttpContext.Session.GetString("Session"));
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Login", "Index");
+            }
+            LogistickTask item = new LogistickTask()
+            {
+                ProjectCode = _appDB.DBTask.FirstOrDefault(p => p.id == id).projectCode,
+                TaskId = id,
+                descTask = _appDB.DBTask.FirstOrDefault(p => p.id == id).desc,
+                supervisorId = _appDB.DBStaff.FirstOrDefault(p => p.name == supervisor).id,
+                resipienId = supervisor != null ? _appDB.DBStaff.FirstOrDefault(p => p.name == supervisor).id : -1,
+                dateRedaction = DateTime.Now,
+                planedTime = _appDB.DBTask.FirstOrDefault(p => p.id == id).plannedTime,
+                actualTime = new TimeSpan(),
+                CommitorId = _appDB.DBStaff.FirstOrDefault(p => p.name == roleSession.SessionName).id,
+                taskStatusId = _appDB.DBTaskStatus.FirstOrDefault(p => p.name == _appDB.DBTask.FirstOrDefault(p => p.id == id).status).id,
+                comment = $"Стату задачи изменен на: {stat}"
+            };
+            _logistickTask.addToDB(item);
 
             return RedirectToAction("TaskTable", new { activTable = activTable,
                 staffTableFilter = staffTableFilter,
@@ -78,8 +102,15 @@ namespace MVP.Controllers
         {
             _project.redactToDB(iid, arhive,link,supervisor,priority,allStages);
 
-            var roleSession = JsonConvert.DeserializeObject<SessionRoles>(HttpContext.Session.GetString("Session"));
-
+            var roleSession = new SessionRoles();
+            try
+            {
+                roleSession = JsonConvert.DeserializeObject<SessionRoles>(HttpContext.Session.GetString("Session"));
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Login", "Index");
+            }
             LogisticProject item = new LogisticProject()
             {
                 arhive = arhive,
@@ -120,8 +151,15 @@ namespace MVP.Controllers
             string porjectFiltr
 )
         {
-            var roleSession = JsonConvert.DeserializeObject<SessionRoles>(HttpContext.Session.GetString("Session"));
-
+            var roleSession = new SessionRoles();
+            try
+            {
+                roleSession = JsonConvert.DeserializeObject<SessionRoles>(HttpContext.Session.GetString("Session"));
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Login", "Index");
+            }
             if (!_task.redactToDB(iid, date, status, comment != null?$"{roleSession.SessionName}: {comment}":null, supervisor, recipient, pririty, plannedTime, start, finish))
             {
                 var msg = "Только одна задача может быть в работе! Проверьте статусы своих задачь!";
@@ -189,8 +227,15 @@ namespace MVP.Controllers
             string porjectFiltr
             )
         {
-            var roleSession = JsonConvert.DeserializeObject<SessionRoles>(HttpContext.Session.GetString("Session"));
-
+            var roleSession = new SessionRoles();
+            try
+            {
+                roleSession = JsonConvert.DeserializeObject<SessionRoles>(HttpContext.Session.GetString("Session"));
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Login", "Index");
+            }
             var item = new Project
             {
                 code = code,
@@ -247,7 +292,15 @@ namespace MVP.Controllers
             string porjectFiltr
             )
         {
-            var roleSession = JsonConvert.DeserializeObject<SessionRoles>(HttpContext.Session.GetString("Session"));
+            var roleSession = new SessionRoles();
+            try
+            {
+                roleSession = JsonConvert.DeserializeObject<SessionRoles>(HttpContext.Session.GetString("Session"));
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Login", "Index");
+            }
 
             try
             {
@@ -327,7 +380,7 @@ namespace MVP.Controllers
                 actualTime = new TimeSpan(),
                 CommitorId = _appDB.DBStaff.FirstOrDefault(p => p.name == roleSession.SessionName).id,
                 taskStatusId = _appDB.DBTaskStatus.FirstOrDefault(p => p.name == "Создана").id,
-                comment = comment
+                comment = "Задача создана. Комментарий: " + comment
             };
             _logistickTask.addToDB(log);
 
@@ -348,18 +401,20 @@ namespace MVP.Controllers
              string recipientProjectFilter ="", string staffTableFilter ="", int activTable = 0 )
         {
             var roleSession = new SessionRoles();
+            var sessionCod = "";
             try
-            { 
+            {
                 roleSession = JsonConvert.DeserializeObject<SessionRoles>(HttpContext.Session.GetString("Session"));
+                sessionCod = _appDB.DBStaff.FirstOrDefault(p => p.name == roleSession.SessionName).code;
             }
             catch (Exception)
             {
-                roleSession = new SessionRoles();
+                return View(new HomeViewModel());
             }
 
 
 
-            var sessionCod = _appDB.DBStaff.FirstOrDefault(p => p.name == roleSession.SessionName).code;
+            
 
             List<Staff> StaffTable = new List<Staff>();
             if (roleSession.SessionRole == "Директор")
@@ -419,7 +474,14 @@ namespace MVP.Controllers
             var tasks = _task.AllTasks;
             var staff = StaffTable;
 
-            
+            List<string> staffNames = new List<string>();
+            foreach (var task in staff)
+            {
+                if (!staffNames.Contains(task.name)) staffNames.Add(task.name);
+            }
+            var taskStaffTable = tasks.Where(p => staffNames.Contains(p.supervisor) || staffNames.Contains(p.recipient));
+
+
 
             List<string> ollGip = new List<string>();
             foreach(Project proj in projects.OrderBy(p => p.supervisor))
@@ -443,6 +505,9 @@ namespace MVP.Controllers
             {
                 tasks = tasks.Where(p => p.supervisor == recipientProjectFilter);
             }
+
+            
+
             List<string> projCod = new List<string>();
             foreach (Project proj in projects)
             {
@@ -505,6 +570,7 @@ namespace MVP.Controllers
                 staffSess = new Staff(),
                 staffs = _staff.AllStaffs,
                 staffsTable = staff,
+                staffTasks = taskStaffTable,
 
                 ProjectCreate = ProjectCreate,
                 TaskRed = TaskRed,

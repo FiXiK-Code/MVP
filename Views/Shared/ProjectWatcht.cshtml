@@ -10,12 +10,22 @@
     {<input class="btn-white btn-top" type="submit" value="Редактировать"
             asp-controller="Home" asp-action="TaskTable"
             asp-route-Projid="@Model.redactedProject.id"
-            asp-route-ProjectRed="@true" />}
+            asp-route-ProjectRed="@true"
+            asp-route-activTable="@Model.activeTableIndex"
+           asp-route-staffTableFilter="@Model.filterStaff"
+             asp-route-recipientProjectFilter="@Model.filterResProj"
+            asp-route-supervisorProjectFilter="@Model.filterSupProj"
+            asp-route-porjectFiltr="@Model.filterProj"/>}
     else
     { <input class="btn-white btn-top" type="submit" value="Редактировать"
              asp-controller="Home" asp-action="TaskTable"
              asp-route-Projid="@Model.redactedProject.id"
-             asp-route-meesage="Редактировать проект могут только ГИП и Директор!" />}
+             asp-route-meesage="Редактировать проект могут только ГИП и Директор!"
+             asp-route-activTable="@Model.activeTableIndex"
+           asp-route-staffTableFilter="@Model.filterStaff"
+             asp-route-recipientProjectFilter="@Model.filterResProj"
+            asp-route-supervisorProjectFilter="@Model.filterSupProj"
+            asp-route-porjectFiltr="@Model.filterProj"/>}
 
     <label>В архиве</label>
     <input id="statusId" disabled class="form-control" value="@Model.redactedProject.archive" />
@@ -46,6 +56,9 @@
 
     <label>Текущая стадия</label>
     <input id="statusId" disabled class="form-control" value="@Model.redactedProject.nowStage" />
+
+    <label>Время в работе</label>
+    <input id="statusId" disabled class="form-control" value="@Model.redactedProject.timeWork.ToString(@"hh\:mm")" />
 
     <label>Планируемая дата завершения</label>
     <input id="statusId" disabled class="form-control" value="@Model.redactedProject.plannedFinishDate.ToShortDateString()" />

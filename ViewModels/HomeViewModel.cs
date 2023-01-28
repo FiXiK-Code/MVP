@@ -32,6 +32,7 @@ namespace MVP.ViewModels
         public IEnumerable<Staff> staffsTable { get; set; }
         public IEnumerable<Role> roles { get; set; }
         public IEnumerable<Post> posts { get; set; }
+        public IEnumerable<Tasks> staffTasks { get; set; }
 
         public bool TaskRed { get; set; }
         public bool ProjectRed { get; set; }

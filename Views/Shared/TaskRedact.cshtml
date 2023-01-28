@@ -16,14 +16,12 @@
             asp-route-supervisorProjectFilter="@Model.filterSupProj"
             asp-route-porjectFiltr="@Model.filterProj"/>
     @{
-        var roleSessionId = Model.roles.FirstOrDefault(p => p.name == ViewBag.Role).id;
-        var staffPost = Model.staffs.FirstOrDefault(p => p.name == Model.redactedTask.supervisor).post;
-        var supervisorRoleCode = Model.posts.FirstOrDefault(p => p.name == staffPost).roleCod;
-        var supervisorRoleId = Model.roles.FirstOrDefault(p => p.code == supervisorRoleCode).id;
-    }
+        var super = Model.staffs.FirstOrDefault(p => p.name == Model.redactedTask.supervisor);
+        var taskSuperRole = Model.roles.FirstOrDefault(p => p.id == super.roleId).name;
+        bool redact = Model.roles.FirstOrDefault(p => p.name == ViewBag.Role).recipient.Split(',').ToList().Contains(taskSuperRole);
+        }
 
-    @if (Model.redactedTask.date.Date >= DateTime.Now.Date && 
-roleSessionId >= supervisorRoleId)
+    @if ((Model.redactedTask.date.Date >= DateTime.Now.Date && ViewBag.RoleName == Model.redactedTask.creator) || redact)
     {<label>Дата</label>
         <input name="date" asp-for="@Model.redactedTask.date" type="date" class="form-control">
     }
@@ -48,7 +46,7 @@ roleSessionId >= supervisorRoleId)
     <textarea name="comment" class="form-control"></textarea>
 
 
-    @if (roleSessionId >= supervisorRoleId)
+    @if (redact)
     {<label>Ответственный</label>
         <select name="supervisor" asp-for="@Model.redactedTask.supervisor">
             <option asp-for="@Model.redactedTask.supervisor" selected hidden>@Model.redactedTask.supervisor</option>
@@ -112,7 +110,7 @@ roleSessionId >= supervisorRoleId)
     }
 
 
-    @if (roleSessionId >= supervisorRoleId)
+    @if (redact)
     {
         <label>Исполнитель</label>
         <select name="recipient" asp-for="@Model.redactedTask.recipient">
@@ -183,7 +181,7 @@ roleSessionId >= supervisorRoleId)
     <label>Приоритет (только для чтения)</label>
     <input readonly name="pririty" class="form-control" value="@priority" />
 
-    @if (roleSessionId >= supervisorRoleId)
+    @if (redact)
     {
         <label>Планируемое время исполнения</label>
         <input name="plannedTime" asp-for="@Model.redactedTask.plannedTime" class="form-control">

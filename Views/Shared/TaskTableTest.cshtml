@@ -27,7 +27,7 @@
         {
             <tr id="title"><th style="text-align:left" colspan="13">Выполненные задачи</th></tr>
 
-            foreach (Task task in Model.tasks.Where(p => p.status == "Выполнена").OrderBy(p => p.date.Date).OrderBy(p => p.priority))
+            foreach (Task task in Model.tasks.Where(p => p.status == "Выполнена").OrderBy(p => p.date.Date).OrderBy(p => p.finish).Reverse())
             {
                 @if (task.liteTask == true)
                 {
@@ -111,21 +111,48 @@
                         </td>
                         <td>
                             <form class="form" method="post">
-                                <select name="stat" asp-for="@task.status">
-                                    <option value="@task.status" selected hidden>@task.status</option>
-                                    <option asp-for="stat">В работе</option>
-                                    <option asp-for="stat">На паузе</option>
-                                    @if (task.status != "Создана")
-                                    {
-                                        <option asp-for="stat">Выполнена</option>
-                                    }
-                                </select>
-                                <input class="btn-white" type="submit" value="Сохранить"
-                                       asp-controller="Home" asp-action="RedactSatusTask" asp-route-activTable="0" asp-route-id="@task.id"
-                                       asp-route-staffTableFilter="@Model.filterStaff"
-             asp-route-recipientProjectFilter="@Model.filterResProj"
-            asp-route-supervisorProjectFilter="@Model.filterSupProj"
-            asp-route-porjectFiltr="@Model.filterProj"/>
+                                @if (task.status == "Создана")
+                                {
+                                    <input class="btn-white" type="submit" value="В работе"
+                                           asp-controller="Home" asp-action="RedactSatusTask" asp-route-activTable="0" asp-route-id="@task.id"
+                                           asp-route-staffTableFilter="@Model.filterStaff"
+                                           asp-route-recipientProjectFilter="@Model.filterResProj"
+                                           asp-route-supervisorProjectFilter="@Model.filterSupProj"
+                                           asp-route-porjectFiltr="@Model.filterProj"
+                                           asp-route-stat="В работе" />
+                                }
+                                else if (task.status == "В работе")
+                                {
+                                    <input class="btn-white" style="background-color: green" type="submit" value="В работе"
+                                           asp-controller="Home" asp-action="RedactSatusTask" asp-route-activTable="0" asp-route-id="@task.id"
+                                           asp-route-staffTableFilter="@Model.filterStaff"
+                                           asp-route-recipientProjectFilter="@Model.filterResProj"
+                                           asp-route-supervisorProjectFilter="@Model.filterSupProj"
+                                           asp-route-porjectFiltr="@Model.filterProj"
+                                           asp-route-stat="На паузе" />
+                                    <input name="stat" class="btn-white" type="submit" value="Выполнена"
+                                           asp-controller="Home" asp-action="RedactSatusTask" asp-route-activTable="0" asp-route-id="@task.id"
+                                           asp-route-staffTableFilter="@Model.filterStaff"
+                                           asp-route-recipientProjectFilter="@Model.filterResProj"
+                                           asp-route-supervisorProjectFilter="@Model.filterSupProj"
+                                           asp-route-porjectFiltr="@Model.filterProj" />
+                                }
+                                else
+                                {
+                                    <input class="btn-white" style="background-color: red" type="submit" value="На паузе"
+                                           asp-controller="Home" asp-action="RedactSatusTask" asp-route-activTable="0" asp-route-id="@task.id"
+                                           asp-route-staffTableFilter="@Model.filterStaff"
+                                           asp-route-recipientProjectFilter="@Model.filterResProj"
+                                           asp-route-supervisorProjectFilter="@Model.filterSupProj"
+                                           asp-route-porjectFiltr="@Model.filterProj"
+                                           asp-route-stat="В работе" />
+                                    <input name="stat" class="btn-white" type="submit" value="Выполнена"
+                                           asp-controller="Home" asp-action="RedactSatusTask" asp-route-activTable="0" asp-route-id="@task.id"
+                                           asp-route-staffTableFilter="@Model.filterStaff"
+                                           asp-route-recipientProjectFilter="@Model.filterResProj"
+                                           asp-route-supervisorProjectFilter="@Model.filterSupProj"
+                                           asp-route-porjectFiltr="@Model.filterProj" />
+                                } 
                             </form>
                         </td>
                         <td>@task.supervisor</td>
@@ -155,21 +182,48 @@
                         </td>
                         <td>
                             <form class="form" method="post">
-                                <select name="stat" asp-for="@task.status">
-                                    <option value="@task.status" selected hidden>@task.status</option>
-                                    <option asp-for="stat">В работе</option>
-                                    <option asp-for="stat">На паузе</option>
-                                    @if (task.status != "Создана")
-                                    {
-                                        <option asp-for="stat">Выполнена</option>
-                                    }
-                                </select>
-                                <input class="btn-white" type="submit" value="Сохранить"
-                                       asp-controller="Home" asp-action="RedactSatusTask" asp-route-activTable="0" asp-route-id="@task.id" 
-                                       asp-route-staffTableFilter="@Model.filterStaff"
-             asp-route-recipientProjectFilter="@Model.filterResProj"
-            asp-route-supervisorProjectFilter="@Model.filterSupProj"
-            asp-route-porjectFiltr="@Model.filterProj"/>
+                                @if (task.status == "Создана")
+                                {
+                                    <input class="btn-white" type="submit" value="В работе"
+                                           asp-controller="Home" asp-action="RedactSatusTask" asp-route-activTable="0" asp-route-id="@task.id"
+                                           asp-route-staffTableFilter="@Model.filterStaff"
+                                           asp-route-recipientProjectFilter="@Model.filterResProj"
+                                           asp-route-supervisorProjectFilter="@Model.filterSupProj"
+                                           asp-route-porjectFiltr="@Model.filterProj"
+                                           asp-route-stat="В работе" />
+                                }
+                                else if (task.status == "В работе")
+                                {
+                                    <input class="btn-white" style="background-color: green" type="submit" value="В работе"
+                                           asp-controller="Home" asp-action="RedactSatusTask" asp-route-activTable="0" asp-route-id="@task.id"
+                                           asp-route-staffTableFilter="@Model.filterStaff"
+                                           asp-route-recipientProjectFilter="@Model.filterResProj"
+                                           asp-route-supervisorProjectFilter="@Model.filterSupProj"
+                                           asp-route-porjectFiltr="@Model.filterProj"
+                                           asp-route-stat="На паузе" />
+                                    <input name="stat" class="btn-white" type="submit" value="Выполнена"
+                                           asp-controller="Home" asp-action="RedactSatusTask" asp-route-activTable="0" asp-route-id="@task.id"
+                                           asp-route-staffTableFilter="@Model.filterStaff"
+                                           asp-route-recipientProjectFilter="@Model.filterResProj"
+                                           asp-route-supervisorProjectFilter="@Model.filterSupProj"
+                                           asp-route-porjectFiltr="@Model.filterProj" />
+                                }
+                                else
+                                {
+                                    <input class="btn-white" style="background-color: red" type="submit" value="На паузе"
+                                           asp-controller="Home" asp-action="RedactSatusTask" asp-route-activTable="0" asp-route-id="@task.id"
+                                           asp-route-staffTableFilter="@Model.filterStaff"
+                                           asp-route-recipientProjectFilter="@Model.filterResProj"
+                                           asp-route-supervisorProjectFilter="@Model.filterSupProj"
+                                           asp-route-porjectFiltr="@Model.filterProj"
+                                           asp-route-stat="В работе" />
+                                    <input name="stat" class="btn-white" type="submit" value="Выполнена"
+                                           asp-controller="Home" asp-action="RedactSatusTask" asp-route-activTable="0" asp-route-id="@task.id"
+                                           asp-route-staffTableFilter="@Model.filterStaff"
+                                           asp-route-recipientProjectFilter="@Model.filterResProj"
+                                           asp-route-supervisorProjectFilter="@Model.filterSupProj"
+                                           asp-route-porjectFiltr="@Model.filterProj" />
+                                }
                             </form>
                         </td>
                         <td>@task.supervisor</td>
@@ -207,22 +261,48 @@
                     </td>
                     <td>
                         <form class="form" method="post">
-                            <select name="stat" asp-for="@task.status">
-                                <option value="@task.status" selected hidden>@task.status</option>
-                                <option asp-for="stat">В работе</option>
-                                <option asp-for="stat">На паузе</option>
-                                @if (task.status != "Создана")
-                                {
-                                    <option asp-for="stat">Выполнена</option>
-                                }
-                            </select>
-                            <input class="btn-white" type="submit" value="Сохранить"
-                                   asp-controller="Home" asp-action="RedactSatusTask" asp-route-supervisor="@task.supervisor"
-                                   asp-route-activTable="0" asp-route-id="@task.id"
-                                   asp-route-staffTableFilter="@Model.filterStaff"
-             asp-route-recipientProjectFilter="@Model.filterResProj"
-            asp-route-supervisorProjectFilter="@Model.filterSupProj"
-            asp-route-porjectFiltr="@Model.filterProj"/>
+                            @if (task.status == "Создана")
+                            {
+                                <input class="btn-white" type="submit" value="В работе"
+                                       asp-controller="Home" asp-action="RedactSatusTask" asp-route-activTable="0" asp-route-id="@task.id"
+                                       asp-route-staffTableFilter="@Model.filterStaff"
+                                       asp-route-recipientProjectFilter="@Model.filterResProj"
+                                       asp-route-supervisorProjectFilter="@Model.filterSupProj"
+                                       asp-route-porjectFiltr="@Model.filterProj"
+                                       asp-route-stat="В работе" />
+                            }
+                            else if (task.status == "В работе")
+                            {
+                                <input class="btn-white" style="background-color: green" type="submit" value="В работе"
+                                       asp-controller="Home" asp-action="RedactSatusTask" asp-route-activTable="0" asp-route-id="@task.id"
+                                       asp-route-staffTableFilter="@Model.filterStaff"
+                                       asp-route-recipientProjectFilter="@Model.filterResProj"
+                                       asp-route-supervisorProjectFilter="@Model.filterSupProj"
+                                       asp-route-porjectFiltr="@Model.filterProj"
+                                       asp-route-stat="На паузе" />
+                                <input name="stat" class="btn-white" type="submit" value="Выполнена"
+                                       asp-controller="Home" asp-action="RedactSatusTask" asp-route-activTable="0" asp-route-id="@task.id"
+                                       asp-route-staffTableFilter="@Model.filterStaff"
+                                       asp-route-recipientProjectFilter="@Model.filterResProj"
+                                       asp-route-supervisorProjectFilter="@Model.filterSupProj"
+                                       asp-route-porjectFiltr="@Model.filterProj" />
+                            }
+                            else
+                            {
+                                <input class="btn-white" style="background-color: red" type="submit" value="На паузе"
+                                       asp-controller="Home" asp-action="RedactSatusTask" asp-route-activTable="0" asp-route-id="@task.id"
+                                       asp-route-staffTableFilter="@Model.filterStaff"
+                                       asp-route-recipientProjectFilter="@Model.filterResProj"
+                                       asp-route-supervisorProjectFilter="@Model.filterSupProj"
+                                       asp-route-porjectFiltr="@Model.filterProj"
+                                       asp-route-stat="В работе" />
+                                <input name="stat" class="btn-white" type="submit" value="Выполнена"
+                                       asp-controller="Home" asp-action="RedactSatusTask" asp-route-activTable="0" asp-route-id="@task.id"
+                                       asp-route-staffTableFilter="@Model.filterStaff"
+                                       asp-route-recipientProjectFilter="@Model.filterResProj"
+                                       asp-route-supervisorProjectFilter="@Model.filterSupProj"
+                                       asp-route-porjectFiltr="@Model.filterProj" />
+                            }
                         </form>
                     </td>
                     <td>@task.supervisor</td>
@@ -252,22 +332,48 @@
                     </td>
                     <td>
                         <form class="form" method="post">
-                            <select name="stat" asp-for="@task.status">
-                                <option value="@task.status" selected hidden>@task.status</option>
-                                <option asp-for="stat">В работе</option>
-                                <option asp-for="stat">На паузе</option>
-                                @if (task.status != "Создана")
-                                {
-                                    <option asp-for="stat">Выполнена</option>
-                                }
-                            </select>
-                            <input class="btn-white" type="submit" value="Сохранить"
-                                   asp-controller="Home" asp-action="RedactSatusTask" asp-route-supervisor="@task.supervisor"
-                                   asp-route-activTable="0" asp-route-id="@task.id"
-                                   asp-route-staffTableFilter="@Model.filterStaff"
-             asp-route-recipientProjectFilter="@Model.filterResProj"
-            asp-route-supervisorProjectFilter="@Model.filterSupProj"
-            asp-route-porjectFiltr="@Model.filterProj"/>
+                            @if (task.status == "Создана")
+                            {
+                                <input class="btn-white" type="submit" value="В работе"
+                                       asp-controller="Home" asp-action="RedactSatusTask" asp-route-activTable="0" asp-route-id="@task.id"
+                                       asp-route-staffTableFilter="@Model.filterStaff"
+                                       asp-route-recipientProjectFilter="@Model.filterResProj"
+                                       asp-route-supervisorProjectFilter="@Model.filterSupProj"
+                                       asp-route-porjectFiltr="@Model.filterProj"
+                                       asp-route-stat="В работе" />
+                            }
+                            else if (task.status == "В работе")
+                            {
+                                <input class="btn-white" style="background-color: green" type="submit" value="В работе"
+                                       asp-controller="Home" asp-action="RedactSatusTask" asp-route-activTable="0" asp-route-id="@task.id"
+                                       asp-route-staffTableFilter="@Model.filterStaff"
+                                       asp-route-recipientProjectFilter="@Model.filterResProj"
+                                       asp-route-supervisorProjectFilter="@Model.filterSupProj"
+                                       asp-route-porjectFiltr="@Model.filterProj"
+                                       asp-route-stat="На паузе" />
+                                <input name="stat" class="btn-white" type="submit" value="Выполнена"
+                                       asp-controller="Home" asp-action="RedactSatusTask" asp-route-activTable="0" asp-route-id="@task.id"
+                                       asp-route-staffTableFilter="@Model.filterStaff"
+                                       asp-route-recipientProjectFilter="@Model.filterResProj"
+                                       asp-route-supervisorProjectFilter="@Model.filterSupProj"
+                                       asp-route-porjectFiltr="@Model.filterProj" />
+                            }
+                            else
+                            {
+                                <input class="btn-white" style="background-color: red" type="submit" value="На паузе"
+                                       asp-controller="Home" asp-action="RedactSatusTask" asp-route-activTable="0" asp-route-id="@task.id"
+                                       asp-route-staffTableFilter="@Model.filterStaff"
+                                       asp-route-recipientProjectFilter="@Model.filterResProj"
+                                       asp-route-supervisorProjectFilter="@Model.filterSupProj"
+                                       asp-route-porjectFiltr="@Model.filterProj"
+                                       asp-route-stat="В работе" />
+                                <input name="stat" class="btn-white" type="submit" value="Выполнена"
+                                       asp-controller="Home" asp-action="RedactSatusTask" asp-route-activTable="0" asp-route-id="@task.id"
+                                       asp-route-staffTableFilter="@Model.filterStaff"
+                                       asp-route-recipientProjectFilter="@Model.filterResProj"
+                                       asp-route-supervisorProjectFilter="@Model.filterSupProj"
+                                       asp-route-porjectFiltr="@Model.filterProj" />
+                            }
                         </form>
                     </td>
                     <td>@task.supervisor</td>

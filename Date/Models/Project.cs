@@ -22,5 +22,7 @@ namespace MVP.Date.Models
         public string nowStage { get; set; }
         public string allStages { get; set; }
 
+        public TimeSpan timeWork { get; set; }
+
     }
 }

@@ -49,6 +49,9 @@ namespace MVP.Date.Repository
                 if (task.status == "В работе" && (status == "Выполнена" || status == "На паузе"))
                 {
                     task.actualTime += (TimeSpan)(DateTime.Now - task.startWork);
+                    var proj = _appDB.DBProject.FirstOrDefault(p=>p.code == task.projectCode);
+                    proj.timeWork += (TimeSpan)(DateTime.Now - task.startWork);
+                    _appDB.SaveChanges();
                 }
                 if (status == "В работе")
                 {
@@ -83,6 +86,9 @@ namespace MVP.Date.Repository
                 if (task.status == "В работе" && (stat == "Выполнена" || stat == "На паузе"))
                 {
                     task.actualTime += (TimeSpan)(DateTime.Now - task.startWork);
+                    var proj = _appDB.DBProject.FirstOrDefault(p => p.code == task.projectCode);
+                    proj.timeWork += (TimeSpan)(DateTime.Now - task.startWork);
+                    _appDB.SaveChanges();
                 }
                 if (stat == "В работе")
                 {

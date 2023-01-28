@@ -24,10 +24,10 @@
                 }
             }
         }
-        @foreach (Project project in Model.filterResProj != "Все ответственные" ? Model.projects.Where(p => projCod.Contains(p.code)).OrderBy(p => p.code) : Model.projects.OrderBy(p => p.code))
+        @foreach (Project project in Model.filterResProj != "Все ответственные" ? Model.projects.Where(p => projCod.Contains(p.code)).OrderBy(p => p.code.Split('/')[0]).OrderBy(p => p.code.Split('/').Last().Split('-')[0]) : Model.projects.OrderBy(p => p.code.Split('/')[0]).OrderBy(p => p.code.Split('/').Last().Split('-')[0]))
         {
             <th> <a asp-controller="Home" asp-action="TaskTable" asp-route-activTable="1" asp-route-Projid="@project.id"
-                    asp-route-staffTableFilter="@Model.filterStaff"
+           asp-route-staffTableFilter="@Model.filterStaff"
              asp-route-recipientProjectFilter="@Model.filterResProj"
             asp-route-supervisorProjectFilter="@Model.filterSupProj"
             asp-route-porjectFiltr="@Model.filterProj">@project.code</a></th>
@@ -37,7 +37,7 @@
     <tr>
         <th>Срок</th>
 
-        @foreach (Project project in Model.filterResProj != "Все ответственные" ? Model.projects.Where(p => projCod.Contains(p.code)).OrderBy(p => p.code) : Model.projects.OrderBy(p => p.code))
+        @foreach (Project project in Model.filterResProj != "Все ответственные" ? Model.projects.Where(p => projCod.Contains(p.code)).OrderBy(p => p.code.Split('/')[0]).OrderBy(p => p.code.Split('/').Last().Split('-')[0]) : Model.projects.OrderBy(p => p.code.Split('/')[0]).OrderBy(p => p.code.Split('/').Last().Split('-')[0]))
         {
             var date = project.plannedFinishDate.Date;
             var day = date - DateTime.Now.Date;
@@ -82,7 +82,7 @@
     <tr>
         <th>Облако</th>
 
-        @foreach (Project project in Model.filterResProj != "Все ответственные" ? Model.projects.Where(p => projCod.Contains(p.code)).OrderBy(p => p.code) : Model.projects.OrderBy(p => p.code))
+        @foreach (Project project in Model.filterResProj != "Все ответственные" ? Model.projects.Where(p => projCod.Contains(p.code)).OrderBy(p => p.code.Split('/')[0]).OrderBy(p => p.code.Split('/').Last().Split('-')[0]) : Model.projects.OrderBy(p => p.code.Split('/')[0]).OrderBy(p => p.code.Split('/').Last().Split('-')[0]))
         {
             <th>
                 <a href="@project.link">
@@ -111,16 +111,16 @@
                 if (j + 1 != Taskss.Count() && Taskss[j + 1].date.Date == Taskss[j].date.Date) continue;
                 <tr id="finish-task">
                     <th colspan="2">@Taskss[j].date.Date.ToString(@"dd\.MM\.yyyy")</th>
-                    @foreach (Project project in Model.filterResProj != "Все ответственные" ? Model.projects.Where(p => projCod.Contains(p.code)).OrderBy(p => p.code) : Model.projects.OrderBy(p => p.code))
+                    @foreach (Project project in Model.filterResProj != "Все ответственные" ? Model.projects.Where(p => projCod.Contains(p.code)).OrderBy(p => p.code.Split('/')[0]).OrderBy(p => p.code.Split('/').Last().Split('-')[0]) : Model.projects.OrderBy(p => p.code.Split('/')[0]).OrderBy(p => p.code.Split('/').Last().Split('-')[0]))
                     {
-                        if (Model.projectTasks.Where(p => p.projectCode == project.code).Where(p => p.date == Taskss[j].date).Where(p => p.status == "Выполнена").Count() == 0)
+                        if (Model.projectTasks.Where(p => p.projectCode == project.code).Where(p => p.date.Date == Taskss[j].date.Date).Where(p => p.status == "Выполнена").Count() == 0)
                         {
                             <td>-</td>
                         }
                         else
                         {
                             <td>
-                                @foreach (Task task1 in Model.projectTasks.Where(p => p.status == "Выполнена").Where(p => p.date == Taskss[j].date).Where(p => p.projectCode == project.code))
+                                @foreach (Task task1 in Model.projectTasks.Where(p => p.status == "Выполнена").Where(p => p.date.Date == Taskss[j].date.Date).Where(p => p.projectCode == project.code))
                                 {
                                     <a asp-controller="Home" asp-action="TaskTable" asp-route-activTable="1" asp-route-Taskid="@task1.id"
                                        asp-route-staffTableFilter="@Model.filterStaff"
@@ -147,7 +147,7 @@
                 if (j + 1 != Taskss.Count() && Taskss[j].date.Date == Taskss[j + 1].date.Date) continue;
                 <tr id="task">
                     <th colspan="2">@Taskss[j].date.Date.ToString(@"dd\.MM\.yyyy")</th>
-                    @foreach (Project project in Model.filterResProj != "Все ответственные" ? Model.projects.Where(p => projCod.Contains(p.code)).OrderBy(p => p.code) : Model.projects.OrderBy(p => p.code))
+                    @foreach (Project project in Model.filterResProj != "Все ответственные" ? Model.projects.Where(p => projCod.Contains(p.code)).OrderBy(p => p.code.Split('/')[0]).OrderBy(p => p.code.Split('/').Last().Split('-')[0]) : Model.projects.OrderBy(p => p.code.Split('/')[0]).OrderBy(p => p.code.Split('/').Last().Split('-')[0]))
                     {
                         if (Model.projectTasks.Where(p => p.projectCode == project.code).Where(p => p.date.Date == Taskss[j].date.Date).Where(p => p.status != "Выполнена").Count() == 0)
                         {
@@ -183,7 +183,7 @@
                 if (j + 1 != Taskss.Count() && Taskss[j].date.Date == Taskss[j + 1].date.Date) continue;
                 <tr id="task">
                     <th colspan="2">@Taskss[j].date.Date.ToString(@"dd\.MM\.yyyy")</th>
-                    @foreach (Project project in Model.filterResProj != "Все ответственные" ? Model.projects.Where(p => projCod.Contains(p.code)).OrderBy(p => p.code) : Model.projects.OrderBy(p => p.code))
+                    @foreach (Project project in Model.filterResProj != "Все ответственные" ? Model.projects.Where(p => projCod.Contains(p.code)).OrderBy(p => p.code.Split('/')[0]).OrderBy(p => p.code.Split('/').Last().Split('-')[0]) : Model.projects.OrderBy(p => p.code.Split('/')[0]).OrderBy(p => p.code.Split('/').Last().Split('-')[0]))
                     {
                         if (Model.projectTasks.Where(p => p.projectCode == project.code).Where(p => p.date.Date == Taskss[j].date.Date).Where(p => p.status != "Выполнена").Count() == 0)
                         {

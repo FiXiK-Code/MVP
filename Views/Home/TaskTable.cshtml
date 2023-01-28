@@ -43,11 +43,16 @@
                 <p>Справочник</p>
             </div>
 
-            <div>
+            @if (@ViewBag.Role != null)
+            {
+                <div>
                 <a asp-controller="Login" asp-action="Index">
                     <button style="width:100%" class="btn btn__top-bar" type="button">Выйти</button>
                 </a>
             </div>
+            }
+
+            
 
 
         </aside>
