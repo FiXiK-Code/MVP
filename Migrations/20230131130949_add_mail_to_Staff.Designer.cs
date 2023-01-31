@@ -3,14 +3,16 @@ using System;
 using MVP.Date;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MVP.Migrations
 {
     [DbContext(typeof(AppDB))]
-    partial class AppDBModelSnapshot : ModelSnapshot
+    [Migration("20230131130949_add_mail_to_Staff")]
+    partial class add_mail_to_Staff
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -259,8 +261,8 @@ namespace MVP.Migrations
                     b.Property<string>("post")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<string>("roleCod")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                    b.Property<int>("roleId")
+                        .HasColumnType("int");
 
                     b.Property<string>("supervisorCod")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");

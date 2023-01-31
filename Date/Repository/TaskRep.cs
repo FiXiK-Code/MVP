@@ -75,19 +75,36 @@ namespace MVP.Date.Repository
                 _appDB.SaveChanges();
                 return true;
             }
+            else if(_appDB.DBTask.FirstOrDefault(p => p.id == iid).status == status)
+            {
+                Tasks tasks = _appDB.DBTask.FirstOrDefault(p => p.id == iid);
+                tasks.date = date;
+                _appDB.SaveChanges();
+                return true;
+            }
             else return false;
         }
 
-        public bool redactStatus(int id, string stat, string supervisor)
+        public bool redactStatus(int id, string stat)
         {
+            var supervisor = _appDB.DBTask.FirstOrDefault(p => p.id == id).supervisor;
             if (_appDB.DBTask.Where(p => p.supervisor == supervisor).Where(p => p.status == "В работе").Count() == 0 || stat != "В работе")
             {
                 Tasks task = _appDB.DBTask.FirstOrDefault(p => p.id == id);
                 if (task.status == "В работе" && (stat == "Выполнена" || stat == "На паузе"))
                 {
                     task.actualTime += (TimeSpan)(DateTime.Now - task.startWork);
-                    var proj = _appDB.DBProject.FirstOrDefault(p => p.code == task.projectCode);
-                    proj.timeWork += (TimeSpan)(DateTime.Now - task.startWork);
+
+                    Project proj = new Project();
+                    try
+                    {
+                        proj = _appDB.DBProject.FirstOrDefault(p => p.code == task.projectCode);
+                        proj.timeWork += (TimeSpan)(DateTime.Now - task.startWork);
+                    }
+                    catch (Exception)
+                    {
+                        proj = null;
+                    }
                     _appDB.SaveChanges();
                 }
                 if (stat == "В работе")

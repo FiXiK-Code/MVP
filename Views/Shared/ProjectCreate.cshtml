@@ -17,7 +17,7 @@
 
     <label>Ответственный</label>
     <select name="supervisor" asp-for="nullProject.supervisor" class="form-control">
-        @foreach (var staff in Model.staffs.Where(p => p.roleId == 6))
+        @foreach (var staff in Model.staffs.Where(p => p.roleCod == "R02"))
         {
             <option>@staff.name</option>
         }

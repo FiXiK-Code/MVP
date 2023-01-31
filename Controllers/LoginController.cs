@@ -37,7 +37,7 @@ namespace MVP.Controllers
                 else
                 {
                     var post = _appDB.DBStaff.FirstOrDefault(p => p.login== login).post;
-                    var roleId = _appDB.DBPost.FirstOrDefault(p => p.name== post).roleCod;
+                    var roleId = _appDB.DBPost.FirstOrDefault(p => p.name == post).roleCod;
                     var sessionInit = new SessionRoles()
                     {
                         SessionName = _appDB.DBStaff.FirstOrDefault(p => p.login == login).name,

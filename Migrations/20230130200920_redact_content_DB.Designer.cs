@@ -3,14 +3,16 @@ using System;
 using MVP.Date;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MVP.Migrations
 {
     [DbContext(typeof(AppDB))]
-    partial class AppDBModelSnapshot : ModelSnapshot
+    [Migration("20230130200920_redact_content_DB")]
+    partial class redact_content_DB
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -247,9 +249,6 @@ namespace MVP.Migrations
                     b.Property<string>("login")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<string>("mail")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
                     b.Property<string>("name")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
@@ -259,8 +258,8 @@ namespace MVP.Migrations
                     b.Property<string>("post")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<string>("roleCod")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                    b.Property<int>("roleId")
+                        .HasColumnType("int");
 
                     b.Property<string>("supervisorCod")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");

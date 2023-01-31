@@ -12,10 +12,12 @@ namespace MVP.Date.Models
         public string name { get; set; }
         public int divisionId { get; set; }
         public string post { get; set; }
-        public int roleId { get; set; }
+        public string roleCod { get; set; }
         public string supervisorCod { get; set; }
         //private??
         public string login { get; set; }
         public string passvord { get; set; }
+
+        public string mail { get; set; }
     }
 }

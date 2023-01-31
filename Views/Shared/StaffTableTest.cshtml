@@ -154,10 +154,10 @@
                             </td>
                         }
 
-                        else if (Model.staffTasks.Where(p => p.supervisor == staff.name).Where(p => p.recipient != null).Where(p => p.date.Date == Taskss[j].date.Date).Where(p => p.status != "Выполнена").Count() > 0)
+                        else if (Model.staffTasks.Where(p => p.supervisor == staff.name).Where(p => p.recipient == null).Where(p => p.date.Date == Taskss[j].date.Date).Where(p => p.status != "Выполнена").Count() > 0)
                         {
                             <td>
-                                @foreach (Task task1 in Model.staffTasks.Where(p => p.status != "Выполнена").Where(p => p.recipient == null).Where(p => p.date.Date == Taskss[j].date.Date).Where(p => p.supervisor == staff.name))
+                                @foreach (Task task1 in Model.staffTasks.Where(p => p.supervisor == staff.name).Where(p => p.status != "Выполнена").Where(p => p.recipient == null).Where(p => p.date.Date == Taskss[j].date.Date))
                                 {
                                     <a asp-controller="Home" asp-action="TaskTable" asp-route-activTable="2" asp-route-Taskid="@task1.id"
                                        asp-route-staffTableFilter="@Model.filterStaff"

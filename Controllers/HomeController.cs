@@ -36,13 +36,13 @@ namespace MVP.Controllers
             _logistickProject = logistickProject;
         }
 
-        public RedirectToActionResult RedactSatusTask(int id, string stat,int activTable, string supervisor, string staffTableFilter,
+        public RedirectToActionResult RedactSatusTask(int id, string stat,int activTable, string staffTableFilter,
             string recipientProjectFilter,
             string supervisorProjectFilter,
             string porjectFiltr)
         {
             
-            if (!_task.redactStatus(id, stat, supervisor))
+            if (!_task.redactStatus(id, stat))
             {
                 var msg = "Только одна задача может быть в работе! Проверьте статусы своих задачь!";
                 return RedirectToAction("TaskTable", new { activTable = activTable, Taskid = id, meesage = msg, TaskRed = true,
@@ -61,6 +61,7 @@ namespace MVP.Controllers
             {
                 return RedirectToAction("Login", "Index");
             }
+            var supervisor = _appDB.DBTask.FirstOrDefault(p => p.id == id).supervisor;
             LogistickTask item = new LogistickTask()
             {
                 ProjectCode = _appDB.DBTask.FirstOrDefault(p => p.id == id).projectCode,
@@ -160,7 +161,7 @@ namespace MVP.Controllers
             {
                 return RedirectToAction("Login", "Index");
             }
-            if (!_task.redactToDB(iid, date, status, comment != null?$"{roleSession.SessionName}: {comment}":null, supervisor, recipient, pririty, plannedTime, start, finish))
+            if (!_task.redactToDB(iid, date, status, comment != null ? $"{roleSession.SessionName}: {comment}\n" : null, supervisor, recipient, pririty, plannedTime, start, finish))
             {
                 var msg = "Только одна задача может быть в работе! Проверьте статусы своих задачь!";
                 return RedirectToAction("TaskTable", new { activTable = activTable, Taskid = iid, meesage = msg, TaskRed = true,
@@ -335,18 +336,48 @@ namespace MVP.Controllers
             }
 
             TimeSpan SumTimeTaskToDay = plannedTime;
-            foreach(var task in _appDB.DBTask.Where(p => p.supervisor == supervisor).Where(p => p.date.Date == date.Date))
+            var maxPriority = 0;
+            var tasksSuper = _appDB.DBTask.Where(p => p.supervisor == supervisor).Where(p => p.date.Date == date.Date).OrderBy(p => p.plannedTime);
+            foreach (var task in tasksSuper)
             {
                 SumTimeTaskToDay += task.plannedTime;
+                maxPriority = task.priority > maxPriority ? task.priority : maxPriority;
             }
             if(SumTimeTaskToDay > new TimeSpan(8, 0, 0))
             {
-                return RedirectToAction("TaskTable", new { activTable = activTable, meesage = "Сумма времени задач на этот день превышает 8 часов!\nВыберите другой день.",
-                staffTableFilter = staffTableFilter,
-                    recipientProjectFilter = recipientProjectFilter,
-                    supervisorProjectFilter = supervisorProjectFilter,
-                    porjectFiltr = porjectFiltr
-                });
+                var exit = false;
+                if(_appDB.DBProject.FirstOrDefault(p => p.code == projectCode).priority < maxPriority || liteTask != "Задача")
+                {
+                    Tasks RedTask = new Tasks();
+                    foreach(var task in tasksSuper)
+                    {
+                        if (SumTimeTaskToDay - task.plannedTime <= new TimeSpan(8, 0, 0) && (task.priority < maxPriority || liteTask != "Задача") )
+                        {
+                            exit = true;
+                            RedTask = task;
+                            comment += $" + Задача {task.desc} перенесена на {task.date.Date.ToString(@"dd\.MM\.yyyy")}, в связи с более низким приоритетом.\n";
+                            break;
+                        }
+                    }
+                    if (RedTask != new Tasks())
+                    {
+                        _task.redactToDB(RedTask.id, RedTask.date.AddDays(1), RedTask.status, RedTask.comment != null ? $"{roleSession.SessionName}: {comment}\n" : null, RedTask.supervisor, RedTask.recipient, RedTask.priority, RedTask.plannedTime, RedTask.start, RedTask.finish);
+                    }
+
+                }
+
+                if (!exit)
+                {
+                    return RedirectToAction("TaskTable", new
+                    {
+                        activTable = activTable,
+                        meesage = "Сумма времени задач на этот день превышает 8 часов!\nПриоритет текущей задачи не позволяет сместить остальные.\nВыберите другой день.",
+                        staffTableFilter = staffTableFilter,
+                        recipientProjectFilter = recipientProjectFilter,
+                        supervisorProjectFilter = supervisorProjectFilter,
+                        porjectFiltr = porjectFiltr
+                    });
+                }
             }
             var item = new Tasks
             {
@@ -356,7 +387,7 @@ namespace MVP.Controllers
                 supervisor = supervisor,
                 recipient = recipient,
                 priority = liteTask == "Задача" ? _appDB.DBProject.FirstOrDefault(p => p.code == projectCode).priority : 0,
-                comment = $"{roleSession.SessionName}: {comment}\n",
+                comment = comment != null ? $"{roleSession.SessionName}: {comment}\n" : null,
                 plannedTime = plannedTime,
                 date = date,
                 Stage = Stage,
@@ -419,52 +450,52 @@ namespace MVP.Controllers
             List<Staff> StaffTable = new List<Staff>();
             if (roleSession.SessionRole == "Директор")
             {
-                foreach (var staffs in _appDB.DBStaff.Where(p => p.roleId == 6))
+                foreach (var staffs in _appDB.DBStaff.Where(p => p.roleCod == "R02"))
                 {
                     StaffTable.Add(staffs);
                 }
-                foreach (var staffs in _appDB.DBStaff.Where(p => p.roleId == 1))
+                foreach (var staffs in _appDB.DBStaff.Where(p => p.roleCod == "R04"))
                 {
                     StaffTable.Add(staffs);
                 }
             }
             else if (roleSession.SessionRole == "ГИП")
             {
-                foreach (var staffs in _appDB.DBStaff.Where(p => p.roleId == 4))
+                foreach (var staffs in _appDB.DBStaff.Where(p => p.roleCod == "R03"))
                 {
                     StaffTable.Add(staffs);
                 }
-                foreach (var staffs in _appDB.DBStaff.Where(p => p.roleId == 1))
+                foreach (var staffs in _appDB.DBStaff.Where(p => p.roleCod == "R04"))
                 {
                     StaffTable.Add(staffs);
                 }
             }
             else if (roleSession.SessionRole == "Помощник ГИПа")
             {
-                foreach (var staffs in _appDB.DBStaff.Where(p => p.roleId == 1))
+                foreach (var staffs in _appDB.DBStaff.Where(p => p.roleCod == "R04"))
                 {
                     StaffTable.Add(staffs);
                 }
             }
             else if (roleSession.SessionRole == "НО")
             {
-                foreach (var staffs in _appDB.DBStaff.Where(p => p.roleId == 6))
+                foreach (var staffs in _appDB.DBStaff.Where(p => p.roleCod == "R02"))
                 {
                     StaffTable.Add(staffs);
                 }
 
-                foreach (var staffs in _appDB.DBStaff.Where(p => p.supervisorCod == sessionCod && p.roleId == 3))
+                foreach (var staffs in _appDB.DBStaff.Where(p => p.supervisorCod == sessionCod && p.roleCod == "R05"))
                 {
                     StaffTable.Add(staffs);
                 }
-                foreach (var staff1 in _appDB.DBStaff.Where(p => p.supervisorCod == sessionCod && p.roleId == 2))
+                foreach (var staff1 in _appDB.DBStaff.Where(p => p.supervisorCod == sessionCod && p.roleCod == "R06"))
                 {
                     StaffTable.Add(staff1);
                 }
             }
             else if (roleSession.SessionRole == "РГ")
             {
-                foreach (var staffs in _appDB.DBStaff.Where(p => p.supervisorCod == sessionCod && p.roleId == 2))
+                foreach (var staffs in _appDB.DBStaff.Where(p => p.supervisorCod == sessionCod && p.roleCod == "R06"))
                 {
                     StaffTable.Add(staffs);
                 }
@@ -479,7 +510,7 @@ namespace MVP.Controllers
             {
                 if (!staffNames.Contains(task.name)) staffNames.Add(task.name);
             }
-            var taskStaffTable = tasks.Where(p => staffNames.Contains(p.supervisor) || staffNames.Contains(p.recipient));
+            List<Tasks> taskStaffTable = tasks.Where(p => staffNames.Contains(p.supervisor) || staffNames.Contains(p.recipient)).ToList();
 
 
 
@@ -489,24 +520,47 @@ namespace MVP.Controllers
                 if(!ollGip.Contains(proj.supervisor)) ollGip.Add(proj.supervisor);
             }
 
-            if (staffTableFilter!="" && staffTableFilter != "Все должности")
+            //////  настроить прием фильтров
+            foreach(var filter in staffTableFilter.Split(','))
             {
-                staff = StaffTable.Where(p => p.post == staffTableFilter).ToList();
+                if (filter != "" && filter != "Все должности")
+                {
+                    staff = StaffTable.Where(p => p.post == filter).ToList();
+                }
             }
-            if (porjectFiltr == "Проекты в архиве")
+            
+
+            foreach(var filter in porjectFiltr.Split(','))
             {
-                projects =  projects.Where(p => p.archive == "Да");
-            }
-            if (supervisorProjectFilter != "Все ГИПы" && supervisorProjectFilter !="")
-            {
-                projects = projects.Where(p => p.supervisor == supervisorProjectFilter);
-            }
-            if(recipientProjectFilter != "Все ответственные" && recipientProjectFilter != "")
-            {
-                tasks = tasks.Where(p => p.supervisor == recipientProjectFilter);
+                if (filter == "Проекты в архиве")
+                {
+                    projects = projects.Where(p => p.archive == "Да");
+                }
+                if (filter == "Текущие проекты")
+                {
+                    projects = projects.Where(p => p.archive == "Нет");
+                }
             }
 
-            
+
+            foreach (var filter in supervisorProjectFilter.Split(','))
+            {
+                if (filter != "Все ГИПы" && filter != "")
+                {
+                    projects = projects.Where(p => p.supervisor == filter);
+                }
+            }
+
+
+            foreach (var filter in recipientProjectFilter.Split(','))
+            {
+                if (filter != "Все ответственные" && filter != "")
+                {
+                    tasks = tasks.Where(p => p.supervisor == filter);
+                }
+            }
+
+            //////////
 
             List<string> projCod = new List<string>();
             foreach (Project proj in projects)

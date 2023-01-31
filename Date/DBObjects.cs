@@ -2094,7 +2094,69 @@ new Task
                         code = "P09",
                         name = "Инженер – проектировщик 3 категории отдела проектирования",
                         roleCod = "R06"
-                    }
+                    },
+
+                    new Post
+                    {
+                        code = "P10",
+                        name = "Главный специалист – эколог",
+                        roleCod = "R06"
+                    },
+                    new Post
+                    {
+                        code = "P11",
+                        name = "Кадастровый инженер",
+                        roleCod = "R06"
+                    },
+                    new Post
+                    {
+                        code = "P12",
+                        name = "Ведущий инженер (сметчик)",
+                        roleCod = "R06"
+                    },
+                    new Post
+                    {
+                        code = "P13",
+                        name = "Инженер - сметчик",
+                        roleCod = "R06"
+                    },
+                    new Post
+                    {
+                        code = "P14",
+                        name = "Начальник отдела инженерных изысканий",
+                        roleCod = "R04"
+                    },
+                    new Post
+                    {
+                        code = "P15",
+                        name = "Ведущий инженер-геолог",
+                        roleCod = "R06"
+                    },
+                    new Post
+                    {
+                        code = "P16",
+                        name = "Инженер-геолог",
+                        roleCod = "R06"
+                    },
+                    new Post
+                    {
+                        code = "P17",
+                        name = "Главный специалист отдела инженерных изысканий",
+                        roleCod = "R06"
+                    },
+                    new Post
+                    {
+                        code = "P18",
+                        name = "Ведущий инженер отдела инженерных изысканий",
+                        roleCod = "R06"
+                    },
+                    new Post
+                    {
+                        code = "P19",
+                        name = "Инженера-топограф 1 категории отдела инженерных изысканий",
+                        roleCod = "R06"
+                    },
+
                     };
                     _Post = new Dictionary<string, Post>();
                     foreach (Post el in list)
@@ -2121,7 +2183,7 @@ new Task
 code = "00",
 name = "Прокопьев Сергей Михайлович",
 divisionId = 1,
-roleId = 5,
+roleCod = "R01",
 post = "Директор",
 login = "ПрокопьевСМ",
 passvord = "123456"
@@ -2130,7 +2192,7 @@ new Staff {
 code = "01",
 name = "Григорьев Виктор Александрович",
 divisionId = 1,
-roleId = 6,
+roleCod = "R02",
 post = "Главный инженер проектов",
 login = "ГригорьевВА",
 passvord = "123456"
@@ -2140,7 +2202,7 @@ new Staff {
 code = "02",
 name = "Домрачев Алексей Юрьевич",
 divisionId = 1,
-roleId = 6,
+roleCod = "R02",
 post = "Главный инженер проектов",
 login = "ДомрачевАЮ",
 passvord = "123456"
@@ -2150,7 +2212,7 @@ new Staff {
 code = "03",
 name = "Мочалов Александр Николаевич",
 divisionId = 1,
-roleId = 6,
+roleCod = "R02",
 post = "Главный инженер проектов",
 login = "МочаловАН",
 passvord = "123456"
@@ -2160,7 +2222,7 @@ new Staff {
 code = "04",
 name = "Терехова Нина Михайловна",
 divisionId = 1,
-roleId = 6,
+roleCod = "R02",
 post = "Главный инженер проектов",
 login = "ТереховаНМ",
 passvord = "123456"
@@ -2170,7 +2232,7 @@ new Staff {
 code = "05",
 name = "Менщиков Андрей Игоревич",
 divisionId = 1,
-roleId = 4,
+roleCod = "R03",
 post = "Помощник главного инженера проекта",
 login = "МенщиковАИ",
 passvord = "123456"
@@ -2180,7 +2242,7 @@ new Staff {
 code = "06",
 name = "Файзуллин Давид Эдуардович",
 divisionId = 1,
-roleId = 4,
+roleCod = "R03",
 post = "Помощник главного инженера проекта",
 login = "ФайзуллинДЭ",
 passvord = "123456"
@@ -2191,7 +2253,7 @@ new Staff {
 code = "07",
 name = "Мухортова Светлана Ивановна",
 divisionId = 2,
-roleId = 1,
+roleCod = "R04",
 post = "Начальник отдела проектирования",
 login = "МухортоваСИ",
 passvord = "123456"
@@ -2202,7 +2264,7 @@ code = "08",
 name = "Лесина Ольга Сергеевна",
 supervisorCod = "07",
 divisionId = 2,
-roleId = 3,
+roleCod = "R05",
 post = "Руководитель группы проектирования",
 login = "ЛесинаОС",
 passvord = "123456"
@@ -2213,7 +2275,7 @@ code = "09",
 name = "Хамитова Анна Федоровна",
 supervisorCod = "08",
 divisionId = 2,
-roleId = 2,
+roleCod = "R06",
 post = "Ведущий инженер отдела проектирования",
 login = "ХамитоваАФ",
 passvord = "123456"
@@ -2224,7 +2286,7 @@ code = "10",
 name = "Власюк Анастасия Олеговна",
 supervisorCod = "08",
 divisionId = 2,
-roleId = 2,
+roleCod = "R06",
 post = "Инженер – проектировщик 2 категории отдела проектирования",
 login = "ВласюкАО",
 passvord = "123456"
@@ -2235,7 +2297,7 @@ code = "11",
 name = "Сергеева Анастасия Андреевна",
 supervisorCod = "08",
 divisionId = 2,
-roleId = 2,
+roleCod = "R06",
 post = "Инженер – проектировщик 2 категории отдела проектирования",
 login = "СергееваАИ",
 passvord = "123456"
@@ -2246,7 +2308,7 @@ code = "12",
 name = "Сидоров Артем Сергеевич",
 supervisorCod = "08",
 divisionId = 2,
-roleId = 2,
+roleCod = "R06",
 post = "Инженер – проектировщик 2 категории отдела проектирования",
 login = "СидоровАС",
 passvord = "123456"
@@ -2259,7 +2321,7 @@ code = "13",
 name = "Кузнецова Инна Владимировна",
 supervisorCod = "07",
 divisionId = 2,
-roleId = 2,
+roleCod = "R06",
 post = "Главный специалист отдела проектирования",
 login = "КузнецоваИВ",
 passvord = "123456"
@@ -2269,7 +2331,7 @@ code = "14",
 name = "Домрачева Наталья Николаевна",
 supervisorCod = "07",
 divisionId = 2,
-roleId = 2,
+roleCod = "R06",
 post = "Ведущий инженер отдела проектирования",
 login = "ДомрачеваНН",
 passvord = "123456"
@@ -2280,7 +2342,7 @@ code = "15",
 name = "Хицунова Неонила Юрьевна",
 supervisorCod = "07",
 divisionId = 2,
-roleId = 2,
+roleCod = "R06",
 post = "Ведущий инженер отдела проектирования",
 login = "ХицуноваНЮ",
 passvord = "123456"
@@ -2293,7 +2355,7 @@ code = "17",
 name = "Лялина Ксения Евгеньевна",
 supervisorCod = "07",
 divisionId = 2,
-roleId = 3,
+roleCod = "R05",
 post = "Руководитель группы проектирования",
 login = "ЛялинаКЕ",
 passvord = "123456"
@@ -2304,7 +2366,7 @@ code = "18",
 name = "Тимофеев Георгий Павлович",
 supervisorCod = "17",
 divisionId = 2,
-roleId = 2,
+roleCod = "R06",
 post = "Инженер – проектировщик 1 категории отдела проектирования",
 login = "ТимофеевГП",
 passvord = "123456"
@@ -2315,7 +2377,7 @@ code = "19",
 name = "Габайдулина Ильнара Итиясовна",
 supervisorCod = "17",
 divisionId = 2,
-roleId = 2,
+roleCod = "R06",
 post = "Инженер – проектировщик 2 категории отдела проектирования",
 login = "ГабайдулинаИИ",
 passvord = "123456"
@@ -2326,7 +2388,7 @@ code = "20",
 name = "Третьякова Жанна Викторовна",
 supervisorCod = "17",
 divisionId = 2,
-roleId = 2,
+roleCod = "R06",
 post = "Инженер – проектировщик 2 категории отдела проектирования",
 login = "ТретьяковаЖВ",
 passvord = "123456"
@@ -2337,7 +2399,7 @@ code = "21",
 name = "Колмогоров Максим Андреевич",
 supervisorCod = "17",
 divisionId = 2,
-roleId = 2,
+roleCod = "R06",
 post = "Инженер – проектировщик 3 категории отдела проектирования",
 login = "КолмогоровМА",
 passvord = "123456"
@@ -2348,7 +2410,7 @@ code = "22",
 name = "Лукьянова Евгения Леонтьевна",
 supervisorCod = "07",
 divisionId = 2,
-roleId = 2,
+roleCod = "R06",
 post = "Главный специалист – эколог",
 login = "ЛукьяноваЕЛ",
 passvord = "123456"
@@ -2358,7 +2420,7 @@ code = "23",
 name = "Титова Елена Валерьевна",
 supervisorCod = "07",
 divisionId = 2,
-roleId = 2,
+roleCod = "R06",
 post = "Ведущий инженер отдела проектирования",
 login = "ТитоваЕВ",
 passvord = "123456"
@@ -2369,7 +2431,7 @@ code = "24",
 name = "Чурилова Ирина Юрьевна",
 supervisorCod = "07",
 divisionId = 2,
-roleId = 2,
+roleCod = "R06",
 post = "Кадастровый инженер",
 login = "ЧуриловаИЮ",
 passvord = "123456"
@@ -2379,7 +2441,7 @@ code = "25",
 name = "Прокопьева Марина Игоревна",
 supervisorCod = "07",
 divisionId = 2,
-roleId = 2,
+roleCod = "R06",
 post = "Ведущий инженер (сметчик)",
 login = "ПрокопьеваМИ",
 passvord = "123456"
@@ -2389,7 +2451,7 @@ code = "26",
 name = "Секисова Ольга Александровна",
 supervisorCod = "07",
 divisionId = 2,
-roleId = 2,
+roleCod = "R06",
 post = "Инженер - сметчик",
 login = "СекисоваОА",
 passvord = "123456"
@@ -2399,7 +2461,7 @@ new Staff {
 code = "27",
 name = "Прокопьев Иван Михайлович",
 divisionId = 3,
-roleId = 1,
+roleCod = "R04",
 post = "Начальник отдела инженерных изысканий",
 login = "ПрокопьевИМ",
 passvord = "123456"
@@ -2409,7 +2471,7 @@ code = "28",
 name = "Коваленко Андрей Иванович",
 supervisorCod = "27",
 divisionId = 3,
-roleId = 2,
+roleCod = "R06",
 post = "Ведущий инженер-геолог",
 login = "КоваленкоАИ",
 passvord = "123456"
@@ -2419,7 +2481,7 @@ code = "29",
 name = "Макеев Алексей Андреевич",
 supervisorCod = "27",
 divisionId = 3,
-roleId = 2,
+roleCod = "R06",
 post = "Инженер-геолог",
 login = "МакеевАА",
 passvord = "123456"
@@ -2429,7 +2491,7 @@ code = "30",
 name = "Приданников Юрий Александрович",
 supervisorCod = "27",
 divisionId = 3,
-roleId = 2,
+roleCod = "R06",
 post = "Главный специалист отдела инженерных изысканий",
 login = "ПриданниковЮА",
 passvord = "123456"
@@ -2439,7 +2501,7 @@ code = "31",
 name = "Иванников Виталий Михайлович",
 supervisorCod = "27",
 divisionId = 3,
-roleId = 2,
+roleCod = "R06",
 post = "Главный специалист отдела инженерных изысканий",
 login = "ИванниковВМ",
 passvord = "123456"
@@ -2449,7 +2511,7 @@ code = "32",
 name = "Мазуров Александр Андреевич",
 supervisorCod = "27",
 divisionId = 3,
-roleId = 2,
+roleCod = "R06",
 post = "Главный специалист отдела инженерных изысканий",
 login = "МазуровАА",
 passvord = "123456"
@@ -2459,7 +2521,7 @@ code = "33",
 name = "Дидигов Руслан Хамзатович",
 supervisorCod = "27",
 divisionId = 3,
-roleId = 2,
+roleCod = "R06",
 post = "Ведущий инженер отдела инженерных изысканий",
 login = "ДидиговРХ",
 passvord = "123456"
@@ -2469,7 +2531,7 @@ code = "34",
 name = "Ерофеев Алексей Павлович",
 supervisorCod = "27",
 divisionId = 3,
-roleId = 2,
+roleCod = "R06",
 post = "Инженера-топограф 1 категории отдела инженерных изысканий",
 login = "ЕрофеевАП",
 passvord = "123456"
