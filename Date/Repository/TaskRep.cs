@@ -32,6 +32,7 @@ namespace MVP.Date.Repository
         }
 
         public bool redactToDB(//про подзадачи
+            string liteTask,
             int iid,
             DateTime date,
             string status,
@@ -43,14 +44,24 @@ namespace MVP.Date.Repository
             DateTime start,
             DateTime finish)
         {
-            if (_appDB.DBTask.Where(p => p.supervisor == supervisor).Where(p => p.status == "В работе").Count() <= 1 || status != "В работе")
+            if (_appDB.DBTask.Where(p => p.supervisor == supervisor).Where(p => p.recipient == null).Where(p => p.status == "В работе").Count() < 1
+                && _appDB.DBTask.Where(p => p.recipient == recipient).Where(p => p.status == "В работе").Count() < 1 
+                    || status != "В работе")
             {
                 Tasks task = _appDB.DBTask.FirstOrDefault(p => p.id == iid);
                 if (task.status == "В работе" && (status == "Выполнена" || status == "На паузе"))
                 {
                     task.actualTime += (TimeSpan)(DateTime.Now - task.startWork);
-                    var proj = _appDB.DBProject.FirstOrDefault(p=>p.code == task.projectCode);
-                    proj.timeWork += (TimeSpan)(DateTime.Now - task.startWork);
+                    Project proj = new Project();
+                    try
+                    {
+                        proj = _appDB.DBProject.FirstOrDefault(p => p.code == task.projectCode);
+                        proj.timeWork += (TimeSpan)(DateTime.Now - task.startWork);
+                    }
+                    catch (Exception)
+                    {
+                        proj = null;
+                    }
                     _appDB.SaveChanges();
                 }
                 if (status == "В работе")
@@ -62,7 +73,6 @@ namespace MVP.Date.Repository
                 task.recipient = recipient;
                 task.comment += comment != null? comment+ "\n": null;
                 task.plannedTime = plannedTime;
-                task.priority = pririty;
                 if (task.status == "Создана" && status == "В работе")
                     task.start = DateTime.Now;
                 task.status = status;
@@ -70,15 +80,10 @@ namespace MVP.Date.Repository
                 {
                     task.finish = DateTime.Now;
                 }else task.finish = finish;
-                
-                
-                _appDB.SaveChanges();
-                return true;
-            }
-            else if(_appDB.DBTask.FirstOrDefault(p => p.id == iid).status == status)
-            {
-                Tasks tasks = _appDB.DBTask.FirstOrDefault(p => p.id == iid);
-                tasks.date = date;
+
+                task.liteTask = liteTask == "Задача" ? false : true;
+                task.priority = liteTask == "Задача" ? pririty : 0;
+
                 _appDB.SaveChanges();
                 return true;
             }
@@ -88,7 +93,10 @@ namespace MVP.Date.Repository
         public bool redactStatus(int id, string stat)
         {
             var supervisor = _appDB.DBTask.FirstOrDefault(p => p.id == id).supervisor;
-            if (_appDB.DBTask.Where(p => p.supervisor == supervisor).Where(p => p.status == "В работе").Count() == 0 || stat != "В работе")
+            var resip = _appDB.DBTask.FirstOrDefault(p => p.id == id).recipient;
+            if (_appDB.DBTask.Where(p => p.supervisor == supervisor).Where(p => p.recipient == null).Where(p => p.status == "В работе").Count() < 1
+                && _appDB.DBTask.Where(p => p.recipient == resip).Where(p => p.status == "В работе").Count() < 1
+                    || stat != "В работе")
             {
                 Tasks task = _appDB.DBTask.FirstOrDefault(p => p.id == id);
                 if (task.status == "В работе" && (stat == "Выполнена" || stat == "На паузе"))

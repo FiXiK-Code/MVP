@@ -105,10 +105,12 @@
             <tr id="title">
                 <th colspan="@(Model.projects.Count()+2)" style="text-align:left ;background-color:#cccccc">Выполненные задачи</th>
             </tr>
-            List<Task> Taskss = Model.projectTasks.Where(p => p.status == "Выполнена").OrderBy(p => p.date).ToList();
+            List<Task> Taskss = Model.projectTasks.Where(p => p.status == "Выполнена").OrderBy(p => p.date.Date).ToList();
             for (int j = 0; j < Taskss.Count(); j++)
             {
-                if (j + 1 != Taskss.Count() && Taskss[j + 1].date.Date == Taskss[j].date.Date) continue;
+                if (j + 1 != Taskss.Count() && Taskss[j].date.Date == Taskss[j + 1].date.Date) continue;
+                if (Model.staffNames.Contains(Taskss[j].supervisor) && Taskss[j].supervisor != ViewBag.RoleName && Taskss[j].recipient != null) continue;
+                if (Taskss[j].supervisor == ViewBag.RoleName && Taskss[j].recipient == null) continue;
                 <tr id="finish-task">
                     <th colspan="2">@Taskss[j].date.Date.ToString(@"dd\.MM\.yyyy")</th>
                     @foreach (Project project in Model.filterResProj != "Все ответственные" ? Model.projects.Where(p => projCod.Contains(p.code)).OrderBy(p => p.code.Split('/')[0]).OrderBy(p => p.code.Split('/').Last().Split('-')[0]) : Model.projects.OrderBy(p => p.code.Split('/')[0]).OrderBy(p => p.code.Split('/').Last().Split('-')[0]))
@@ -141,10 +143,12 @@
             <tr id="title">
                 <th colspan="@(Model.projects.Count()+2)" style="text-align:left ;background-color:#cccccc">Задачи на сегодня</th>
             </tr>
-            List<Task> Taskss = Model.projectTasks.Where(p => p.status != "Выполнена").Where(p => p.date.Date <= DateTime.Now.Date).OrderBy(p => p.priority).ToList();
+            List<Task> Taskss = Model.projectTasks.Where(p => p.status != "Выполнена").Where(p => p.date.Date <= DateTime.Now.Date).OrderBy(p => p.date.Date).ToList();
             for (int j = 0; j < Taskss.Count(); j++)
             {
                 if (j + 1 != Taskss.Count() && Taskss[j].date.Date == Taskss[j + 1].date.Date) continue;
+                if (Model.staffNames.Contains(Taskss[j].supervisor) && Taskss[j].supervisor != ViewBag.RoleName && Taskss[j].recipient != null) continue;
+                if (Taskss[j].supervisor == ViewBag.RoleName && Taskss[j].recipient == null) continue;
                 <tr id="task">
                     <th colspan="2">@Taskss[j].date.Date.ToString(@"dd\.MM\.yyyy")</th>
                     @foreach (Project project in Model.filterResProj != "Все ответственные" ? Model.projects.Where(p => projCod.Contains(p.code)).OrderBy(p => p.code.Split('/')[0]).OrderBy(p => p.code.Split('/').Last().Split('-')[0]) : Model.projects.OrderBy(p => p.code.Split('/')[0]).OrderBy(p => p.code.Split('/').Last().Split('-')[0]))
@@ -181,6 +185,8 @@
             for (int j = 0; j < Taskss.Count(); j++)
             {
                 if (j + 1 != Taskss.Count() && Taskss[j].date.Date == Taskss[j + 1].date.Date) continue;
+                if (Model.staffNames.Contains(Taskss[j].supervisor) && Taskss[j].supervisor != ViewBag.RoleName && Taskss[j].recipient != null) continue;
+                if (Taskss[j].supervisor == ViewBag.RoleName && Taskss[j].recipient == null) continue;
                 <tr id="task">
                     <th colspan="2">@Taskss[j].date.Date.ToString(@"dd\.MM\.yyyy")</th>
                     @foreach (Project project in Model.filterResProj != "Все ответственные" ? Model.projects.Where(p => projCod.Contains(p.code)).OrderBy(p => p.code.Split('/')[0]).OrderBy(p => p.code.Split('/').Last().Split('-')[0]) : Model.projects.OrderBy(p => p.code.Split('/')[0]).OrderBy(p => p.code.Split('/').Last().Split('-')[0]))

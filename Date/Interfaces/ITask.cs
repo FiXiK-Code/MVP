@@ -13,7 +13,8 @@ namespace MVP.Date.Interfaces
         IEnumerable<Tasks> TasksProject(string _projentCode);
         Tasks GetTask(int taskId);
         void addToDB(Tasks task);
-        bool redactToDB(int iid,
+        bool redactToDB(string liteTask,
+            int iid,
             DateTime date,
             string status,
             string comment,

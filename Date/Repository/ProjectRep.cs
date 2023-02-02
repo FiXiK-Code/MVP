@@ -25,33 +25,36 @@ namespace MVP.Date.Repository
 
         public void NextStage(int projectId)
         {
-            if (_appDB.DBTask.Where(p=>p.liteTask == false)
-                .Where(i => i.Stage == _appDB.DBProject.FirstOrDefault(p => p.id == projectId).nowStage)
-                .Where(i => i.status != "Выполнена").Count() == 0 && projectId != -1)
+            if (projectId != -1)
             {
-                Project proj = _appDB.DBProject.FirstOrDefault(p => p.id == projectId);
-                if (_appDB.DBStage.Where(p => p.stageId == projectId)
-                    .FirstOrDefault(
-                    p => p.stageId ==
-                        (_appDB.DBStage.Where(p => p.projectId == projectId)
-                        .FirstOrDefault(p => p.name == proj.nowStage)
-                        .stageId + 1)) == null)
+                if (_appDB.DBTask.Where(p => p.liteTask == false)
+                    .Where(i => i.Stage == _appDB.DBProject.FirstOrDefault(p => p.id == projectId).nowStage)
+                    .Where(i => i.status != "Выполнена").Count() == 0 && projectId != -1)
                 {
-                    proj.archive = "Да";
-                    proj.nowStage = "Проект в архиве";
-                    proj.actualFinishDate = DateTime.Now;
-                }
-                else
-                {
-                    proj.nowStage = _appDB.DBStage.Where(p => p.stageId == projectId)
+                    Project proj = _appDB.DBProject.FirstOrDefault(p => p.id == projectId);
+                    if (_appDB.DBStage.Where(p => p.stageId == projectId)
                         .FirstOrDefault(
                         p => p.stageId ==
                             (_appDB.DBStage.Where(p => p.projectId == projectId)
                             .FirstOrDefault(p => p.name == proj.nowStage)
-                            .stageId + 1)
-                        ).name;
-                    proj.history = proj.history + $"\n{DateTime.Now} - Проект перешел в стадию {proj.nowStage}";
-                    _appDB.SaveChanges();
+                            .stageId + 1)) == null)
+                    {
+                        proj.archive = "Да";
+                        proj.nowStage = "Проект в архиве";
+                        proj.actualFinishDate = DateTime.Now;
+                    }
+                    else
+                    {
+                        proj.nowStage = _appDB.DBStage.Where(p => p.stageId == projectId)
+                            .FirstOrDefault(
+                            p => p.stageId ==
+                                (_appDB.DBStage.Where(p => p.projectId == projectId)
+                                .FirstOrDefault(p => p.name == proj.nowStage)
+                                .stageId + 1)
+                            ).name;
+                        proj.history = proj.history + $"\n{DateTime.Now} - Проект перешел в стадию {proj.nowStage}";
+                        _appDB.SaveChanges();
+                    }
                 }
             }
         }

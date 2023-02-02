@@ -10,7 +10,7 @@ namespace MVP.ViewModels
 {
     public class HomeViewModel
     {
-        public  string filterStaff { get; set; }
+        public string filterStaff { get; set; }
         public string filterProj { get; set; }
         public string filterSupProj { get; set; }
         public string filterResProj { get; set; }
@@ -19,6 +19,8 @@ namespace MVP.ViewModels
         public int taskId { get; set; }
         public Tasks redactedTask { get; set; }
         public Tasks nullTask { get; set; }
+
+        public List<Tasks> task4Table { get; set; }
 
         public IEnumerable<Project> projects { get; set; }
         public int projectId { get; set; }
@@ -33,6 +35,8 @@ namespace MVP.ViewModels
         public IEnumerable<Role> roles { get; set; }
         public IEnumerable<Post> posts { get; set; }
         public IEnumerable<Tasks> staffTasks { get; set; }
+
+        public List<string> staffNames{get;set;}
 
         public bool TaskRed { get; set; }
         public bool ProjectRed { get; set; }
