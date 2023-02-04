@@ -27,7 +27,7 @@
         {
             <tr id="title"><th style="text-align:left" colspan="13">Выполненные задачи</th></tr>
 
-            foreach (Task task in Model.task4Table.Where(p => p.status == "Выполнена").OrderBy(p => p.finish))
+            foreach (Task task in Model.task4TableTasks.Where(p => p.status == "Выполнена").OrderBy(p => p.finish))
             {
                 if (Model.staffNames.Contains(task.supervisor) && task.supervisor != ViewBag.RoleName && task.recipient != null) continue;
                 @if (task.liteTask == true)
@@ -40,7 +40,9 @@
                                asp-route-staffTableFilter="@Model.filterStaff"
              asp-route-recipientProjectFilter="@Model.filterResProj"
             asp-route-supervisorProjectFilter="@Model.filterSupProj"
-            asp-route-porjectFiltr="@Model.filterProj">
+            asp-route-porjectFiltr="@Model.filterProj"
+                               asp-route-filterTaskTable="@Model.filterTaskTable"
+                               asp-route-filterStaffTable="@Model.filterStaffTable">
                                 <button type="submit">@task.desc</button>
                             </a>
                         </td>
@@ -72,7 +74,9 @@
                                asp-route-staffTableFilter="@Model.filterStaff"
              asp-route-recipientProjectFilter="@Model.filterResProj"
             asp-route-supervisorProjectFilter="@Model.filterSupProj"
-            asp-route-porjectFiltr="@Model.filterProj">
+            asp-route-porjectFiltr="@Model.filterProj"
+                               asp-route-filterTaskTable="@Model.filterTaskTable"
+                               asp-route-filterStaffTable="@Model.filterStaffTable">
                                 <button type="submit">@task.desc</button>
                             </a>
                         </td>
@@ -99,7 +103,7 @@
         if (i == 0)
         {
             <tr id="title"><th style="text-align:left" colspan="13">Задачи на сегодня</th></tr>
-            foreach (Task task in Model.task4Table.Where(p => p.status != "Выполнена").Where(p => p.date.Date <= DateTime.Now.Date).OrderBy(p => p.date.Date).OrderBy(p => p.priority))
+            foreach (Task task in Model.task4TableTasks.Where(p => p.status != "Выполнена").Where(p => p.date.Date <= DateTime.Now.Date).OrderBy(p => p.date.Date).OrderBy(p => p.priority))
             {
                 if (Model.staffNames.Contains(task.supervisor) && task.supervisor != ViewBag.RoleName && task.recipient != null) continue;
                 @if (task.liteTask == true)
@@ -112,7 +116,9 @@
                                asp-route-staffTableFilter="@Model.filterStaff"
              asp-route-recipientProjectFilter="@Model.filterResProj"
             asp-route-supervisorProjectFilter="@Model.filterSupProj"
-            asp-route-porjectFiltr="@Model.filterProj">
+            asp-route-porjectFiltr="@Model.filterProj"
+                               asp-route-filterTaskTable="@Model.filterTaskTable"
+                               asp-route-filterStaffTable="@Model.filterStaffTable">
                                 <button type="submit">@task.desc</button>
                             </a>
                         </td>
@@ -126,6 +132,8 @@
                                            asp-route-recipientProjectFilter="@Model.filterResProj"
                                            asp-route-supervisorProjectFilter="@Model.filterSupProj"
                                            asp-route-porjectFiltr="@Model.filterProj"
+                                           asp-route-filterTaskTable="@Model.filterTaskTable"
+                                           asp-route-filterStaffTable="@Model.filterStaffTable"
                                            asp-route-stat="В работе" />
                                 }
                                 else if (task.status == "В работе")
@@ -136,13 +144,17 @@
                                            asp-route-recipientProjectFilter="@Model.filterResProj"
                                            asp-route-supervisorProjectFilter="@Model.filterSupProj"
                                            asp-route-porjectFiltr="@Model.filterProj"
+                                           asp-route-filterTaskTable="@Model.filterTaskTable"
+                                           asp-route-filterStaffTable="@Model.filterStaffTable"
                                            asp-route-stat="На паузе" />
                                     <input name="stat" class="btn-white" type="submit" value="Выполнена"
                                            asp-controller="Home" asp-action="RedactSatusTask" asp-route-activTable="0" asp-route-id="@task.id"
                                            asp-route-staffTableFilter="@Model.filterStaff"
                                            asp-route-recipientProjectFilter="@Model.filterResProj"
                                            asp-route-supervisorProjectFilter="@Model.filterSupProj"
-                                           asp-route-porjectFiltr="@Model.filterProj" />
+                                           asp-route-porjectFiltr="@Model.filterProj" 
+                                           asp-route-filterTaskTable="@Model.filterTaskTable"
+                                           asp-route-filterStaffTable="@Model.filterStaffTable"/>
                                 }
                                 else
                                 {
@@ -152,13 +164,17 @@
                                            asp-route-recipientProjectFilter="@Model.filterResProj"
                                            asp-route-supervisorProjectFilter="@Model.filterSupProj"
                                            asp-route-porjectFiltr="@Model.filterProj"
+                                           asp-route-filterTaskTable="@Model.filterTaskTable"
+                                           asp-route-filterStaffTable="@Model.filterStaffTable"
                                            asp-route-stat="В работе" />
                                     <input name="stat" class="btn-white" type="submit" value="Выполнена"
                                            asp-controller="Home" asp-action="RedactSatusTask" asp-route-activTable="0" asp-route-id="@task.id"
                                            asp-route-staffTableFilter="@Model.filterStaff"
                                            asp-route-recipientProjectFilter="@Model.filterResProj"
                                            asp-route-supervisorProjectFilter="@Model.filterSupProj"
-                                           asp-route-porjectFiltr="@Model.filterProj" />
+                                           asp-route-porjectFiltr="@Model.filterProj" 
+                                           asp-route-filterTaskTable="@Model.filterTaskTable"
+                                           asp-route-filterStaffTable="@Model.filterStaffTable"/>
                                 } 
                             </form>
                         </td>
@@ -196,7 +212,9 @@
                                asp-route-staffTableFilter="@Model.filterStaff"
              asp-route-recipientProjectFilter="@Model.filterResProj"
             asp-route-supervisorProjectFilter="@Model.filterSupProj"
-            asp-route-porjectFiltr="@Model.filterProj">
+            asp-route-porjectFiltr="@Model.filterProj"
+                               asp-route-filterTaskTable="@Model.filterTaskTable"
+                               asp-route-filterStaffTable="@Model.filterStaffTable">
                                 <button type="submit">@task.desc</button>
                             </a>
                         </td>
@@ -210,6 +228,8 @@
                                            asp-route-recipientProjectFilter="@Model.filterResProj"
                                            asp-route-supervisorProjectFilter="@Model.filterSupProj"
                                            asp-route-porjectFiltr="@Model.filterProj"
+                                           asp-route-filterTaskTable="@Model.filterTaskTable"
+                                           asp-route-filterStaffTable="@Model.filterStaffTable"
                                            asp-route-stat="В работе" />
                                 }
                                 else if (task.status == "В работе")
@@ -220,13 +240,17 @@
                                            asp-route-recipientProjectFilter="@Model.filterResProj"
                                            asp-route-supervisorProjectFilter="@Model.filterSupProj"
                                            asp-route-porjectFiltr="@Model.filterProj"
+                                           asp-route-filterTaskTable="@Model.filterTaskTable"
+                                           asp-route-filterStaffTable="@Model.filterStaffTable"
                                            asp-route-stat="На паузе" />
                                     <input name="stat" class="btn-white" type="submit" value="Выполнена"
                                            asp-controller="Home" asp-action="RedactSatusTask" asp-route-activTable="0" asp-route-id="@task.id"
                                            asp-route-staffTableFilter="@Model.filterStaff"
                                            asp-route-recipientProjectFilter="@Model.filterResProj"
                                            asp-route-supervisorProjectFilter="@Model.filterSupProj"
-                                           asp-route-porjectFiltr="@Model.filterProj" />
+                                           asp-route-porjectFiltr="@Model.filterProj" 
+                                           asp-route-filterTaskTable="@Model.filterTaskTable"
+                                           asp-route-filterStaffTable="@Model.filterStaffTable"/>
                                 }
                                 else
                                 {
@@ -236,13 +260,17 @@
                                            asp-route-recipientProjectFilter="@Model.filterResProj"
                                            asp-route-supervisorProjectFilter="@Model.filterSupProj"
                                            asp-route-porjectFiltr="@Model.filterProj"
+                                           asp-route-filterTaskTable="@Model.filterTaskTable"
+                                           asp-route-filterStaffTable="@Model.filterStaffTable"
                                            asp-route-stat="В работе" />
                                     <input name="stat" class="btn-white" type="submit" value="Выполнена"
                                            asp-controller="Home" asp-action="RedactSatusTask" asp-route-activTable="0" asp-route-id="@task.id"
                                            asp-route-staffTableFilter="@Model.filterStaff"
                                            asp-route-recipientProjectFilter="@Model.filterResProj"
                                            asp-route-supervisorProjectFilter="@Model.filterSupProj"
-                                           asp-route-porjectFiltr="@Model.filterProj" />
+                                           asp-route-porjectFiltr="@Model.filterProj"
+                                           asp-route-filterTaskTable="@Model.filterTaskTable" 
+                                           asp-route-filterStaffTable="@Model.filterStaffTable"/>
                                 }
                             </form>
                         </td>
@@ -276,7 +304,7 @@
         if (i == 1)
         {
             <tr id="title"><th style="text-align:left" colspan="13">Предстоящие задачи</th></tr>
-            foreach (Task task in Model.task4Table.Where(p => p.date.Date > DateTime.Now.Date).OrderBy(p => p.date.Date).OrderBy(p => p.priority))
+            foreach (Task task in Model.task4TableTasks.Where(p => p.date.Date > DateTime.Now.Date).OrderBy(p => p.date.Date).OrderBy(p => p.priority))
             {
                 if (Model.staffNames.Contains(task.supervisor) && task.supervisor != ViewBag.RoleName && task.recipient != null) continue;
                 @if (task.liteTask == true)
@@ -289,7 +317,9 @@
                            asp-route-staffTableFilter="@Model.filterStaff"
              asp-route-recipientProjectFilter="@Model.filterResProj"
             asp-route-supervisorProjectFilter="@Model.filterSupProj"
-            asp-route-porjectFiltr="@Model.filterProj">
+            asp-route-porjectFiltr="@Model.filterProj"
+                           asp-route-filterTaskTable="@Model.filterTaskTable"
+                           asp-route-filterStaffTable="@Model.filterStaffTable">
                             <button type="submit">@task.desc</button>
                         </a>
                     </td>
@@ -303,6 +333,8 @@
                                        asp-route-recipientProjectFilter="@Model.filterResProj"
                                        asp-route-supervisorProjectFilter="@Model.filterSupProj"
                                        asp-route-porjectFiltr="@Model.filterProj"
+                                       asp-route-filterTaskTable="@Model.filterTaskTable"
+                                       asp-route-filterStaffTable="@Model.filterStaffTable"
                                        asp-route-stat="В работе" />
                             }
                             else if (task.status == "В работе")
@@ -313,13 +345,17 @@
                                        asp-route-recipientProjectFilter="@Model.filterResProj"
                                        asp-route-supervisorProjectFilter="@Model.filterSupProj"
                                        asp-route-porjectFiltr="@Model.filterProj"
+                                       asp-route-filterTaskTable="@Model.filterTaskTable"
+                                       asp-route-filterStaffTable="@Model.filterStaffTable"
                                        asp-route-stat="На паузе" />
                                 <input name="stat" class="btn-white" type="submit" value="Выполнена"
                                        asp-controller="Home" asp-action="RedactSatusTask" asp-route-activTable="0" asp-route-id="@task.id"
                                        asp-route-staffTableFilter="@Model.filterStaff"
                                        asp-route-recipientProjectFilter="@Model.filterResProj"
                                        asp-route-supervisorProjectFilter="@Model.filterSupProj"
-                                       asp-route-porjectFiltr="@Model.filterProj" />
+                                       asp-route-porjectFiltr="@Model.filterProj"
+                                       asp-route-filterTaskTable="@Model.filterTaskTable"
+                                       asp-route-filterStaffTable="@Model.filterStaffTable"/>
                             }
                             else
                             {
@@ -329,13 +365,17 @@
                                        asp-route-recipientProjectFilter="@Model.filterResProj"
                                        asp-route-supervisorProjectFilter="@Model.filterSupProj"
                                        asp-route-porjectFiltr="@Model.filterProj"
+                                       asp-route-filterTaskTable="@Model.filterTaskTable"
+                                       asp-route-filterStaffTable="@Model.filterStaffTable"
                                        asp-route-stat="В работе" />
                                 <input name="stat" class="btn-white" type="submit" value="Выполнена"
                                        asp-controller="Home" asp-action="RedactSatusTask" asp-route-activTable="0" asp-route-id="@task.id"
                                        asp-route-staffTableFilter="@Model.filterStaff"
                                        asp-route-recipientProjectFilter="@Model.filterResProj"
                                        asp-route-supervisorProjectFilter="@Model.filterSupProj"
-                                       asp-route-porjectFiltr="@Model.filterProj" />
+                                       asp-route-porjectFiltr="@Model.filterProj" 
+                                       asp-route-filterTaskTable="@Model.filterTaskTable"
+                                       asp-route-filterStaffTable="@Model.filterStaffTable"/>
                             }
                         </form>
                     </td>
@@ -373,7 +413,9 @@
                            asp-route-staffTableFilter="@Model.filterStaff"
              asp-route-recipientProjectFilter="@Model.filterResProj"
             asp-route-supervisorProjectFilter="@Model.filterSupProj"
-            asp-route-porjectFiltr="@Model.filterProj">
+            asp-route-porjectFiltr="@Model.filterProj"
+                           asp-route-filterTaskTable="@Model.filterTaskTable"
+                           asp-route-filterStaffTable="@Model.filterStaffTable">
                             <button type="submit">@task.desc</button>
                         </a>
                     </td>
@@ -387,6 +429,8 @@
                                        asp-route-recipientProjectFilter="@Model.filterResProj"
                                        asp-route-supervisorProjectFilter="@Model.filterSupProj"
                                        asp-route-porjectFiltr="@Model.filterProj"
+                                       asp-route-filterTaskTable="@Model.filterTaskTable"
+                                       asp-route-filterStaffTable="@Model.filterStaffTable"
                                        asp-route-stat="В работе" />
                             }
                             else if (task.status == "В работе")
@@ -397,13 +441,17 @@
                                        asp-route-recipientProjectFilter="@Model.filterResProj"
                                        asp-route-supervisorProjectFilter="@Model.filterSupProj"
                                        asp-route-porjectFiltr="@Model.filterProj"
+                                       asp-route-filterTaskTable="@Model.filterTaskTable"
+                                       asp-route-filterStaffTable="@Model.filterStaffTable"
                                        asp-route-stat="На паузе" />
                                 <input name="stat" class="btn-white" type="submit" value="Выполнена"
                                        asp-controller="Home" asp-action="RedactSatusTask" asp-route-activTable="0" asp-route-id="@task.id"
                                        asp-route-staffTableFilter="@Model.filterStaff"
                                        asp-route-recipientProjectFilter="@Model.filterResProj"
                                        asp-route-supervisorProjectFilter="@Model.filterSupProj"
-                                       asp-route-porjectFiltr="@Model.filterProj" />
+                                       asp-route-porjectFiltr="@Model.filterProj"
+                                       asp-route-filterTaskTable="@Model.filterTaskTable"
+                                       asp-route-filterStaffTable="@Model.filterStaffTable"/>
                             }
                             else
                             {
@@ -413,13 +461,17 @@
                                        asp-route-recipientProjectFilter="@Model.filterResProj"
                                        asp-route-supervisorProjectFilter="@Model.filterSupProj"
                                        asp-route-porjectFiltr="@Model.filterProj"
+                                       asp-route-filterTaskTable="@Model.filterTaskTable"
+                                       asp-route-filterStaffTable="@Model.filterStaffTable"
                                        asp-route-stat="В работе" />
                                 <input name="stat" class="btn-white" type="submit" value="Выполнена"
                                        asp-controller="Home" asp-action="RedactSatusTask" asp-route-activTable="0" asp-route-id="@task.id"
                                        asp-route-staffTableFilter="@Model.filterStaff"
                                        asp-route-recipientProjectFilter="@Model.filterResProj"
                                        asp-route-supervisorProjectFilter="@Model.filterSupProj"
-                                       asp-route-porjectFiltr="@Model.filterProj" />
+                                       asp-route-porjectFiltr="@Model.filterProj"
+                                       asp-route-filterTaskTable="@Model.filterTaskTable"
+                                       asp-route-filterStaffTable="@Model.filterStaffTable"/>
                             }
                         </form>
                     </td>

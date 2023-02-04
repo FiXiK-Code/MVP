@@ -85,7 +85,15 @@ namespace MVP.Date.Repository
                 }else task.finish = finish;
 
                 task.liteTask = liteTask == "Задача" ? false : true;
-                task.priority = liteTask == "Задача" ? _appDB.DBProject.FirstOrDefault(p => p.code == task.projectCode).priority : -1;
+                try
+                {
+                    task.priority = liteTask == "Задача" ? _appDB.DBProject.FirstOrDefault(p => p.code == task.projectCode).priority : -1;
+                }
+                catch (Exception)
+                {
+                    task.priority = liteTask == "Задача" ? pririty : -1;
+                }
+               
 
                 _appDB.SaveChanges();
                 return true;

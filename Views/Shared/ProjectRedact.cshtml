@@ -12,7 +12,8 @@
            asp-route-staffTableFilter="@Model.filterStaff"
              asp-route-recipientProjectFilter="@Model.filterResProj"
             asp-route-supervisorProjectFilter="@Model.filterSupProj"
-            asp-route-porjectFiltr="@Model.filterProj"/>
+            asp-route-porjectFiltr="@Model.filterProj"
+           asp-route-filterTaskTable="@Model.filterTaskTable"/>
 
     <label>В архиве</label>
     <input name="arhive" asp-for="@Model.redactedProject.archive" class="form-control" value="@Model.redactedProject.archive" />
@@ -52,6 +53,7 @@
            asp-route-staffTableFilter="@Model.filterStaff"
              asp-route-recipientProjectFilter="@Model.filterResProj"
             asp-route-supervisorProjectFilter="@Model.filterSupProj"
-            asp-route-porjectFiltr="@Model.filterProj"/>
+            asp-route-porjectFiltr="@Model.filterProj"
+           asp-route-filterTaskTable="@Model.filterTaskTable"/>
 
 </form>

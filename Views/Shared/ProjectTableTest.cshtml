@@ -30,7 +30,9 @@
            asp-route-staffTableFilter="@Model.filterStaff"
              asp-route-recipientProjectFilter="@Model.filterResProj"
             asp-route-supervisorProjectFilter="@Model.filterSupProj"
-            asp-route-porjectFiltr="@Model.filterProj">@project.code</a></th>
+            asp-route-porjectFiltr="@Model.filterProj"
+                    asp-route-filterTaskTable="@Model.filterTaskTable"
+                    asp-route-filterStaffTable="@Model.filterStaffTable">@project.code</a></th>
         }
 
     </tr>
@@ -128,7 +130,9 @@
                                        asp-route-staffTableFilter="@Model.filterStaff"
              asp-route-recipientProjectFilter="@Model.filterResProj"
             asp-route-supervisorProjectFilter="@Model.filterSupProj"
-            asp-route-porjectFiltr="@Model.filterProj">
+            asp-route-porjectFiltr="@Model.filterProj"
+                                       asp-route-filterTaskTable="@Model.filterTaskTable"
+                                       asp-route-filterStaffTable="@Model.filterStaffTable">
                                         <button type="submit">@task1.desc</button>
                                     </a>
                                 }
@@ -166,7 +170,9 @@
                                         asp-route-staffTableFilter="@Model.filterStaff"
              asp-route-recipientProjectFilter="@Model.filterResProj"
             asp-route-supervisorProjectFilter="@Model.filterSupProj"
-            asp-route-porjectFiltr="@Model.filterProj">
+            asp-route-porjectFiltr="@Model.filterProj"
+                                       asp-route-filterTaskTable="@Model.filterTaskTable"
+                                       asp-route-filterStaffTable="@Model.filterStaffTable">
                                         <button type="submit">@task1.desc</button>
                                     </a>
                                 }
@@ -204,7 +210,9 @@
                                        asp-route-staffTableFilter="@Model.filterStaff"
              asp-route-recipientProjectFilter="@Model.filterResProj"
             asp-route-supervisorProjectFilter="@Model.filterSupProj"
-            asp-route-porjectFiltr="@Model.filterProj">
+            asp-route-porjectFiltr="@Model.filterProj"
+                                       asp-route-filterTaskTable="@Model.filterTaskTable"
+                                       asp-route-filterStaffTable="@Model.filterStaffTable">
                                         <button type="submit">@task1.desc</button>
                                     </a>
                                 }

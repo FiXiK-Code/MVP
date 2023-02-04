@@ -25,7 +25,7 @@
             <tr id="title">
                 <th colspan="@(Model.staffsTable.Count()+2)" style="text-align:left ;background-color:#cccccc">Выполненные задачи </th>
             </tr>
-            List<Task> Taskss = Model.task4Table.Where(p => p.creator == ViewBag.RoleName).Where(p => (p.recipient != ViewBag.RoleName && p.recipient != null) || (p.supervisor == ViewBag.RoleName && p.recipient != null)
+            List<Task> Taskss = Model.task4Table.Where(p => (p.recipient != ViewBag.RoleName && p.recipient != null) || (p.supervisor == ViewBag.RoleName && p.recipient != null)
             || (p.supervisor != ViewBag.RoleName && p.recipient != ViewBag.RoleName && p.recipient != ViewBag.RoleName)).Where(p => p.status == "Выполнена").OrderBy(p => p.date).ToList();
             for (int j = 0; j < Taskss.Count(); j++)
             {
@@ -45,7 +45,9 @@
                                        asp-route-staffTableFilter="@Model.filterStaff"
                                        asp-route-recipientProjectFilter="@Model.filterResProj"
                                        asp-route-supervisorProjectFilter="@Model.filterSupProj"
-                                       asp-route-porjectFiltr="@Model.filterProj">
+                                       asp-route-porjectFiltr="@Model.filterProj"
+                                       asp-route-filterTaskTable="@Model.filterTaskTable"
+                                       asp-route-filterStaffTable="@Model.filterStaffTable">
                                         <button type="submit">@task1.desc</button>
                                     </a>
                                 }
@@ -61,7 +63,9 @@
                                        asp-route-staffTableFilter="@Model.filterStaff"
                                        asp-route-recipientProjectFilter="@Model.filterResProj"
                                        asp-route-supervisorProjectFilter="@Model.filterSupProj"
-                                       asp-route-porjectFiltr="@Model.filterProj">
+                                       asp-route-porjectFiltr="@Model.filterProj"
+                                       asp-route-filterTaskTable="@Model.filterTaskTable"
+                                       asp-route-filterStaffTable="@Model.filterStaffTable">
                                         <button type="submit">@task1.desc</button>
                                     </a>
                                 }
@@ -80,7 +84,7 @@
             <tr id="title">
                 <th colspan="@(Model.staffsTable.Count()+2)" style="text-align:left ;background-color:#cccccc">Задачи на сегодня</th>
             </tr>
-            List<Tasks> Taskss = Model.task4Table.Where(p => p.creator == ViewBag.RoleName).Where(p => (p.recipient != ViewBag.RoleName && p.recipient != null) || (p.supervisor == ViewBag.RoleName && p.recipient != null)
+            List<Tasks> Taskss = Model.task4Table.Where(p => (p.recipient != ViewBag.RoleName && p.recipient != null) || (p.supervisor == ViewBag.RoleName && p.recipient != null)
             || (p.supervisor != ViewBag.RoleName && p.recipient != ViewBag.RoleName && p.recipient != ViewBag.RoleName)).Where(p => p.date.Date <= DateTime.Now.Date).Where(p => p.status != "Выполнена").OrderBy(p => p.date.Date).ToList();
             for (int j = 0; j < Taskss.Count(); j++)
             {
@@ -100,7 +104,9 @@
                                        asp-route-staffTableFilter="@Model.filterStaff"
                                        asp-route-recipientProjectFilter="@Model.filterResProj"
                                        asp-route-supervisorProjectFilter="@Model.filterSupProj"
-                                       asp-route-porjectFiltr="@Model.filterProj">
+                                       asp-route-porjectFiltr="@Model.filterProj"
+                                       asp-route-filterTaskTable="@Model.filterTaskTable"
+                                       asp-route-filterStaffTable="@Model.filterStaffTable">
                                         <button type="submit">@task1.desc</button>
                                     </a>
                                 }
@@ -116,7 +122,9 @@
                                        asp-route-staffTableFilter="@Model.filterStaff"
                                        asp-route-recipientProjectFilter="@Model.filterResProj"
                                        asp-route-supervisorProjectFilter="@Model.filterSupProj"
-                                       asp-route-porjectFiltr="@Model.filterProj">
+                                       asp-route-porjectFiltr="@Model.filterProj"
+                                       asp-route-filterTaskTable="@Model.filterTaskTable"
+                                       asp-route-filterStaffTable="@Model.filterStaffTable">
                                         <button type="submit">@task1.desc</button>
                                     </a>
                                 }
@@ -135,7 +143,7 @@
             <tr id="title">
                 <th colspan="@(Model.staffsTable.Count()+2)" style="text-align:left ;background-color:#cccccc">Предстоящие задачи</th>
             </tr>
-            List<Tasks> Taskss = Model.task4Table.Where(p => p.creator == ViewBag.RoleName).Where(p => (p.recipient != ViewBag.RoleName && p.recipient != null) || (p.supervisor == ViewBag.RoleName && p.recipient != null)
+            List<Tasks> Taskss = Model.task4Table.Where(p => (p.recipient != ViewBag.RoleName && p.recipient != null) || (p.supervisor == ViewBag.RoleName && p.recipient != null)
             || (p.supervisor != ViewBag.RoleName && p.recipient != ViewBag.RoleName && p.recipient != ViewBag.RoleName)).Where(p => p.date.Date > DateTime.Now.Date).Where(p => p.status != "Выполнена").OrderBy(p => p.date.Date).ToList();
             for (int j = 0; j < Taskss.Count(); j++)
             {
@@ -155,7 +163,9 @@
                                        asp-route-staffTableFilter="@Model.filterStaff"
                                        asp-route-recipientProjectFilter="@Model.filterResProj"
                                        asp-route-supervisorProjectFilter="@Model.filterSupProj"
-                                       asp-route-porjectFiltr="@Model.filterProj">
+                                       asp-route-porjectFiltr="@Model.filterProj"
+                                       asp-route-filterTaskTable="@Model.filterTaskTable"
+                                       asp-route-filterStaffTable="@Model.filterStaffTable">
                                         <button type="submit">@task1.desc</button>
                                     </a>
                                 }
@@ -171,7 +181,9 @@
                                        asp-route-staffTableFilter="@Model.filterStaff"
                                        asp-route-recipientProjectFilter="@Model.filterResProj"
                                        asp-route-supervisorProjectFilter="@Model.filterSupProj"
-                                       asp-route-porjectFiltr="@Model.filterProj">
+                                       asp-route-porjectFiltr="@Model.filterProj"
+                                       asp-route-filterTaskTable="@Model.filterTaskTable"
+                                       asp-route-filterStaffTable="@Model.filterStaffTable">
                                         <button type="submit">@task1.desc</button>
                                     </a>
                                 }

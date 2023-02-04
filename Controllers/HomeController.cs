@@ -39,7 +39,9 @@ namespace MVP.Controllers
         public RedirectToActionResult RedactSatusTask(int id, string stat,int activTable, string staffTableFilter,
             string recipientProjectFilter,
             string supervisorProjectFilter,
-            string porjectFiltr)
+            string porjectFiltr,
+            string filterTaskTable,
+            string filterStaffTable)
         {
             var roleSession = new SessionRoles();
             try
@@ -58,7 +60,8 @@ namespace MVP.Controllers
                     staffTableFilter = staffTableFilter,
                     recipientProjectFilter = recipientProjectFilter,
                     supervisorProjectFilter = supervisorProjectFilter,
-                    porjectFiltr = porjectFiltr
+                    porjectFiltr = porjectFiltr,
+                    filterStaffTable = filterStaffTable
                 });
             }
             
@@ -83,7 +86,9 @@ namespace MVP.Controllers
                 staffTableFilter = staffTableFilter,
                 recipientProjectFilter = recipientProjectFilter,
                 supervisorProjectFilter = supervisorProjectFilter,
-                porjectFiltr = porjectFiltr
+                porjectFiltr = porjectFiltr,
+                filterTaskTable = filterTaskTable,
+                filterStaffTable = filterStaffTable
             });
         }
 
@@ -99,7 +104,9 @@ namespace MVP.Controllers
             string staffTableFilter,
             string recipientProjectFilter,
             string supervisorProjectFilter,
-            string porjectFiltr
+            string porjectFiltr,
+            string filterTaskTable,
+            string filterStaffTable
             )
         {
            
@@ -132,7 +139,9 @@ namespace MVP.Controllers
                 staffTableFilter = staffTableFilter,
                 recipientProjectFilter = recipientProjectFilter,
                 supervisorProjectFilter = supervisorProjectFilter,
-                porjectFiltr = porjectFiltr
+                porjectFiltr = porjectFiltr,
+                filterTaskTable = filterTaskTable,
+                filterStaffTable = filterStaffTable
             });
 
         }
@@ -153,7 +162,9 @@ namespace MVP.Controllers
             string staffTableFilter,
             string recipientProjectFilter,
             string supervisorProjectFilter,
-            string porjectFiltr
+            string porjectFiltr,
+            string filterTaskTable,
+            string filterStaffTable
 )
         {
             var roleSession = new SessionRoles();
@@ -175,7 +186,8 @@ namespace MVP.Controllers
                     staffTableFilter = staffTableFilter,
                     recipientProjectFilter = recipientProjectFilter,
                     supervisorProjectFilter = supervisorProjectFilter,
-                    porjectFiltr = porjectFiltr
+                    porjectFiltr = porjectFiltr,
+                    filterStaffTable = filterStaffTable
                 });
             }
             else
@@ -205,7 +217,9 @@ namespace MVP.Controllers
                     staffTableFilter = staffTableFilter,
                     recipientProjectFilter = recipientProjectFilter,
                     supervisorProjectFilter = supervisorProjectFilter,
-                    porjectFiltr = porjectFiltr
+                    porjectFiltr = porjectFiltr,
+                    filterTaskTable = filterTaskTable,
+                    filterStaffTable = filterStaffTable
                 });
             }
 
@@ -224,7 +238,9 @@ namespace MVP.Controllers
             string staffTableFilter,
             string recipientProjectFilter,
             string supervisorProjectFilter,
-            string porjectFiltr
+            string porjectFiltr,
+            string filterTaskTable,
+            string filterStaffTable
             )
         {
             var roleSession = new SessionRoles();
@@ -270,7 +286,9 @@ namespace MVP.Controllers
                 staffTableFilter = staffTableFilter,
                 recipientProjectFilter = recipientProjectFilter,
                 supervisorProjectFilter = supervisorProjectFilter,
-                porjectFiltr = porjectFiltr
+                porjectFiltr = porjectFiltr,
+                filterTaskTable = filterTaskTable,
+                filterStaffTable = filterStaffTable
             });
         }
 
@@ -358,7 +376,9 @@ namespace MVP.Controllers
             string staffTableFilter,
             string recipientProjectFilter,
             string supervisorProjectFilter,
-            string porjectFiltr
+            string porjectFiltr,
+            string filterTaskTable,
+            string filterStaffTable
             )
         {
             var roleSession = new SessionRoles();
@@ -379,7 +399,8 @@ namespace MVP.Controllers
                         staffTableFilter = staffTableFilter,
                         recipientProjectFilter = recipientProjectFilter,
                         supervisorProjectFilter = supervisorProjectFilter,
-                        porjectFiltr = porjectFiltr
+                        porjectFiltr = porjectFiltr,
+                        filterStaffTable = filterStaffTable
                     });
                 }
             }
@@ -389,7 +410,8 @@ namespace MVP.Controllers
                     staffTableFilter = staffTableFilter,
                     recipientProjectFilter = recipientProjectFilter,
                     supervisorProjectFilter = supervisorProjectFilter,
-                    porjectFiltr = porjectFiltr
+                    porjectFiltr = porjectFiltr,
+                    filterStaffTable = filterStaffTable
                 });
             }
 
@@ -399,7 +421,8 @@ namespace MVP.Controllers
                     staffTableFilter = staffTableFilter,
                     recipientProjectFilter = recipientProjectFilter,
                     supervisorProjectFilter = supervisorProjectFilter,
-                    porjectFiltr = porjectFiltr
+                    porjectFiltr = porjectFiltr,
+                    filterStaffTable = filterStaffTable
                 });
             }
 
@@ -446,7 +469,10 @@ namespace MVP.Controllers
             return RedirectToAction("TaskTable", new { activTable = activTable, staffTableFilter = staffTableFilter, 
                 recipientProjectFilter= recipientProjectFilter,
                 supervisorProjectFilter = supervisorProjectFilter,
-                porjectFiltr = porjectFiltr});
+                porjectFiltr = porjectFiltr,
+                filterTaskTable = filterTaskTable,
+                filterStaffTable = filterStaffTable
+            });
 
         }
 
@@ -456,7 +482,8 @@ namespace MVP.Controllers
         public ViewResult TaskTable(int Taskid = -1, int Projid = -1, string meesage = "",
             bool TaskRed = false, bool ProjectRed = false, bool ProjectCreate = false,
              string porjectFiltr = "", string supervisorProjectFilter ="",
-             string recipientProjectFilter ="", string staffTableFilter ="", int activTable = 0 )
+             string recipientProjectFilter ="", string staffTableFilter ="", int activTable = 0, string filterTaskTable = "",
+             string filterStaffTable = "")
         {
             var roleSession = new SessionRoles();
             var sessionCod = "";
@@ -541,8 +568,7 @@ namespace MVP.Controllers
 
             List<Tasks> taskStaffTable = tasks.Where(p => staffNames.Contains(p.supervisor) || staffNames.Contains(p.recipient)).ToList();
 
-            List<Tasks> tasksTable = tasks.Where(p => (staffNames.Contains(p.supervisor) || staffNames.Contains(p.recipient))
-            || (p.supervisor == roleSession.SessionName || p.recipient == roleSession.SessionName)).ToList();
+            
 
 
             List<string> ollGip = new List<string>();
@@ -551,8 +577,56 @@ namespace MVP.Controllers
                 if(!ollGip.Contains(proj.supervisor)) ollGip.Add(proj.supervisor);
             }
 
+            List<Tasks> tasksTabbleFilter = tasks.Where(p => (staffNames.Contains(p.supervisor) || staffNames.Contains(p.recipient))
+                                || (p.supervisor == roleSession.SessionName || p.recipient == roleSession.SessionName)).ToList();
+
             //////  настроить прием фильтров
-            foreach(var filter in staffTableFilter.Split(','))
+
+            List<Tasks> tasksTable = tasks.Where(p => p.creator == roleSession.SessionName).Where(p => staffNames.Contains(p.supervisor) || staffNames.Contains(p.recipient)).ToList();
+
+            foreach (var filter in filterStaffTable.Split(','))///
+            {
+                if (filter == "Все задачи")
+                {
+                    tasksTable = tasks.Where(p => staffNames.Contains(p.supervisor) || staffNames.Contains(p.recipient)).ToList();
+                }
+            }
+
+
+                List<string> staffsDiv = new List<string>();
+            foreach (var filter in filterTaskTable.Split(','))///
+            {
+                switch (filter)
+                {
+                    case "Все задачи":
+                        tasksTabbleFilter = _task.AllTasks.ToList();
+                        break;
+                    case "Задачи отдела управления":
+                        foreach(var staff1 in _staff.AllStaffs.Where(p => p.divisionId == 1).ToList())
+                        {
+                            if (!staffsDiv.Contains(staff1.name)) staffsDiv.Add(staff1.name);
+                        }
+                        tasksTabbleFilter = _task.AllTasks.Where(p => staffsDiv.Contains(p.supervisor) || staffsDiv.Contains(p.recipient)).ToList();
+                        break;
+                    case "Задачи отдела проектирования":
+                        foreach (var staff1 in _staff.AllStaffs.Where(p => p.divisionId == 2).ToList())
+                        {
+                            if (!staffsDiv.Contains(staff1.name)) staffsDiv.Add(staff1.name);
+                        }
+                        tasksTabbleFilter = _task.AllTasks.Where(p => staffsDiv.Contains(p.supervisor) || staffsDiv.Contains(p.recipient)).ToList();
+                        break;
+                    case "Задачи отдела изысканий":
+                        foreach (var staff1 in _staff.AllStaffs.Where(p => p.divisionId == 3).ToList())
+                        {
+                            if (!staffsDiv.Contains(staff1.name)) staffsDiv.Add(staff1.name);
+                        }
+                        tasksTabbleFilter = _task.AllTasks.Where(p => staffsDiv.Contains(p.supervisor) || staffsDiv.Contains(p.recipient)).ToList();
+                        break;
+                }
+            }
+
+
+            foreach (var filter in staffTableFilter.Split(','))
             {
                 if (filter != "" && filter != "Все должности")
                 {
@@ -642,6 +716,8 @@ namespace MVP.Controllers
                 filterProj = porjectFiltr == "" ? "Все проекты" : porjectFiltr,
                 filterSupProj = supervisorProjectFilter == "" ? "Все ГИПы" : supervisorProjectFilter,
                 filterResProj = recipientProjectFilter == "" ? "Все ответственные" : recipientProjectFilter,
+                filterTaskTable = filterTaskTable == "" ? "Мои задачи" : filterTaskTable,
+                filterStaffTable = filterStaffTable == ""? "Мои задачи" : filterStaffTable, 
 
                 projectTasks = tasks,
                 projects = projects,
@@ -652,6 +728,7 @@ namespace MVP.Controllers
                 taskId = Taskid,
                 redactedTask = _task.GetTask(Taskid),
                 task4Table = tasksTable,
+                task4TableTasks = tasksTabbleFilter,
 
                 staffSess = new Staff(),
                 staffs = _staff.AllStaffs,

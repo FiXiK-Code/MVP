@@ -61,14 +61,16 @@
                 @if (@ViewBag.Role != null)
                 {
                     <div class="first-table" style="display:@Model.activeTable1">
-                        <form class="top-menu" action="" method="post">
+                        <form class="top-menu" asp-controller="Home" asp-action="TaskTable" asp-route-activTable="0">
                             @if (ViewBag.Role != "Сотрудник")
                             {
                                 <a asp-controller="Home" asp-action="TaskTable" asp-route-activTable="0"
                                    asp-route-staffTableFilter="@Model.filterStaff"
-             asp-route-recipientProjectFilter="@Model.filterResProj"
-            asp-route-supervisorProjectFilter="@Model.filterSupProj"
-            asp-route-porjectFiltr="@Model.filterProj">
+                                   asp-route-recipientProjectFilter="@Model.filterResProj"
+                                   asp-route-supervisorProjectFilter="@Model.filterSupProj"
+                                   asp-route-porjectFiltr="@Model.filterProj"
+                                   asp-route-filterTaskTable="@Model.filterTaskTable"
+                                   asp-route-filterStaffTable="@Model.filterStaffTable">
                                     <button class="btn btn__top-bar" type="button">Добавить задачу</button>
                                 </a>
                             }
@@ -76,13 +78,26 @@
                             @if (ViewBag.Role == "Директор" || ViewBag.Role == "ГИП")
                             {<a asp-controller="Home" asp-action="TaskTable" asp-route-activTable="0" asp-route-ProjectCreate="@true"
                                 asp-route-staffTableFilter="@Model.filterStaff"
-             asp-route-recipientProjectFilter="@Model.filterResProj"
-            asp-route-supervisorProjectFilter="@Model.filterSupProj"
-            asp-route-porjectFiltr="@Model.filterProj">
+                                asp-route-recipientProjectFilter="@Model.filterResProj"
+                                asp-route-supervisorProjectFilter="@Model.filterSupProj"
+                                asp-route-porjectFiltr="@Model.filterProj"
+                                asp-route-filterTaskTable="@Model.filterTaskTable"
+                                asp-route-filterStaffTable="@Model.filterStaffTable">
                                     <button class="btn btn__top-bar" type="button">Добавить проект</button>
                                 </a>}
 
+                            <select class="select" id="select" name="filterTaskTable">
+                                <option value="@Model.filterTaskTable" selected hidden>@Model.filterTaskTable</option>
+                                <option>Мои задачи</option>
+                                <option>Все задачи</option>
+                                <option>Задачи отдела управления</option>
+                                <option>Задачи отдела проектирования</option>
+                                <option>Задачи отдела изысканий</option>
+                            </select>
 
+                            <a>
+                                <button class="btn btn__top-bar" type="submit">Отфильтровать</button>
+                            </a>
 
                         </form>
                         @Html.Partial("TaskTableTest")
@@ -95,7 +110,9 @@
                                    asp-route-staffTableFilter="@Model.filterStaff"
              asp-route-recipientProjectFilter="@Model.filterResProj"
             asp-route-supervisorProjectFilter="@Model.filterSupProj"
-            asp-route-porjectFiltr="@Model.filterProj">
+            asp-route-porjectFiltr="@Model.filterProj"
+                                   asp-route-filterTaskTable="@Model.filterTaskTable"
+                                   asp-route-filterStaffTable="@Model.filterStaffTable">
                                     <button class="btn btn__top-bar" type="button">Добавить задачу</button>
                                 </a>}
 
@@ -104,7 +121,9 @@
                                 asp-route-staffTableFilter="@Model.filterStaff"
              asp-route-recipientProjectFilter="@Model.filterResProj"
             asp-route-supervisorProjectFilter="@Model.filterSupProj"
-            asp-route-porjectFiltr="@Model.filterProj">
+            asp-route-porjectFiltr="@Model.filterProj"
+                                asp-route-filterTaskTable="@Model.filterTaskTable"
+                                asp-route-filterStaffTable="@Model.filterStaffTable">
                                     <button class="btn btn__top-bar" type="button">Добавить проект</button>
                                 </a>}
 
@@ -154,25 +173,31 @@
                     <div class="third-table" style="display:@Model.activeTable3">
                         <form class="top-menu" method="post" asp-controller="Home" asp-action="TaskTable" asp-route-activTable="2"
                               asp-route-staffTableFilter="@Model.filterStaff"
-             asp-route-recipientProjectFilter="@Model.filterResProj"
-            asp-route-supervisorProjectFilter="@Model.filterSupProj"
-            asp-route-porjectFiltr="@Model.filterProj">
+                              asp-route-recipientProjectFilter="@Model.filterResProj"
+                              asp-route-supervisorProjectFilter="@Model.filterSupProj"
+                              asp-route-porjectFiltr="@Model.filterProj"
+                              asp-route-filterTaskTable="@Model.filterTaskTable"
+                              asp-route-filterStaffTable="@Model.filterStaffTable">
                             @if (ViewBag.Role != "Сотрудник")
                             {
                                 <a asp-controller="Home" asp-action="TaskTable" asp-route-activTable="2"
                                    asp-route-staffTableFilter="@Model.filterStaff"
-             asp-route-recipientProjectFilter="@Model.filterResProj"
-            asp-route-supervisorProjectFilter="@Model.filterSupProj"
-            asp-route-porjectFiltr="@Model.filterProj">
+                                   asp-route-recipientProjectFilter="@Model.filterResProj"
+                                   asp-route-supervisorProjectFilter="@Model.filterSupProj"
+                                   asp-route-porjectFiltr="@Model.filterProj"
+                                   asp-route-filterTaskTable="@Model.filterTaskTable"
+                                   asp-route-filterStaffTable="@Model.filterStaffTable">
                                     <button class="btn btn__top-bar" type="button">Добавить задачу</button>
                                 </a>}
 
                             @if (ViewBag.Role == "Директор" || ViewBag.Role == "ГИП")
                             {<a asp-controller="Home" asp-action="TaskTable" asp-route-ProjectCreate="@true" asp-route-activTable="2"
                                 asp-route-staffTableFilter="@Model.filterStaff"
-             asp-route-recipientProjectFilter="@Model.filterResProj"
-            asp-route-supervisorProjectFilter="@Model.filterSupProj"
-            asp-route-porjectFiltr="@Model.filterProj">
+                                asp-route-recipientProjectFilter="@Model.filterResProj"
+                                asp-route-supervisorProjectFilter="@Model.filterSupProj"
+                                asp-route-porjectFiltr="@Model.filterProj"
+                                asp-route-filterTaskTable="@Model.filterTaskTable"
+                                asp-route-filterStaffTable="@Model.filterStaffTable">
                                     <button class="btn btn__top-bar" type="button">Добавить проект</button>
                                 </a>}
 
@@ -245,6 +270,12 @@
                                 {
                                     <option>@elem</option>
                                 }
+                            </select>
+
+                            <select class="select" id="select" name="filterStaffTable">
+                                <option value="@Model.filterStaffTable" selected hidden>@Model.filterStaffTable</option>
+                                <option>Мои задачи</option>
+                                <option>Все задачи</option>
                             </select>
 
 

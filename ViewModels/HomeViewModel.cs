@@ -22,6 +22,13 @@ namespace MVP.ViewModels
 
         public List<Tasks> task4Table { get; set; }
 
+        public List<Tasks> task4TableTasks { get; set; }
+
+        public string filterTaskTable { get; set; }
+         public string filterStaffTable { get; set; }
+
+
+
         public IEnumerable<Project> projects { get; set; }
         public int projectId { get; set; }
         public Project redactedProject { get; set; }
