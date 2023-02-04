@@ -35,6 +35,7 @@ namespace MVP.Date.Repository
             string liteTask,
             int iid,
             DateTime date,
+            DateTime dedline,
             string status,
             string comment,
             string supervisor,
@@ -52,6 +53,7 @@ namespace MVP.Date.Repository
                 if (task.status == "В работе" && (status == "Выполнена" || status == "На паузе"))
                 {
                     task.actualTime += (TimeSpan)(DateTime.Now - task.startWork);
+                    task.historyWorc += $"{DateTime.Now.Date.ToString(@"dd\.MM\.yyyy")} в работе: {(DateTime.Now - task.startWork).ToString(@"hh\:mm")}\n";
                     Project proj = new Project();
                     try
                     {
@@ -70,6 +72,7 @@ namespace MVP.Date.Repository
                 }
                 task.supervisor = supervisor;
                 task.date = date;
+                task.dedline = dedline;
                 task.recipient = recipient;
                 task.comment += comment != null? comment+ "\n": null;
                 task.plannedTime = plannedTime;
@@ -82,7 +85,7 @@ namespace MVP.Date.Repository
                 }else task.finish = finish;
 
                 task.liteTask = liteTask == "Задача" ? false : true;
-                task.priority = liteTask == "Задача" ? pririty : 0;
+                task.priority = liteTask == "Задача" ? _appDB.DBProject.FirstOrDefault(p => p.code == task.projectCode).priority : -1;
 
                 _appDB.SaveChanges();
                 return true;
@@ -102,7 +105,7 @@ namespace MVP.Date.Repository
                 if (task.status == "В работе" && (stat == "Выполнена" || stat == "На паузе"))
                 {
                     task.actualTime += (TimeSpan)(DateTime.Now - task.startWork);
-
+                    task.historyWorc += $"{DateTime.Now.Date.ToString(@"dd\.MM\.yyyy")} в работе: {(DateTime.Now - task.startWork).ToString(@"hh\:mm")}\n";
                     Project proj = new Project();
                     try
                     {
@@ -122,11 +125,31 @@ namespace MVP.Date.Repository
                 if (task.status == "Создана" && stat == "В работе")
                     task.start = DateTime.Now;
                 task.status = stat;
+                task.priority = task.liteTask == false ? _appDB.DBProject.FirstOrDefault(p => p.code == task.projectCode).priority : -1;
                 if (stat == "Выполнена") task.finish = DateTime.Now;
                 _appDB.SaveChanges();
                 return true;
             }
             return false;
         }
+
+        // 8 hours
+        public async Task timeWork(int idTask)
+        {
+            await Task.Delay(10000);
+            redStat(idTask);
+        }
+
+        public async Task redStat(int idTask)
+        {
+            
+            await Task.Run(() =>
+            {
+                Tasks el = _appDB.DBTask.FirstOrDefaultAsync(p => p.id == idTask).Result;
+                el.status = "На паузе";
+                el.historyWorc += $"{DateTime.Now.Date.ToString(@"dd\.MM\.yyyy")} в работе: {(DateTime.Now - el.startWork).ToString(@"hh\:mm")}\n";
+                _appDB.SaveChanges();
+            });
+        } 
     }
 }

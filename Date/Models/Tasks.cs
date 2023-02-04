@@ -26,5 +26,8 @@ namespace MVP.Date.Models
         public string status { get; set; }
         public DateTime startWork { get; set; }
         public string creator { get; set; }
+        public string historyWorc { get; set; }
+
+        public DateTime dedline { get; set; }
     }
 }

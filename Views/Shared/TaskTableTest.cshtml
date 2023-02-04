@@ -15,6 +15,7 @@
         <th>Комментарий</th>
         <th>План время</th>
         <th>Факт время</th>
+        <th>Дедлайн</th>
         <th>Начал</th>
         <th>Завершил</th>
     </tr>
@@ -22,7 +23,7 @@
     @for (int i = 0; i < 3; i++)
     {
 
-        if (i == 0)
+        if (i == 2)
         {
             <tr id="title"><th style="text-align:left" colspan="13">Выполненные задачи</th></tr>
 
@@ -55,8 +56,9 @@
                         <td>@task.comment</td>
                         <td>@task.plannedTime.ToString(@"hh\:mm")</td>
                         <td>@task.actualTime.ToString(@"hh\:mm")</td>
-                        <td>@task.start.ToString(@"dd\.MM\.yyyy hh\:mm\:ss")</td>
-                        <td>@task.finish.ToString(@"dd\.MM\.yyyy hh\:mm\:ss")</td>
+                        <td>@task.dedline.ToString(@"dd\.MM\.yyyy HH\:mm\:ss")</td>
+                        <td>@task.start.ToString(@"dd\.MM\.yyyy HH\:mm\:ss")</td>
+                        <td>@task.finish.ToString(@"dd\.MM\.yyyy HH\:mm\:ss")</td>
                         
                     </tr>
                 }
@@ -86,14 +88,15 @@
                         <td>@task.comment</td>
                         <td>@task.plannedTime.ToString(@"hh\:mm")</td>
                         <td>@task.actualTime.ToString(@"hh\:mm")</td>
-                        <td>@task.start.ToString(@"dd\.MM\.yyyy hh\:mm\:ss")</td>
-                        <td>@task.finish.ToString(@"dd\.MM\.yyyy hh\:mm\:ss")</td>
+                        <td>@task.dedline.ToString(@"dd\.MM\.yyyy HH\:mm")</td>
+                        <td>@task.start.ToString(@"dd\.MM\.yyyy HH\:mm\:ss")</td>
+                        <td>@task.finish.ToString(@"dd\.MM\.yyyy HH\:mm\:ss")</td>
                     </tr>
                 }
 
             }
         }
-        if (i == 1)
+        if (i == 0)
         {
             <tr id="title"><th style="text-align:left" colspan="13">Задачи на сегодня</th></tr>
             foreach (Task task in Model.task4Table.Where(p => p.status != "Выполнена").Where(p => p.date.Date <= DateTime.Now.Date).OrderBy(p => p.date.Date).OrderBy(p => p.priority))
@@ -168,17 +171,18 @@
                         <td>@task.comment</td>
                         <td>@task.plannedTime.ToString(@"hh\:mm")</td>
                         <td>@task.actualTime.ToString(@"hh\:mm")</td>
+                        <td>@task.dedline.ToString(@"dd\.MM\.yyyy HH\:mm\:ss")</td>
                         @if(task.start <= new DateTime(2022,1,1))
                         {
                             <td>-</td>
                         }else{
-                            <td>@task.start.ToString(@"dd\.MM\.yyyy hh\:mm\:ss")</td>
+                            <td>@task.start.ToString(@"dd\.MM\.yyyy HH\:mm\:ss")</td>
                         }
                         @if(task.finish <= new DateTime(2022,1,1))
                         {
                             <td>-</td>
                         }else{
-                            <td>@task.finish.ToString(@"dd\.MM\.yyyy hh\:mm\:ss")</td>
+                            <td>@task.finish.ToString(@"dd\.MM\.yyyy HH\:mm\:ss")</td>
                         }
                     </tr>
                 }
@@ -251,24 +255,25 @@
                         <td>@task.comment</td>
                         <td>@task.plannedTime.ToString(@"hh\:mm")</td>
                         <td>@task.actualTime.ToString(@"hh\:mm")</td>
+                        <td>@task.dedline.ToString(@"dd\.MM\.yyyy HH\:mm\:ss")</td>
                          @if(task.start <= new DateTime(2022,1,1))
                         {
                             <td>-</td>
                         }else{
-                            <td>@task.start.ToString(@"dd\.MM\.yyyy hh\:mm\:ss")</td>
+                            <td>@task.start.ToString(@"dd\.MM\.yyyy HH\:mm\:ss")</td>
                         }
                         @if(task.finish <= new DateTime(2023,1,1))
                         {
                             <td>-</td>
                         }else{
-                            <td>@task.finish.ToString(@"dd\.MM\.yyyy hh\:mm\:ss")</td>
+                            <td>@task.finish.ToString(@"dd\.MM\.yyyy HH\:mm\:ss")</td>
                         }
                     </tr>
                 }
 
             }
         }
-        if (i == 2)
+        if (i == 1)
         {
             <tr id="title"><th style="text-align:left" colspan="13">Предстоящие задачи</th></tr>
             foreach (Task task in Model.task4Table.Where(p => p.date.Date > DateTime.Now.Date).OrderBy(p => p.date.Date).OrderBy(p => p.priority))
@@ -343,17 +348,18 @@
                     <td>@task.comment</td>
                     <td>@task.plannedTime.ToString(@"hh\:mm")</td>
                     <td>@task.actualTime.ToString(@"hh\:mm")</td>
+                    <td>@task.dedline.ToString(@"dd\.MM\.yyyy HH\:mm\:ss")</td>
                     @if(task.start <= new DateTime(2022,1,1))
                         {
                             <td>-</td>
                         }else{
-                            <td>@task.start.ToString(@"dd\.MM\.yyyy hh\:mm\:ss")</td>
+                            <td>@task.start.ToString(@"dd\.MM\.yyyy HH\:mm\:ss")</td>
                         }
                      @if(task.finish <= new DateTime(2023,1,1))
                         {
                             <td>-</td>
                         }else{
-                            <td>@task.finish.ToString(@"dd\.MM\.yyyy hh\:mm\:ss")</td>
+                            <td>@task.finish.ToString(@"dd\.MM\.yyyy HH\:mm\:ss")</td>
                         }
                     </tr>
                 }
@@ -426,17 +432,18 @@
                     <td>@task.comment</td>
                     <td>@task.plannedTime.ToString(@"hh\:mm")</td>
                     <td>@task.actualTime.ToString(@"hh\:mm")</td>
+                    <td>@task.dedline.ToString(@"dd\.MM\.yyyy HH\:mm\:ss")</td>
                      @if(task.start <= new DateTime(2022,1,1))
                         {
                             <td>-</td>
                         }else{
-                            <td>@task.start.ToString(@"dd\.MM\.yyyy hh\:mm\:ss")</td>
+                            <td>@task.start.ToString(@"dd\.MM\.yyyy HH\:mm\:ss")</td>
                         }
                      @if(task.finish <= new DateTime(2023,1,1))
                         {
                             <td>-</td>
                         }else{
-                            <td>@task.finish.ToString(@"dd\.MM\.yyyy hh\:mm\:ss")</td>
+                            <td>@task.finish.ToString(@"dd\.MM\.yyyy HH\:mm\:ss")</td>
                         }
                 </tr>
                 }

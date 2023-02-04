@@ -6,18 +6,19 @@
 </form>
 
 <form class="form" id="form-info-task" method="post">
-    @if (Model.redactedTask.status != "Выполнена") { 
-    <input class="btn-white btn-top" type="submit" value="Редактировать"
-           asp-controller="Home" asp-action="TaskTable"
-           asp-route-Taskid="@Model.redactedTask.id"
-           asp-route-TaskRed="@true"
-           asp-route-activTable="@Model.activeTableIndex"
-           asp-route-staffTableFilter="@Model.filterStaff"
-             asp-route-recipientProjectFilter="@Model.filterResProj"
-            asp-route-supervisorProjectFilter="@Model.filterSupProj"
-            asp-route-porjectFiltr="@Model.filterProj"/>   
+    @if (Model.redactedTask.status != "Выполнена")
+    {
+        <input class="btn-white btn-top" type="submit" value="Редактировать"
+               asp-controller="Home" asp-action="TaskTable"
+               asp-route-Taskid="@Model.redactedTask.id"
+               asp-route-TaskRed="@true"
+               asp-route-activTable="@Model.activeTableIndex"
+               asp-route-staffTableFilter="@Model.filterStaff"
+               asp-route-recipientProjectFilter="@Model.filterResProj"
+               asp-route-supervisorProjectFilter="@Model.filterSupProj"
+               asp-route-porjectFiltr="@Model.filterProj" />
     }
-    
+
 
     <label>Дата</label>
     <input id="statusId" disabled class="form-control" value="@Model.redactedTask.date.ToShortDateString()" />
@@ -52,11 +53,17 @@
     <label>Планируемое время исполнения</label>
     <input id="statusId" disabled class="form-control" value="@Model.redactedTask.plannedTime" />
 
+    <label>Дедлайн</label>
+    <input id="statusId" disabled class="form-control" type="datetime" value="@Model.redactedTask.dedline" />
+
     <label>Начало работы над задачей</label>
     <input id="statusId" disabled class="form-control" value="@Model.redactedTask.start" />
 
     <label>Задача завершена</label>
     <input id="statusId" disabled class="form-control" value="@Model.redactedTask.finish" />
+
+    <label>История работ</label>
+    <textarea disabled>@Model.redactedTask.historyWorc</textarea>
 
 
 </form>

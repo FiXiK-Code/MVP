@@ -15,7 +15,7 @@
            asp-route-recipientProjectFilter="@Model.filterResProj"
            asp-route-supervisorProjectFilter="@Model.filterSupProj"
            asp-route-porjectFiltr="@Model.filterProj" />
-    @{ 
+    @{
         var liteTask = Model.redactedTask.liteTask == false ? "Задача" : "Задача вне очереди";
     }
     <select name="liteTask">
@@ -30,7 +30,7 @@
         bool redact = ViewBag.Role != "Сотрудник" ? Model.roles.FirstOrDefault(p => p.name == ViewBag.Role).recipient.Split(',').ToList().Contains(taskSuperRole) : false;
     }
 
-    @if ((Model.redactedTask.date.Date >= DateTime.Now.Date && ViewBag.RoleName == Model.redactedTask.creator) || redact)
+    @if ((Model.redactedTask.date.Date >= DateTime.Now.Date && ViewBag.RoleName == Model.redactedTask.creator) || (redact && Model.redactedTask.creator == null))
     {<label>Дата</label>
         <input name="date" asp-for="@Model.redactedTask.date" type="date" class="form-control">
     }
@@ -55,7 +55,7 @@
     <textarea name="comment" class="form-control"></textarea>
 
 
-    @if (redact || ViewBag.RoleName == Model.redactedTask.creator)
+    @if ((redact && Model.redactedTask.creator == null) || ViewBag.RoleName == Model.redactedTask.creator)
     {<label>Ответственный</label>
         <select name="supervisor" asp-for="@Model.redactedTask.supervisor">
             <option asp-for="@Model.redactedTask.supervisor" selected hidden>@Model.redactedTask.supervisor</option>
@@ -119,7 +119,7 @@
     }
 
 
-    @if (redact || ViewBag.RoleName == Model.redactedTask.creator)
+    @if ((redact && Model.redactedTask.creator == null) || ViewBag.RoleName == Model.redactedTask.creator)
     {
         <label>Исполнитель</label>
         <select name="recipient" asp-for="@Model.redactedTask.recipient">
@@ -192,7 +192,7 @@
     <label>Приоритет (только для чтения)</label>
     <input readonly name="pririty" class="form-control" value="@priority" />
 
-    @if (redact || ViewBag.RoleName == Model.redactedTask.creator)
+    @if ((redact && Model.redactedTask.creator == null) || ViewBag.RoleName == Model.redactedTask.creator)
     {
         <label>Планируемое время исполнения</label>
         <input name="plannedTime" asp-for="@Model.redactedTask.plannedTime" class="form-control">
@@ -202,6 +202,17 @@
         <label>Планируемое время исполнения (только для чтения)</label>
         <input readonly name="plannedTime" asp-for="@Model.redactedTask.plannedTime" class="form-control" value="@Model.redactedTask.plannedTime">
     }
+    @if ((redact && Model.redactedTask.creator == null) || ViewBag.RoleName == Model.redactedTask.creator)
+    {
+        <label>Дедлайн</label>
+        <input name="dedline" asp-for="@Model.redactedTask.dedline" class="form-control">
+    }
+    else
+    {
+        <label>Дедлайн (только для чтения)</label>
+        <input readonly name="dedline" asp-for="@Model.redactedTask.dedline" class="form-control">
+    }
+
 
     <label>Начало работы над задачей</label>
     <input name="start" asp-for="@Model.redactedTask.start" class="form-control">

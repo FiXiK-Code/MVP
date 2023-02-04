@@ -50,6 +50,7 @@ namespace MVP.Controllers
             {
                 return RedirectToAction("Index", "Login");
             }
+            //if (stat == "В работе") _task.timeWork(id);
             if (!_task.redactStatus(id, stat))
             {
                 var msg = "Только одна задача может быть в работе! Проверьте статусы своих задачь!";
@@ -135,10 +136,11 @@ namespace MVP.Controllers
             });
 
         }
-        public async Task<RedirectToActionResult> RedactTaskToDB(
+        public RedirectToActionResult RedactTaskToDB(
             string liteTask,
             int iid,
             DateTime date,
+            DateTime dedline,
             string status,
             string comment,
             string supervisor,
@@ -166,7 +168,7 @@ namespace MVP.Controllers
 
             date = redackPriorAndPerenos(supervisor, date, plannedTime, _appDB.DBTask.FirstOrDefault(p => p.id == iid).projectCode, liteTask);
 
-            if (!_task.redactToDB(liteTask, iid, date, status, comment != null ? $"{roleSession.SessionName}: {comment}\n" : null, supervisor, recipient, pririty, plannedTime, start, finish))
+            if (!_task.redactToDB(liteTask, iid, date, dedline, status, comment != null ? $"{roleSession.SessionName}: {comment}\n" : null, supervisor, recipient, pririty, plannedTime, start, finish))
             {
                 var msg = "Только одна задача может быть в работе! Проверьте статусы своих задачь!";
                 return RedirectToAction("TaskTable", new { activTable = activTable, Taskid = iid, meesage = msg, TaskRed = true,
@@ -198,7 +200,7 @@ namespace MVP.Controllers
                     comment = comment
                 };
                 _logistickTask.addToDB(item);
-                if (status == "В работе") await TimerPauseTask(iid);
+                //if (status == "В работе") _task.timeWork(iid);
                 return RedirectToAction("TaskTable", new { activTable = activTable, Taskid = iid,
                     staffTableFilter = staffTableFilter,
                     recipientProjectFilter = recipientProjectFilter,
@@ -207,14 +209,6 @@ namespace MVP.Controllers
                 });
             }
 
-        }
-
-        public async Task TimerPauseTask(int idTask)
-        {
-            await Task.Delay(43200000);
-            Tasks el =  _appDB.DBTask.FirstOrDefault(p => p.id == idTask);
-            el.status = "На паузе";
-            await _appDB.SaveChangesAsync();
         }
 
         public RedirectToActionResult addProjectToDB(
@@ -305,9 +299,9 @@ namespace MVP.Controllers
                     {
                         if ((SumTimeTaskToDay - task.plannedTime) >= timeWorkDay && (task.priority <= maxPriority || liteTask != "Задача"))
                         {
-                            _task.redactToDB(liteTask, task.id, 
+                            _task.redactToDB(liteTask, task.id,
                                     redackPriorAndPerenos(task.supervisor, task.date.AddDays(1),task.plannedTime,
-                                        task.projectCode, task.liteTask == false ? "Задача" : "Вне очереди"),
+                                        task.projectCode, task.liteTask == false ? "Задача" : "Вне очереди"), task.dedline,
                                task.status, task.comment,task.supervisor, task.recipient, task.priority, task.plannedTime, task.start, task.finish);
 
                             var tasksSupernew = _appDB.DBTask.Where(p => (p.supervisor == supervisor && p.recipient == null) || p.recipient == supervisor)
@@ -325,7 +319,7 @@ namespace MVP.Controllers
                         if ((SumTimeTaskToDay - task.plannedTime) < timeWorkDay)
                         {
                             _task.redactToDB(liteTask, task.id, redackPriorAndPerenos(task.supervisor, task.date.AddDays(1), task.plannedTime,
-                                        task.projectCode, task.liteTask == false ? "Задача" : "Вне очереди"), task.status, task.comment,
+                                        task.projectCode, task.liteTask == false ? "Задача" : "Вне очереди"), task.dedline, task.status, task.comment,
                                task.supervisor, task.recipient, task.priority, task.plannedTime, task.start, task.finish);
                             
                             var tasksSupernew = _appDB.DBTask.Where(p => (p.supervisor == supervisor && p.recipient == null) || p.recipient == supervisor)
@@ -357,6 +351,7 @@ namespace MVP.Controllers
             string comment,
             TimeSpan plannedTime,
             DateTime date,
+            DateTime dedline,
             string Stage,
             string liteTask,
             int activTable,
@@ -417,10 +412,11 @@ namespace MVP.Controllers
                 projectCode = projectCode,
                 supervisor = supervisor,
                 recipient = recipient,
-                priority = liteTask == "Задача" ? _appDB.DBProject.FirstOrDefault(p => p.code == projectCode).priority : 0,
+                priority = liteTask == "Задача" ? _appDB.DBProject.FirstOrDefault(p => p.code == projectCode).priority : -1,
                 comment = comment != null ? $"{roleSession.SessionName}: {comment}\n" : null,
                 plannedTime = plannedTime,
                 date = date,
+                dedline = dedline,
                 Stage = Stage,
                 status = "Создана",
                 liteTask = liteTask == "Задача" ? false : true,

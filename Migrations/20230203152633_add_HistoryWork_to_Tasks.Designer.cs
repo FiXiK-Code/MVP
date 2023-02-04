@@ -3,14 +3,16 @@ using System;
 using MVP.Date;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MVP.Migrations
 {
     [DbContext(typeof(AppDB))]
-    partial class AppDBModelSnapshot : ModelSnapshot
+    [Migration("20230203152633_add_HistoryWork_to_Tasks")]
+    partial class add_HistoryWork_to_Tasks
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -329,9 +331,6 @@ namespace MVP.Migrations
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<DateTime>("date")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("dedline")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("desc")

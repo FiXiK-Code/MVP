@@ -16,6 +16,7 @@ namespace MVP.Date.Interfaces
         bool redactToDB(string liteTask,
             int iid,
             DateTime date,
+            DateTime dedline,
             string status,
             string comment,
             string supervisor,
@@ -25,5 +26,8 @@ namespace MVP.Date.Interfaces
             DateTime start,
             DateTime finish);
         bool redactStatus(int id, string stat);
+
+        Task timeWork(int idTask);
+        Task redStat(int idTask);
     }
 }

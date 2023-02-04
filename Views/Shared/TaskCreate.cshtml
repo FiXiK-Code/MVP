@@ -13,10 +13,10 @@
 
     @{ Model.nullTask.date = DateTime.Now.Date;}
     <label>Дата</label>
-    <input name="date" asp-for="@Model.nullTask.date" type="date" class="form-control"/>
+    <input name="date" asp-for="@Model.nullTask.date" type="date" class="form-control" />
 
     @*<label>Шифр задачи</label>
-    <input name="code" asp-for="@Model.nullTask.code" class="form-control" />*@
+        <input name="code" asp-for="@Model.nullTask.code" class="form-control" />*@
 
     <label>Шифр проекта</label>
     <select name="projectCode" asp-for="@Model.nullTask.projectCode" class="form-control">
@@ -79,7 +79,7 @@
             }
             foreach (var staff1 in Model.staffs.Where(p => p.supervisorCod == ViewBag.RoleCod && p.roleCod == "R06"))
             {
-                    <option>@staff1.name</option>
+                <option>@staff1.name</option>
             }
         }
         else if (ViewBag.Role == "РГ")
@@ -151,6 +151,10 @@
         }
     </select>
 
+    @{ Model.nullTask.dedline = DateTime.Now.Date;}
+    <label>Дедлайн</label>
+    <input name="dedline" asp-for="@Model.nullTask.dedline"  class="form-control" />
+
     <label>Планируемое время исполнения</label>
     <input name="plannedTime" asp-for="@Model.nullTask.plannedTime" class="form-control" />
 
@@ -158,7 +162,7 @@
     <input class="btn-white" type="submit" value="Сохранить"
            asp-controller="Home" asp-action="addTaskToDB" asp-route-activTable="@Model.activeTableIndex"
            asp-route-staffTableFilter="@Model.filterStaff"
-             asp-route-recipientProjectFilter="@Model.filterResProj"
-            asp-route-supervisorProjectFilter="@Model.filterSupProj"
-            asp-route-porjectFiltr="@Model.filterProj"/>
+           asp-route-recipientProjectFilter="@Model.filterResProj"
+           asp-route-supervisorProjectFilter="@Model.filterSupProj"
+           asp-route-porjectFiltr="@Model.filterProj" />
 </form>
