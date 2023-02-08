@@ -12,5 +12,7 @@ namespace MVP.Date.Interfaces
         IEnumerable<Staff> DivisoinStaff(int divisionId);
         Staff GetStaff(int staffId);
 
+        List<Staff> StaffTable(string SessionRole, string sessionCod);
+
     }
 }

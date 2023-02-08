@@ -3,8 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Tasks = MVP.Date.Models.Tasks;
-using TaskStatus = MVP.Date.Models.TaskStatus;
 
 namespace MVP.ViewModels
 {

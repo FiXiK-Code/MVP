@@ -25,9 +25,9 @@ namespace MVP.Date.Interfaces
             TimeSpan plannedTime,
             DateTime start,
             DateTime finish);
-        bool redactStatus(int id, string stat);
+        Task<bool> redactStatusAsync(int id, string stat);
 
         Task timeWork(int idTask);
-        Task redStat(int idTask);
+        public void bridge(int id);
     }
 }

@@ -105,7 +105,7 @@
             <tr id="title"><th style="text-align:left" colspan="13">Задачи на сегодня</th></tr>
             foreach (Task task in Model.task4TableTasks.Where(p => p.status != "Выполнена").Where(p => p.date.Date <= DateTime.Now.Date).OrderBy(p => p.date.Date).OrderBy(p => p.priority))
             {
-                if (Model.staffNames.Contains(task.supervisor) && task.supervisor != ViewBag.RoleName && task.recipient != null) continue;
+                //if (Model.staffNames.Contains(task.supervisor) && task.supervisor != ViewBag.RoleName && task.recipient != null) continue;
                 @if (task.liteTask == true)
                 {
                     <tr style="background-color:green" id="task">

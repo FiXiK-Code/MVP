@@ -53,7 +53,7 @@ namespace MVP.Controllers
                 return RedirectToAction("Index", "Login");
             }
             //if (stat == "В работе") _task.timeWork(id);
-            if (!_task.redactStatus(id, stat))
+            if (!_task.redactStatusAsync(id, stat).Result)
             {
                 var msg = "Только одна задача может быть в работе! Проверьте статусы своих задачь!";
                 return RedirectToAction("TaskTable", new { activTable = activTable, Taskid = id, meesage = msg, TaskRed = true,
@@ -593,7 +593,7 @@ namespace MVP.Controllers
             }
 
 
-                List<string> staffsDiv = new List<string>();
+            List<string> staffsDiv = new List<string>();
             foreach (var filter in filterTaskTable.Split(','))///
             {
                 switch (filter)
@@ -602,7 +602,7 @@ namespace MVP.Controllers
                         tasksTabbleFilter = _task.AllTasks.ToList();
                         break;
                     case "Задачи отдела управления":
-                        foreach(var staff1 in _staff.AllStaffs.Where(p => p.divisionId == 1).ToList())
+                        foreach (var staff1 in _staff.AllStaffs.Where(p => p.divisionId == 1).ToList())
                         {
                             if (!staffsDiv.Contains(staff1.name)) staffsDiv.Add(staff1.name);
                         }
