@@ -25,7 +25,7 @@ namespace MVP
             services.AddDbContextPool<AppDB>(
                     options =>
                     {
-                        options.UseMySql($"server=db;userid=root;pwd=root;port=3306;database=mvp");
+                        options.UseMySql($"server=localhost;userid=root;pwd=root;port=3306;database=mvp");
                     });
 
             services.AddTransient<ICompanyStructure, CompanyStuctureRep>();

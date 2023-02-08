@@ -29,7 +29,7 @@
 
             foreach (Task task in Model.task4TableTasks.Where(p => p.status == "Выполнена").OrderBy(p => p.finish))
             {
-                if (Model.staffNames.Contains(task.supervisor) && task.supervisor != ViewBag.RoleName && task.recipient != null) continue;
+                //if (Model.staffNames.Contains(task.supervisor) && task.supervisor != ViewBag.RoleName && task.recipient != null) continue;
                 @if (task.liteTask == true)
                 {
                     <tr style="background-color:green" id="finish-task">
@@ -51,7 +51,7 @@
                         </td>
                         <td>@task.supervisor</td>
                         <td>@task.recipient</td>
-                            @if (task.priority == 0)
+                            @if (task.priority == -1)
                             {<td>Вне очереди</td>}
                             else
                             {<td>@task.priority</td>}
@@ -85,7 +85,7 @@
                         </td>
                         <td>@task.supervisor</td>
                         <td>@task.recipient</td>
-                        @if (task.priority == 0)
+                        @if (task.priority == -1)
                             {<td>Вне очереди</td>}
                             else
                             {<td>@task.priority</td>}
@@ -180,7 +180,7 @@
                         </td>
                         <td>@task.supervisor</td>
                         <td>@task.recipient</td>
-                        @if (task.priority == 0)
+                        @if (task.priority == -1)
                             {<td>Вне очереди</td>}
                             else
                             {<td>@task.priority</td>}
@@ -276,7 +276,7 @@
                         </td>
                         <td>@task.supervisor</td>
                         <td>@task.recipient</td>
-                        @if (task.priority == 0)
+                        @if (task.priority == -1)
                             {<td>Вне очереди</td>}
                             else
                             {<td>@task.priority</td>}
@@ -304,9 +304,9 @@
         if (i == 1)
         {
             <tr id="title"><th style="text-align:left" colspan="13">Предстоящие задачи</th></tr>
-            foreach (Task task in Model.task4TableTasks.Where(p => p.date.Date > DateTime.Now.Date).OrderBy(p => p.date.Date).OrderBy(p => p.priority))
+            foreach (Task task in Model.task4TableTasks.Where(p => p.status != "Выполнена").Where(p => p.date.Date > DateTime.Now.Date).OrderBy(p => p.date.Date).OrderBy(p => p.priority))
             {
-                if (Model.staffNames.Contains(task.supervisor) && task.supervisor != ViewBag.RoleName && task.recipient != null) continue;
+                //if (Model.staffNames.Contains(task.supervisor) && task.supervisor != ViewBag.RoleName && task.recipient != null) continue;
                 @if (task.liteTask == true)
                 {
                     <tr style="background-color:green" id="task">
@@ -381,7 +381,7 @@
                     </td>
                     <td>@task.supervisor</td>
                     <td>@task.recipient</td>
-                    @if (task.priority == 0)
+                    @if (task.priority == -1)
                             {<td>Вне очереди</td>}
                             else
                             {<td>@task.priority</td>}
@@ -477,7 +477,7 @@
                     </td>
                     <td>@task.supervisor</td>
                     <td>@task.recipient</td>
-                    @if (task.priority == 0)
+                    @if (task.priority == -1)
                             {<td>Вне очереди</td>}
                             else
                             {<td>@task.priority</td>}

@@ -141,6 +141,7 @@
                                 <option>Все ГИПы</option>
                                 @foreach (string staff in Model.ollGip)
                                 {
+                                    if (staff == null) continue;
                                     <option>@staff</option>
                                 }
                             </select>

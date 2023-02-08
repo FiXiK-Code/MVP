@@ -10,14 +10,20 @@
            asp-controller="Home" asp-action="TaskTable"
            asp-route-Projid="@Model.redactedProject.id"
            asp-route-staffTableFilter="@Model.filterStaff"
-             asp-route-recipientProjectFilter="@Model.filterResProj"
-            asp-route-supervisorProjectFilter="@Model.filterSupProj"
-            asp-route-porjectFiltr="@Model.filterProj"
-           asp-route-filterTaskTable="@Model.filterTaskTable"/>
+           asp-route-recipientProjectFilter="@Model.filterResProj"
+           asp-route-supervisorProjectFilter="@Model.filterSupProj"
+           asp-route-porjectFiltr="@Model.filterProj"
+           asp-route-filterTaskTable="@Model.filterTaskTable" />
+
+
 
     <label>В архиве</label>
-    <input name="arhive" asp-for="@Model.redactedProject.archive" class="form-control" value="@Model.redactedProject.archive" />
-
+    <select name="arhive">
+        <option selected hidden>@Model.redactedProject.archive</option>
+        <option asp-for="liteTask">Да</option>
+        <option asp-for="liteTask">Нет</option>
+    </select>
+    
     <label>Облако</label>
     <input name="link" asp-for="@Model.redactedProject.link" class="form-control" value="@Model.redactedProject.link" />
 
@@ -51,9 +57,9 @@
            asp-route-iid="@Model.redactedProject.id"
            asp-route-activTable="@Model.activeTableIndex"
            asp-route-staffTableFilter="@Model.filterStaff"
-             asp-route-recipientProjectFilter="@Model.filterResProj"
-            asp-route-supervisorProjectFilter="@Model.filterSupProj"
-            asp-route-porjectFiltr="@Model.filterProj"
-           asp-route-filterTaskTable="@Model.filterTaskTable"/>
+           asp-route-recipientProjectFilter="@Model.filterResProj"
+           asp-route-supervisorProjectFilter="@Model.filterSupProj"
+           asp-route-porjectFiltr="@Model.filterProj"
+           asp-route-filterTaskTable="@Model.filterTaskTable" />
 
 </form>

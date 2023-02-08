@@ -45,9 +45,21 @@ namespace MVP.Date.Repository
             DateTime start,
             DateTime finish)
         {
-            if (_appDB.DBTask.Where(p => p.supervisor == supervisor).Where(p => p.recipient == null).Where(p => p.status == "В работе").Count() < 1
-                && _appDB.DBTask.Where(p => p.recipient == recipient).Where(p => p.status == "В работе").Count() < 1 
-                    || status != "В работе")
+            bool red = false;
+            if (recipient == null)
+            {
+                recipient = supervisor;
+                red = _appDB.DBTask.Where(p => p.supervisor == supervisor).Where(p => p.recipient == null).Where(p => p.status == "В работе").Count() < 1
+                    && _appDB.DBTask.Where(p => p.recipient == recipient).Where(p => p.status == "В работе").Count() < 1
+                    ? true : false;
+            }
+            else if (recipient != null)
+            {
+                red = _appDB.DBTask.Where(p => p.supervisor == recipient).Where(p => p.recipient == null).Where(p => p.status == "В работе").Count() < 1
+                    && _appDB.DBTask.Where(p => p.recipient == recipient).Where(p => p.status == "В работе").Count() < 1
+                    ? true : false;
+            }
+            if (red || status != "В работе")
             {
                 Tasks task = _appDB.DBTask.FirstOrDefault(p => p.id == iid);
                 if (task.status == "В работе" && (status == "Выполнена" || status == "На паузе"))
@@ -105,9 +117,23 @@ namespace MVP.Date.Repository
         {
             var supervisor = (await _appDB.DBTask.FirstOrDefaultAsync(p => p.id == id)).supervisor;
             var resip = (await _appDB.DBTask.FirstOrDefaultAsync(p => p.id == id)).recipient;
-            if (_appDB.DBTask.Where(p => p.supervisor == supervisor).Where(p => p.recipient == null).Where(p => p.status == "В работе").Count() < 1
-                && _appDB.DBTask.Where(p => p.recipient == resip).Where(p => p.status == "В работе").Count() < 1
-                    || stat != "В работе")
+
+            bool red = false;
+            if (resip == null)
+            {
+                resip = supervisor;
+                red = _appDB.DBTask.Where(p => p.supervisor == supervisor).Where(p => p.recipient == null).Where(p => p.status == "В работе").Count() < 1
+                    && _appDB.DBTask.Where(p => p.recipient == supervisor).Where(p => p.status == "В работе").Count() < 1
+                    ? true : false;
+            }
+            else if (resip != null)
+            {
+                red = _appDB.DBTask.Where(p => p.supervisor == resip).Where(p => p.recipient == null).Where(p => p.status == "В работе").Count() < 1
+                    && _appDB.DBTask.Where(p => p.recipient == resip).Where(p => p.status == "В работе").Count() < 1
+                    ? true : false;
+            }
+
+            if (red || stat != "В работе")
             {
                 Tasks task = (await _appDB.DBTask.FirstOrDefaultAsync(p => p.id == id));
                 if (task.status == "В работе" && (stat == "Выполнена" || stat == "На паузе"))
@@ -132,6 +158,7 @@ namespace MVP.Date.Repository
                 }
                 if (task.status == "Создана" && stat == "В работе")
                     task.start = DateTime.Now;
+                task.recipient = resip;
                 task.status = stat;
                 try
                 {

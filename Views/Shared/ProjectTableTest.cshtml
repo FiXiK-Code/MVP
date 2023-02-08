@@ -7,7 +7,7 @@
         <th rowspan="4">Дата</th>
     </tr>
     <tr>
-        <th>Шрифт</th>
+        <th>Шифр</th>
         @{ List<string> projCod = new List<string>();
             if (Model.filterResProj != "Все ответственные")
             {
@@ -111,7 +111,7 @@
             for (int j = 0; j < Taskss.Count(); j++)
             {
                 if (j + 1 != Taskss.Count() && Taskss[j].date.Date == Taskss[j + 1].date.Date) continue;
-                if (Model.staffNames.Contains(Taskss[j].supervisor) && Taskss[j].supervisor != ViewBag.RoleName && Taskss[j].recipient != null) continue;
+                //if (Model.staffNames.Contains(Taskss[j].supervisor) && Taskss[j].supervisor != ViewBag.RoleName && Taskss[j].recipient != null) continue;
                 if (Taskss[j].supervisor == ViewBag.RoleName && Taskss[j].recipient == null) continue;
                 <tr id="finish-task">
                     <th colspan="2">@Taskss[j].date.Date.ToString(@"dd\.MM\.yyyy")</th>
@@ -151,7 +151,7 @@
             for (int j = 0; j < Taskss.Count(); j++)
             {
                 if (j + 1 != Taskss.Count() && Taskss[j].date.Date == Taskss[j + 1].date.Date) continue;
-                if (Model.staffNames.Contains(Taskss[j].supervisor) && Taskss[j].supervisor != ViewBag.RoleName && Taskss[j].recipient != null) continue;
+                //if (Model.staffNames.Contains(Taskss[j].supervisor) && Taskss[j].supervisor != ViewBag.RoleName && Taskss[j].recipient != null) continue;
                 if (Taskss[j].supervisor == ViewBag.RoleName && Taskss[j].recipient == null) continue;
                 <tr id="task">
                     <th colspan="2">@Taskss[j].date.Date.ToString(@"dd\.MM\.yyyy")</th>
@@ -191,7 +191,7 @@
             for (int j = 0; j < Taskss.Count(); j++)
             {
                 if (j + 1 != Taskss.Count() && Taskss[j].date.Date == Taskss[j + 1].date.Date) continue;
-                if (Model.staffNames.Contains(Taskss[j].supervisor) && Taskss[j].supervisor != ViewBag.RoleName && Taskss[j].recipient != null) continue;
+                //if (Model.staffNames.Contains(Taskss[j].supervisor) && Taskss[j].supervisor != ViewBag.RoleName && Taskss[j].recipient != null) continue;
                 if (Taskss[j].supervisor == ViewBag.RoleName && Taskss[j].recipient == null) continue;
                 <tr id="task">
                     <th colspan="2">@Taskss[j].date.Date.ToString(@"dd\.MM\.yyyy")</th>

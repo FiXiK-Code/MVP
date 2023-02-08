@@ -53,6 +53,22 @@ namespace MVP.Controllers
                 return RedirectToAction("Index", "Login");
             }
             //if (stat == "В работе") _task.timeWork(id);
+            if(_task.GetTask(id).recipient != roleSession.SessionName && _task.GetTask(id).recipient != null)
+            {
+                var msg = "Только одна задача может быть в работе! Проверьте статусы своих задачь!";
+                return RedirectToAction("TaskTable", new
+                {
+                    activTable = activTable,
+                    Taskid = id,
+                    meesage = msg,
+                    TaskRed = true,
+                    staffTableFilter = staffTableFilter,
+                    recipientProjectFilter = recipientProjectFilter,
+                    supervisorProjectFilter = supervisorProjectFilter,
+                    porjectFiltr = porjectFiltr,
+                    filterStaffTable = filterStaffTable
+                });
+            }
             if (!_task.redactStatusAsync(id, stat).Result)
             {
                 var msg = "Только одна задача может быть в работе! Проверьте статусы своих задачь!";
@@ -178,7 +194,22 @@ namespace MVP.Controllers
             }
 
             date = redackPriorAndPerenos(supervisor, date, plannedTime, _appDB.DBTask.FirstOrDefault(p => p.id == iid).projectCode, liteTask);
-
+            if (recipient != roleSession.SessionName && status == "В работе")
+            {
+                var msg = "Только одна задача может быть в работе! Проверьте статусы своих задачь!";
+                return RedirectToAction("TaskTable", new
+                {
+                    activTable = activTable,
+                    Taskid = iid,
+                    meesage = msg,
+                    TaskRed = true,
+                    staffTableFilter = staffTableFilter,
+                    recipientProjectFilter = recipientProjectFilter,
+                    supervisorProjectFilter = supervisorProjectFilter,
+                    porjectFiltr = porjectFiltr,
+                    filterStaffTable = filterStaffTable
+                });
+            }
             if (!_task.redactToDB(liteTask, iid, date, dedline, status, comment != null ? $"{roleSession.SessionName}: {comment}\n" : null, supervisor, recipient, pririty, plannedTime, start, finish))
             {
                 var msg = "Только одна задача может быть в работе! Проверьте статусы своих задачь!";
