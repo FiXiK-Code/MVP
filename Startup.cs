@@ -19,14 +19,25 @@ namespace MVP
 {
     public class Startup
     {
+        public IConfigurationRoot _config;
+         public Startup(IHostingEnvironment hostEvn)
+        {
+            _config = new ConfigurationBuilder().SetBasePath(hostEvn.ContentRootPath).AddJsonFile("appsettings.json").Build();
+        }
         public void ConfigureServices(IServiceCollection services)
         {
 
             services.AddDbContextPool<AppDB>(
                     options =>
                     {
-                        options.UseMySql($"server=localhost;userid=root;pwd=root;port=3306;database=mvp");
+                        options.UseMySql($"server=db;userid=root;pwd=root;port=3306;database=mvp");
                     });
+
+            var config = _config.GetSection("EmailConfiguration").Get<EmailConfig>();
+            services.AddSingleton(config);
+
+            services.AddScoped<IEmailService, EmailServiceRep>();
+
 
             services.AddTransient<ICompanyStructure, CompanyStuctureRep>();
             services.AddTransient<IDivision, DivisionRep>();
@@ -53,7 +64,7 @@ namespace MVP
         
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, AppDB context)
         {
-
+            
 
             app.UseSession();
 

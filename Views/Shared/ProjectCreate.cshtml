@@ -7,7 +7,7 @@
 <form class="form" id="create-task" method="post">
 
     <label>Планируемая дата завершения</label>
-    <input name="plannedFinishDate" asp-for="nullProject.plannedFinishDate" class="form-control" value="@DateTime.Now.Date" />
+    <input name="plannedFinishDate" asp-for="nullProject.plannedFinishDate" class="form-control" value="@DateTime.Now.AddHours(-5).Date" />
 
     <label>Облако</label>
     <input name="link" asp-for="nullProject.link" class="form-control" />

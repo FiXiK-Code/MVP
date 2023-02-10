@@ -41,7 +41,7 @@ namespace MVP.Date.Repository
                     {
                         proj.archive = "Да";
                         proj.nowStage = "Проект в архиве";
-                        proj.actualFinishDate = DateTime.Now;
+                        proj.actualFinishDate = DateTime.Now.AddHours(-5);
                     }
                     else
                     {
@@ -52,7 +52,7 @@ namespace MVP.Date.Repository
                                 .FirstOrDefault(p => p.name == proj.nowStage)
                                 .stageId + 1)
                             ).name;
-                        proj.history = proj.history + $"\n{DateTime.Now} - Проект перешел в стадию {proj.nowStage}";
+                        proj.history = proj.history + $"\n{DateTime.Now.AddHours(-5)} - Проект перешел в стадию {proj.nowStage}";
                         _appDB.SaveChanges();
                     }
                 }
@@ -90,13 +90,13 @@ namespace MVP.Date.Repository
             string allStages)
         {
             Project project = _appDB.DBProject.FirstOrDefault(p => p.id == id);
-            if (arhive == "Да") project.actualFinishDate = DateTime.Now;
+            if (arhive == "Да") project.actualFinishDate = DateTime.Now.AddHours(-5);
             project.archive = arhive;
             project.link = link;
             project.supervisor = supervisor;
             project.priority = priority;
             project.allStages = allStages;
-            project.history += $"\n{DateTime.Now} - В проект внесли изменения";
+            project.history += $"\n{DateTime.Now.AddHours(-5)} - В проект внесли изменения";
             _appDB.SaveChanges();
         }
     }

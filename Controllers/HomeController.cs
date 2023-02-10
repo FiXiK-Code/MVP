@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MimeKit;
 using MVP.Date;
 using MVP.Date.Interfaces;
 using MVP.Date.Models;
@@ -23,8 +24,9 @@ namespace MVP.Controllers
         private readonly ILogistickTask _logistickTask;
         private readonly ILogisticProject _logistickProject;
         private readonly IStaff _staff;
+        private readonly IEmailService _emailService;
 
-        public HomeController(IPost post, IRole role,ITask task, IProject project, AppDB appDB, ILogistickTask logistick, IStaff staff, ILogisticProject logistickProject)
+        public HomeController(IPost post, IRole role,ITask task, IProject project, AppDB appDB, ILogistickTask logistick, IStaff staff, ILogisticProject logistickProject, IEmailService emailService)
         {
             _post = post;
             _role = role;
@@ -34,6 +36,7 @@ namespace MVP.Controllers
             _logistickTask = logistick;
             _staff = staff;
             _logistickProject = logistickProject;
+            _emailService = emailService;
         }
 
         public RedirectToActionResult RedactSatusTask(int id, string stat,int activTable, string staffTableFilter,
@@ -55,21 +58,21 @@ namespace MVP.Controllers
             //if (stat == "В работе") _task.timeWork(id);
             if(_task.GetTask(id).recipient != roleSession.SessionName && _task.GetTask(id).recipient != null)
             {
-                var msg = "Только одна задача может быть в работе! Проверьте статусы своих задачь!";
-                return RedirectToAction("TaskTable", new
-                {
-                    activTable = activTable,
-                    Taskid = id,
-                    meesage = msg,
-                    TaskRed = true,
-                    staffTableFilter = staffTableFilter,
-                    recipientProjectFilter = recipientProjectFilter,
-                    supervisorProjectFilter = supervisorProjectFilter,
-                    porjectFiltr = porjectFiltr,
-                    filterStaffTable = filterStaffTable
-                });
+                    var msg = "Нельзя менять статус чужих задач!";
+                    return RedirectToAction("TaskTable", new
+                    {
+                        activTable = activTable,
+                        Taskid = id,
+                        meesage = msg,
+                        TaskRed = true,
+                        staffTableFilter = staffTableFilter,
+                        recipientProjectFilter = recipientProjectFilter,
+                        supervisorProjectFilter = supervisorProjectFilter,
+                        porjectFiltr = porjectFiltr,
+                        filterStaffTable = filterStaffTable
+                    });
             }
-            if (!_task.redactStatusAsync(id, stat).Result)
+            if (!_task.redactStatusAsync(id, stat,roleSession.SessionName).Result)
             {
                 var msg = "Только одна задача может быть в работе! Проверьте статусы своих задачь!";
                 return RedirectToAction("TaskTable", new { activTable = activTable, Taskid = id, meesage = msg, TaskRed = true,
@@ -89,7 +92,7 @@ namespace MVP.Controllers
                 descTask = _appDB.DBTask.FirstOrDefault(p => p.id == id).desc,
                 supervisorId = _appDB.DBStaff.FirstOrDefault(p => p.name == supervisor).id,
                 resipienId = supervisor != null ? _appDB.DBStaff.FirstOrDefault(p => p.name == supervisor).id : -1,
-                dateRedaction = DateTime.Now,
+                dateRedaction = DateTime.Now.AddHours(-5),
                 planedTime = _appDB.DBTask.FirstOrDefault(p => p.id == id).plannedTime,
                 actualTime = new TimeSpan(),
                 CommitorId = _appDB.DBStaff.FirstOrDefault(p => p.name == roleSession.SessionName).id,
@@ -146,7 +149,7 @@ namespace MVP.Controllers
                 priority = priority,
                 allStages = allStages,
                 CommitorId = _appDB.DBStaff.FirstOrDefault(p => p.name == roleSession.SessionName).id,
-                dateRedaction = DateTime.Now,
+                dateRedaction = DateTime.Now.AddHours(-5),
                 comment = comment
             };
 
@@ -194,23 +197,28 @@ namespace MVP.Controllers
             }
 
             date = redackPriorAndPerenos(supervisor, date, plannedTime, _appDB.DBTask.FirstOrDefault(p => p.id == iid).projectCode, liteTask);
-            if (recipient != roleSession.SessionName && status == "В работе")
+
+            if (recipient != roleSession.SessionName && recipient != null)
             {
-                var msg = "Только одна задача может быть в работе! Проверьте статусы своих задачь!";
-                return RedirectToAction("TaskTable", new
+                if (status == "В работе" && recipient == _task.GetTask(iid).recipient)
                 {
-                    activTable = activTable,
-                    Taskid = iid,
-                    meesage = msg,
-                    TaskRed = true,
-                    staffTableFilter = staffTableFilter,
-                    recipientProjectFilter = recipientProjectFilter,
-                    supervisorProjectFilter = supervisorProjectFilter,
-                    porjectFiltr = porjectFiltr,
-                    filterStaffTable = filterStaffTable
-                });
+                    var msg = "Нельзя менять статус чужих задач!";
+                    return RedirectToAction("TaskTable", new
+                    {
+                        activTable = activTable,
+                        Taskid = iid,
+                        meesage = msg,
+                        TaskRed = true,
+                        staffTableFilter = staffTableFilter,
+                        recipientProjectFilter = recipientProjectFilter,
+                        supervisorProjectFilter = supervisorProjectFilter,
+                        porjectFiltr = porjectFiltr,
+                        filterStaffTable = filterStaffTable
+                    });
+                }
             }
-            if (!_task.redactToDB(liteTask, iid, date, dedline, status, comment != null ? $"{roleSession.SessionName}: {comment}\n" : null, supervisor, recipient, pririty, plannedTime, start, finish))
+
+            if (!_task.redactToDB(liteTask, iid, date, dedline, status, comment != null ? $"{roleSession.SessionName}: {comment}\n" : null, supervisor, recipient, pririty, plannedTime, start, finish, roleSession.SessionName))
             {
                 var msg = "Только одна задача может быть в работе! Проверьте статусы своих задачь!";
                 return RedirectToAction("TaskTable", new { activTable = activTable, Taskid = iid, meesage = msg, TaskRed = true,
@@ -235,7 +243,7 @@ namespace MVP.Controllers
                     descTask = _appDB.DBTask.FirstOrDefault(p => p.id == iid).desc,
                     supervisorId = _appDB.DBStaff.FirstOrDefault(p => p.name == supervisor).id,
                     resipienId = supervisor != null ? _appDB.DBStaff.FirstOrDefault(p => p.name == supervisor).id : -1,
-                    dateRedaction = DateTime.Now,
+                    dateRedaction = DateTime.Now.AddHours(-5),
                     planedTime = plannedTime,
                     actualTime = _appDB.DBTask.FirstOrDefault(p => p.id == iid).actualTime,
                     CommitorId = _appDB.DBStaff.FirstOrDefault(p => p.name == roleSession.SessionName).id,
@@ -289,14 +297,14 @@ namespace MVP.Controllers
                 name = name,
                 shortName = shortName,
                 priority = priority,
-                dateStart = DateTime.Now,
+                dateStart = DateTime.Now.AddHours(-5),
                 plannedFinishDate = plannedFinishDate,
                 supervisor = supervisor,
                 link = link,
                 archive = "Нет",
                 nowStage = allStages == null? "" : allStages.Split(',')[0],
                 allStages = allStages,
-                history = $"{DateTime.Now} - Проект создан"
+                history = $"{DateTime.Now.AddHours(-5)} - Проект создан"
             };
 
             LogisticProject log = new LogisticProject()
@@ -308,7 +316,7 @@ namespace MVP.Controllers
                 priority = priority,
                 allStages = allStages,
                 CommitorId = _appDB.DBStaff.FirstOrDefault(p => p.name == roleSession.SessionName).id,
-                dateRedaction = DateTime.Now,
+                dateRedaction = DateTime.Now.AddHours(-5),
                 comment = "Проект создан"
             };
             _logistickProject.addToDB(log);
@@ -351,7 +359,7 @@ namespace MVP.Controllers
                             _task.redactToDB(liteTask, task.id,
                                     redackPriorAndPerenos(task.supervisor, task.date.AddDays(1),task.plannedTime,
                                         task.projectCode, task.liteTask == false ? "Задача" : "Вне очереди"), task.dedline,
-                               task.status, task.comment,task.supervisor, task.recipient, task.priority, task.plannedTime, task.start, task.finish);
+                               task.status, task.comment,task.supervisor, task.recipient, task.priority, task.plannedTime, task.start, task.finish, "");
 
                             var tasksSupernew = _appDB.DBTask.Where(p => (p.supervisor == supervisor && p.recipient == null) || p.recipient == supervisor)
                                 .Where(p => p.status != "Выполнена").Where(p => p.date.Date == date.Date).OrderBy(p => p.plannedTime).ToList();
@@ -369,7 +377,7 @@ namespace MVP.Controllers
                         {
                             _task.redactToDB(liteTask, task.id, redackPriorAndPerenos(task.supervisor, task.date.AddDays(1), task.plannedTime,
                                         task.projectCode, task.liteTask == false ? "Задача" : "Вне очереди"), task.dedline, task.status, task.comment,
-                               task.supervisor, task.recipient, task.priority, task.plannedTime, task.start, task.finish);
+                               task.supervisor, task.recipient, task.priority, task.plannedTime, task.start, task.finish, "");
                             
                             var tasksSupernew = _appDB.DBTask.Where(p => (p.supervisor == supervisor && p.recipient == null) || p.recipient == supervisor)
                                 .Where(p => p.status != "Выполнена").Where(p => p.date.Date == date.Date).OrderBy(p => p.plannedTime).ToList();
@@ -421,6 +429,8 @@ namespace MVP.Controllers
             {
                 return RedirectToAction("Index", "Login");
             }
+
+            
 
             try
             {
@@ -487,7 +497,7 @@ namespace MVP.Controllers
                 descTask = _appDB.DBTask.FirstOrDefault(p => p.id == iid).desc,
                 supervisorId = _appDB.DBStaff.FirstOrDefault(p => p.name == supervisor).id,
                 resipienId = supervisor != null ? _appDB.DBStaff.FirstOrDefault(p => p.name == supervisor).id : -1,
-                dateRedaction = DateTime.Now,
+                dateRedaction = DateTime.Now.AddHours(-5),
                 planedTime = plannedTime,
                 actualTime = new TimeSpan(),
                 CommitorId = _appDB.DBStaff.FirstOrDefault(p => p.name == roleSession.SessionName).id,
@@ -496,6 +506,9 @@ namespace MVP.Controllers
             };
             _logistickTask.addToDB(log);
 
+            //var message = new Message(new string[]
+            //    { "tailedstory@yandex.ru"}, "Tema yandex", "content yandex");
+            //_emailService.SendEmail(message);
 
             return RedirectToAction("TaskTable", new { activTable = activTable, staffTableFilter = staffTableFilter, 
                 recipientProjectFilter= recipientProjectFilter,

@@ -24,8 +24,9 @@ namespace MVP.Date.Interfaces
             int pririty,
             TimeSpan plannedTime,
             DateTime start,
-            DateTime finish);
-        Task<bool> redactStatusAsync(int id, string stat);
+            DateTime finish,
+            string session);
+        Task<bool> redactStatusAsync(int id, string stat, string session);
 
         Task timeWork(int idTask);
         public void bridge(int id);

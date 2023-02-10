@@ -31,7 +31,7 @@
         bool redact = ViewBag.Role != "Сотрудник" ? Model.roles.FirstOrDefault(p => p.name == ViewBag.Role).recipient.Split(',').ToList().Contains(taskSuperRole) : false;
     }
 
-    @if ((Model.redactedTask.date.Date >= DateTime.Now.Date && ViewBag.RoleName == Model.redactedTask.creator) || (redact && Model.redactedTask.creator == null))
+    @if ((Model.redactedTask.date.Date >= DateTime.Now.AddHours(-5).Date && ViewBag.RoleName == Model.redactedTask.creator) || (redact && Model.redactedTask.creator == null))
     {<label>Дата</label>
         <input name="date" asp-for="@Model.redactedTask.date" type="date" class="form-control">
     }

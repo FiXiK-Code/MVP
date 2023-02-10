@@ -11,7 +11,7 @@
         <option asp-for="liteTask">Задача вне очереди</option>
     </select>
 
-    @{ Model.nullTask.date = DateTime.Now.Date;}
+    @{ Model.nullTask.date = DateTime.Now.AddHours(-5).Date;}
     <label>Дата</label>
     <input name="date" asp-for="@Model.nullTask.date" type="date" class="form-control" />
 
@@ -151,7 +151,7 @@
         }
     </select>
 
-    @{ Model.nullTask.dedline = DateTime.Now.Date;}
+    @{ Model.nullTask.dedline = DateTime.Now.AddHours(-5).Date;}
     <label>Дедлайн</label>
     <input name="dedline" asp-for="@Model.nullTask.dedline"  class="form-control" />
 

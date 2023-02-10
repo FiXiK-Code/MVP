@@ -30,7 +30,7 @@
             for (int j = 0; j < Taskss.Count(); j++)
             {
                 if (j + 1 != Taskss.Count() && Taskss[j].date.Date == Taskss[j + 1].date.Date) continue;
-                if (Model.staffNames.Contains(Taskss[j].supervisor) && Taskss[j].supervisor != ViewBag.RoleName && Taskss[j].recipient != null) continue;
+                //if (Model.staffNames.Contains(Taskss[j].supervisor) && Taskss[j].supervisor != ViewBag.RoleName && Taskss[j].recipient != null) continue;
                 if (Taskss[j].supervisor == ViewBag.RoleName && Taskss[j].recipient == null) continue;
                 <tr id="finish-task">
                     <th colspan="2">@Taskss[j].date.Date.ToString(@"dd\.MM\.yyyy")</th>
@@ -85,7 +85,7 @@
                 <th colspan="@(Model.staffsTable.Count()+2)" style="text-align:left ;background-color:#cccccc">Задачи на сегодня</th>
             </tr>
             List<Tasks> Taskss = Model.task4Table.Where(p => (p.recipient != ViewBag.RoleName && p.recipient != null) || (p.supervisor == ViewBag.RoleName && p.recipient != null)
-            || (p.supervisor != ViewBag.RoleName && p.recipient != ViewBag.RoleName && p.recipient != ViewBag.RoleName)).Where(p => p.date.Date <= DateTime.Now.Date).Where(p => p.status != "Выполнена").OrderBy(p => p.date.Date).ToList();
+            || (p.supervisor != ViewBag.RoleName && p.recipient != ViewBag.RoleName && p.recipient != ViewBag.RoleName)).Where(p => p.date.Date <= DateTime.Now.AddHours(-5).Date).Where(p => p.status != "Выполнена").OrderBy(p => p.date.Date).ToList();
             for (int j = 0; j < Taskss.Count(); j++)
             {
                 if (j + 1 != Taskss.Count() && Taskss[j].date.Date == Taskss[j + 1].date.Date) continue;
@@ -144,7 +144,7 @@
                 <th colspan="@(Model.staffsTable.Count()+2)" style="text-align:left ;background-color:#cccccc">Предстоящие задачи</th>
             </tr>
             List<Tasks> Taskss = Model.task4Table.Where(p => (p.recipient != ViewBag.RoleName && p.recipient != null) || (p.supervisor == ViewBag.RoleName && p.recipient != null)
-            || (p.supervisor != ViewBag.RoleName && p.recipient != ViewBag.RoleName && p.recipient != ViewBag.RoleName)).Where(p => p.date.Date > DateTime.Now.Date).Where(p => p.status != "Выполнена").OrderBy(p => p.date.Date).ToList();
+            || (p.supervisor != ViewBag.RoleName && p.recipient != ViewBag.RoleName && p.recipient != ViewBag.RoleName)).Where(p => p.date.Date > DateTime.Now.AddHours(-5).Date).Where(p => p.status != "Выполнена").OrderBy(p => p.date.Date).ToList();
             for (int j = 0; j < Taskss.Count(); j++)
             {
                 if (j + 1 != Taskss.Count() && Taskss[j].date.Date == Taskss[j + 1].date.Date) continue;

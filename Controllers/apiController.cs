@@ -66,7 +66,7 @@ namespace MVP.Controllers
                             _task.redactToDB(liteTask, task.id,
                                     redackPriorAndPerenos(task.supervisor, task.date.AddDays(1), task.plannedTime,
                                         task.projectCode, task.liteTask == false ? "Задача" : "Вне очереди"), task.dedline,
-                               task.status, task.comment, task.supervisor, task.recipient, task.priority, task.plannedTime, task.start, task.finish);
+                               task.status, task.comment, task.supervisor, task.recipient, task.priority, task.plannedTime, task.start, task.finish, "");
 
                             var tasksSupernew = _appDB.DBTask.Where(p => (p.supervisor == supervisor && p.recipient == null) || p.recipient == supervisor)
                                 .Where(p => p.status != "Выполнена").Where(p => p.date.Date == date.Date).OrderBy(p => p.plannedTime).ToList();
@@ -84,7 +84,7 @@ namespace MVP.Controllers
                         {
                             _task.redactToDB(liteTask, task.id, redackPriorAndPerenos(task.supervisor, task.date.AddDays(1), task.plannedTime,
                                         task.projectCode, task.liteTask == false ? "Задача" : "Вне очереди"), task.dedline, task.status, task.comment,
-                               task.supervisor, task.recipient, task.priority, task.plannedTime, task.start, task.finish);
+                               task.supervisor, task.recipient, task.priority, task.plannedTime, task.start, task.finish,"");
 
                             var tasksSupernew = _appDB.DBTask.Where(p => (p.supervisor == supervisor && p.recipient == null) || p.recipient == supervisor)
                                 .Where(p => p.status != "Выполнена").Where(p => p.date.Date == date.Date).OrderBy(p => p.plannedTime).ToList();
@@ -297,7 +297,7 @@ namespace MVP.Controllers
             date = redackPriorAndPerenos(supervisor, date, plannedTime, _appDB.DBTask.FirstOrDefault(p => p.id == iid).projectCode, liteTask);
 
             // попытка редактирования задачи
-            if (!_task.redactToDB(liteTask, iid, date, dedline, status, comment != null ? $"{roleSession.SessionName}: {comment}\n" : null, supervisor, recipient, pririty, plannedTime, start, finish))
+            if (!_task.redactToDB(liteTask, iid, date, dedline, status, comment != null ? $"{roleSession.SessionName}: {comment}\n" : null, supervisor, recipient, pririty, plannedTime, start, finish,roleSession.SessionName))
             {
                 var msg = "Только одна задача может быть в работе! Проверьте статусы своих задачь!";
                 return new JsonResult(msg);////////////////
