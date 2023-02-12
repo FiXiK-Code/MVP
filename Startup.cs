@@ -14,6 +14,9 @@ using MVP.Date.Models;
 using Task = MVP.Date.Models.Tasks;
 using TaskStatus = MVP.Date.Models.TaskStatus;
 using MVP.Date.Repository;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace MVP
 {
@@ -26,12 +29,23 @@ namespace MVP
         }
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidIssuer = "ValidIssuer",
+                    ValidAudience = "ValidateAudience",
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("IssuerSigningSecretKey")),
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ClockSkew = TimeSpan.Zero
+                };
+            });
 
-            services.AddDbContextPool<AppDB>(
-                    options =>
-                    {
-                        options.UseMySql($"server=db;userid=root;pwd=root;port=3306;database=mvp");
-                    });
+           
 
             var config = _config.GetSection("EmailConfiguration").Get<EmailConfig>();
             services.AddSingleton(config);
@@ -51,6 +65,12 @@ namespace MVP
             services.AddTransient<ILogistickTask, LogistickTaskRep>();
             services.AddTransient<ILogisticProject, LogistickProjectRep>();
 
+            services.AddDbContextPool<AppDB>(
+                   options =>
+                   {
+                       options.UseMySql($"server=localhost;userid=root;pwd=root;port=3306;database=mvp");
+                   });
+
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddMvc(option => option.EnableEndpointRouting = false);
@@ -67,6 +87,9 @@ namespace MVP
             
 
             app.UseSession();
+
+
+            app.UseAuthentication();
 
             context.Database.Migrate();
             app.UseRouting();
