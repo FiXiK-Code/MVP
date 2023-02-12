@@ -57,9 +57,9 @@ namespace MVP.Controllers
 
         [Route("token")]
         [HttpPost]
-        public async Task<IActionResult> Token([FromBody] IdentityPerson person)
+        public async Task<IActionResult> Token([FromBody] IdentityPerson person)// генерация токена
         {
-            var identity = await GetIdentity(person.UserName, person.Password);
+            var identity = await GetIdentity(person.UserName, person.Password); // проверка на авторизацию 
             if (identity == null)
             {
                 return Unauthorized();
@@ -77,6 +77,7 @@ namespace MVP.Controllers
 
             return Ok(encodedJwt);
         }
+        // функция проверки
         private async Task<IReadOnlyCollection<Claim>> GetIdentity(string userName, string password)
         {
             List<Claim> claims = null;
@@ -96,7 +97,7 @@ namespace MVP.Controllers
             return claims;
         }
 
-
+        // редактирование даты постановки задачи в зависимоти от загруженности для
         public DateTime redackPriorAndPerenos(string supervisor, DateTime date, TimeSpan plannedTime, string projectCode, string liteTask)// перенос даты задачи в зависимотсти от загруженности дня и приоритета
         {
             var tasksSuper = _appDB.DBTask.Where(p => (p.supervisor == supervisor && p.recipient == null) || p.recipient == supervisor)
@@ -296,6 +297,7 @@ namespace MVP.Controllers
             return new JsonResult("Задача добавлена!");
         }
 
+        //[Authorize]
         [HttpPut]
         public JsonResult PutTasks
             ([FromQuery] TasksParameters TaskParam)// обновляет задачу
@@ -329,7 +331,7 @@ namespace MVP.Controllers
                 var msg = "Только одна задача может быть в работе! Проверьте статусы своих задачь!";
                 return new JsonResult(msg);////////////////
             }
-            else
+            else // при успешном редактировании ->
             {
                 // проверка перехода проекта в следующую стадию
                 var projCod = _appDB.DBTask.FirstOrDefault(p => p.id == TaskParam.id).projectCode;
@@ -359,23 +361,26 @@ namespace MVP.Controllers
         }
 
         //////// ????
-        [HttpDelete]
-        public JsonResult DeleteTasks()// удаляет задачу???
-        {
-            return new JsonResult("");
-        }
+        //[Authorize]
+        //[HttpDelete]
+        //public JsonResult DeleteTasks()// удаляет задачу???
+        //{
+        //    return new JsonResult("");
+        //}
 
+        //[Authorize]
         [HttpGet]
-        public JsonResult GetSearch(string param)// поиск чего?
+        public JsonResult GetSearch(string param)// поиск по описанию задачи - возвраащет список задач в которых описание содержит передаваемый текст
         {
             return new JsonResult(_appDB.DBTask.Where(p => p.desc.Contains(param)).ToList());
         }
 
         ////////// projects
+        //[Authorize]
         [HttpGet]
         public JsonResult GetProjects([FromQuery] ProjectParameters ProjParam)// список проектов + 2 фильтра: в архиве или текущие, все гипы или выборочно, если есть id - выдает инф по проекту
         {
-
+            // проверка сесии
             var roleSession = new SessionRoles();
             var sessionCod = "";
             try
@@ -396,12 +401,14 @@ namespace MVP.Controllers
 
             if (ProjParam.id != -1)
             {
+                // возвращает инфу по id проекта
                 return new JsonResult(_project.GetProject(ProjParam.id));
             }
             else
             {
                 var projects = _project.AllProjects;
 
+                // фильтрация архивных проектов
                 foreach (var filter in ProjParam.filterProj.Split(','))
                 {
                     if (filter == "Проекты в архиве")
@@ -414,7 +421,7 @@ namespace MVP.Controllers
                     }
                 }
 
-
+                // фильтрация по ответсвенному за проекты
                 foreach (var filter in ProjParam.supervisorFilter.Split(','))
                 {
                     if (filter != "Все ГИПы" && filter != "")
@@ -425,6 +432,7 @@ namespace MVP.Controllers
 
                 ProjectTableReturnModels output = new ProjectTableReturnModels
                 {
+                    // проекты
                     projects = projects.ToList(),
                     // задачи на чегодня
                     today = _task.AllTasks.Where(p => p.status != "Выполнена").Where(p => p.date.Date <= DateTime.Now.Date).OrderBy(p => p.date.Date).OrderBy(p => p.priority).ToList(),
@@ -441,6 +449,7 @@ namespace MVP.Controllers
             }
         }
 
+        //[Authorize]
         [HttpGet]
         public JsonResult GetEmployees([FromQuery] StaffParameters StaffParam)// список сотрудников
         {
@@ -463,6 +472,7 @@ namespace MVP.Controllers
                 return new JsonResult("Не авторизованный запрос!");////////////////
             }
 
+            // списка сотрудников без фильтрации
             if (StaffParam.filterStaff == "")
             {
                 List<string> staffNames = new List<string>();
@@ -476,6 +486,7 @@ namespace MVP.Controllers
 
                 StaffTableReturnModels output = new StaffTableReturnModels
                 {
+                    // список сотрудников
                     staffs = _staff.StaffTable(roleSession.SessionRole, sessionCod).ToList(),
                     // задачи на чегодня
                     today = tasksTabbleFilter.Where(p => p.status != "Выполнена").Where(p => p.date.Date <= DateTime.Now.Date).OrderBy(p => p.date.Date).OrderBy(p => p.priority).ToList(),
@@ -491,7 +502,7 @@ namespace MVP.Controllers
                 // возвращает список сотрудников в подчинении у залогиненного пользователя
                 return new JsonResult(output);
             }
-            // возвращает всех сотрудников
+            // список сотрудников с фильтром по должности
             else
             {
                 var StaffTable = _staff.StaffTable(roleSession.SessionRole, sessionCod);
