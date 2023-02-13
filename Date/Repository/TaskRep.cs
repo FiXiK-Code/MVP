@@ -194,7 +194,7 @@ namespace MVP.Date.Repository
         public List<Tasks> GetMoreTasks(List<string> staffNames, SessionRoles roleSession, string filterTable ="", bool TaskTable = false)
         {
             List<Tasks> tasksTabbleFilter = new List<Tasks>();
-            if (!TaskTable) tasksTabbleFilter = AllTasks.Where(p => (staffNames.Contains(p.supervisor) || staffNames.Contains(p.recipient))).ToList();
+            if (!TaskTable) tasksTabbleFilter = AllTasks.Where(p => staffNames.Contains(p.supervisor) || staffNames.Contains(p.recipient)).ToList();
 
             else tasksTabbleFilter = AllTasks.Where(p => (staffNames.Contains(p.supervisor) || staffNames.Contains(p.recipient))
                                     || (p.supervisor == roleSession.SessionName || p.recipient == roleSession.SessionName)).ToList();

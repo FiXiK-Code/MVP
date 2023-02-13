@@ -22,7 +22,7 @@ namespace MVP.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-   
+
     public class ApiController : Controller
     {
         private readonly AppDB _appDB;
@@ -57,9 +57,9 @@ namespace MVP.Controllers
 
         [Route("token")]
         [HttpPost]
-        public async Task<IActionResult> Token([FromBody] IdentityPerson person)// генерация токена
+        public IActionResult Token([FromBody] IdentityPerson person)// генерация токена
         {
-            var identity = await GetIdentity(person.UserName, person.Password); // проверка на авторизацию 
+            var identity = GetIdentity(person.UserName, person.Password); // проверка на авторизацию 
             if (identity == null)
             {
                 return Unauthorized();
@@ -70,31 +70,44 @@ namespace MVP.Controllers
                     issuer: AuthOptions.ISSUER,
                     audience: AuthOptions.AUDIENCE,
                     notBefore: now,
-                    claims: identity,
+                    claims: identity.Claims,
                     expires: now.Add(TimeSpan.FromMinutes(480)),
                     signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
 
-            return Ok(encodedJwt);
+            var response = new
+            {
+                access_token = encodedJwt,
+                username = identity.Name
+            };
+
+            return Ok(response);
         }
         // функция проверки
-        private async Task<IReadOnlyCollection<Claim>> GetIdentity(string userName, string password)
+        private ClaimsIdentity GetIdentity(string userName, string password)
         {
             List<Claim> claims = null;
             var user = _appDB.DBStaff.FirstOrDefault(p => p.name == userName && p.passvord == password);
             if (user != null)
             {
-               // var sha256 = new SHA256Managed();
-               // var passwordHash = Convert.ToBase64String(sha256.ComputeHash(Encoding.UTF8.GetBytes(password)));
+                // var sha256 = new SHA256Managed();
+                // var passwordHash = Convert.ToBase64String(sha256.ComputeHash(Encoding.UTF8.GetBytes(password)));
                 if (password == user.passvord)
                 {
                     claims = new List<Claim>
-                    { 
+                    {
                         new Claim(ClaimsIdentity.DefaultNameClaimType, _appDB.DBStaff.FirstOrDefault(p => p.name == userName).login),
+                        new Claim(ClaimsIdentity.DefaultRoleClaimType, _appDB.DBStaff.FirstOrDefault(p => p.name == userName).roleCod)
+
+                        //new Claim(ClaimsIdentity.DefaultNameClaimType, _appDB.DBStaff.FirstOrDefault(p => p.name == userName).login),
                     };
                 }
+                ClaimsIdentity claimsIdentity =
+                new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
+                   ClaimsIdentity.DefaultRoleClaimType);
+                return claimsIdentity;
             }
-            return claims;
+            return null;
         }
 
         // редактирование даты постановки задачи в зависимоти от загруженности для
@@ -144,7 +157,7 @@ namespace MVP.Controllers
                         {
                             _task.redactToDB(liteTask, task.id, redackPriorAndPerenos(task.supervisor, task.date.AddDays(1), task.plannedTime,
                                         task.projectCode, task.liteTask == false ? "Задача" : "Вне очереди"), task.dedline, task.status, task.comment,
-                               task.supervisor, task.recipient, task.priority, task.plannedTime, task.start, task.finish,"");
+                               task.supervisor, task.recipient, task.priority, task.plannedTime, task.start, task.finish, "");
 
                             var tasksSupernew = _appDB.DBTask.Where(p => (p.supervisor == supervisor && p.recipient == null) || p.recipient == supervisor)
                                 .Where(p => p.status != "Выполнена").Where(p => p.date.Date == date.Date).OrderBy(p => p.plannedTime).ToList();
@@ -168,13 +181,14 @@ namespace MVP.Controllers
         }
 
         ////////// tasks
-        //[Authorize]
+        [Authorize]
         [HttpGet]
         public JsonResult GetTasks([FromQuery] TasksParameters TaskParam)// выдает все задачи определенного сотрудника, либо если есть - по фильтру; если есть id - выдает инф по задаче
-        { 
-            if (TaskParam.id != -1) 
+        {
+            if (TaskParam.id != -1)
             {
-                return new JsonResult(JsonConvert.SerializeObject(_task.GetTask(TaskParam)));
+                return new JsonResult(new ObjectResult(JsonConvert.SerializeObject(_task.GetTask(TaskParam))) { StatusCode = 200 });
+                //return new JsonResult(JsonConvert.SerializeObject(_task.GetTask(TaskParam)));
             }
             else
             {
@@ -183,18 +197,20 @@ namespace MVP.Controllers
                 var sessionCod = "";
                 try
                 {
-                    var post = _appDB.DBStaff.FirstOrDefault(p => p.name == TaskParam.personName).post;
-                    var roleId = _appDB.DBPost.FirstOrDefault(p => p.name == post).roleCod;
+                    var person = _appDB.DBStaff.FirstOrDefault(p => p.login == User.Identity.Name);
+
+                    var post = person.post;
+                    var roleCod = _appDB.DBPost.FirstOrDefault(p => p.name == post).roleCod;
                     var sessionInit = new SessionRoles()
                     {
-                        SessionName = _appDB.DBStaff.FirstOrDefault(p => p.name == TaskParam.personName).name,
-                        SessionRole = _appDB.DBRole.FirstOrDefault(p => p.code == roleId).name
+                        SessionName = person.name,
+                        SessionRole = _appDB.DBRole.FirstOrDefault(p => p.code == roleCod).name
                     };
-                    sessionCod = _appDB.DBStaff.FirstOrDefault(p => p.name == roleSession.SessionName).code;
+                    sessionCod = person.code;
                 }
                 catch (Exception)
                 {
-                    return new JsonResult("Не авторизованный запрос!");////////////////
+                    return new JsonResult(new ObjectResult("Не авторизованный запрос!") { StatusCode = 400 });////////////////
                 }
 
                 // составление списка сотрудников в подчинениии у того кто вошел в сессию
@@ -222,12 +238,12 @@ namespace MVP.Controllers
 
                 };
 
-                return new JsonResult(JsonConvert.SerializeObject(output));
+                return new JsonResult(new ObjectResult(JsonConvert.SerializeObject(output)) { StatusCode = 200 });
             }
-            
+
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpPost]
         public JsonResult PostTasks
             ([FromQuery] TasksParameters TaskParam)//добавляет задачу в базу
@@ -237,18 +253,21 @@ namespace MVP.Controllers
             var sessionCod = "";
             try
             {
-                var post = _appDB.DBStaff.FirstOrDefault(p => p.name == TaskParam.personName).post;
-                var roleId = _appDB.DBPost.FirstOrDefault(p => p.name == post).roleCod;
+                var person = _appDB.DBStaff.FirstOrDefault(p => p.login == User.Identity.Name);
+
+                var post = person.post;
+                var roleCod = _appDB.DBPost.FirstOrDefault(p => p.name == post).roleCod;
                 var sessionInit = new SessionRoles()
                 {
-                    SessionName = _appDB.DBStaff.FirstOrDefault(p => p.name == TaskParam.personName).name,
-                    SessionRole = _appDB.DBRole.FirstOrDefault(p => p.code == roleId).name
+                    SessionName = person.name,
+                    SessionRole = _appDB.DBRole.FirstOrDefault(p => p.code == roleCod).name
                 };
-                sessionCod = _appDB.DBStaff.FirstOrDefault(p => p.name == roleSession.SessionName).code;
+                sessionCod = person.code;
             }
             catch (Exception)
             {
-                return new JsonResult("Не авторизованный запрос!");////////////////
+                return new JsonResult(new ObjectResult("Не авторизованный запрос!") { StatusCode = 400 });
+                //return new JsonResult("Не авторизованный запрос!");////////////////
             }
 
             // корректировка даты - автоперенос при заполненном дне
@@ -276,12 +295,12 @@ namespace MVP.Controllers
             _task.addToDB(item);
 
             // заполнение лога
-            var iid = _appDB.DBTask.FirstOrDefault(p => p.desc == TaskParam.desc).id;
+            var task = _appDB.DBTask.FirstOrDefault(p => p.desc == TaskParam.desc);
             LogistickTask log = new LogistickTask()
             {
-                ProjectCode = _appDB.DBTask.FirstOrDefault(p => p.id == iid).projectCode,
-                TaskId = iid,
-                descTask = _appDB.DBTask.FirstOrDefault(p => p.id == iid).desc,
+                ProjectCode = task.projectCode,
+                TaskId = task.id,
+                descTask = task.desc,
                 supervisorId = _appDB.DBStaff.FirstOrDefault(p => p.name == TaskParam.supervisor).id,
                 resipienId = TaskParam.supervisor != null ? _appDB.DBStaff.FirstOrDefault(p => p.name == TaskParam.supervisor).id : -1,
                 dateRedaction = DateTime.Now,
@@ -294,10 +313,10 @@ namespace MVP.Controllers
             _logistickTask.addToDB(log);
 
 
-            return new JsonResult("Задача добавлена!");
+            return new JsonResult(new ObjectResult("Задача добавлена!") { StatusCode = 200 });
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpPut]
         public JsonResult PutTasks
             ([FromQuery] TasksParameters TaskParam)// обновляет задачу
@@ -308,28 +327,31 @@ namespace MVP.Controllers
             var sessionCod = "";
             try
             {
-                var post = _appDB.DBStaff.FirstOrDefault(p => p.name == TaskParam.personName).post;
-                var roleId = _appDB.DBPost.FirstOrDefault(p => p.name == post).roleCod;
+                var person = _appDB.DBStaff.FirstOrDefault(p => p.login == User.Identity.Name);
+
+                var post = person.post;
+                var roleCod = _appDB.DBPost.FirstOrDefault(p => p.name == post).roleCod;
                 var sessionInit = new SessionRoles()
                 {
-                    SessionName = _appDB.DBStaff.FirstOrDefault(p => p.name == TaskParam.personName).name,
-                    SessionRole = _appDB.DBRole.FirstOrDefault(p => p.code == roleId).name
+                    SessionName = person.name,
+                    SessionRole = _appDB.DBRole.FirstOrDefault(p => p.code == roleCod).name
                 };
-                sessionCod = _appDB.DBStaff.FirstOrDefault(p => p.name == roleSession.SessionName).code;
+                sessionCod = person.code;
             }
             catch (Exception)
             {
-                return new JsonResult("Не авторизованный запрос!");////////////////
+                return new JsonResult(new ObjectResult("Не авторизованный запрос!") { StatusCode = 400 });
+                //return new JsonResult("Не авторизованный запрос!");////////////////
             }
 
             // корректировка даты - автоперенос при заполненном дне
             TaskParam.date = redackPriorAndPerenos(TaskParam.supervisor, TaskParam.date, TaskParam.plannedTime, _appDB.DBTask.FirstOrDefault(p => p.id == TaskParam.id).projectCode, TaskParam.liteTask);
 
             // попытка редактирования задачи
-            if (!_task.redactToDB(TaskParam.liteTask, TaskParam.id, TaskParam.date, TaskParam.dedline, TaskParam.status, TaskParam.comment != null ? $"{roleSession.SessionName}: {TaskParam.comment}\n" : null, TaskParam.supervisor, TaskParam.recipient,TaskParam. pririty, TaskParam.plannedTime, TaskParam.start, TaskParam.finish, roleSession.SessionName))
+            if (!_task.redactToDB(TaskParam.liteTask, TaskParam.id, TaskParam.date, TaskParam.dedline, TaskParam.status, TaskParam.comment != null ? $"{roleSession.SessionName}: {TaskParam.comment}\n" : null, TaskParam.supervisor, TaskParam.recipient, TaskParam.pririty, TaskParam.plannedTime, TaskParam.start, TaskParam.finish, roleSession.SessionName))
             {
                 var msg = "Только одна задача может быть в работе! Проверьте статусы своих задачь!";
-                return new JsonResult(msg);////////////////
+                return new JsonResult(new ObjectResult(msg) { StatusCode = 400 });////////////////
             }
             else // при успешном редактировании ->
             {
@@ -356,27 +378,65 @@ namespace MVP.Controllers
                 _logistickTask.addToDB(item);
 
 
-                return new JsonResult("Задача успешно обновлена!");
+                return new JsonResult(new ObjectResult("Задача успешно обновлена!") { StatusCode = 200 });
             }
         }
 
-        //////// ????
-        //[Authorize]
-        //[HttpDelete]
-        //public JsonResult DeleteTasks()// удаляет задачу???
-        //{
-        //    return new JsonResult("");
-        //}
 
-        //[Authorize]
-        [HttpGet]
+        [Authorize]
+        [HttpPut]
+        public JsonResult PutTasksStatus
+            ([FromQuery] TasksParameters TaskParam)// обновляет задачу
+        {
+            if (TaskParam.status == "В работе") _task.timeWork(TaskParam.id, _task);
+            var person = _appDB.DBStaff.FirstOrDefault(p => p.login == User.Identity.Name);
+            if (_task.GetTask(TaskParam).recipient != person.name && _task.GetTask(TaskParam).recipient != null)
+            {
+                var msg = "Нельзя менять статус чужих задач!";
+                return new JsonResult(new ObjectResult(msg) { StatusCode = 200 });
+            }
+            if (!_task.redactStatus(TaskParam.id, TaskParam.status, person.name))
+            {
+                var msg = "Только одна задача может быть в работе! Проверьте статусы своих задачь!";
+                return new JsonResult(new ObjectResult(msg) { StatusCode = 200 });
+            }
+
+            var supervisor = _appDB.DBTask.FirstOrDefault(p => p.id == TaskParam.id).supervisor;
+            LogistickTask item = new LogistickTask()
+            {
+                ProjectCode = _appDB.DBTask.FirstOrDefault(p => p.id == TaskParam.id).projectCode,
+                TaskId = TaskParam.id,
+                descTask = _appDB.DBTask.FirstOrDefault(p => p.id == TaskParam.id).desc,
+                supervisorId = _appDB.DBStaff.FirstOrDefault(p => p.name == supervisor).id,
+                resipienId = supervisor != null ? _appDB.DBStaff.FirstOrDefault(p => p.name == supervisor).id : -1,
+                dateRedaction = DateTime.Now.AddHours(-5),
+                planedTime = _appDB.DBTask.FirstOrDefault(p => p.id == TaskParam.id).plannedTime,
+                actualTime = new TimeSpan(),
+                CommitorId = _appDB.DBStaff.FirstOrDefault(p => p.name == person.name).id,
+                taskStatusId = _appDB.DBTaskStatus.FirstOrDefault(p => p.name == _appDB.DBTask.FirstOrDefault(p => p.id == TaskParam.id).status).id,
+                comment = $"Стату задачи изменен на: {TaskParam.status}"
+            };
+            _logistickTask.addToDB(item);
+
+            return new JsonResult(new ObjectResult("Статус успешно обновлен!") { StatusCode = 200 });
+        }
+            //////// ????
+            //[Authorize]
+            //[HttpDelete]
+            //public JsonResult DeleteTasks()// удаляет задачу???
+            //{
+            //    return new JsonResult("");
+            //}
+
+            //[Authorize]
+            [HttpGet]
         public JsonResult GetSearch(string param)// поиск по описанию задачи - возвраащет список задач в которых описание содержит передаваемый текст
         {
-            return new JsonResult(_appDB.DBTask.Where(p => p.desc.Contains(param)).ToList());
+            return new JsonResult(new ObjectResult(_appDB.DBTask.Where(p => p.desc.Contains(param)).ToList()) { StatusCode = 200 });
         }
 
         ////////// projects
-        //[Authorize]
+        [Authorize]
         [HttpGet]
         public JsonResult GetProjects([FromQuery] ProjectParameters ProjParam)// список проектов + 2 фильтра: в архиве или текущие, все гипы или выборочно, если есть id - выдает инф по проекту
         {
@@ -385,24 +445,27 @@ namespace MVP.Controllers
             var sessionCod = "";
             try
             {
-                var post = _appDB.DBStaff.FirstOrDefault(p => p.name == ProjParam.personName).post;
-                var roleId = _appDB.DBPost.FirstOrDefault(p => p.name == post).roleCod;
+                var person = _appDB.DBStaff.FirstOrDefault(p => p.login == User.Identity.Name);
+
+                var post = person.post;
+                var roleCod = _appDB.DBPost.FirstOrDefault(p => p.name == post).roleCod;
                 var sessionInit = new SessionRoles()
                 {
-                    SessionName = _appDB.DBStaff.FirstOrDefault(p => p.name == ProjParam.personName).name,
-                    SessionRole = _appDB.DBRole.FirstOrDefault(p => p.code == roleId).name
+                    SessionName = person.name,
+                    SessionRole = _appDB.DBRole.FirstOrDefault(p => p.code == roleCod).name
                 };
-                sessionCod = _appDB.DBStaff.FirstOrDefault(p => p.name == roleSession.SessionName).code;
+                sessionCod = person.code;
             }
             catch (Exception)
             {
-                return new JsonResult("Не авторизованный запрос!");////////////////
+                return new JsonResult(new ObjectResult("Не авторизованный запрос!") { StatusCode = 400 });
+                //return new JsonResult("Не авторизованный запрос!");////////////////
             }
 
             if (ProjParam.id != -1)
             {
                 // возвращает инфу по id проекта
-                return new JsonResult(_project.GetProject(ProjParam.id));
+                return new JsonResult(new ObjectResult(_project.GetProject(ProjParam.id)) { StatusCode = 200 });
             }
             else
             {
@@ -445,7 +508,7 @@ namespace MVP.Controllers
 
                 };
 
-                return new JsonResult(output);
+                return new JsonResult(new ObjectResult(output) { StatusCode = 200 });
             }
         }
 
@@ -458,18 +521,21 @@ namespace MVP.Controllers
             var sessionCod = "";
             try
             {
-                var post = _appDB.DBStaff.FirstOrDefault(p => p.name == StaffParam.personName).post;
-                var roleId = _appDB.DBPost.FirstOrDefault(p => p.name == post).roleCod;
+                var person = _appDB.DBStaff.FirstOrDefault(p => p.login == User.Identity.Name);
+
+                var post = person.post;
+                var roleCod = _appDB.DBPost.FirstOrDefault(p => p.name == post).roleCod;
                 var sessionInit = new SessionRoles()
                 {
-                    SessionName = _appDB.DBStaff.FirstOrDefault(p => p.name == StaffParam.personName).name,
-                    SessionRole = _appDB.DBRole.FirstOrDefault(p => p.code == roleId).name
+                    SessionName = person.name,
+                    SessionRole = _appDB.DBRole.FirstOrDefault(p => p.code == roleCod).name
                 };
-                sessionCod = _appDB.DBStaff.FirstOrDefault(p => p.name == roleSession.SessionName).code;
+                sessionCod = person.code;
             }
             catch (Exception)
             {
-                return new JsonResult("Не авторизованный запрос!");////////////////
+                return new JsonResult(new ObjectResult("Не авторизованный запрос!") { StatusCode = 400 });
+                //return new JsonResult("Не авторизованный запрос!");////////////////
             }
 
             // списка сотрудников без фильтрации
@@ -500,7 +566,7 @@ namespace MVP.Controllers
                 };
 
                 // возвращает список сотрудников в подчинении у залогиненного пользователя
-                return new JsonResult(output);
+                return new JsonResult(new ObjectResult(output) { StatusCode = 200 });
             }
             // список сотрудников с фильтром по должности
             else
@@ -540,8 +606,116 @@ namespace MVP.Controllers
                 };
 
                 // возвращает список сотрудников в подчинении у залогиненного пользователя
-                return new JsonResult(output);
+                return new JsonResult(new ObjectResult(output) { StatusCode = 200 });
             }
+        }
+
+        ///// project
+
+        //[Authorize]
+        [HttpPut]
+        public JsonResult PutProj
+            ([FromQuery] ProjectParameters ProjParam)// обновляет проект
+        {
+            var roleSession = new SessionRoles();
+            var sessionCod = "";
+            try
+            {
+                var person = _appDB.DBStaff.FirstOrDefault(p => p.login == User.Identity.Name);
+
+                var post = person.post;
+                var roleCod = _appDB.DBPost.FirstOrDefault(p => p.name == post).roleCod;
+                var sessionInit = new SessionRoles()
+                {
+                    SessionName = person.name,
+                    SessionRole = _appDB.DBRole.FirstOrDefault(p => p.code == roleCod).name
+                };
+                sessionCod = person.code;
+            }
+            catch (Exception)
+            {
+                return new JsonResult(new ObjectResult("Не авторизованный запрос!") { StatusCode = 400 });
+                //return new JsonResult("Не авторизованный запрос!");////////////////
+            }
+
+            _project.redactToDB(ProjParam.id, ProjParam.arhive, ProjParam.link, ProjParam.supervisor, ProjParam.priority, ProjParam.allStages);
+            LogisticProject item = new LogisticProject()
+            {
+                arhive = ProjParam.arhive,
+                projectId = ProjParam.id,
+                link = ProjParam.link,
+                supervisor = ProjParam.supervisor,
+                priority = ProjParam.priority,
+                allStages = ProjParam.allStages,
+                CommitorId = _appDB.DBStaff.FirstOrDefault(p => p.name == roleSession.SessionName).id,
+                dateRedaction = DateTime.Now.AddHours(-5),
+                comment = ProjParam.comment
+            };
+
+            _logistickProject.addToDB(item);
+
+            return new JsonResult(new ObjectResult("Проект успешно обновлен!") { StatusCode = 200 });
+        }
+
+        //[Authorize]
+        [HttpPost]
+        public JsonResult PostProj
+            ([FromQuery] ProjectParameters ProjParam)//добавляет проект в базу
+        {
+            var roleSession = new SessionRoles();
+            var sessionCod = "";
+            try
+            {
+                var person = _appDB.DBStaff.FirstOrDefault(p => p.login == User.Identity.Name);
+
+                var post = person.post;
+                var roleCod = _appDB.DBPost.FirstOrDefault(p => p.name == post).roleCod;
+                var sessionInit = new SessionRoles()
+                {
+                    SessionName = person.name,
+                    SessionRole = _appDB.DBRole.FirstOrDefault(p => p.code == roleCod).name
+                };
+                sessionCod = person.code;
+            }
+            catch (Exception)
+            {
+                return new JsonResult(new ObjectResult("Не авторизованный запрос!") { StatusCode = 400 });
+                //return new JsonResult("Не авторизованный запрос!");////////////////
+            }
+
+            var item = new Project
+            {
+                code = ProjParam.code,
+                name = ProjParam.name,
+                shortName = ProjParam.shortName,
+                priority = ProjParam.priority,
+                dateStart = DateTime.Now.AddHours(-5),
+                plannedFinishDate = ProjParam.plannedFinishDate,
+                supervisor = ProjParam.supervisor,
+                link = ProjParam.link,
+                archive = "Нет",
+                nowStage = ProjParam.allStages == null ? "" : ProjParam.allStages.Split(',')[0],
+                allStages = ProjParam.allStages,
+                history = $"{DateTime.Now.AddHours(-5)} - Проект создан"
+            };
+
+            LogisticProject log = new LogisticProject()
+            {
+                arhive = "Нет",
+                projectId = item.id,
+                link = ProjParam.link,
+                supervisor = ProjParam.supervisor,
+                priority = ProjParam.priority,
+                allStages = ProjParam.allStages,
+                CommitorId = _appDB.DBStaff.FirstOrDefault(p => p.name == roleSession.SessionName).id,
+                dateRedaction = DateTime.Now.AddHours(-5),
+                comment = "Проект создан"
+            };
+
+            _logistickProject.addToDB(log);
+            _project.addToDB(item);
+
+            return new JsonResult(new ObjectResult("Проект успешно добавлен!") { StatusCode = 200 });
         }
     }
 }

@@ -39,7 +39,11 @@ namespace MVP.Controllers
             _emailService = emailService;
         }
 
-        public RedirectToActionResult RedactSatusTask(int id, string stat,int activTable, string staffTableFilter,
+        public RedirectToActionResult RedactSatusTask(
+            int id, string stat,
+
+            int activTable,
+            string staffTableFilter,
             string recipientProjectFilter,
             string supervisorProjectFilter,
             string porjectFiltr,
@@ -119,6 +123,7 @@ namespace MVP.Controllers
             int priority,
             string allStages,
             string comment,
+
             int activTable,
             string staffTableFilter,
             string recipientProjectFilter,
@@ -273,6 +278,7 @@ namespace MVP.Controllers
             string shortName,
             string name,
             string allStages,
+
             int activTable,
             string staffTableFilter,
             string recipientProjectFilter,

@@ -8,16 +8,15 @@ namespace MVP.Date.API
     public class TasksParameters // насторить необходимые фильтры
     {
         public int id { get; set; } = -1;
-        public string personName { get; set; }
         public string filterTable { get; set; }
 
-        public string code { get; set; }
+        public string status { get; set; }
         public string desc { get; set; }
         public string projectCode { get; set; }
         public string supervisor { get; set; }
         public string recipient { get; set; }
         public string comment { get; set; }
-        public string status { get; set; }
+        
         public int pririty { get; set; }
         public TimeSpan plannedTime { get; set; }
         public DateTime date { get; set; }

@@ -32,16 +32,16 @@ namespace MVP
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
-                options.RequireHttpsMetadata = false;
-                options.SaveToken = true;
+                options.RequireHttpsMetadata = true;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidIssuer = "ValidIssuer",
-                    ValidAudience = "ValidateAudience",
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("IssuerSigningSecretKey")),
+                    ValidateIssuer = true,
+                    ValidIssuer = "MyAuthServer",
+                    ValidateAudience = true,
+                    ValidAudience = "MyAuthClient",
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("mysupersecret_secretkey!123")),
                     ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ClockSkew = TimeSpan.Zero
+                    ValidateIssuerSigningKey = true
                 };
             });
 
