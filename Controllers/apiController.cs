@@ -386,7 +386,7 @@ namespace MVP.Controllers
         [Authorize]
         [HttpPut]
         public JsonResult PutTasksStatus
-            ([FromQuery] TasksParameters TaskParam)// обновляет задачу
+            ([FromQuery] TasksParameters TaskParam)// обновляет статус задачи
         {
             if (TaskParam.status == "В работе") _task.timeWork(TaskParam.id, _task);
             var person = _appDB.DBStaff.FirstOrDefault(p => p.login == User.Identity.Name);
@@ -512,7 +512,7 @@ namespace MVP.Controllers
             }
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpGet]
         public JsonResult GetEmployees([FromQuery] StaffParameters StaffParam)// список сотрудников
         {
@@ -612,7 +612,7 @@ namespace MVP.Controllers
 
         ///// project
 
-        //[Authorize]
+        [Authorize]
         [HttpPut]
         public JsonResult PutProj
             ([FromQuery] ProjectParameters ProjParam)// обновляет проект
@@ -657,7 +657,7 @@ namespace MVP.Controllers
             return new JsonResult(new ObjectResult("Проект успешно обновлен!") { StatusCode = 200 });
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpPost]
         public JsonResult PostProj
             ([FromQuery] ProjectParameters ProjParam)//добавляет проект в базу
