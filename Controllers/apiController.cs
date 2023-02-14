@@ -410,7 +410,7 @@ namespace MVP.Controllers
                 return new JsonResult(new ObjectResult("Не авторизованный запрос!") { StatusCode = 401 });
                 //return new JsonResult("Не авторизованный запрос!");////////////////
             }
-            if (TaskParam.status == "В работе") _task.timeWork(TaskParam.id, _task);
+            //if (TaskParam.status == "В работе") _task.timeWork(TaskParam.id, _task);
             if (_task.GetTask(TaskParam).recipient != person.name && _task.GetTask(TaskParam).recipient != null)
             {
                 var msg = "Нельзя менять статус чужих задач!";

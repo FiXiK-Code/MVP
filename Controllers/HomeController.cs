@@ -59,23 +59,23 @@ namespace MVP.Controllers
             {
                 return RedirectToAction("Index", "Login");
             }
-            //if (stat == "В работе") _task.timeWork(id, _task);
-            //if(_task.GetTask(id).recipient != roleSession.SessionName && _task.GetTask(id).recipient != null)
-            //{
-            //        var msg = "Нельзя менять статус чужих задач!";
-            //        return RedirectToAction("TaskTable", new
-            //        {
-            //            activTable = activTable,
-            //            Taskid = id,
-            //            meesage = msg,
-            //            TaskRed = true,
-            //            staffTableFilter = staffTableFilter,
-            //            recipientProjectFilter = recipientProjectFilter,
-            //            supervisorProjectFilter = supervisorProjectFilter,
-            //            porjectFiltr = porjectFiltr,
-            //            filterStaffTable = filterStaffTable
-            //        });
-            //}
+            if (stat == "В работе") _task.timeWork(id);
+            if (_appDB.DBTask.FirstOrDefault(p => p.id == id).recipient != roleSession.SessionName && _appDB.DBTask.FirstOrDefault(p => p.id == id).recipient != null)
+            {
+                var msg = "Нельзя менять статус чужих задач!";
+                return RedirectToAction("TaskTable", new
+                {
+                    activTable = activTable,
+                    Taskid = id,
+                    meesage = msg,
+                    TaskRed = true,
+                    staffTableFilter = staffTableFilter,
+                    recipientProjectFilter = recipientProjectFilter,
+                    supervisorProjectFilter = supervisorProjectFilter,
+                    porjectFiltr = porjectFiltr,
+                    filterStaffTable = filterStaffTable
+                });
+            }
             if (!_task.redactStatus(id, stat,roleSession.SessionName))
             {
                 var msg = "Только одна задача может быть в работе! Проверьте статусы своих задачь!";
@@ -205,22 +205,22 @@ namespace MVP.Controllers
 
             if (recipient != roleSession.SessionName && recipient != null)
             {
-                //if (status == "В работе" && recipient == _task.GetTask(iid).recipient)
-                //{
-                //    var msg = "Нельзя менять статус чужих задач!";
-                //    return RedirectToAction("TaskTable", new
-                //    {
-                //        activTable = activTable,
-                //        Taskid = iid,
-                //        meesage = msg,
-                //        TaskRed = true,
-                //        staffTableFilter = staffTableFilter,
-                //        recipientProjectFilter = recipientProjectFilter,
-                //        supervisorProjectFilter = supervisorProjectFilter,
-                //        porjectFiltr = porjectFiltr,
-                //        filterStaffTable = filterStaffTable
-                //    });
-                //}
+                if (status == "В работе" && recipient == _appDB.DBTask.FirstOrDefault(p => p.id == iid).recipient)
+                {
+                    var msg = "Нельзя менять статус чужих задач!";
+                    return RedirectToAction("TaskTable", new
+                    {
+                        activTable = activTable,
+                        Taskid = iid,
+                        meesage = msg,
+                        TaskRed = true,
+                        staffTableFilter = staffTableFilter,
+                        recipientProjectFilter = recipientProjectFilter,
+                        supervisorProjectFilter = supervisorProjectFilter,
+                        porjectFiltr = porjectFiltr,
+                        filterStaffTable = filterStaffTable
+                    });
+                }
             }
 
             if (!_task.redactToDB(liteTask, iid, date, dedline, status, comment != null ? $"{roleSession.SessionName}: {comment}\n" : null, supervisor, recipient, pririty, plannedTime, start, finish, roleSession.SessionName))
