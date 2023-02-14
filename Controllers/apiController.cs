@@ -185,6 +185,26 @@ namespace MVP.Controllers
         [HttpGet]
         public JsonResult GetTasks([FromQuery] TasksParameters TaskParam)// выдает все задачи определенного сотрудника, либо если есть - по фильтру; если есть id - выдает инф по задаче
         {
+            // проверка сессии - без входа в сессию нужно переходить на траницу авторизации
+            var roleSession = new SessionRoles();
+            var sessionCod = "";
+            try
+            {
+                var person = _appDB.DBStaff.FirstOrDefault(p => p.login == User.Identity.Name);
+
+                var post = person.post;
+                var roleCod = _appDB.DBPost.FirstOrDefault(p => p.name == post).roleCod;
+                var sessionInit = new SessionRoles()
+                {
+                    SessionName = person.name,
+                    SessionRole = _appDB.DBRole.FirstOrDefault(p => p.code == roleCod).name
+                };
+                sessionCod = person.code;
+            }
+            catch (Exception)
+            {
+                return new JsonResult(new ObjectResult("Не авторизованный запрос!") { StatusCode = 401 });////////////////
+            }
             if (TaskParam.id != -1)
             {
                 return new JsonResult(new ObjectResult(JsonConvert.SerializeObject(_task.GetTask(TaskParam))) { StatusCode = 200 });
@@ -192,26 +212,7 @@ namespace MVP.Controllers
             }
             else
             {
-                // проверка сессии - без входа в сессию нужно переходить на траницу авторизации
-                var roleSession = new SessionRoles();
-                var sessionCod = "";
-                try
-                {
-                    var person = _appDB.DBStaff.FirstOrDefault(p => p.login == User.Identity.Name);
-
-                    var post = person.post;
-                    var roleCod = _appDB.DBPost.FirstOrDefault(p => p.name == post).roleCod;
-                    var sessionInit = new SessionRoles()
-                    {
-                        SessionName = person.name,
-                        SessionRole = _appDB.DBRole.FirstOrDefault(p => p.code == roleCod).name
-                    };
-                    sessionCod = person.code;
-                }
-                catch (Exception)
-                {
-                    return new JsonResult(new ObjectResult("Не авторизованный запрос!") { StatusCode = 400 });////////////////
-                }
+                
 
                 // составление списка сотрудников в подчинениии у того кто вошел в сессию
                 List<string> staffNames = new List<string>();
@@ -266,7 +267,7 @@ namespace MVP.Controllers
             }
             catch (Exception)
             {
-                return new JsonResult(new ObjectResult("Не авторизованный запрос!") { StatusCode = 400 });
+                return new JsonResult(new ObjectResult("Не авторизованный запрос!") { StatusCode = 401 });
                 //return new JsonResult("Не авторизованный запрос!");////////////////
             }
 
@@ -313,7 +314,7 @@ namespace MVP.Controllers
             _logistickTask.addToDB(log);
 
 
-            return new JsonResult(new ObjectResult("Задача добавлена!") { StatusCode = 200 });
+            return new JsonResult(new ObjectResult("Задача добавлена!") { StatusCode = 201 });
         }
 
         [Authorize]
@@ -340,7 +341,7 @@ namespace MVP.Controllers
             }
             catch (Exception)
             {
-                return new JsonResult(new ObjectResult("Не авторизованный запрос!") { StatusCode = 400 });
+                return new JsonResult(new ObjectResult("Не авторизованный запрос!") { StatusCode = 401 });
                 //return new JsonResult("Не авторизованный запрос!");////////////////
             }
 
@@ -351,7 +352,7 @@ namespace MVP.Controllers
             if (!_task.redactToDB(TaskParam.liteTask, TaskParam.id, TaskParam.date, TaskParam.dedline, TaskParam.status, TaskParam.comment != null ? $"{roleSession.SessionName}: {TaskParam.comment}\n" : null, TaskParam.supervisor, TaskParam.recipient, TaskParam.pririty, TaskParam.plannedTime, TaskParam.start, TaskParam.finish, roleSession.SessionName))
             {
                 var msg = "Только одна задача может быть в работе! Проверьте статусы своих задачь!";
-                return new JsonResult(new ObjectResult(msg) { StatusCode = 400 });////////////////
+                return new JsonResult(new ObjectResult(msg) { StatusCode = 403 });////////////////
             }
             else // при успешном редактировании ->
             {
@@ -378,7 +379,7 @@ namespace MVP.Controllers
                 _logistickTask.addToDB(item);
 
 
-                return new JsonResult(new ObjectResult("Задача успешно обновлена!") { StatusCode = 200 });
+                return new JsonResult(new ObjectResult("Задача успешно обновлена!") { StatusCode = 202 });
             }
         }
 
@@ -388,17 +389,37 @@ namespace MVP.Controllers
         public JsonResult PutTasksStatus
             ([FromQuery] TasksParameters TaskParam)// обновляет статус задачи
         {
+            var roleSession = new SessionRoles();
+            var sessionCod = "";
+            Staff person = new Staff();
+            try
+            {
+                person = _appDB.DBStaff.FirstOrDefault(p => p.login == User.Identity.Name);
+
+                var post = person.post;
+                var roleCod = _appDB.DBPost.FirstOrDefault(p => p.name == post).roleCod;
+                var sessionInit = new SessionRoles()
+                {
+                    SessionName = person.name,
+                    SessionRole = _appDB.DBRole.FirstOrDefault(p => p.code == roleCod).name
+                };
+                sessionCod = person.code;
+            }
+            catch (Exception)
+            {
+                return new JsonResult(new ObjectResult("Не авторизованный запрос!") { StatusCode = 401 });
+                //return new JsonResult("Не авторизованный запрос!");////////////////
+            }
             if (TaskParam.status == "В работе") _task.timeWork(TaskParam.id, _task);
-            var person = _appDB.DBStaff.FirstOrDefault(p => p.login == User.Identity.Name);
             if (_task.GetTask(TaskParam).recipient != person.name && _task.GetTask(TaskParam).recipient != null)
             {
                 var msg = "Нельзя менять статус чужих задач!";
-                return new JsonResult(new ObjectResult(msg) { StatusCode = 200 });
+                return new JsonResult(new ObjectResult(msg) { StatusCode = 403 });
             }
             if (!_task.redactStatus(TaskParam.id, TaskParam.status, person.name))
             {
                 var msg = "Только одна задача может быть в работе! Проверьте статусы своих задачь!";
-                return new JsonResult(new ObjectResult(msg) { StatusCode = 200 });
+                return new JsonResult(new ObjectResult(msg) { StatusCode = 403 });
             }
 
             var supervisor = _appDB.DBTask.FirstOrDefault(p => p.id == TaskParam.id).supervisor;
@@ -418,7 +439,7 @@ namespace MVP.Controllers
             };
             _logistickTask.addToDB(item);
 
-            return new JsonResult(new ObjectResult("Статус успешно обновлен!") { StatusCode = 200 });
+            return new JsonResult(new ObjectResult("Статус успешно обновлен!") { StatusCode = 202 });
         }
             //////// ????
             //[Authorize]
@@ -428,10 +449,30 @@ namespace MVP.Controllers
             //    return new JsonResult("");
             //}
 
-            //[Authorize]
+            [Authorize]
             [HttpGet]
         public JsonResult GetSearch(string param)// поиск по описанию задачи - возвраащет список задач в которых описание содержит передаваемый текст
         {
+            var roleSession = new SessionRoles();
+            var sessionCod = "";
+            try
+            {
+                var person = _appDB.DBStaff.FirstOrDefault(p => p.login == User.Identity.Name);
+
+                var post = person.post;
+                var roleCod = _appDB.DBPost.FirstOrDefault(p => p.name == post).roleCod;
+                var sessionInit = new SessionRoles()
+                {
+                    SessionName = person.name,
+                    SessionRole = _appDB.DBRole.FirstOrDefault(p => p.code == roleCod).name
+                };
+                sessionCod = person.code;
+            }
+            catch (Exception)
+            {
+                return new JsonResult(new ObjectResult("Не авторизованный запрос!") { StatusCode = 401 });
+                //return new JsonResult("Не авторизованный запрос!");////////////////
+            }
             return new JsonResult(new ObjectResult(_appDB.DBTask.Where(p => p.desc.Contains(param)).ToList()) { StatusCode = 200 });
         }
 
@@ -458,7 +499,7 @@ namespace MVP.Controllers
             }
             catch (Exception)
             {
-                return new JsonResult(new ObjectResult("Не авторизованный запрос!") { StatusCode = 400 });
+                return new JsonResult(new ObjectResult("Не авторизованный запрос!") { StatusCode = 401 });
                 //return new JsonResult("Не авторизованный запрос!");////////////////
             }
 
@@ -534,7 +575,7 @@ namespace MVP.Controllers
             }
             catch (Exception)
             {
-                return new JsonResult(new ObjectResult("Не авторизованный запрос!") { StatusCode = 400 });
+                return new JsonResult(new ObjectResult("Не авторизованный запрос!") { StatusCode = 401 });
                 //return new JsonResult("Не авторизованный запрос!");////////////////
             }
 
@@ -634,7 +675,7 @@ namespace MVP.Controllers
             }
             catch (Exception)
             {
-                return new JsonResult(new ObjectResult("Не авторизованный запрос!") { StatusCode = 400 });
+                return new JsonResult(new ObjectResult("Не авторизованный запрос!") { StatusCode = 401 });
                 //return new JsonResult("Не авторизованный запрос!");////////////////
             }
 
@@ -654,7 +695,7 @@ namespace MVP.Controllers
 
             _logistickProject.addToDB(item);
 
-            return new JsonResult(new ObjectResult("Проект успешно обновлен!") { StatusCode = 200 });
+            return new JsonResult(new ObjectResult("Проект успешно обновлен!") { StatusCode = 202 });
         }
 
         [Authorize]
@@ -715,7 +756,7 @@ namespace MVP.Controllers
             _logistickProject.addToDB(log);
             _project.addToDB(item);
 
-            return new JsonResult(new ObjectResult("Проект успешно добавлен!") { StatusCode = 200 });
+            return new JsonResult(new ObjectResult("Проект успешно добавлен!") { StatusCode = 201 });
         }
     }
 }
