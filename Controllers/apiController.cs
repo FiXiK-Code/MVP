@@ -20,9 +20,6 @@ using System.Threading.Tasks;
 
 namespace MVP.Controllers
 {
-    //[Route("api/[controller]")]
-    //[ApiController]
-
     public class ApiController : Controller
     {
         private readonly AppDB _appDB;
@@ -55,7 +52,7 @@ namespace MVP.Controllers
                 new SymmetricSecurityKey(Encoding.UTF8.GetBytes(KEY));
         }
 
-        [Route("token")]
+        
         [HttpPost]
         public IActionResult Token([FromBody] IdentityPerson person)// генерация токена
         {
@@ -183,7 +180,6 @@ namespace MVP.Controllers
         ////////// tasks
         [Authorize]
         [HttpGet]
-        //[Route("gettasks")]
         public JsonResult GetTasks([FromQuery] TasksParameters TaskParam)// выдает все задачи определенного сотрудника, либо если есть - по фильтру; если есть id - выдает инф по задаче
         {
             // проверка сессии - без входа в сессию нужно переходить на траницу авторизации
