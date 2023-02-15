@@ -84,7 +84,7 @@ namespace MVP.Controllers
         private ClaimsIdentity GetIdentity(string userName, string password)
         {
             List<Claim> claims = null;
-            var user = _appDB.DBStaff.FirstOrDefault(p => p.name == userName && p.passvord == password);
+            var user = _appDB.DBStaff.FirstOrDefault(p => p.login == userName && p.passvord == password);
             if (user != null)
             {
                 // var sha256 = new SHA256Managed();
