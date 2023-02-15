@@ -93,8 +93,8 @@ namespace MVP.Controllers
                 {
                     claims = new List<Claim>
                     {
-                        new Claim(ClaimsIdentity.DefaultNameClaimType, _appDB.DBStaff.FirstOrDefault(p => p.name == userName).login),
-                        new Claim(ClaimsIdentity.DefaultRoleClaimType, _appDB.DBStaff.FirstOrDefault(p => p.name == userName).roleCod)
+                        new Claim(ClaimsIdentity.DefaultNameClaimType, _appDB.DBStaff.FirstOrDefault(p => p.login == userName).login),
+                        new Claim(ClaimsIdentity.DefaultRoleClaimType, _appDB.DBStaff.FirstOrDefault(p => p.login == userName).roleCod)
 
                         //new Claim(ClaimsIdentity.DefaultNameClaimType, _appDB.DBStaff.FirstOrDefault(p => p.name == userName).login),
                     };
