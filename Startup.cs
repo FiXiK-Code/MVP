@@ -17,6 +17,7 @@ using MVP.Date.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Pomelo.EntityFrameworkCore.MySql.Storage;
 
 namespace MVP
 {
@@ -65,7 +66,7 @@ namespace MVP
             services.AddTransient<ILogistickTask, LogistickTaskRep>();
             services.AddTransient<ILogisticProject, LogistickProjectRep>();
 
-            services.AddDbContextPool<AppDB>(
+            services.AddDbContext<AppDB>(
                    options =>
                    {
                        options.UseMySql($"server=localhost;userid=root;pwd=root;port=3306;database=mvp");

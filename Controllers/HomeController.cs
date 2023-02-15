@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using TaskStatus = MVP.Date.Models.TaskStatus;
 
@@ -38,7 +39,7 @@ namespace MVP.Controllers
             _logistickProject = logistickProject;
             _emailService = emailService;
         }
-
+        
         public RedirectToActionResult RedactSatusTask(
             int id, string stat,
 
@@ -776,7 +777,7 @@ namespace MVP.Controllers
 
                 tasks = _task.AllTasks,
                 taskId = Taskid,
-                //redactedTask = _task.GetTask(Taskid),
+                redactedTask = _appDB.DBTask.FirstOrDefault(p => p.id == Taskid),
                 task4Table = tasksTable,
                 task4TableTasks = tasksTabbleFilter,
 

@@ -20,8 +20,8 @@ using System.Threading.Tasks;
 
 namespace MVP.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    //[Route("api/[controller]")]
+    //[ApiController]
 
     public class ApiController : Controller
     {
@@ -183,6 +183,7 @@ namespace MVP.Controllers
         ////////// tasks
         [Authorize]
         [HttpGet]
+        //[Route("gettasks")]
         public JsonResult GetTasks([FromQuery] TasksParameters TaskParam)// выдает все задачи определенного сотрудника, либо если есть - по фильтру; если есть id - выдает инф по задаче
         {
             // проверка сессии - без входа в сессию нужно переходить на траницу авторизации
@@ -203,7 +204,7 @@ namespace MVP.Controllers
             }
             catch (Exception)
             {
-                return new JsonResult(new ObjectResult("Не авторизованный запрос!") { StatusCode = 401 });////////////////
+                return new JsonResult(new ObjectResult("not authorized!") { StatusCode = 401 });////////////////
             }
             if (TaskParam.id != -1)
             {

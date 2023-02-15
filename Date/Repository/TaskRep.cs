@@ -119,7 +119,7 @@ namespace MVP.Date.Repository
             else return false;
         }
 
-        public bool redactStatus(int id, string stat, string session="")
+        public bool redactStatus(int id, string stat, string session = "")
         {
             var supervisor = _appDB.DBTask.FirstOrDefault(p => p.id == id).supervisor;
             var resip = _appDB.DBTask.FirstOrDefault(p => p.id == id).recipient;
@@ -149,7 +149,7 @@ namespace MVP.Date.Repository
                     Project proj = new Project();
                     try
                     {
-                        proj =  _appDB.DBProject.FirstOrDefault(p => p.code == task.projectCode);
+                        proj = _appDB.DBProject.FirstOrDefault(p => p.code == task.projectCode);
                         proj.timeWork += (TimeSpan)(DateTime.Now.AddHours(-5) - task.startWork);
                     }
                     catch (Exception)
@@ -174,20 +174,25 @@ namespace MVP.Date.Repository
                 {
                     task.priority = task.liteTask == false ? task.priority : -1;
                 }
-               
+
                 if (stat == "Выполнена") task.finish = DateTime.Now.AddHours(-5);
                 _appDB.SaveChanges();
                 return true;
             }
             return false;
-        }
+        }    
+                
+        
 
         // 8 hours
         public async Task timeWork(int idTask)
         {
-            var timer = (new TimeSpan(13, 0, 0) - DateTime.Now.TimeOfDay);//.AddHours(-5)
+
+            var timer = (new TimeSpan(1, 34, 0) - DateTime.Now.TimeOfDay);//.AddHours(-5)
             await Task.Delay(timer);
-            await Task.Run(() => redactStatus(idTask, "На паузе"));
+            await Task.Run(() => 
+                redactStatus(idTask, "На паузе")
+            );
         }
 
         public List<Tasks> GetMoreTasks(List<string> staffNames, SessionRoles roleSession, string filterTable ="", bool TaskTable = false)
