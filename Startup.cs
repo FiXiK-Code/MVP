@@ -34,15 +34,15 @@ namespace MVP
             .AddJwtBearer(options =>
             {
                 options.RequireHttpsMetadata = true;
+                options.SaveToken = true;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuer = true,
                     ValidIssuer = "MyAuthServer",
-                    ValidateAudience = true,
                     ValidAudience = "MyAuthClient",
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("mysupersecret_secretkey!123")),
                     ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true
+                    ValidateIssuerSigningKey = true,
+                    ClockSkew = TimeSpan.Zero
                 };
             });
 

@@ -191,7 +191,7 @@ namespace MVP.Controllers
 
                 var post = person.post;
                 var roleCod = _appDB.DBPost.FirstOrDefault(p => p.name == post).roleCod;
-                var sessionInit = new SessionRoles()
+                roleSession = new SessionRoles()
                 {
                     SessionName = person.name,
                     SessionRole = _appDB.DBRole.FirstOrDefault(p => p.code == roleCod).name
@@ -204,6 +204,17 @@ namespace MVP.Controllers
             }
             if (TaskParam.id != -1)
             {
+                Tasks result = new Tasks();
+                try
+                {
+                    result = _appDB.DBTask.FirstOrDefault(p => p.id == TaskParam.id);
+                }
+                catch (Exception)
+                {
+                    result = null;
+                }
+
+                if (result != null) return new JsonResult(new ObjectResult("task not found") { StatusCode = 404 });
                 return new JsonResult(new ObjectResult(JsonConvert.SerializeObject(_task.GetTask(TaskParam))) { StatusCode = 200 });
                 //return new JsonResult(JsonConvert.SerializeObject(_task.GetTask(TaskParam)));
             }
@@ -255,7 +266,7 @@ namespace MVP.Controllers
 
                 var post = person.post;
                 var roleCod = _appDB.DBPost.FirstOrDefault(p => p.name == post).roleCod;
-                var sessionInit = new SessionRoles()
+                roleSession = new SessionRoles()
                 {
                     SessionName = person.name,
                     SessionRole = _appDB.DBRole.FirstOrDefault(p => p.code == roleCod).name
@@ -319,6 +330,17 @@ namespace MVP.Controllers
         public JsonResult PutTasks
             ([FromQuery] TasksParameters TaskParam)// обновляет задачу
         {
+            Tasks result = new Tasks();
+            try
+            {
+                result = _appDB.DBTask.FirstOrDefault(p => p.id == TaskParam.id);
+            }
+            catch (Exception)
+            {
+                result = null;
+            }
+
+            if (result != null) return new JsonResult(new ObjectResult("task not found") { StatusCode = 404 });
 
             // проверка сессии - без входа в сессию нужно переходить на траницу авторизации
             var roleSession = new SessionRoles();
@@ -329,7 +351,7 @@ namespace MVP.Controllers
 
                 var post = person.post;
                 var roleCod = _appDB.DBPost.FirstOrDefault(p => p.name == post).roleCod;
-                var sessionInit = new SessionRoles()
+                roleSession = new SessionRoles()
                 {
                     SessionName = person.name,
                     SessionRole = _appDB.DBRole.FirstOrDefault(p => p.code == roleCod).name
@@ -386,6 +408,18 @@ namespace MVP.Controllers
         public JsonResult PutTasksStatus
             ([FromQuery] TasksParameters TaskParam)// обновляет статус задачи
         {
+            Tasks result = new Tasks();
+            try
+            {
+                result = _appDB.DBTask.FirstOrDefault(p => p.id == TaskParam.id);
+            }
+            catch (Exception)
+            {
+                result = null;
+            }
+
+            if (result != null) return new JsonResult(new ObjectResult("task not found") { StatusCode = 404 });
+
             var roleSession = new SessionRoles();
             var sessionCod = "";
             Staff person = new Staff();
@@ -395,7 +429,7 @@ namespace MVP.Controllers
 
                 var post = person.post;
                 var roleCod = _appDB.DBPost.FirstOrDefault(p => p.name == post).roleCod;
-                var sessionInit = new SessionRoles()
+                roleSession = new SessionRoles()
                 {
                     SessionName = person.name,
                     SessionRole = _appDB.DBRole.FirstOrDefault(p => p.code == roleCod).name
@@ -458,7 +492,7 @@ namespace MVP.Controllers
 
                 var post = person.post;
                 var roleCod = _appDB.DBPost.FirstOrDefault(p => p.name == post).roleCod;
-                var sessionInit = new SessionRoles()
+                roleSession = new SessionRoles()
                 {
                     SessionName = person.name,
                     SessionRole = _appDB.DBRole.FirstOrDefault(p => p.code == roleCod).name
@@ -470,7 +504,18 @@ namespace MVP.Controllers
                 return new JsonResult(new ObjectResult("Не авторизованный запрос!") { StatusCode = 401 });
                 //return new JsonResult("Не авторизованный запрос!");////////////////
             }
-            return new JsonResult(new ObjectResult(_appDB.DBTask.Where(p => p.desc.Contains(param)).ToList()) { StatusCode = 200 });
+            List<Tasks> result = new List<Tasks>();
+            try
+            {
+                result = _appDB.DBTask.Where(p => p.desc.Contains(param)).ToList();
+            }
+            catch (Exception)
+            {
+                result = null;
+            }
+            
+            if(result != null) return new JsonResult(new ObjectResult(result) { StatusCode = 200 });
+            else return new JsonResult(new ObjectResult("no matches!") { StatusCode = 204 });
         }
 
         ////////// projects
@@ -487,7 +532,7 @@ namespace MVP.Controllers
 
                 var post = person.post;
                 var roleCod = _appDB.DBPost.FirstOrDefault(p => p.name == post).roleCod;
-                var sessionInit = new SessionRoles()
+                roleSession = new SessionRoles()
                 {
                     SessionName = person.name,
                     SessionRole = _appDB.DBRole.FirstOrDefault(p => p.code == roleCod).name
@@ -563,7 +608,7 @@ namespace MVP.Controllers
 
                 var post = person.post;
                 var roleCod = _appDB.DBPost.FirstOrDefault(p => p.name == post).roleCod;
-                var sessionInit = new SessionRoles()
+                roleSession = new SessionRoles()
                 {
                     SessionName = person.name,
                     SessionRole = _appDB.DBRole.FirstOrDefault(p => p.code == roleCod).name
@@ -663,7 +708,7 @@ namespace MVP.Controllers
 
                 var post = person.post;
                 var roleCod = _appDB.DBPost.FirstOrDefault(p => p.name == post).roleCod;
-                var sessionInit = new SessionRoles()
+                roleSession = new SessionRoles()
                 {
                     SessionName = person.name,
                     SessionRole = _appDB.DBRole.FirstOrDefault(p => p.code == roleCod).name
@@ -708,7 +753,7 @@ namespace MVP.Controllers
 
                 var post = person.post;
                 var roleCod = _appDB.DBPost.FirstOrDefault(p => p.name == post).roleCod;
-                var sessionInit = new SessionRoles()
+                roleSession = new SessionRoles()
                 {
                     SessionName = person.name,
                     SessionRole = _appDB.DBRole.FirstOrDefault(p => p.code == roleCod).name

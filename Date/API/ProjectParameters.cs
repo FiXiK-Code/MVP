@@ -7,8 +7,8 @@ namespace MVP.Date.API
 {
     public class ProjectParameters
     {
-        public int id { get; set; }
-        public string filterProj { get; set; } 
+        public int id { get; set; } = -1;
+        public string filterProj { get; set; } = "";
         public string supervisorFilter { get; set; } = "";
 
 

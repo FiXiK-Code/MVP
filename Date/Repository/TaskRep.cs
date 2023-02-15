@@ -205,7 +205,7 @@ namespace MVP.Date.Repository
 
             // редактирование возвращаемых задач в зависимости от фильтра (в перспективе передача нескольких фильтров через запятую)
             List<string> staffsDiv = new List<string>();
-            foreach (var filter in filterTable.Split(','))///
+            if (filterTable != null) foreach (var filter in filterTable.Split(','))///
             {
                 switch (filter)
                 {
