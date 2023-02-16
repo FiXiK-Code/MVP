@@ -72,10 +72,20 @@ namespace MVP.Controllers
                     signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
 
+            var personbuf = _appDB.DBStaff.FirstOrDefault(p => p.login == person.UserName);
+
+            var post = personbuf.post;
+            var roleCod = _appDB.DBPost.FirstOrDefault(p => p.name == post).roleCod;
+            var role = _appDB.DBRole.FirstOrDefault(p => p.code == roleCod).name;
+            
+
             var response = new
             {
                 access_token = encodedJwt,
-                username = identity.Name
+                user_login = identity.Name,
+                user_name = personbuf.name,
+                user_role = role,
+                user_id = personbuf.id
             };
 
             return Ok(response);
