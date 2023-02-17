@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MVP.ApiModels;
 using MVP.Date.API;
 using MVP.Date.Models;
 using Tasks = MVP.Date.Models.Tasks;
@@ -13,7 +14,7 @@ namespace MVP.Date.Interfaces
         IEnumerable<Tasks> AllTasks { get; }
         IEnumerable<Tasks> TasksProject(string _projentCode);
         Tasks GetTask(TasksParameters param);
-        List<Tasks> GetMoreTasks(List<string> staffNames, SessionRoles roleSession, string filterTable = "", bool TaskTable = false);
+        TasksTableReturnModels GetMoreTasks(List<string> staffNames, SessionRoles roleSession, string filterTable = "", bool TaskTable = false);
         void addToDB(Tasks task);
         bool redactToDB(string liteTask,
             int iid,

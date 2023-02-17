@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MVP.ApiModels;
 using MVP.Date.API;
 using MVP.Date.Interfaces;
 using MVP.Date.Models;
@@ -195,7 +196,7 @@ namespace MVP.Date.Repository
             );
         }
 
-        public List<Tasks> GetMoreTasks(List<string> staffNames, SessionRoles roleSession, string filterTable ="", bool TaskTable = false)
+        public TasksTableReturnModels GetMoreTasks(List<string> staffNames, SessionRoles roleSession, string filterTable = "", bool TaskTable = false)
         {
             List<Tasks> tasksTabbleFilter = new List<Tasks>();
             if (!TaskTable) tasksTabbleFilter = AllTasks.Where(p => staffNames.Contains(p.supervisor) || staffNames.Contains(p.recipient)).ToList();
@@ -206,37 +207,149 @@ namespace MVP.Date.Repository
             // редактирование возвращаемых задач в зависимости от фильтра (в перспективе передача нескольких фильтров через запятую)
             List<string> staffsDiv = new List<string>();
             if (filterTable != null) foreach (var filter in filterTable.Split(','))///
-            {
-                switch (filter)
                 {
-                    case "Все задачи":
-                        tasksTabbleFilter = AllTasks.ToList();
-                        break;
-                    case "Задачи отдела управления":
-                        foreach (var staff1 in _staff.AllStaffs.Where(p => p.divisionId == 1).ToList())
-                        {
-                            if (!staffsDiv.Contains(staff1.name)) staffsDiv.Add(staff1.name);
-                        }
-                        tasksTabbleFilter = AllTasks.Where(p => staffsDiv.Contains(p.supervisor) || staffsDiv.Contains(p.recipient)).ToList();
-                        break;
-                    case "Задачи отдела проектирования":
-                        foreach (var staff1 in _staff.AllStaffs.Where(p => p.divisionId == 2).ToList())
-                        {
-                            if (!staffsDiv.Contains(staff1.name)) staffsDiv.Add(staff1.name);
-                        }
-                        tasksTabbleFilter = AllTasks.Where(p => staffsDiv.Contains(p.supervisor) || staffsDiv.Contains(p.recipient)).ToList();
-                        break;
-                    case "Задачи отдела изысканий":
-                        foreach (var staff1 in _staff.AllStaffs.Where(p => p.divisionId == 3).ToList())
-                        {
-                            if (!staffsDiv.Contains(staff1.name)) staffsDiv.Add(staff1.name);
-                        }
-                        tasksTabbleFilter = AllTasks.Where(p => staffsDiv.Contains(p.supervisor) || staffsDiv.Contains(p.recipient)).ToList();
-                        break;
-                }
+                    switch (filter)
+                    {
+                        case "Все задачи":
+                            tasksTabbleFilter = AllTasks.ToList();
+                            break;
+                        case "Задачи отдела управления":
+                            foreach (var staff1 in _staff.AllStaffs.Where(p => p.divisionId == 1).ToList())
+                            {
+                                if (!staffsDiv.Contains(staff1.name)) staffsDiv.Add(staff1.name);
+                            }
+                            tasksTabbleFilter = AllTasks.Where(p => staffsDiv.Contains(p.supervisor) || staffsDiv.Contains(p.recipient)).ToList();
+                            break;
+                        case "Задачи отдела проектирования":
+                            foreach (var staff1 in _staff.AllStaffs.Where(p => p.divisionId == 2).ToList())
+                            {
+                                if (!staffsDiv.Contains(staff1.name)) staffsDiv.Add(staff1.name);
+                            }
+                            tasksTabbleFilter = AllTasks.Where(p => staffsDiv.Contains(p.supervisor) || staffsDiv.Contains(p.recipient)).ToList();
+                            break;
+                        case "Задачи отдела изысканий":
+                            foreach (var staff1 in _staff.AllStaffs.Where(p => p.divisionId == 3).ToList())
+                            {
+                                if (!staffsDiv.Contains(staff1.name)) staffsDiv.Add(staff1.name);
+                            }
+                            tasksTabbleFilter = AllTasks.Where(p => staffsDiv.Contains(p.supervisor) || staffsDiv.Contains(p.recipient)).ToList();
+                            break;
+                    }
             }
 
-            return tasksTabbleFilter;
+            var today = tasksTabbleFilter.Where(p => p.status != "Выполнена").Where(p => p.date.Date <= DateTime.Now.Date).OrderBy(p => p.date.Date).OrderBy(p => p.priority).ToList();
+
+            List <TasksOut> todayOut = new List<TasksOut>();
+            foreach(var task in today)
+            {
+                var outt = new TasksOut
+                {
+                    id = task.id,
+                    code = task.code,
+                    desc = task.desc,
+                    TaskCodeParent = task.TaskCodeParent,
+                    projectCode = task.projectCode,
+                    supervisor = task.supervisor,
+                    recipient = task.recipient,
+                    priority =task.priority,
+                    comment = task.comment,
+                    plannedTime =task.plannedTime.ToString(@"hh\:mm"),
+                    actualTime = task.actualTime.ToString(@"hh\:mm"),
+                    start = task.start.ToString(@"dd\.MM\.yyyy HH\:mm\:ss"),
+                    finish =task.finish.ToString(@"dd\.MM\.yyyy HH\:mm\:ss"),
+                    date = task.date.ToString(@"dd\.MM\.yyyy"),
+                    Stage = task.Stage,
+                    liteTask =task.liteTask ,
+                    status =task.status ,
+                    startWork =task.startWork ,
+                    creator =task.creator ,
+                    historyWorc = task.historyWorc,
+                    dedline = task.dedline.ToString(@"dd\.MM\.yyyy HH\:mm\:ss")
+
+                };
+                todayOut.Add(outt);
+            }
+
+
+
+            // выполненные задачи
+            var completed = tasksTabbleFilter.Where(p => p.status == "Выполнена").OrderBy(p => p.finish).ToList();
+
+            List<TasksOut> completedOut = new List<TasksOut>();
+            foreach (var task in completed)
+            {
+                var outt = new TasksOut
+                {
+                    id = task.id,
+                    code = task.code,
+                    desc = task.desc,
+                    TaskCodeParent = task.TaskCodeParent,
+                    projectCode = task.projectCode,
+                    supervisor = task.supervisor,
+                    recipient = task.recipient,
+                    priority = task.priority,
+                    comment = task.comment,
+                    plannedTime = task.plannedTime.ToString(@"hh\:mm"),
+                    actualTime = task.actualTime.ToString(@"hh\:mm"),
+                    start = task.start.ToString(@"dd\.MM\.yyyy HH\:mm\:ss"),
+                    finish = task.finish.ToString(@"dd\.MM\.yyyy HH\:mm\:ss"),
+                    date = task.date.ToString(@"dd\.MM\.yyyy"),
+                    Stage = task.Stage,
+                    liteTask = task.liteTask,
+                    status = task.status,
+                    startWork = task.startWork,
+                    creator = task.creator,
+                    historyWorc = task.historyWorc,
+                    dedline = task.dedline.ToString(@"dd\.MM\.yyyy HH\:mm\:ss")
+
+                };
+                completedOut.Add(outt);
+            }
+            // будущие задачи 
+            var future = tasksTabbleFilter.Where(p => p.date.Date > DateTime.Now.Date).OrderBy(p => p.date.Date).OrderBy(p => p.priority).ToList();
+
+            List<TasksOut> futureOut = new List<TasksOut>();
+            foreach (var task in future)
+            {
+                var outt = new TasksOut
+                {
+                    id = task.id,
+                    code = task.code,
+                    desc = task.desc,
+                    TaskCodeParent = task.TaskCodeParent,
+                    projectCode = task.projectCode,
+                    supervisor = task.supervisor,
+                    recipient = task.recipient,
+                    priority = task.priority,
+                    comment = task.comment,
+                    plannedTime = task.plannedTime.ToString(@"hh\:mm"),
+                    actualTime = task.actualTime.ToString(@"hh\:mm"),
+                    start = task.start.ToString(@"dd\.MM\.yyyy HH\:mm\:ss"),
+                    finish = task.finish.ToString(@"dd\.MM\.yyyy HH\:mm\:ss"),
+                    date = task.date.ToString(@"dd\.MM\.yyyy"),
+                    Stage = task.Stage,
+                    liteTask = task.liteTask,
+                    status = task.status,
+                    startWork = task.startWork,
+                    creator = task.creator,
+                    historyWorc = task.historyWorc,
+                    dedline = task.dedline.ToString(@"dd\.MM\.yyyy HH\:mm\:ss")
+
+                };
+                futureOut.Add(outt);
+            }
+
+            TasksTableReturnModels output = new TasksTableReturnModels
+            {
+                // задачи на чегодня
+                today = todayOut,
+                // выполненные задачи
+                completed = completedOut,
+                // будущие задачи 
+                future = futureOut
+            };
+
+            return output;
         }
     }
 } 

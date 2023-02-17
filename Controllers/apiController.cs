@@ -241,21 +241,10 @@ namespace MVP.Controllers
                 }
 
                 // список задач сотрудников из вышеупомянутого списка
-                List<Tasks> tasksTabbleFilter = _task.GetMoreTasks(staffNames, roleSession, TaskParam.filterTable, true);
+                
 
                 // сборка модели для возвращения
-                TasksTableReturnModels output = new TasksTableReturnModels
-                {
-                    // задачи на чегодня
-                    today = tasksTabbleFilter.Where(p => p.status != "Выполнена").Where(p => p.date.Date <= DateTime.Now.Date).OrderBy(p => p.date.Date).OrderBy(p => p.priority).ToList(),
-
-                    // выполненные задачи
-                    completed = tasksTabbleFilter.Where(p => p.status == "Выполнена").OrderBy(p => p.finish).ToList(),
-
-                    // будущие задачи 
-                    future = tasksTabbleFilter.Where(p => p.date.Date > DateTime.Now.Date).OrderBy(p => p.date.Date).OrderBy(p => p.priority).ToList()
-
-                };
+                TasksTableReturnModels output = _task.GetMoreTasks(staffNames, roleSession, TaskParam.filterTable, true);
 
                 return new JsonResult(new ObjectResult(JsonConvert.SerializeObject(output)) { StatusCode = 200 });
             }
@@ -322,7 +311,7 @@ namespace MVP.Controllers
                 descTask = task.desc,
                 supervisorId = _appDB.DBStaff.FirstOrDefault(p => p.name == TaskParam.supervisor).id,
                 resipienId = TaskParam.supervisor != null ? _appDB.DBStaff.FirstOrDefault(p => p.name == TaskParam.supervisor).id : -1,
-                dateRedaction = DateTime.Now,
+                dateRedaction = DateTime.Now.AddHours(-5),
                 planedTime = TaskParam.plannedTime,
                 actualTime = new TimeSpan(),
                 CommitorId = _appDB.DBStaff.FirstOrDefault(p => p.name == roleSession.SessionName).id,
@@ -641,21 +630,18 @@ namespace MVP.Controllers
                     if (!staffNames.Contains(task.name)) staffNames.Add(task.name);
                 }
 
-                List<Tasks> tasksTabbleFilter = _task.GetMoreTasks(staffNames, roleSession, "");
+                TasksTableReturnModels tasksTabbleFilter = _task.GetMoreTasks(staffNames, roleSession, "");
 
                 StaffTableReturnModels output = new StaffTableReturnModels
                 {
                     // список сотрудников
                     staffs = _staff.StaffTable(roleSession.SessionRole, sessionCod).ToList(),
                     // задачи на чегодня
-                    today = tasksTabbleFilter.Where(p => p.status != "Выполнена").Where(p => p.date.Date <= DateTime.Now.Date).OrderBy(p => p.date.Date).OrderBy(p => p.priority).ToList(),
-
+                    today = tasksTabbleFilter.today,
                     // выполненные задачи
-                    completed = tasksTabbleFilter.Where(p => p.status == "Выполнена").OrderBy(p => p.finish).ToList(),
-
+                    completed = tasksTabbleFilter.completed,
                     // будущие задачи 
-                    future = tasksTabbleFilter.Where(p => p.date.Date > DateTime.Now.Date).OrderBy(p => p.date.Date).OrderBy(p => p.priority).ToList()
-
+                    future = tasksTabbleFilter.future
                 };
 
                 // возвращает список сотрудников в подчинении у залогиненного пользователя
@@ -683,19 +669,17 @@ namespace MVP.Controllers
                 }
 
                 // список задач сотрудников из вышеупомянутого списка
-                List<Tasks> tasksTabbleFilter = _task.GetMoreTasks(staffNames, roleSession, "", true);
+                TasksTableReturnModels tasksTabbleFilter = _task.GetMoreTasks(staffNames, roleSession, "", true);
 
                 StaffTableReturnModels output = new StaffTableReturnModels
                 {
                     staffs = StaffTable,
                     // задачи на чегодня
-                    today = tasksTabbleFilter.Where(p => p.status != "Выполнена").Where(p => p.date.Date <= DateTime.Now.Date).OrderBy(p => p.date.Date).OrderBy(p => p.priority).ToList(),
-
+                    today = tasksTabbleFilter.today,
                     // выполненные задачи
-                    completed = tasksTabbleFilter.Where(p => p.status == "Выполнена").OrderBy(p => p.finish).ToList(),
-
+                    completed = tasksTabbleFilter.completed,
                     // будущие задачи 
-                    future = tasksTabbleFilter.Where(p => p.date.Date > DateTime.Now.Date).OrderBy(p => p.date.Date).OrderBy(p => p.priority).ToList()
+                    future = tasksTabbleFilter.future
                 };
 
                 // возвращает список сотрудников в подчинении у залогиненного пользователя
