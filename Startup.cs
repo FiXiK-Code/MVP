@@ -2,8 +2,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using MVP.Date;
 using MVP.Date.Interfaces;
 using System;
@@ -19,12 +22,13 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Pomelo.EntityFrameworkCore.MySql.Storage;
 
+
 namespace MVP
 {
     public class Startup
     {
         public IConfigurationRoot _config;
-         public Startup(IHostingEnvironment hostEvn)
+         public Startup(Microsoft.Extensions.Hosting.IHostingEnvironment hostEvn)
         {
             _config = new ConfigurationBuilder().SetBasePath(hostEvn.ContentRootPath).AddJsonFile("appsettings.json").Build();
         }
@@ -45,6 +49,7 @@ namespace MVP
                     ClockSkew = TimeSpan.Zero
                 };
             });
+
 
            
 
@@ -80,6 +85,14 @@ namespace MVP
             services.AddSession(p => {
                 p.IdleTimeout = TimeSpan.FromHours(9);
             });
+
+            services.AddControllersWithViews();
+
+            // In production, the React files will be served from this directory
+            services.AddSpaStaticFiles(configuration =>
+            {
+                configuration.RootPath = "ClientApp/build";
+            });
         }
 
         
@@ -88,6 +101,10 @@ namespace MVP
             
 
             app.UseSession();
+
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
+            app.UseSpaStaticFiles();
 
 
             app.UseAuthentication();
@@ -106,6 +123,15 @@ namespace MVP
 
             });
 
+            app.UseSpa(spa =>
+            {
+                spa.Options.SourcePath = "ClientApp";
+
+                if (env.IsDevelopment())
+                {
+                    spa.UseReactDevelopmentServer(npmScript: "start");
+                }
+            });
 
             using (var scope = app.ApplicationServices.CreateScope())
             {
