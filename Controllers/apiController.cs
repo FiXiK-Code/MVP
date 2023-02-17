@@ -441,12 +441,12 @@ namespace MVP.Controllers
                 //return new JsonResult("Не авторизованный запрос!");////////////////
             }
             //if (TaskParam.status == "В работе") _task.timeWork(TaskParam.id, _task);
-            if (_task.GetTask(TaskParam).recipient != person.name && _task.GetTask(TaskParam).recipient != null)
+            if (_task.GetTask(TaskParam).recipient != roleSession.SessionName && _task.GetTask(TaskParam).recipient != null)
             {
                 var msg = "Нельзя менять статус чужих задач!";
                 return new JsonResult(new ObjectResult(msg) { StatusCode = 403 });
             }
-            if (!_task.redactStatus(TaskParam.id, TaskParam.status, person.name))
+            if (!_task.redactStatus(TaskParam.id, TaskParam.status, roleSession.SessionName))
             {
                 var msg = "Только одна задача может быть в работе! Проверьте статусы своих задачь!";
                 return new JsonResult(new ObjectResult(msg) { StatusCode = 403 });
@@ -463,7 +463,7 @@ namespace MVP.Controllers
                 dateRedaction = DateTime.Now.AddHours(-5),
                 planedTime = _appDB.DBTask.FirstOrDefault(p => p.id == TaskParam.id).plannedTime,
                 actualTime = new TimeSpan(),
-                CommitorId = _appDB.DBStaff.FirstOrDefault(p => p.name == person.name).id,
+                CommitorId = _appDB.DBStaff.FirstOrDefault(p => p.name == roleSession.SessionName).id,
                 taskStatusId = _appDB.DBTaskStatus.FirstOrDefault(p => p.name == _appDB.DBTask.FirstOrDefault(p => p.id == TaskParam.id).status).id,
                 comment = $"Стату задачи изменен на: {TaskParam.status}"
             };
