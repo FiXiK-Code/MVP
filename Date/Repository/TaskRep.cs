@@ -242,7 +242,7 @@ namespace MVP.Date.Repository
             List <TasksOut> todayOut = new List<TasksOut>();
             foreach(var task in today)
             {
-                var outt = new TasksOut
+                var outt = new TasksOut()
                 {
                     id = task.id,
                     code = task.code,
@@ -278,7 +278,7 @@ namespace MVP.Date.Repository
             List<TasksOut> completedOut = new List<TasksOut>();
             foreach (var task in completed)
             {
-                var outt = new TasksOut
+                var outt = new TasksOut()
                 {
                     id = task.id,
                     code = task.code,
@@ -311,7 +311,7 @@ namespace MVP.Date.Repository
             List<TasksOut> futureOut = new List<TasksOut>();
             foreach (var task in future)
             {
-                var outt = new TasksOut
+                TasksOut outt = new TasksOut()
                 {
                     id = task.id,
                     code = task.code,
@@ -334,7 +334,6 @@ namespace MVP.Date.Repository
                     creator = task.creator,
                     historyWorc = task.historyWorc,
                     dedline = task.dedline.ToString(@"dd\.MM\.yyyy HH\:mm\:ss")
-
                 };
                 futureOut.Add(outt);
             }

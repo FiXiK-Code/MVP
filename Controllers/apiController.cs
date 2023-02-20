@@ -225,7 +225,7 @@ namespace MVP.Controllers
                 }
 
                 if (result != null) return new JsonResult(new ObjectResult("task not found") { StatusCode = 404 });
-                return new JsonResult(new ObjectResult(JsonConvert.SerializeObject(_task.GetTask(TaskParam))) { StatusCode = 200 });
+                return new JsonResult(new ObjectResult(_task.GetTask(TaskParam)) { StatusCode = 200 });
                 //return new JsonResult(JsonConvert.SerializeObject(_task.GetTask(TaskParam)));
             }
             else
@@ -246,7 +246,7 @@ namespace MVP.Controllers
                 // сборка модели для возвращения
                 TasksTableReturnModels output = _task.GetMoreTasks(staffNames, roleSession, TaskParam.filterTable, true);
 
-                return new JsonResult(new ObjectResult(JsonConvert.SerializeObject(output)) { StatusCode = 200 });
+                return new JsonResult(new ObjectResult(output) { StatusCode = 200 });
             }
 
         }
@@ -254,7 +254,7 @@ namespace MVP.Controllers
         [Authorize]
         [HttpPost]
         public JsonResult PostTasks
-            ([FromQuery] TasksParameters TaskParam)//добавляет задачу в базу
+            ([FromBody] TasksParameters TaskParam)//добавляет задачу в базу
         {
             // проверка сессии - без входа в сессию нужно переходить на траницу авторизации
             var roleSession = new SessionRoles();
@@ -327,7 +327,7 @@ namespace MVP.Controllers
         [Authorize]
         [HttpPut]
         public JsonResult PutTasks
-            ([FromQuery] TasksParameters TaskParam)// обновляет задачу
+            ([FromBody] TasksParameters TaskParam)// обновляет задачу
         {
             Tasks result = new Tasks();
             try
@@ -405,7 +405,7 @@ namespace MVP.Controllers
         [Authorize]
         [HttpPut]
         public JsonResult PutTasksStatus
-            ([FromQuery] TasksParameters TaskParam)// обновляет статус задачи
+            ([FromBody] TasksParameters TaskParam)// обновляет статус задачи
         {
             Tasks result = new Tasks();
             try
@@ -417,7 +417,7 @@ namespace MVP.Controllers
                 result = null;
             }
 
-            if (result != null) return new JsonResult(new ObjectResult("task not found") { StatusCode = 404 });
+            if (result == null) return new JsonResult(new ObjectResult("task not found") { StatusCode = 404 });
 
             var roleSession = new SessionRoles();
             var sessionCod = "";
@@ -471,17 +471,17 @@ namespace MVP.Controllers
 
             return new JsonResult(new ObjectResult("Статус успешно обновлен!") { StatusCode = 202 });
         }
-            //////// ????
-            //[Authorize]
-            //[HttpDelete]
-            //public JsonResult DeleteTasks()// удаляет задачу???
-            //{
-            //    return new JsonResult("");
-            //}
+        //////// ????
+        //[Authorize]
+        //[HttpDelete]
+        //public JsonResult DeleteTasks()// удаляет задачу???
+        //{
+        //    return new JsonResult("");
+        //}
 
-            [Authorize]
-            [HttpGet]
-        public JsonResult GetSearch(string param)// поиск по описанию задачи - возвраащет список задач в которых описание содержит передаваемый текст
+        [Authorize]
+        [HttpGet]
+        public JsonResult GetSearch([FromQuery] string param)// поиск по описанию задачи - возвраащет список задач в которых описание содержит передаваемый текст
         {
             var roleSession = new SessionRoles();
             var sessionCod = "";
@@ -503,10 +503,41 @@ namespace MVP.Controllers
                 return new JsonResult(new ObjectResult("Не авторизованный запрос!") { StatusCode = 401 });
                 //return new JsonResult("Не авторизованный запрос!");////////////////
             }
-            List<Tasks> result = new List<Tasks>();
+            List<TasksOut> result = new List<TasksOut>();
             try
             {
-                result = _appDB.DBTask.Where(p => p.desc.Contains(param)).ToList();
+                List<Tasks> today = _appDB.DBTask.Where(p => p.desc.Contains(param)).ToList();
+
+               
+                foreach (var task in today)
+                {
+                    var outt = new TasksOut
+                    {
+                        id = task.id,
+                        code = task.code,
+                        desc = task.desc,
+                        TaskCodeParent = task.TaskCodeParent,
+                        projectCode = task.projectCode,
+                        supervisor = task.supervisor,
+                        recipient = task.recipient,
+                        priority = task.priority,
+                        comment = task.comment,
+                        plannedTime = task.plannedTime.ToString(@"hh\:mm"),
+                        actualTime = task.actualTime.ToString(@"hh\:mm"),
+                        start = task.start.ToString(@"dd\.MM\.yyyy HH\:mm\:ss"),
+                        finish = task.finish.ToString(@"dd\.MM\.yyyy HH\:mm\:ss"),
+                        date = task.date.ToString(@"dd\.MM\.yyyy"),
+                        Stage = task.Stage,
+                        liteTask = task.liteTask,
+                        status = task.status,
+                        startWork = task.startWork,
+                        creator = task.creator,
+                        historyWorc = task.historyWorc,
+                        dedline = task.dedline.ToString(@"dd\.MM\.yyyy HH\:mm\:ss")
+
+                    };
+                    result.Add(outt);
+                }
             }
             catch (Exception)
             {
@@ -692,7 +723,7 @@ namespace MVP.Controllers
         [Authorize]
         [HttpPut]
         public JsonResult PutProj
-            ([FromQuery] ProjectParameters ProjParam)// обновляет проект
+            ([FromBody] ProjectParameters ProjParam)// обновляет проект
         {
             var roleSession = new SessionRoles();
             var sessionCod = "";
@@ -737,7 +768,7 @@ namespace MVP.Controllers
         [Authorize]
         [HttpPost]
         public JsonResult PostProj
-            ([FromQuery] ProjectParameters ProjParam)//добавляет проект в базу
+            ([FromBody] ProjectParameters ProjParam)//добавляет проект в базу
         {
             var roleSession = new SessionRoles();
             var sessionCod = "";
