@@ -12,6 +12,8 @@ export class Tasks extends Component {
 
     constructor(props) {
         super(props);
+
+        this.kek = 'yes';
         this.state = {
             auth: true,
             tasks: {
@@ -19,27 +21,63 @@ export class Tasks extends Component {
                 today: [],
                 upcoming: [],
             },
+            search: false,
             headers: [],
             loading: true
         };
+
+        this.renderTasksTable = this.renderTasksTable.bind(this);
+        this.searchHandleInput = this.searchHandleInput.bind(this);
+        this.searchHandleSubmit = this.searchHandleSubmit.bind(this);
     }
 
     componentDidMount() {
         this.populateWeatherData();
     }
 
-    static renderTasksTable(headers, tasks) {
-        console.log(tasks);
+    renderTasksTable(headers, tasks) {
+        console.log("Render tasks: ", tasks);
 
         return (
-            <CollapsibleTable tasks={tasks} headers={headers} />
+            <CollapsibleTable search={ this.state.search } tasks={tasks} headers={headers} />
         );
+    }
+
+    async searchHandleSubmit(e) {
+        e.preventDefault();
+        let term = this.state.search;
+        if (term.length > 0) {
+            const response = await fetchWithAuth(`/api/GetSearch?param=${encodeURIComponent(term)}`);
+            if (response.statusCode === 200) {
+                this.setState({
+                    tasks: {
+                        done: response.value,
+                        today: [],
+                        upcoming: []
+                    }
+                })
+                console.log(response);
+                console.log("tasks state: ", this.state);
+                console.log(this.kek);
+            }
+        } else {
+            this.populateWeatherData();
+        }
+
+
+    }
+
+    searchHandleInput(e) {
+        console.log(e.target.value)
+        this.setState({
+            search: e.target.value
+        });
     }
 
     render() {
         let contents = this.state.loading
             ? <p><em>Загрузка данных...</em></p>
-            : Tasks.renderTasksTable(this.state.headers, this.state.tasks);
+            : this.renderTasksTable(this.state.headers, this.state.tasks);
 
         const tableSettingsHandler = (event) => {
             console.log(event.target.value);
@@ -54,7 +92,7 @@ export class Tasks extends Component {
             <div>
                 <Unauthorized auth={this.state.auth} />
                 <h1>Задачи</h1>
-                <Search tableSettingsHandler={tableSettingsHandler} headers={this.state.headers} />
+                <Search handleInput={this.searchHandleInput} handleSubmit={this.searchHandleSubmit} tableSettingsHandler={tableSettingsHandler} headers={this.state.headers} />
                 <Box sx={{
                     paddingTop: 2,
                     paddingBottom: 2
@@ -79,551 +117,10 @@ export class Tasks extends Component {
         }
 
         const data = JSON.parse(response.value);
-        const testData = {
-            "done": [
-                {
-                    date: "01.01.2001",
-                    taskCode: "Шифр задачи",
-                    projectCode: "48/21 - ТСП",
-                    name: "Прозвонить Копьева",
-                    statusCode: 3,
-                    statusName: "Выполнена",
-                    responsible: "Мочалов А. Н.",
-                    reassign: "Менщиков А. И.",
-                    priority: "2",
-                    comment: "Комментарий",
-                    planTime: "00:15:00",
-                    factTime: "00:00:14",
-                    dateOfStart: "01/01/2001 00:00:00",
-                    dateOfEnd: "01/24/2023 10:23:17"
-                },
-                {
-                    date: "01.01.2001",
-                    taskCode: "Шифр задачи",
-                    projectCode: "48/21 - ТСП",
-                    name: "Прозвонить Копьева",
-                    statusCode: 3,
-                    statusName: "Выполнена",
-                    responsible: "Мочалов А. Н.",
-                    reassign: "Менщиков А. И.",
-                    priority: "2",
-                    comment: "Комментарий",
-                    planTime: "00:15:00",
-                    factTime: "00:00:14",
-                    dateOfStart: "01/01/2001 00:00:00",
-                    dateOfEnd: "01/24/2023 10:23:17"
-                },
-                {
-                    date: "01.01.2001",
-                    taskCode: "Шифр задачи",
-                    projectCode: "48/21 - ТСП",
-                    name: "Прозвонить Копьева",
-                    statusCode: 3,
-                    statusName: "Выполнена",
-                    responsible: "Мочалов А. Н.",
-                    reassign: "Менщиков А. И.",
-                    priority: "2",
-                    comment: "Комментарий",
-                    planTime: "00:15:00",
-                    factTime: "00:00:14",
-                    dateOfStart: "01/01/2001 00:00:00",
-                    dateOfEnd: "01/24/2023 10:23:17"
-                },
-                {
-                    date: "01.01.2001",
-                    taskCode: "Шифр задачи",
-                    projectCode: "48/21 - ТСП",
-                    name: "Прозвонить Копьева",
-                    statusCode: 3,
-                    statusName: "Выполнена",
-                    responsible: "Мочалов А. Н.",
-                    reassign: "Менщиков А. И.",
-                    priority: "0",
-                    comment: "Комментарий",
-                    planTime: "00:15:00",
-                    factTime: "00:00:14",
-                    dateOfStart: "01/01/2001 00:00:00",
-                    dateOfEnd: "01/24/2023 10:23:17"
-                },
-                {
-                    date: "01.01.2001",
-                    taskCode: "Шифр задачи",
-                    projectCode: "48/21 - ТСП",
-                    name: "Прозвонить Копьева",
-                    statusCode: 3,
-                    statusName: "Выполнена",
-                    responsible: "Мочалов А. Н.",
-                    reassign: "Менщиков А. И.",
-                    priority: "2",
-                    comment: "Комментарий",
-                    planTime: "00:15:00",
-                    factTime: "00:00:14",
-                    dateOfStart: "01/01/2001 00:00:00",
-                    dateOfEnd: "01/24/2023 10:23:17"
-                },
-                {
-                    date: "01.01.2001",
-                    taskCode: "Шифр задачи",
-                    projectCode: "48/21 - ТСП",
-                    name: "Прозвонить Копьева",
-                    statusCode: 3,
-                    statusName: "Выполнена",
-                    responsible: "Мочалов А. Н.",
-                    reassign: "Менщиков А. И.",
-                    priority: "2",
-                    comment: "Комментарий",
-                    planTime: "00:15:00",
-                    factTime: "00:00:14",
-                    dateOfStart: "01/01/2001 00:00:00",
-                    dateOfEnd: "01/24/2023 10:23:17"
-                },
-                {
-                    date: "01.01.2001",
-                    taskCode: "Шифр задачи",
-                    projectCode: "48/21 - ТСП",
-                    name: "Прозвонить Копьева",
-                    statusCode: 3,
-                    statusName: "Выполнена",
-                    responsible: "Мочалов А. Н.",
-                    reassign: "Менщиков А. И.",
-                    priority: "2",
-                    comment: "Комментарий",
-                    planTime: "00:15:00",
-                    factTime: "00:00:14",
-                    dateOfStart: "01/01/2001 00:00:00",
-                    dateOfEnd: "01/24/2023 10:23:17"
-                },
-                {
-                    date: "01.01.2001",
-                    taskCode: "Шифр задачи",
-                    projectCode: "48/21 - ТСП",
-                    name: "Прозвонить Копьева",
-                    statusCode: 3,
-                    statusName: "Выполнена",
-                    responsible: "Мочалов А. Н.",
-                    reassign: "Менщиков А. И.",
-                    priority: "2",
-                    comment: "Комментарий",
-                    planTime: "00:15:00",
-                    factTime: "00:00:14",
-                    dateOfStart: "01/01/2001 00:00:00",
-                    dateOfEnd: "01/24/2023 10:23:17"
-                },
-                {
-                    date: "01.01.2001",
-                    taskCode: "Шифр задачи",
-                    projectCode: "48/21 - ТСП",
-                    name: "Прозвонить Копьева",
-                    statusCode: 3,
-                    statusName: "Выполнена",
-                    responsible: "Мочалов А. Н.",
-                    reassign: "Менщиков А. И.",
-                    priority: "2",
-                    comment: "Комментарий",
-                    planTime: "00:15:00",
-                    factTime: "00:00:14",
-                    dateOfStart: "01/01/2001 00:00:00",
-                    dateOfEnd: "01/24/2023 10:23:17"
-                },
-                {
-                    date: "01.01.2001",
-                    taskCode: "Шифр задачи",
-                    projectCode: "48/21 - ТСП",
-                    name: "Прозвонить Копьева",
-                    statusCode: 3,
-                    statusName: "Выполнена",
-                    responsible: "Мочалов А. Н.",
-                    reassign: "Менщиков А. И.",
-                    priority: "2",
-                    comment: "Комментарий",
-                    planTime: "00:15:00",
-                    factTime: "00:00:14",
-                    dateOfStart: "01/01/2001 00:00:00",
-                    dateOfEnd: "01/24/2023 10:23:17"
-                },
-                {
-                    date: "01.01.2001",
-                    taskCode: "Шифр задачи",
-                    projectCode: "48/21 - ТСП",
-                    name: "Прозвонить Копьева",
-                    statusCode: 3,
-                    statusName: "Выполнена",
-                    responsible: "Мочалов А. Н.",
-                    reassign: "Менщиков А. И.",
-                    priority: "2",
-                    comment: "Комментарий",
-                    planTime: "00:15:00",
-                    factTime: "00:00:14",
-                    dateOfStart: "01/01/2001 00:00:00",
-                    dateOfEnd: "01/24/2023 10:23:17"
-                }
-            ],
-            "today": [
-                {
-                    date: "01.01.2001",
-                    taskCode: "Шифр задачи",
-                    projectCode: "48/21 - ТСП",
-                    name: "Прозвонить Копьева",
-                    statusCode: 3,
-                    statusName: "Выполнена",
-                    responsible: "Мочалов А. Н.",
-                    reassign: "Менщиков А. И.",
-                    priority: "2",
-                    comment: "Комментарий",
-                    planTime: "00:15:00",
-                    factTime: "00:00:14",
-                    dateOfStart: "01/01/2001 00:00:00",
-                    dateOfEnd: "01/24/2023 10:23:17"
-                },
-                {
-                    date: "01.01.2001",
-                    taskCode: "Шифр задачи",
-                    projectCode: "48/21 - ТСП",
-                    name: "Прозвонить Копьева",
-                    statusCode: 3,
-                    statusName: "Выполнена",
-                    responsible: "Мочалов А. Н.",
-                    reassign: "Менщиков А. И.",
-                    priority: "2",
-                    comment: "Комментарий",
-                    planTime: "00:15:00",
-                    factTime: "00:00:14",
-                    dateOfStart: "01/01/2001 00:00:00",
-                    dateOfEnd: "01/24/2023 10:23:17"
-                },
-                {
-                    date: "01.01.2001",
-                    taskCode: "Шифр задачи",
-                    projectCode: "48/21 - ТСП",
-                    name: "Прозвонить Копьева",
-                    statusCode: 3,
-                    statusName: "Выполнена",
-                    responsible: "Мочалов А. Н.",
-                    reassign: "Менщиков А. И.",
-                    priority: "2",
-                    comment: "Комментарий",
-                    planTime: "00:15:00",
-                    factTime: "00:00:14",
-                    dateOfStart: "01/01/2001 00:00:00",
-                    dateOfEnd: "01/24/2023 10:23:17"
-                },
-                {
-                    date: "01.01.2001",
-                    taskCode: "Шифр задачи",
-                    projectCode: "48/21 - ТСП",
-                    name: "Прозвонить Копьева",
-                    statusCode: 3,
-                    statusName: "Выполнена",
-                    responsible: "Мочалов А. Н.",
-                    reassign: "Менщиков А. И.",
-                    priority: "0",
-                    comment: "Комментарий",
-                    planTime: "00:15:00",
-                    factTime: "00:00:14",
-                    dateOfStart: "01/01/2001 00:00:00",
-                    dateOfEnd: "01/24/2023 10:23:17"
-                },
-                {
-                    date: "01.01.2001",
-                    taskCode: "Шифр задачи",
-                    projectCode: "48/21 - ТСП",
-                    name: "Прозвонить Копьева",
-                    statusCode: 3,
-                    statusName: "Выполнена",
-                    responsible: "Мочалов А. Н.",
-                    reassign: "Менщиков А. И.",
-                    priority: "2",
-                    comment: "Комментарий",
-                    planTime: "00:15:00",
-                    factTime: "00:00:14",
-                    dateOfStart: "01/01/2001 00:00:00",
-                    dateOfEnd: "01/24/2023 10:23:17"
-                },
-                {
-                    date: "01.01.2001",
-                    taskCode: "Шифр задачи",
-                    projectCode: "48/21 - ТСП",
-                    name: "Прозвонить Копьева",
-                    statusCode: 3,
-                    statusName: "Выполнена",
-                    responsible: "Мочалов А. Н.",
-                    reassign: "Менщиков А. И.",
-                    priority: "2",
-                    comment: "Комментарий",
-                    planTime: "00:15:00",
-                    factTime: "00:00:14",
-                    dateOfStart: "01/01/2001 00:00:00",
-                    dateOfEnd: "01/24/2023 10:23:17"
-                },
-                {
-                    date: "01.01.2001",
-                    taskCode: "Шифр задачи",
-                    projectCode: "48/21 - ТСП",
-                    name: "Прозвонить Копьева",
-                    statusCode: 3,
-                    statusName: "Выполнена",
-                    responsible: "Мочалов А. Н.",
-                    reassign: "Менщиков А. И.",
-                    priority: "2",
-                    comment: "Комментарий",
-                    planTime: "00:15:00",
-                    factTime: "00:00:14",
-                    dateOfStart: "01/01/2001 00:00:00",
-                    dateOfEnd: "01/24/2023 10:23:17"
-                },
-                {
-                    date: "01.01.2001",
-                    taskCode: "Шифр задачи",
-                    projectCode: "48/21 - ТСП",
-                    name: "Прозвонить Копьева",
-                    statusCode: 3,
-                    statusName: "Выполнена",
-                    responsible: "Мочалов А. Н.",
-                    reassign: "Менщиков А. И.",
-                    priority: "2",
-                    comment: "Комментарий",
-                    planTime: "00:15:00",
-                    factTime: "00:00:14",
-                    dateOfStart: "01/01/2001 00:00:00",
-                    dateOfEnd: "01/24/2023 10:23:17"
-                },
-                {
-                    date: "01.01.2001",
-                    taskCode: "Шифр задачи",
-                    projectCode: "48/21 - ТСП",
-                    name: "Прозвонить Копьева",
-                    statusCode: 3,
-                    statusName: "Выполнена",
-                    responsible: "Мочалов А. Н.",
-                    reassign: "Менщиков А. И.",
-                    priority: "2",
-                    comment: "Комментарий",
-                    planTime: "00:15:00",
-                    factTime: "00:00:14",
-                    dateOfStart: "01/01/2001 00:00:00",
-                    dateOfEnd: "01/24/2023 10:23:17"
-                },
-                {
-                    date: "01.01.2001",
-                    taskCode: "Шифр задачи",
-                    projectCode: "48/21 - ТСП",
-                    name: "Прозвонить Копьева",
-                    statusCode: 3,
-                    statusName: "Выполнена",
-                    responsible: "Мочалов А. Н.",
-                    reassign: "Менщиков А. И.",
-                    priority: "2",
-                    comment: "Комментарий",
-                    planTime: "00:15:00",
-                    factTime: "00:00:14",
-                    dateOfStart: "01/01/2001 00:00:00",
-                    dateOfEnd: "01/24/2023 10:23:17"
-                },
-                {
-                    date: "01.01.2001",
-                    taskCode: "Шифр задачи",
-                    projectCode: "48/21 - ТСП",
-                    name: "Прозвонить Копьева",
-                    statusCode: 3,
-                    statusName: "Выполнена",
-                    responsible: "Мочалов А. Н.",
-                    reassign: "Менщиков А. И.",
-                    priority: "2",
-                    comment: "Комментарий",
-                    planTime: "00:15:00",
-                    factTime: "00:00:14",
-                    dateOfStart: "01/01/2001 00:00:00",
-                    dateOfEnd: "01/24/2023 10:23:17"
-                }
-            ],
-            "upcoming": [
-                {
-                    date: "01.01.2001",
-                    taskCode: "Шифр задачи",
-                    projectCode: "48/21 - ТСП",
-                    name: "Прозвонить Копьева",
-                    statusCode: 3,
-                    statusName: "Выполнена",
-                    responsible: "Мочалов А. Н.",
-                    reassign: "Менщиков А. И.",
-                    priority: "2",
-                    comment: "Комментарий",
-                    planTime: "00:15:00",
-                    factTime: "00:00:14",
-                    dateOfStart: "01/01/2001 00:00:00",
-                    dateOfEnd: "01/24/2023 10:23:17"
-                },
-                {
-                    date: "01.01.2001",
-                    taskCode: "Шифр задачи",
-                    projectCode: "48/21 - ТСП",
-                    name: "Прозвонить Копьева",
-                    statusCode: 3,
-                    statusName: "Выполнена",
-                    responsible: "Мочалов А. Н.",
-                    reassign: "Менщиков А. И.",
-                    priority: "2",
-                    comment: "Комментарий",
-                    planTime: "00:15:00",
-                    factTime: "00:00:14",
-                    dateOfStart: "01/01/2001 00:00:00",
-                    dateOfEnd: "01/24/2023 10:23:17"
-                },
-                {
-                    date: "01.01.2001",
-                    taskCode: "Шифр задачи",
-                    projectCode: "48/21 - ТСП",
-                    name: "Прозвонить Копьева",
-                    statusCode: 3,
-                    statusName: "Выполнена",
-                    responsible: "Мочалов А. Н.",
-                    reassign: "Менщиков А. И.",
-                    priority: "2",
-                    comment: "Комментарий",
-                    planTime: "00:15:00",
-                    factTime: "00:00:14",
-                    dateOfStart: "01/01/2001 00:00:00",
-                    dateOfEnd: "01/24/2023 10:23:17"
-                },
-                {
-                    date: "01.01.2001",
-                    taskCode: "Шифр задачи",
-                    projectCode: "48/21 - ТСП",
-                    name: "Прозвонить Копьева",
-                    statusCode: 3,
-                    statusName: "Выполнена",
-                    responsible: "Мочалов А. Н.",
-                    reassign: "Менщиков А. И.",
-                    priority: "2",
-                    comment: "Комментарий",
-                    planTime: "00:15:00",
-                    factTime: "00:00:14",
-                    dateOfStart: "01/01/2001 00:00:00",
-                    dateOfEnd: "01/24/2023 10:23:17"
-                },
-                {
-                    date: "01.01.2001",
-                    taskCode: "Шифр задачи",
-                    projectCode: "48/21 - ТСП",
-                    name: "Прозвонить Копьева",
-                    statusCode: 3,
-                    statusName: "Выполнена",
-                    responsible: "Мочалов А. Н.",
-                    reassign: "Менщиков А. И.",
-                    priority: "2",
-                    comment: "Комментарий",
-                    planTime: "00:15:00",
-                    factTime: "00:00:14",
-                    dateOfStart: "01/01/2001 00:00:00",
-                    dateOfEnd: "01/24/2023 10:23:17"
-                },
-                {
-                    date: "01.01.2001",
-                    taskCode: "Шифр задачи",
-                    projectCode: "48/21 - ТСП",
-                    name: "Прозвонить Копьева",
-                    statusCode: 3,
-                    statusName: "Выполнена",
-                    responsible: "Мочалов А. Н.",
-                    reassign: "Менщиков А. И.",
-                    priority: "2",
-                    comment: "Комментарий",
-                    planTime: "00:15:00",
-                    factTime: "00:00:14",
-                    dateOfStart: "01/01/2001 00:00:00",
-                    dateOfEnd: "01/24/2023 10:23:17"
-                },
-                {
-                    date: "01.01.2001",
-                    taskCode: "Шифр задачи",
-                    projectCode: "48/21 - ТСП",
-                    name: "Прозвонить Копьева",
-                    statusCode: 3,
-                    statusName: "Выполнена",
-                    responsible: "Мочалов А. Н.",
-                    reassign: "Менщиков А. И.",
-                    priority: "2",
-                    comment: "Комментарий",
-                    planTime: "00:15:00",
-                    factTime: "00:00:14",
-                    dateOfStart: "01/01/2001 00:00:00",
-                    dateOfEnd: "01/24/2023 10:23:17"
-                },
-                {
-                    date: "01.01.2001",
-                    taskCode: "Шифр задачи",
-                    projectCode: "48/21 - ТСП",
-                    name: "Прозвонить Копьева",
-                    statusCode: 3,
-                    statusName: "Выполнена",
-                    responsible: "Мочалов А. Н.",
-                    reassign: "Менщиков А. И.",
-                    priority: "2",
-                    comment: "Комментарий",
-                    planTime: "00:15:00",
-                    factTime: "00:00:14",
-                    dateOfStart: "01/01/2001 00:00:00",
-                    dateOfEnd: "01/24/2023 10:23:17"
-                },
-                {
-                    date: "01.01.2001",
-                    taskCode: "Шифр задачи",
-                    projectCode: "48/21 - ТСП",
-                    name: "Прозвонить Копьева",
-                    statusCode: 3,
-                    statusName: "Выполнена",
-                    responsible: "Мочалов А. Н.",
-                    reassign: "Менщиков А. И.",
-                    priority: "2",
-                    comment: "Комментарий",
-                    planTime: "00:15:00",
-                    factTime: "00:00:14",
-                    dateOfStart: "01/01/2001 00:00:00",
-                    dateOfEnd: "01/24/2023 10:23:17"
-                },
-                {
-                    date: "01.01.2001",
-                    taskCode: "Шифр задачи",
-                    projectCode: "48/21 - ТСП",
-                    name: "Прозвонить Копьева",
-                    statusCode: 3,
-                    statusName: "Выполнена",
-                    responsible: "Мочалов А. Н.",
-                    reassign: "Менщиков А. И.",
-                    priority: "2",
-                    comment: "Комментарий",
-                    planTime: "00:15:00",
-                    factTime: "00:00:14",
-                    dateOfStart: "01/01/2001 00:00:00",
-                    dateOfEnd: "01/24/2023 10:23:17"
-                },
-                {
-                    date: "01.01.2001",
-                    taskCode: "Шифр задачи",
-                    projectCode: "48/21 - ТСП",
-                    name: "Прозвонить Копьева",
-                    statusCode: 3,
-                    statusName: "Выполнена",
-                    responsible: "Мочалов А. Н.",
-                    reassign: "Менщиков А. И.",
-                    priority: "2",
-                    comment: "Комментарий",
-                    planTime: "00:15:00",
-                    factTime: "00:00:14",
-                    dateOfStart: "01/01/2001 00:00:00",
-                    dateOfEnd: "01/24/2023 10:23:17"
-                }
-            ]
-        };
         const headers = [
             {
                 "name": "date",
                 "title": "Дата",
-                "show": true
-            },
-            {
-                "name": "taskCode",
-                "title": "Шифр задачи",
                 "show": true
             },
             {
@@ -632,7 +129,7 @@ export class Tasks extends Component {
                 "show": true
             },
             {
-                "name": "name",
+                "name": "desc",
                 "title": "Задача",
                 "show": true
             },
@@ -642,12 +139,12 @@ export class Tasks extends Component {
                 "show": true
             },
             {
-                "name": "responsible",
+                "name": "supervisor",
                 "title": "Ответственный",
                 "show": true
             },
             {
-                "name": "reassign",
+                "name": "recipient",
                 "title": "Переназначить",
                 "show": true
             },
@@ -662,22 +159,22 @@ export class Tasks extends Component {
                 "show": true
             },
             {
-                "name": "planTime",
+                "name": "plannedTime",
                 "title": "План время",
                 "show": true
             },
             {
-                "name": "factTime",
+                "name": "actualTime",
                 "title": "Факт время",
                 "show": true
             },
             {
-                "name": "dateOfStart",
+                "name": "start",
                 "title": "Начал",
                 "show": true
             },
             {
-                "name": "dateOfEnd",
+                "name": "finish",
                 "title": "Завершил",
                 "show": true
             },

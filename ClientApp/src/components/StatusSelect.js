@@ -8,18 +8,21 @@ import { fetchWithAuth } from '../utils.js';
 
 export default function StatusSelect(props) {
     const { taskId } = props;
-    const [status, setStatus] = React.useState(2);
+    const [status, setStatus] = React.useState('');
     const [color, setColor] = React.useState('#FFFFFF');
-    const statuses = ["В работе", "На паузе", "Выполнена"];
+    const statuses = ["Создана", "В работе", "На паузе", "Выполнена"];
 
     React.useEffect(() => {
-        setStatus(props.status);
+        console.log(props.status);
+        if (typeof props.status !== 'undefined') {
+            setStatus(props.status);
+        }
     }, [props.status])
 
     const sendTaskStatus = async (target) => {
         fetchWithAuth('/api/PutTasksStatus', 'put', {
             id: taskId,
-            status: statuses[target.value]
+            status: status
         });
     }
 
@@ -27,13 +30,13 @@ export default function StatusSelect(props) {
         setStatus(event.target.value);
         sendTaskStatus(event.target);
 
-        if (event.target.value === 0) {
+        if (event.target.value === "В работе") {
             setColor('#CEFDED')
         }
-        if (event.target.value === 1) {
+        if (event.target.value === "На паузе") {
             setColor('#FFCCDD')
         }
-        if (event.target.value === 2) {
+        if (event.target.value === "Выполнена" || event.target.value === "Создана") {
             setColor('#FFFFFF')
         }
     };
@@ -46,13 +49,14 @@ export default function StatusSelect(props) {
                     style={{backgroundColor: color} }
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
-                    value={status}
+                    value={ status } 
                     label=""
                     onChange={handleChange}
                 >
-                    <MenuItem value={0}>В работе</MenuItem>
-                    <MenuItem value={1}>На паузе</MenuItem>
-                    <MenuItem value={2}>Выполнена</MenuItem>
+                    <MenuItem value={"Создана"}>Создана</MenuItem>
+                    <MenuItem value={"В работе"}>В работе</MenuItem>
+                    <MenuItem value={"На паузе"}>На паузе</MenuItem>
+                    <MenuItem value={"Выполнена"}>Выполнена</MenuItem>
                 </Select>
             </FormControl>
         </Box>

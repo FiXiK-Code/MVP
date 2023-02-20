@@ -30,17 +30,17 @@ function CollapsedTasks(props) {
     };
 
     let contents = (
-        display
+        (typeof props.tasks !== 'undefined') && display
         &&
         <>
-            {tasks.map((task) =>
+            {props.tasks.map((task) =>
                 <TableRow sx={{ backgroundColor: task.priority == 0 ? "#71FACA" : "#FFFFFF" }}>
                     {stateHeaders.map((header) =>
-                        header.show && 
+                        header.show &&
                         <>
                             {header.name === "status" ?
                                 <TableCell sx={{ ...tableStyling }}>
-                                    <StatusSelect taskId={ task.id } />
+                                    <StatusSelect taskId={task.id} status={task.status} />
                                 </TableCell>
 
                                 :
@@ -70,6 +70,8 @@ function TaskGroup(props) {
 
     React.useEffect(() => {
         setStateHeaders(props.headers);
+        setOpen(props.isOpen);
+
         // setStateTasks(props.tasks);
     })
 
@@ -100,19 +102,20 @@ function TaskGroup(props) {
 }
 
 export default function CollapsibleTable(props) {
-    const { tasks, headers } = props;
+    const { tasks, headers, search } = props;
 
     const tableStyling = {
         padding: "6px 10px"
     };
 
+    const [stateTasks, setStateTasks] = React.useState([]);
     const [stateHeaders, setStateHeaders] = React.useState([]);
     const [length, setLength] = React.useState(13);
-   /* const [stateTasks, setStateTasks] = React.useState({
-        done: [],
-        today: [],
-        upcoming: [],
-    });*/
+    /* const [stateTasks, setStateTasks] = React.useState({
+         done: [],
+         today: [],
+         upcoming: [],
+     });*/
 
     React.useEffect(() => {
         setStateHeaders(props.headers);
@@ -121,9 +124,24 @@ export default function CollapsibleTable(props) {
             if (header.show) counter++;
         })
         setLength(counter);
+        console.log('update');
         // setStateTasks(props.tasks);
         // console.log('CollapsibleTable: tasks', props.tasks);
     });
+
+    let tableBody;
+    if (search) {
+        tableBody = <TableBody>
+            <TaskGroup title={`Результаты поиска по запросу ${search}`} tasks={tasks.done} isOpen={true} colNum={length} headers={stateHeaders} />
+        </TableBody>
+    } else {
+        tableBody =
+            <TableBody>
+                <TaskGroup title="Выполненные задачи" tasks={tasks.completed} isOpen={false} colNum={length} headers={stateHeaders} />
+                <TaskGroup title="Задачи на сегодня" tasks={tasks.today} isOpen={true} colNum={length} headers={stateHeaders} />
+                <TaskGroup title="Предстоящие задачи" tasks={tasks.upcoming} isOpen={false} colNum={length} headers={stateHeaders} />
+            </TableBody>
+    }
 
     return (
         <TableContainer component={Paper}>
@@ -131,16 +149,12 @@ export default function CollapsibleTable(props) {
                 <TableHead>
                     <TableRow>
                         {headers.map((header) =>
-                            header.show && 
+                            header.show &&
                             <TableCell sx={{ ...tableStyling }} key={header.name}>{header.title}</TableCell>
                         )}
                     </TableRow>
                 </TableHead>
-                <TableBody>
-                    <TaskGroup title="Выполненные задачи" tasks={tasks.completed} isOpen={false} colNum={length} headers={stateHeaders} />
-                    <TaskGroup title="Задачи на сегодня" tasks={tasks.today} isOpen={true} colNum={length} headers={stateHeaders} />
-                    <TaskGroup title="Предстоящие задачи" tasks={tasks.upcoming} isOpen={false} colNum={length} headers={stateHeaders} />
-                </TableBody>
+                { tableBody }
             </Table>
         </TableContainer>
     );

@@ -1,4 +1,4 @@
-﻿import React, { Component } from 'react';
+import React, { Component } from 'react';
 import Bell from '../img/svg/bell.svg';
 import styles from './HeaderProfile.module.scss';
 import { Link } from 'react-router-dom';
@@ -13,6 +13,12 @@ const userData = {
 export class HeaderProfile extends Component {
 
     render() {
+        const userData = {
+            name: localStorage.getItem('full_name'),
+            position: localStorage.getItem('role'),
+            photo: false
+        };
+
         return (
             <div className={styles.wrapper}>
                 <Link to="/notifications">

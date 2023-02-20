@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import DialogTitle from '@mui/material/DialogTitle';
-import Dialog from '@mui/material/Dialog';
+import Drawer from '@mui/material/Drawer';
 import TableCell from '@mui/material/TableCell';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
@@ -96,10 +96,11 @@ function SimpleDialog(props) {
     };
 
     return (
-        <Dialog onClose={handleClose} open={open} maxWidth="sm" fullWidth>
+        <Drawer anchor="right" onClose={handleClose} open={open} maxWidth="sm" fullWidth>
             <DialogTitle>Просмотр задачи</DialogTitle>
             <Box sx={{
-                    padding: 2
+                padding: 2,
+                minWidth: '400px'
                 } }>
                 <Stack spacing={2}>
                     <Button variant="contained">Редактировать</Button>
@@ -110,7 +111,7 @@ function SimpleDialog(props) {
                     )}
                 </Stack>
             </Box>
-        </Dialog>
+        </Drawer>
     );
 }
 

@@ -77,9 +77,11 @@ export default function SignIn() {
             ))
             .then(data => {
                 console.log(data);
-                const { access_token, username } = data;
-                localStorage.setItem('access_token', access_token);
-                localStorage.setItem('username', username);
+                localStorage.setItem('access_token', data.access_token);
+                localStorage.setItem('username', data.user_login);
+                localStorage.setItem('user_id', data.user_id);
+                localStorage.setItem('full_name', data.user_name);
+                localStorage.setItem('role', data.user_role);
                 navigate("/tasks");
             })
             .catch(error => {
