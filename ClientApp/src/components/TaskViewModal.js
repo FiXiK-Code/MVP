@@ -6,110 +6,56 @@ import TableCell from '@mui/material/TableCell';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
-
-const fields = [
-    {
-        "type": "textfield",
-        "name": "date",
-        "title": "Дата",
-        "value": "01/01/2001"
-    },
-    {
-        "type": "textfield",
-        "name": "taskCode",
-        "title": "Шифр задачи",
-        "value": "Шифр задачи"
-    },
-    {
-        "type": "textfield",
-        "name": "projectCode",
-        "title": "Шифр проекта",
-        "value": "48/21 - ТСП"
-    },
-    {
-        "type": "textfield",
-        "name": "relateTo",
-        "title": "Относится к",
-        "value": " "
-    },
-    {
-        "type": "textfield",
-        "name": "status",
-        "title": "Статус задачи",
-        "value": "Выполнена"
-    },
-    {
-        "type": "textfield",
-        "name": "name",
-        "title": "Формулировка",
-        "value": "Прозвонить Копьева"
-    },
-    {
-        "type": "textarea",
-        "name": "comment",
-        "title": "Комментарий",
-        "value": "Менщиков А.И.: Копъев переобулся. Теперь ему нужны распечатанные тома в 2 экз. Печати поставит и вернет согласованные. Отдал Светлане на печать."
-    },
-    {
-        "type": "textfield",
-        "name": "responsible",
-        "title": "Ответственный",
-        "value": "Мочалов Александр Николаевич"
-    },
-    {
-        "type": "textfield",
-        "name": "reassigned",
-        "title": "Исполнитель",
-        "value": "Менщиков Андрей Игоревич"
-    },
-    {
-        "type": "textfield",
-        "name": "priority",
-        "title": "Приоритет",
-        "value": "2"
-    },
-    {
-        "type": "textfield",
-        "name": "planTime",
-        "title": "Планируемое время исполнения",
-        "value": "00:15:00"
-    },
-    {
-        "type": "textfield",
-        "name": "dateOfStart",
-        "title": "Начало работы над задачей",
-        "value": "01/01/2001 00:00:00"
-    },
-    {
-        "type": "textfield",
-        "name": "dateOfEnd",
-        "title": "Задача завершена",
-        "value": "01/24/2023 10:23:17"
-    },
-];
+import { fetchWithAuth } from '../utils';
 
 function SimpleDialog(props) {
-    const { onClose, selectedValue, open } = props;
+    const { onClose, selectedValue, open, task } = props;
 
     const handleClose = () => {
         onClose(selectedValue);
     };
 
+    const handleSubmit = () => {
+        console.log('save');
+        fetchWithAuth()
+    };
+
+    const [edit, setEdit] = React.useState(false);
+    let title, content;
+    if (edit) {
+        title = "Редактирование задачи";
+        content =
+            <Stack spacing={2} component="form" onSubmit={handleSubmit}>               
+                {props.headers.map((field) =>
+                    <>
+                        <TextField id={field.name} label={field.title} variant="outlined" value={task[field.name]} multiline />
+                    </>
+                )}
+                <Button variant="contained" type="submit">Сохранить</Button>
+            </Stack>
+    } else {
+        title = "Просмотр задачи";
+        content =
+            <Stack spacing={2}>
+                <Button variant="contained" onClick={() => setEdit(true)}>Редактировать</Button>
+                {props.headers.map((field) =>
+                    <>
+                        <TextField id={field.name} label={field.title} variant="outlined" disabled value={task[field.name]} multiline />
+                    </>
+                )}           
+            </Stack>
+    }
+
+
+
     return (
         <Drawer anchor="right" onClose={handleClose} open={open} maxWidth="sm" fullWidth>
-            <DialogTitle>Просмотр задачи</DialogTitle>
+            <DialogTitle>{title}</DialogTitle>
             <Box sx={{
                 padding: 2,
                 minWidth: '400px'
-                } }>
-                <Stack spacing={2}>
-                    <Button variant="contained">Редактировать</Button>
-                    {fields.map((field) =>
-                        <>
-                            <TextField id={field.name} label={field.title} variant="outlined" disabled value={field.value} multiline />
-                        </>
-                    )}
-                </Stack>
+            }}>
+                {content}
             </Box>
         </Drawer>
     );
@@ -141,6 +87,8 @@ export default function TaskViewModal(props) {
             <SimpleDialog
                 open={open}
                 onClose={handleClose}
+                task={props.task}
+                headers={props.headers}
             />
         </>
     );

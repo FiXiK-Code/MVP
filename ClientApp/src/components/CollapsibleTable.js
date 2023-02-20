@@ -44,7 +44,7 @@ function CollapsedTasks(props) {
                                 </TableCell>
 
                                 :
-                                <TaskViewModal>
+                                <TaskViewModal headers={ props.headers } task={ task } >
                                     {task[header.name]}
                                 </TaskViewModal>}
                         </>
@@ -108,7 +108,6 @@ export default function CollapsibleTable(props) {
         padding: "6px 10px"
     };
 
-    const [stateTasks, setStateTasks] = React.useState([]);
     const [stateHeaders, setStateHeaders] = React.useState([]);
     const [length, setLength] = React.useState(13);
     /* const [stateTasks, setStateTasks] = React.useState({
