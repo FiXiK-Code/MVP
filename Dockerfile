@@ -29,9 +29,11 @@ COPY ["MVP.csproj", "."]
 RUN dotnet restore "./MVP.csproj"
 COPY . .
 WORKDIR "/src/."
+ARG ENV=development
 RUN dotnet build "MVP.csproj" -c Release -o /app/build
 
 FROM build AS publish
+ARG ENV=development
 RUN dotnet publish "MVP.csproj" -c Release -o /app/publish
 
 FROM base AS final
