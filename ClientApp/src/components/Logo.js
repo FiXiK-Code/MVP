@@ -1,6 +1,6 @@
-﻿import React, { Component } from 'react';
+import React, { Component } from 'react';
 import styles from "./Logo.module.scss";
-import { LogoImg } from "../img/svg/logo.svg";
+import LogoImg from "../img/svg/logo.svg";
 import { Link } from 'react-router-dom';
 
 

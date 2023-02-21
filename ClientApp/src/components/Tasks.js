@@ -23,7 +23,9 @@ export class Tasks extends Component {
             },
             search: false,
             headers: [],
-            loading: true
+            loading: true,
+            projectCode: [],
+            supervisor: []
         };
 
         this.renderTasksTable = this.renderTasksTable.bind(this);
@@ -33,13 +35,15 @@ export class Tasks extends Component {
 
     componentDidMount() {
         this.populateWeatherData();
+        this.getEmployees();
+        this.getProjects();
     }
 
-    renderTasksTable(headers, tasks) {
+    renderTasksTable(headers, tasks, supervisor, projectCode ) {
         console.log("Render tasks: ", tasks);
 
         return (
-            <CollapsibleTable search={ this.state.search } tasks={tasks} headers={headers} />
+            <CollapsibleTable search={this.state.search} tasks={tasks} headers={headers} supervisor={supervisor} projectCode={ projectCode }  />
         );
     }
 
@@ -77,7 +81,7 @@ export class Tasks extends Component {
     render() {
         let contents = this.state.loading
             ? <p><em>Загрузка данных...</em></p>
-            : this.renderTasksTable(this.state.headers, this.state.tasks);
+            : this.renderTasksTable(this.state.headers, this.state.tasks, this.state.supervisor, this.state.projectCode);
 
         const tableSettingsHandler = (event) => {
             console.log(event.target.value);
@@ -98,13 +102,39 @@ export class Tasks extends Component {
                     paddingBottom: 2
                 }}>
                     <Stack spacing={2} direction="row">
-                        <TaskAddModal />
+                        <TaskAddModal headers={this.state.headers} supervisor={this.state.supervisor} projectCode={this.state.projectCode }  />
                         <Button variant="contained">Добавить проект</Button>
                     </Stack>
                 </Box>
                 {contents}
             </div>
         );
+    }
+
+    async getProjects() {
+        const response = await fetchWithAuth("/api/GetProjects");
+        console.log(response);
+        if (response.status === 401) {
+            this.setState({
+                auth: false
+            })
+        }
+
+        const data = response.value.projects;
+        this.setState({ projectCode: data });
+    }
+
+    async getEmployees() {
+        const response = await fetchWithAuth("/api/GetEmployees");
+        console.log(response);
+        if (response.status === 401) {
+            this.setState({
+                auth: false
+            })
+        }
+
+        const data = response.value.staffs;
+        this.setState({ supervisor: data });
     }
 
     async populateWeatherData() {
@@ -116,67 +146,88 @@ export class Tasks extends Component {
             })
         }
 
-        const data = JSON.parse(response.value);
+        const data = response.value;
         const headers = [
             {
                 "name": "date",
+                "type": "datefield",
                 "title": "Дата",
-                "show": true
+                "show": true,
+                "createAvailability": true
             },
             {
                 "name": "projectCode",
+                "type": "select",
                 "title": "Шифр проекта",
-                "show": true
+                "show": true,
+                "createAvailability": true,
+                "fieldToShow": "code",
             },
             {
                 "name": "desc",
-                "title": "Задача",
-                "show": true
+                "type": "textfield",
+                "title": "Задача",              
+                "show": true,
+                "createAvailability": true
             },
             {
                 "name": "status",
                 "title": "Статус",
-                "show": true
+                "show": true,
+                "createAvailability": false
             },
             {
                 "name": "supervisor",
+                "type": "select",
                 "title": "Ответственный",
-                "show": true
+                "show": true,
+                "createAvailability": true,
+                "fieldToShow": "name"
             },
             {
                 "name": "recipient",
+                "type": "select",
                 "title": "Переназначить",
-                "show": true
+                "show": true,
+                "createAvailability": false
             },
             {
                 "name": "priority",
                 "title": "Приоритет",
-                "show": true
+                "show": true,
+                "createAvailability": false
             },
             {
                 "name": "comment",
+                "type": "textfield",
                 "title": "Комментарий",
-                "show": true
+                "show": true,
+                "createAvailability": true
             },
             {
                 "name": "plannedTime",
+                "type": "timefield",
                 "title": "План время",
-                "show": true
+                "show": true,
+                "createAvailability": true
             },
             {
                 "name": "actualTime",
                 "title": "Факт время",
-                "show": true
+                "show": true,
+                "createAvailability": false
             },
             {
                 "name": "start",
                 "title": "Начал",
-                "show": true
+                "show": true,
+                "createAvailability": false
             },
             {
                 "name": "finish",
                 "title": "Завершил",
-                "show": true
+                "show": true,
+                "createAvailability": false
             },
         ];
         this.setState({ tasks: data, headers: headers, loading: false });

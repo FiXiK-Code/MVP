@@ -27,11 +27,12 @@
   "devDependencies": {
     "ajv": "^6.12.6",
     "cross-env": "^5.2.0",
-    "eslint-config-react-app": "^5.2.1",
+    "eslint": "^8.0.0",
+    "eslint-config-react-app": "^7.0.1",
     "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react-hooks": "^5.0.0-next-4fcc9184a-20230217",
     "nan": "^2.15.0",
-    "react-scripts": "^5.0.0",
-    "typescript": "^3.9.10"
+    "react-scripts": "^5.0.0"
   },
   "eslintConfig": {
     "extends": "react-app"

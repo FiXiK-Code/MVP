@@ -49,7 +49,7 @@ function SimpleDialog(props) {
 
 
     return (
-        <Drawer anchor="right" onClose={handleClose} open={open} maxWidth="sm" fullWidth>
+        <Drawer anchor="right" onClose={handleClose} open={open}>
             <DialogTitle>{title}</DialogTitle>
             <Box sx={{
                 padding: 2,

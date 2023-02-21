@@ -26,7 +26,7 @@ function SimpleDialog(props) {
     }, [props.fields])
 
     return (
-        <Drawer anchor="right" onClose={handleClose} open={open} maxWidth="sm">
+        <Drawer anchor="right" onClose={handleClose} open={open}>
             <DialogTitle>Настройка столбцов</DialogTitle>
             <Box sx={{
                 padding: 2

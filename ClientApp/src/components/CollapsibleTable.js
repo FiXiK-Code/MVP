@@ -44,7 +44,7 @@ function CollapsedTasks(props) {
                                 </TableCell>
 
                                 :
-                                <TaskViewModal headers={ props.headers } task={ task } >
+                                <TaskViewModal headers={props.headers} task={task} supervisor={ props.supervisor }  >
                                     {task[header.name]}
                                 </TaskViewModal>}
                         </>

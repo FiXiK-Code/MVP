@@ -38,7 +38,7 @@ export function fetchWithAuth(url, method = "get", body = false) {
                     console.log('401');
                     localStorage.removeItem('access_token');
                     localStorage.removeItem('username');
-                    redirect("/");
+                    // redirect("/");
                     return response;
                 }
                 throw new Error(response.status)
