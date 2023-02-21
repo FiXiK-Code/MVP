@@ -74,7 +74,7 @@ namespace MVP
             services.AddDbContext<AppDB>(
                    options =>
                    {
-                       options.UseMySql($"server=localhost;userid=root;pwd=;port=3306;database=mvp");
+                       options.UseMySql($"server=localhost;userid=root;pwd=root;port=3306;database=mvp");
                    });
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
