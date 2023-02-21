@@ -24,6 +24,7 @@ services:
   restart: always
   environment:
     - DBHOST=db
+    - ENV=development
     - ASPNETCORE_ENVIRONMENT=Development
   command: --disable-partition-engine-check
   
