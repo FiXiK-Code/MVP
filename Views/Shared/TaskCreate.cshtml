@@ -1,0 +1,169 @@
+﻿@model HomeViewModel
+<form class="form" id="create-task" method="post">
+    <label><h2>Создание задачи</h2></label>
+    @if (ViewBag.ErrorMassage != "")
+    {<label><h2>@ViewBag.ErrorMassage</h2></label>}
+</form>
+<form class="form" id="create-task" method="post">
+
+    <select name="liteTask">
+        <option asp-for="liteTask">Задача</option>
+        <option asp-for="liteTask">Задача вне очереди</option>
+    </select>
+
+    @{ Model.nullTask.date = DateTime.Now.AddHours(-5).Date;}
+    <label>Дата</label>
+    <input name="date" asp-for="@Model.nullTask.date" type="date" class="form-control" />
+
+    @*<label>Шифр задачи</label>
+        <input name="code" asp-for="@Model.nullTask.code" class="form-control" />*@
+
+    <label>Шифр проекта</label>
+    <select name="projectCode" asp-for="@Model.nullTask.projectCode" class="form-control">
+        @foreach (var projCod in Model.projects.OrderBy(p => p.code.Split('/')[0]).OrderBy(p => p.code.Split('/').Last().Split('-')[0]))
+        {
+            <option asp-for="@Model.nullTask.projectCode">@projCod.code</option>
+        }
+    </select>
+
+    <label>Относится к стадии проекта</label>
+    <input name="Stage" asp-for="@Model.nullTask.Stage" class="form-control" />
+
+    <label>Формулировка</label>
+    <textarea name="desc" asp-for="@Model.nullTask.desc" class="form-control"></textarea>
+
+    <label>Комментарий</label>
+    <textarea name="comment" class="form-control"></textarea>
+
+    <label>Ответственный </label>
+    <select name="supervisor">
+        <option asp-for="@Model.nullTask.supervisor" selected hidden>@ViewBag.RoleName</option>
+        @if (ViewBag.Role == "Директор")
+        {
+            @foreach (var staff in Model.staffs.Where(p => p.roleCod == "R02"))
+            {
+                <option asp-for="@Model.nullTask.supervisor">@staff.name</option>
+            }
+            @foreach (var staff in Model.staffs.Where(p => p.roleCod == "R04"))
+            {
+                <option asp-for="@Model.nullTask.supervisor">@staff.name</option>
+            }
+        }
+        else if (ViewBag.Role == "ГИП")
+        {
+            @foreach (var staff in Model.staffs.Where(p => p.roleCod == "R03"))
+            {
+                <option asp-for="@Model.nullTask.supervisor">@staff.name</option>
+            }
+            @foreach (var staff in Model.staffs.Where(p => p.roleCod == "R04"))
+            {
+                <option asp-for="@Model.nullTask.supervisor">@staff.name</option>
+            }
+        }
+        else if (ViewBag.Role == "Помощник ГИПа")
+        {
+            @foreach (var staff in Model.staffs.Where(p => p.roleCod == "R04"))
+            {
+                <option asp-for="@Model.nullTask.supervisor">@staff.name</option>
+            }
+        }
+        else if (ViewBag.Role == "НО")
+        {
+            @foreach (var staff in Model.staffs.Where(p => p.roleCod == "R02"))
+            {
+                <option>@staff.name</option>
+            }
+            @foreach (var staff in Model.staffs.Where(p => p.supervisorCod == ViewBag.RoleCod && p.roleCod == "R05"))
+            {
+                <option>@staff.name</option>
+            }
+            foreach (var staff1 in Model.staffs.Where(p => p.supervisorCod == ViewBag.RoleCod && p.roleCod == "R06"))
+            {
+                <option>@staff1.name</option>
+            }
+        }
+        else if (ViewBag.Role == "РГ")
+        {
+            @foreach (var staff in Model.staffs.Where(p => p.supervisorCod == ViewBag.RoleCod && p.roleCod == "R06"))
+            {
+                <option>@staff.name</option>
+            }
+        }
+    </select>
+
+
+
+    <label>Исполнитель</label>
+    <select name="recipient" asp-for="@Model.nullTask.recipient" class="form-control">
+        <option value="@Model.nullTask.recipient" selected hidden></option>
+
+        <option asp-for="@Model.nullTask.supervisor">@ViewBag.RoleName</option>
+        @if (ViewBag.Role == "Директор")
+        {
+            @foreach (var staff in Model.staffs.Where(p => p.roleCod == "R02"))
+            {
+                <option asp-for="@Model.nullTask.supervisor">@staff.name</option>
+            }
+            @foreach (var staff in Model.staffs.Where(p => p.roleCod == "R04"))
+            {
+                <option asp-for="@Model.nullTask.supervisor">@staff.name</option>
+            }
+        }
+        else if (ViewBag.Role == "ГИП")
+        {
+            @foreach (var staff in Model.staffs.Where(p => p.roleCod == "R03"))
+            {
+                <option asp-for="@Model.nullTask.supervisor">@staff.name</option>
+            }
+            @foreach (var staff in Model.staffs.Where(p => p.roleCod == "R04"))
+            {
+                <option asp-for="@Model.nullTask.supervisor">@staff.name</option>
+            }
+        }
+        else if (ViewBag.Role == "Помощник ГИПа")
+        {
+            @foreach (var staff in Model.staffs.Where(p => p.roleCod == "R04"))
+            {
+                <option asp-for="@Model.nullTask.supervisor">@staff.name</option>
+            }
+        }
+        else if (ViewBag.Role == "НО")
+        {
+            @foreach (var staff in Model.staffs.Where(p => p.roleCod == "R02"))
+            {
+                <option>@staff.name</option>
+            }
+            @foreach (var staff in Model.staffs.Where(p => p.supervisorCod == ViewBag.RoleCod && p.roleCod == "R05"))
+            {
+                <option>@staff.name</option>
+            }
+            foreach (var staff1 in Model.staffs.Where(p => p.supervisorCod == ViewBag.RoleCod && p.roleCod == "R06"))
+            {
+                <option>@staff1.name</option>
+            }
+        }
+        else if (ViewBag.Role == "РГ")
+        {
+            @foreach (var staff in Model.staffs.Where(p => p.supervisorCod == ViewBag.RoleCod && p.roleCod == "R06"))
+            {
+                <option>@staff.name</option>
+            }
+        }
+    </select>
+
+    @{ Model.nullTask.dedline = DateTime.Now.AddHours(-5).Date;}
+    <label>Дедлайн</label>
+    <input name="dedline" asp-for="@Model.nullTask.dedline"  class="form-control" />
+
+    <label>Планируемое время исполнения</label>
+    <input name="plannedTime" asp-for="@Model.nullTask.plannedTime" class="form-control" />
+
+
+    <input class="btn-white" type="submit" value="Сохранить"
+           asp-controller="Home" asp-action="addTaskToDB" asp-route-activTable="@Model.activeTableIndex"
+           asp-route-staffTableFilter="@Model.filterStaff"
+           asp-route-recipientProjectFilter="@Model.filterResProj"
+           asp-route-supervisorProjectFilter="@Model.filterSupProj"
+           asp-route-porjectFiltr="@Model.filterProj"
+           asp-route-filterTaskTable="@Model.filterTaskTable"/>
+</form>
