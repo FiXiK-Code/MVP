@@ -1,0 +1,201 @@
+﻿@model HomeViewModel
+
+<table class="table-emploeey">
+    <tr>
+        <th rowspan="3">Дата</th>
+    </tr>
+    <tr>
+        <th>Должность</th>
+        @foreach (Staff staff in Model.staffsTable.OrderBy(p => p.name))
+        {
+            <th>@staff.post</th>
+        }
+    </tr>
+    <tr>
+        <th>ФИО</th>
+        @foreach (Staff staff in Model.staffsTable.OrderBy(p => p.name))
+        {
+            <th>@staff.name</th>
+        }
+    </tr>
+    @for (int i = 0; i < 3; i++)
+    {
+        if (i == 2)
+        {
+            <tr id="title">
+                <th colspan="@(Model.staffsTable.Count()+2)" style="text-align:left ;background-color:#cccccc">Выполненные задачи </th>
+            </tr>
+            List<Task> Taskss = Model.task4Table.Where(p => (p.recipient != ViewBag.RoleName && p.recipient != null) || (p.supervisor == ViewBag.RoleName && p.recipient != null)
+            || (p.supervisor != ViewBag.RoleName && p.recipient != ViewBag.RoleName && p.recipient != ViewBag.RoleName)).Where(p => p.status == "Выполнена").OrderBy(p => p.date).ToList();
+            for (int j = 0; j < Taskss.Count(); j++)
+            {
+                if (j + 1 != Taskss.Count() && Taskss[j].date.Date == Taskss[j + 1].date.Date) continue;
+                //if (Model.staffNames.Contains(Taskss[j].supervisor) && Taskss[j].supervisor != ViewBag.RoleName && Taskss[j].recipient != null) continue;
+                if (Taskss[j].supervisor == ViewBag.RoleName && Taskss[j].recipient == null) continue;
+                <tr id="finish-task">
+                    <th colspan="2">@Taskss[j].date.Date.ToString(@"dd\.MM\.yyyy")</th>
+                    @foreach (Staff staff in Model.staffsTable.Where(p => p.name != ViewBag.RoleName).OrderBy(p => p.name))
+                    {
+                        if (Model.task4Table.Where(p => p.recipient == staff.name).Where(p => p.date.Date == Taskss[j].date.Date).Where(p => p.status == "Выполнена").Count() > 0)
+                        {
+                            <td>
+                                @foreach (Task task1 in Model.task4Table.Where(p => p.status == "Выполнена").Where(p => p.date.Date == Taskss[j].date.Date).Where(p => p.recipient == staff.name))
+                                {
+                                    <a asp-controller="Home" asp-action="TaskTable" asp-route-activTable="2" asp-route-Taskid="@task1.id"
+                                       asp-route-staffTableFilter="@Model.filterStaff"
+                                       asp-route-recipientProjectFilter="@Model.filterResProj"
+                                       asp-route-supervisorProjectFilter="@Model.filterSupProj"
+                                       asp-route-porjectFiltr="@Model.filterProj"
+                                       asp-route-filterTaskTable="@Model.filterTaskTable"
+                                       asp-route-filterStaffTable="@Model.filterStaffTable">
+                                        <button type="submit">@task1.desc</button>
+                                    </a>
+                                }
+                            </td>
+                        }
+
+                        else if (Model.task4Table.Where(p => p.supervisor == staff.name).Where(p => p.recipient == null).Where(p => p.date.Date == Taskss[j].date.Date).Where(p => p.status == "Выполнена").Count() > 0)
+                        {
+                            <td>
+                                @foreach (Task task1 in Model.task4Table.Where(p => p.status == "Выполнена").Where(p => p.recipient == null).Where(p => p.date.Date == Taskss[j].date.Date).Where(p => p.supervisor == staff.name))
+                                {
+                                    <a asp-controller="Home" asp-action="TaskTable" asp-route-activTable="2" asp-route-Taskid="@task1.id"
+                                       asp-route-staffTableFilter="@Model.filterStaff"
+                                       asp-route-recipientProjectFilter="@Model.filterResProj"
+                                       asp-route-supervisorProjectFilter="@Model.filterSupProj"
+                                       asp-route-porjectFiltr="@Model.filterProj"
+                                       asp-route-filterTaskTable="@Model.filterTaskTable"
+                                       asp-route-filterStaffTable="@Model.filterStaffTable">
+                                        <button type="submit">@task1.desc</button>
+                                    </a>
+                                }
+                            </td>
+                        }
+                        else
+                        {
+                            <td>-</td>
+                        }
+                    }
+                </tr>
+            }
+        }
+        if (i == 0)
+        {
+            <tr id="title">
+                <th colspan="@(Model.staffsTable.Count()+2)" style="text-align:left ;background-color:#cccccc">Задачи на сегодня</th>
+            </tr>
+            List<Tasks> Taskss = Model.task4Table.Where(p => (p.recipient != ViewBag.RoleName && p.recipient != null) || (p.supervisor == ViewBag.RoleName && p.recipient != null)
+            || (p.supervisor != ViewBag.RoleName && p.recipient != ViewBag.RoleName && p.recipient != ViewBag.RoleName)).Where(p => p.date.Date <= DateTime.Now.AddHours(-5).Date).Where(p => p.status != "Выполнена").OrderBy(p => p.date.Date).ToList();
+            for (int j = 0; j < Taskss.Count(); j++)
+            {
+                if (j + 1 != Taskss.Count() && Taskss[j].date.Date == Taskss[j + 1].date.Date) continue;
+                if (Model.staffNames.Contains(Taskss[j].supervisor) && Taskss[j].supervisor != ViewBag.RoleName && Taskss[j].recipient != null) continue;
+                if (Taskss[j].supervisor == ViewBag.RoleName && Taskss[j].recipient == null) continue;
+                <tr id="task">
+                    <th colspan="2">@Taskss[j].date.Date.ToString(@"dd\.MM\.yyyy")</th>
+                    @foreach (Staff staff in Model.staffsTable.Where(p => p.name != ViewBag.RoleName).OrderBy(p => p.name))
+                    {
+                        if (Model.task4Table.Where(p => p.recipient == staff.name).Where(p => p.date.Date == Taskss[j].date.Date).Where(p => p.status != "Выполнена").Count() > 0)
+                        {
+                            <td>
+                                @foreach (Task task1 in Model.task4Table.Where(p => p.status != "Выполнена").Where(p => p.date.Date == Taskss[j].date.Date).Where(p => p.recipient == staff.name))
+                                {
+                                    <a asp-controller="Home" asp-action="TaskTable" asp-route-activTable="2" asp-route-Taskid="@task1.id"
+                                       asp-route-staffTableFilter="@Model.filterStaff"
+                                       asp-route-recipientProjectFilter="@Model.filterResProj"
+                                       asp-route-supervisorProjectFilter="@Model.filterSupProj"
+                                       asp-route-porjectFiltr="@Model.filterProj"
+                                       asp-route-filterTaskTable="@Model.filterTaskTable"
+                                       asp-route-filterStaffTable="@Model.filterStaffTable">
+                                        <button type="submit">@task1.desc</button>
+                                    </a>
+                                }
+                            </td>
+                        }
+
+                        else if (Model.task4Table.Where(p => p.supervisor == staff.name).Where(p => p.recipient == null).Where(p => p.date.Date == Taskss[j].date.Date).Where(p => p.status != "Выполнена").Count() > 0)
+                        {
+                            <td>
+                                @foreach (Task task1 in Model.task4Table.Where(p => p.status != "Выполнена").Where(p => p.recipient == null).Where(p => p.date.Date == Taskss[j].date.Date).Where(p => p.supervisor == staff.name))
+                                {
+                                    <a asp-controller="Home" asp-action="TaskTable" asp-route-activTable="2" asp-route-Taskid="@task1.id"
+                                       asp-route-staffTableFilter="@Model.filterStaff"
+                                       asp-route-recipientProjectFilter="@Model.filterResProj"
+                                       asp-route-supervisorProjectFilter="@Model.filterSupProj"
+                                       asp-route-porjectFiltr="@Model.filterProj"
+                                       asp-route-filterTaskTable="@Model.filterTaskTable"
+                                       asp-route-filterStaffTable="@Model.filterStaffTable">
+                                        <button type="submit">@task1.desc</button>
+                                    </a>
+                                }
+                            </td>
+                        }
+                        else
+                        {
+                            <td>-</td>
+                        }
+                    }
+                </tr>
+            }
+        }
+        if (i == 1)
+        {
+            <tr id="title">
+                <th colspan="@(Model.staffsTable.Count()+2)" style="text-align:left ;background-color:#cccccc">Предстоящие задачи</th>
+            </tr>
+            List<Tasks> Taskss = Model.task4Table.Where(p => (p.recipient != ViewBag.RoleName && p.recipient != null) || (p.supervisor == ViewBag.RoleName && p.recipient != null)
+            || (p.supervisor != ViewBag.RoleName && p.recipient != ViewBag.RoleName && p.recipient != ViewBag.RoleName)).Where(p => p.date.Date > DateTime.Now.AddHours(-5).Date).Where(p => p.status != "Выполнена").OrderBy(p => p.date.Date).ToList();
+            for (int j = 0; j < Taskss.Count(); j++)
+            {
+                if (j + 1 != Taskss.Count() && Taskss[j].date.Date == Taskss[j + 1].date.Date) continue;
+                if (Model.staffNames.Contains(Taskss[j].supervisor) && Taskss[j].supervisor != ViewBag.RoleName && Taskss[j].recipient != null) continue;
+                if (Taskss[j].supervisor == ViewBag.RoleName && Taskss[j].recipient == null) continue;
+                <tr id="task">
+                    <th colspan="2">@Taskss[j].date.Date.ToString(@"dd\.MM\.yyyy")</th>
+                    @foreach (Staff staff in Model.staffsTable.Where(p => p.name != ViewBag.RoleName).OrderBy(p => p.name))
+                    {
+                        if (Model.task4Table.Where(p => p.recipient == staff.name).Where(p => p.date.Date == Taskss[j].date.Date).Where(p => p.status != "Выполнена").Count() > 0)
+                        {
+                            <td>
+                                @foreach (Task task1 in Model.task4Table.Where(p => p.status != "Выполнена").Where(p => p.date.Date == Taskss[j].date.Date).Where(p => p.recipient == staff.name))
+                                {
+                                    <a asp-controller="Home" asp-action="TaskTable" asp-route-activTable="2" asp-route-Taskid="@task1.id"
+                                       asp-route-staffTableFilter="@Model.filterStaff"
+                                       asp-route-recipientProjectFilter="@Model.filterResProj"
+                                       asp-route-supervisorProjectFilter="@Model.filterSupProj"
+                                       asp-route-porjectFiltr="@Model.filterProj"
+                                       asp-route-filterTaskTable="@Model.filterTaskTable"
+                                       asp-route-filterStaffTable="@Model.filterStaffTable">
+                                        <button type="submit">@task1.desc</button>
+                                    </a>
+                                }
+                            </td>
+                        }
+
+                        else if (Model.task4Table.Where(p => p.supervisor == staff.name).Where(p => p.recipient == null).Where(p => p.date.Date == Taskss[j].date.Date).Where(p => p.status != "Выполнена").Count() > 0)
+                        {
+                            <td>
+                                @foreach (Task task1 in Model.task4Table.Where(p => p.supervisor == staff.name).Where(p => p.status != "Выполнена").Where(p => p.recipient == null).Where(p => p.date.Date == Taskss[j].date.Date))
+                                {
+                                    <a asp-controller="Home" asp-action="TaskTable" asp-route-activTable="2" asp-route-Taskid="@task1.id"
+                                       asp-route-staffTableFilter="@Model.filterStaff"
+                                       asp-route-recipientProjectFilter="@Model.filterResProj"
+                                       asp-route-supervisorProjectFilter="@Model.filterSupProj"
+                                       asp-route-porjectFiltr="@Model.filterProj"
+                                       asp-route-filterTaskTable="@Model.filterTaskTable"
+                                       asp-route-filterStaffTable="@Model.filterStaffTable">
+                                        <button type="submit">@task1.desc</button>
+                                    </a>
+                                }
+                            </td>
+                        }
+                        else
+                        {
+                            <td>-</td>
+                        }
+                    }
+                </tr>
+            }
+        }
+    }
+</table>
