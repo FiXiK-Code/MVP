@@ -127,7 +127,7 @@ namespace MVP
             {
                 spa.Options.SourcePath = "ClientApp";
 
-                if (Environment.GetEnvironmentVariable("ENV") !== "production")
+                if (Environment.GetEnvironmentVariable("ENV") != "production")
                 {
                     spa.UseReactDevelopmentServer(npmScript: "start");
                 }
