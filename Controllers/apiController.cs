@@ -279,21 +279,28 @@ namespace MVP.Controllers
             }
 
             // корректировка даты - автоперенос при заполненном дне
-            TaskParam.date = redackPriorAndPerenos(TaskParam.supervisor, TaskParam.date, TaskParam.plannedTime, TaskParam.projectCode, TaskParam.liteTask);
+            var supervisor = _appDB.DBStaff.FirstOrDefault(p => p.id == TaskParam.supervisor).name;
+            var recipient = _appDB.DBStaff.FirstOrDefault(p => p.id == TaskParam.recipient).name;
+            var date = new DateTime(Convert.ToInt32(TaskParam.date.Split('-')[0]), Convert.ToInt32(TaskParam.date.Split('-')[1]), Convert.ToInt32(TaskParam.date.Split('-')[2]));
+            var projectCode = _appDB.DBProject.FirstOrDefault(p => p.id == TaskParam.projectCode).code;
+            var plannedTime = new TimeSpan(Convert.ToInt32(TaskParam.plannedTime.Split(':')[0]), Convert.ToInt32(TaskParam.plannedTime.Split(':')[1]), Convert.ToInt32(TaskParam.plannedTime.Split(':')[2]));
+            var dedline = new DateTime(Convert.ToInt32(TaskParam.dedline.Split(' ')[0].Split('-')[0]), Convert.ToInt32(TaskParam.dedline.Split(' ')[0].Split('-')[1]), Convert.ToInt32(TaskParam.dedline.Split(' ')[0].Split('-')[2]),
+                Convert.ToInt32(TaskParam.dedline.Split(' ')[1].Split(':')[0]), Convert.ToInt32(TaskParam.dedline.Split(' ')[1].Split(':')[1]), Convert.ToInt32(TaskParam.dedline.Split(' ')[1].Split(':')[2]));
+            date = redackPriorAndPerenos(supervisor, date, plannedTime, projectCode, TaskParam.liteTask);
 
             // добавление задачи в базу
             var item = new Tasks
             {
                 actualTime = TimeSpan.Zero,
                 desc = TaskParam.desc,
-                projectCode = TaskParam.projectCode,
-                supervisor = TaskParam.supervisor,
-                recipient = TaskParam.recipient,
-                priority = TaskParam.liteTask == "Задача" ? _appDB.DBProject.FirstOrDefault(p => p.code == TaskParam.projectCode).priority : -1,
+                projectCode = projectCode,
+                supervisor = supervisor,
+                recipient = recipient,
+                priority = TaskParam.liteTask == "Задача" ? _appDB.DBProject.FirstOrDefault(p => p.code == projectCode).priority : -1,
                 comment = TaskParam.comment != null ? $"{roleSession.SessionName}: {TaskParam.comment}\n" : null,
-                plannedTime = TaskParam.plannedTime,
-                date = TaskParam.date,
-                dedline = TaskParam.dedline,
+                plannedTime = plannedTime,
+                date = date,
+                dedline = dedline,
                 Stage = TaskParam.Stage,
                 status = "Создана",
                 liteTask = TaskParam.liteTask == "Задача" ? false : true,
@@ -309,10 +316,10 @@ namespace MVP.Controllers
                 ProjectCode = task.projectCode,
                 TaskId = task.id,
                 descTask = task.desc,
-                supervisorId = _appDB.DBStaff.FirstOrDefault(p => p.name == TaskParam.supervisor).id,
-                resipienId = TaskParam.supervisor != null ? _appDB.DBStaff.FirstOrDefault(p => p.name == TaskParam.supervisor).id : -1,
+                supervisorId = _appDB.DBStaff.FirstOrDefault(p => p.name == supervisor).id,
+                resipienId = supervisor != null ? _appDB.DBStaff.FirstOrDefault(p => p.name == supervisor).id : -1,
                 dateRedaction = DateTime.Now.AddHours(-5),
-                planedTime = TaskParam.plannedTime,
+                planedTime = plannedTime,
                 actualTime = new TimeSpan(),
                 CommitorId = _appDB.DBStaff.FirstOrDefault(p => p.name == roleSession.SessionName).id,
                 taskStatusId = _appDB.DBTaskStatus.FirstOrDefault(p => p.name == "Создана").id,
@@ -362,12 +369,23 @@ namespace MVP.Controllers
                 return new JsonResult(new ObjectResult("Не авторизованный запрос!") { StatusCode = 401 });
                 //return new JsonResult("Не авторизованный запрос!");////////////////
             }
+            var supervisor = _appDB.DBStaff.FirstOrDefault(p => p.id == TaskParam.supervisor).name;
+            var recipient = _appDB.DBStaff.FirstOrDefault(p => p.id == TaskParam.recipient).name;
+            var date = new DateTime(Convert.ToInt32(TaskParam.date.Split('-')[0]), Convert.ToInt32(TaskParam.date.Split('-')[1]), Convert.ToInt32(TaskParam.date.Split('-')[2]));
+            var projectCode = _appDB.DBProject.FirstOrDefault(p => p.id == TaskParam.projectCode).code;
+            var plannedTime = new TimeSpan(Convert.ToInt32(TaskParam.plannedTime.Split(':')[0]), Convert.ToInt32(TaskParam.plannedTime.Split(':')[1]), Convert.ToInt32(TaskParam.plannedTime.Split(':')[2]));
+            var start = new DateTime(Convert.ToInt32(TaskParam.start.Split(' ')[0].Split('-')[0]), Convert.ToInt32(TaskParam.start.Split(' ')[0].Split('-')[1]), Convert.ToInt32(TaskParam.start.Split(' ')[0].Split('-')[2]),
+                Convert.ToInt32(TaskParam.start.Split(' ')[1].Split(':')[0]), Convert.ToInt32(TaskParam.start.Split(' ')[1].Split(':')[1]), Convert.ToInt32(TaskParam.start.Split(' ')[1].Split(':')[2]));
+            var finish = new DateTime(Convert.ToInt32(TaskParam.finish.Split(' ')[0].Split('-')[0]), Convert.ToInt32(TaskParam.finish.Split(' ')[0].Split('-')[1]), Convert.ToInt32(TaskParam.finish.Split(' ')[0].Split('-')[2]),
+                Convert.ToInt32(TaskParam.finish.Split(' ')[1].Split(':')[0]), Convert.ToInt32(TaskParam.finish.Split(' ')[1].Split(':')[1]), Convert.ToInt32(TaskParam.finish.Split(' ')[1].Split(':')[2]));
+            var dedline = new DateTime(Convert.ToInt32(TaskParam.dedline.Split(' ')[0].Split('-')[0]), Convert.ToInt32(TaskParam.dedline.Split(' ')[0].Split('-')[1]), Convert.ToInt32(TaskParam.dedline.Split(' ')[0].Split('-')[2]),
+                Convert.ToInt32(TaskParam.dedline.Split(' ')[1].Split(':')[0]), Convert.ToInt32(TaskParam.dedline.Split(' ')[1].Split(':')[1]), Convert.ToInt32(TaskParam.dedline.Split(' ')[1].Split(':')[2]));
 
             // корректировка даты - автоперенос при заполненном дне
-            TaskParam.date = redackPriorAndPerenos(TaskParam.supervisor, TaskParam.date, TaskParam.plannedTime, _appDB.DBTask.FirstOrDefault(p => p.id == TaskParam.id).projectCode, TaskParam.liteTask);
+            date = redackPriorAndPerenos(supervisor, date, plannedTime, _appDB.DBTask.FirstOrDefault(p => p.id == TaskParam.id).projectCode, TaskParam.liteTask);
 
             // попытка редактирования задачи
-            if (!_task.redactToDB(TaskParam.liteTask, TaskParam.id, TaskParam.date, TaskParam.dedline, TaskParam.status, TaskParam.comment != null ? $"{roleSession.SessionName}: {TaskParam.comment}\n" : null, TaskParam.supervisor, TaskParam.recipient, TaskParam.pririty, TaskParam.plannedTime, TaskParam.start, TaskParam.finish, roleSession.SessionName))
+            if (!_task.redactToDB(TaskParam.liteTask, TaskParam.id, date, dedline, TaskParam.status, TaskParam.comment != null ? $"{roleSession.SessionName}: {TaskParam.comment}\n" : null, supervisor, recipient, TaskParam.pririty, plannedTime, start, finish, roleSession.SessionName))
             {
                 var msg = "Только одна задача может быть в работе! Проверьте статусы своих задачь!";
                 return new JsonResult(new ObjectResult(msg) { StatusCode = 403 });////////////////
@@ -385,10 +403,10 @@ namespace MVP.Controllers
                     ProjectCode = _appDB.DBTask.FirstOrDefault(p => p.id == TaskParam.id).projectCode,
                     TaskId = TaskParam.id,
                     descTask = _appDB.DBTask.FirstOrDefault(p => p.id == TaskParam.id).desc,
-                    supervisorId = _appDB.DBStaff.FirstOrDefault(p => p.name == TaskParam.supervisor).id,
-                    resipienId = TaskParam.supervisor != null ? _appDB.DBStaff.FirstOrDefault(p => p.name == TaskParam.supervisor).id : -1,
+                    supervisorId = _appDB.DBStaff.FirstOrDefault(p => p.name == supervisor).id,
+                    resipienId = TaskParam.supervisor != null ? _appDB.DBStaff.FirstOrDefault(p => p.name == supervisor).id : -1,
                     dateRedaction = DateTime.Now.AddHours(-5),
-                    planedTime = TaskParam.plannedTime,
+                    planedTime = plannedTime,
                     actualTime = _appDB.DBTask.FirstOrDefault(p => p.id == TaskParam.id).actualTime,
                     CommitorId = _appDB.DBStaff.FirstOrDefault(p => p.name == roleSession.SessionName).id,
                     taskStatusId = _appDB.DBTaskStatus.FirstOrDefault(p => p.name == TaskParam.status).id,
@@ -746,13 +764,15 @@ namespace MVP.Controllers
                 //return new JsonResult("Не авторизованный запрос!");////////////////
             }
 
-            _project.redactToDB(ProjParam.id, ProjParam.arhive, ProjParam.link, ProjParam.supervisor, ProjParam.priority, ProjParam.allStages);
+            var supervisor = _appDB.DBStaff.FirstOrDefault(p => p.id == ProjParam.supervisor).name;
+
+            _project.redactToDB(ProjParam.id, ProjParam.arhive, ProjParam.link, supervisor, ProjParam.priority, ProjParam.allStages);
             LogisticProject item = new LogisticProject()
             {
                 arhive = ProjParam.arhive,
                 projectId = ProjParam.id,
                 link = ProjParam.link,
-                supervisor = ProjParam.supervisor,
+                supervisor = supervisor,
                 priority = ProjParam.priority,
                 allStages = ProjParam.allStages,
                 CommitorId = _appDB.DBStaff.FirstOrDefault(p => p.name == roleSession.SessionName).id,
@@ -791,6 +811,12 @@ namespace MVP.Controllers
                 //return new JsonResult("Не авторизованный запрос!");////////////////
             }
 
+            var supervisor = _appDB.DBStaff.FirstOrDefault(p => p.id == ProjParam.supervisor).name;
+
+            var plannedFinishDate = new DateTime(Convert.ToInt32(ProjParam.plannedFinishDate.Split(' ')[0].Split('-')[0]), Convert.ToInt32(ProjParam.plannedFinishDate.Split(' ')[0].Split('-')[1]), Convert.ToInt32(ProjParam.plannedFinishDate.Split(' ')[0].Split('-')[2]),
+                Convert.ToInt32(ProjParam.plannedFinishDate.Split(' ')[1].Split(':')[0]), Convert.ToInt32(ProjParam.plannedFinishDate.Split(' ')[1].Split(':')[1]), Convert.ToInt32(ProjParam.plannedFinishDate.Split(' ')[1].Split(':')[2]));
+
+
             var item = new Project
             {
                 code = ProjParam.code,
@@ -798,8 +824,8 @@ namespace MVP.Controllers
                 shortName = ProjParam.shortName,
                 priority = ProjParam.priority,
                 dateStart = DateTime.Now.AddHours(-5),
-                plannedFinishDate = ProjParam.plannedFinishDate,
-                supervisor = ProjParam.supervisor,
+                plannedFinishDate = plannedFinishDate,
+                supervisor = supervisor,
                 link = ProjParam.link,
                 archive = "Нет",
                 nowStage = ProjParam.allStages == null ? "" : ProjParam.allStages.Split(',')[0],
@@ -812,7 +838,7 @@ namespace MVP.Controllers
                 arhive = "Нет",
                 projectId = item.id,
                 link = ProjParam.link,
-                supervisor = ProjParam.supervisor,
+                supervisor = supervisor,
                 priority = ProjParam.priority,
                 allStages = ProjParam.allStages,
                 CommitorId = _appDB.DBStaff.FirstOrDefault(p => p.name == roleSession.SessionName).id,

@@ -12,17 +12,17 @@ namespace MVP.Date.API
 
         public string status { get; set; }
         public string desc { get; set; }
-        public string projectCode { get; set; }
-        public string supervisor { get; set; }
-        public string recipient { get; set; }
+        public int projectCode { get; set; }
+        public int supervisor { get; set; }
+        public int recipient { get; set; }
         public string comment { get; set; }
         
         public int pririty { get; set; }
-        public TimeSpan plannedTime { get; set; }
-        public DateTime date { get; set; }
-        public DateTime dedline { get; set; }
-        public DateTime start { get; set; }
-        public DateTime finish { get; set; }
+        public string plannedTime { get; set; }
+        public string date { get; set; }
+        public string dedline { get; set; }
+        public string start { get; set; }
+        public string finish { get; set; }
         public string Stage { get; set; }
         public string liteTask { get; set; }
 
