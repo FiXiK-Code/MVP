@@ -1,0 +1,228 @@
+﻿@model HomeViewModel
+
+
+
+<table class="table-emploee">
+    <tr>
+        <th rowspan="4">Дата</th>
+    </tr>
+    <tr>
+        <th>Шифр</th>
+        @{ List<string> projCod = new List<string>();
+            if (Model.filterResProj != "Все ответственные")
+            {
+                foreach (var tast in Model.tasks.Where(p => p.supervisor == Model.filterResProj))
+                {
+                    if (!projCod.Contains(tast.projectCode)) projCod.Add(tast.projectCode);
+                }
+            }
+            else
+            {
+                foreach (var tast in Model.tasks)
+                {
+                    if (!projCod.Contains(tast.projectCode)) projCod.Add(tast.projectCode);
+                }
+            }
+        }
+        @foreach (Project project in Model.filterResProj != "Все ответственные" ? Model.projects.Where(p => projCod.Contains(p.code)).OrderBy(p => p.code.Split('/')[0]).OrderBy(p => p.code.Split('/').Last().Split('-')[0]) : Model.projects.OrderBy(p => p.code.Split('/')[0]).OrderBy(p => p.code.Split('/').Last().Split('-')[0]))
+        {
+            <th> <a asp-controller="Home" asp-action="TaskTable" asp-route-activTable="1" asp-route-Projid="@project.id"
+           asp-route-staffTableFilter="@Model.filterStaff"
+             asp-route-recipientProjectFilter="@Model.filterResProj"
+            asp-route-supervisorProjectFilter="@Model.filterSupProj"
+            asp-route-porjectFiltr="@Model.filterProj"
+                    asp-route-filterTaskTable="@Model.filterTaskTable"
+                    asp-route-filterStaffTable="@Model.filterStaffTable">@project.code</a></th>
+        }
+
+    </tr>
+    <tr>
+        <th>Срок</th>
+
+        @foreach (Project project in Model.filterResProj != "Все ответственные" ? Model.projects.Where(p => projCod.Contains(p.code)).OrderBy(p => p.code.Split('/')[0]).OrderBy(p => p.code.Split('/').Last().Split('-')[0]) : Model.projects.OrderBy(p => p.code.Split('/')[0]).OrderBy(p => p.code.Split('/').Last().Split('-')[0]))
+        {
+            var date = project.plannedFinishDate.Date;
+            var day = date - DateTime.Now.AddHours(-5).Date;
+            if (day >= TimeSpan.Zero)
+            {
+                if (project.archive == "Нет")
+                {
+                    <th style="background-color:green">
+                        <p>@date.Date.ToString(@"dd\.MM\.yyyy")</p>
+                        <p>Дней осталось: @day.Days </p>
+                    </th>
+                }
+                else
+                {
+                    <th style="background-color:orange">
+                        <p>Проект в архиве</p>
+                    </th>
+                }
+
+            }
+            else
+            {
+                if (project.archive == "Нет")
+                {
+                    <th style="background-color:red">
+                        <p>@date.Date.ToString(@"dd\.MM\.yyyy")</p>
+                        <p>Дней Просрочено: @(day.Days * -1) </p>
+                    </th>
+                }
+                else
+                {
+                    <th style="background-color:orange">
+                        <p>Проект в архиве</p>
+                    </th>
+                }
+
+            }
+        }
+
+
+    </tr>
+    <tr>
+        <th>Облако</th>
+
+        @foreach (Project project in Model.filterResProj != "Все ответственные" ? Model.projects.Where(p => projCod.Contains(p.code)).OrderBy(p => p.code.Split('/')[0]).OrderBy(p => p.code.Split('/').Last().Split('-')[0]) : Model.projects.OrderBy(p => p.code.Split('/')[0]).OrderBy(p => p.code.Split('/').Last().Split('-')[0]))
+        {
+            <th>
+                <a href="@project.link">
+                    @if (project.link != null)
+                    {
+                        for (int i = 0; i < 3; i++)
+                        {
+                            @project.link.Split('/')[i]; <text>/</text>
+                        }
+                    }
+                </a>
+            </th>
+        }
+    </tr>
+
+    @for (int i = 0; i < 3; i++)
+    {
+        if (i == 2)
+        {
+            <tr id="title">
+                <th colspan="@(Model.projects.Count()+2)" style="text-align:left ;background-color:#cccccc">Выполненные задачи</th>
+            </tr>
+            List<Task> Taskss = Model.projectTasks.Where(p => p.status == "Выполнена").OrderBy(p => p.date.Date).ToList();
+            for (int j = 0; j < Taskss.Count(); j++)
+            {
+                if (j + 1 != Taskss.Count() && Taskss[j].date.Date == Taskss[j + 1].date.Date) continue;
+                //if (Model.staffNames.Contains(Taskss[j].supervisor) && Taskss[j].supervisor != ViewBag.RoleName && Taskss[j].recipient != null) continue;
+                if (Taskss[j].supervisor == ViewBag.RoleName && Taskss[j].recipient == null) continue;
+                <tr id="finish-task">
+                    <th colspan="2">@Taskss[j].date.Date.ToString(@"dd\.MM\.yyyy")</th>
+                    @foreach (Project project in Model.filterResProj != "Все ответственные" ? Model.projects.Where(p => projCod.Contains(p.code)).OrderBy(p => p.code.Split('/')[0]).OrderBy(p => p.code.Split('/').Last().Split('-')[0]) : Model.projects.OrderBy(p => p.code.Split('/')[0]).OrderBy(p => p.code.Split('/').Last().Split('-')[0]))
+                    {
+                        if (Model.projectTasks.Where(p => p.projectCode == project.code).Where(p => p.date.Date == Taskss[j].date.Date).Where(p => p.status == "Выполнена").Count() == 0)
+                        {
+                            <td>-</td>
+                        }
+                        else
+                        {
+                            <td>
+                                @foreach (Task task1 in Model.projectTasks.Where(p => p.status == "Выполнена").Where(p => p.date.Date == Taskss[j].date.Date).Where(p => p.projectCode == project.code))
+                                {
+                                    <a asp-controller="Home" asp-action="TaskTable" asp-route-activTable="1" asp-route-Taskid="@task1.id"
+                                       asp-route-staffTableFilter="@Model.filterStaff"
+             asp-route-recipientProjectFilter="@Model.filterResProj"
+            asp-route-supervisorProjectFilter="@Model.filterSupProj"
+            asp-route-porjectFiltr="@Model.filterProj"
+                                       asp-route-filterTaskTable="@Model.filterTaskTable"
+                                       asp-route-filterStaffTable="@Model.filterStaffTable">
+                                        <button type="submit">@task1.desc</button>
+                                    </a>
+                                }
+                            </td>
+                        }
+                    }
+                </tr>
+            }
+        }
+        if (i == 0)
+        {
+            <tr id="title">
+                <th colspan="@(Model.projects.Count()+2)" style="text-align:left ;background-color:#cccccc">Задачи на сегодня</th>
+            </tr>
+            List<Task> Taskss = Model.projectTasks.Where(p => p.status != "Выполнена").Where(p => p.date.Date <= DateTime.Now.AddHours(-5).Date).OrderBy(p => p.date.Date).ToList();
+            for (int j = 0; j < Taskss.Count(); j++)
+            {
+                if (j + 1 != Taskss.Count() && Taskss[j].date.Date == Taskss[j + 1].date.Date) continue;
+                //if (Model.staffNames.Contains(Taskss[j].supervisor) && Taskss[j].supervisor != ViewBag.RoleName && Taskss[j].recipient != null) continue;
+                if (Taskss[j].supervisor == ViewBag.RoleName && Taskss[j].recipient == null) continue;
+                <tr id="task">
+                    <th colspan="2">@Taskss[j].date.Date.ToString(@"dd\.MM\.yyyy")</th>
+                    @foreach (Project project in Model.filterResProj != "Все ответственные" ? Model.projects.Where(p => projCod.Contains(p.code)).OrderBy(p => p.code.Split('/')[0]).OrderBy(p => p.code.Split('/').Last().Split('-')[0]) : Model.projects.OrderBy(p => p.code.Split('/')[0]).OrderBy(p => p.code.Split('/').Last().Split('-')[0]))
+                    {
+                        if (Model.projectTasks.Where(p => p.projectCode == project.code).Where(p => p.date.Date == Taskss[j].date.Date).Where(p => p.status != "Выполнена").Count() == 0)
+                        {
+                            <td>-</td>
+                        }
+                        else
+                        {
+                            <td>
+                                @foreach (Task task1 in Model.projectTasks.Where(p => p.status != "Выполнена").Where(p => p.date.Date == Taskss[j].date.Date).Where(p => p.projectCode == project.code))
+                                {
+                                    <a asp-controller="Home" asp-action="TaskTable" asp-route-activTable="1" asp-route-Taskid="@task1.id"
+                                        asp-route-staffTableFilter="@Model.filterStaff"
+             asp-route-recipientProjectFilter="@Model.filterResProj"
+            asp-route-supervisorProjectFilter="@Model.filterSupProj"
+            asp-route-porjectFiltr="@Model.filterProj"
+                                       asp-route-filterTaskTable="@Model.filterTaskTable"
+                                       asp-route-filterStaffTable="@Model.filterStaffTable">
+                                        <button type="submit">@task1.desc</button>
+                                    </a>
+                                }
+                            </td>
+                        }
+                    }
+                </tr>
+            }
+        }
+        if (i == 1)
+        {
+            <tr id="title">
+                <th colspan="@(Model.projects.Count()+2)" style="text-align:left ;background-color:#cccccc">Предстоящие задачи</th>
+            </tr>
+            List<Task> Taskss = Model.projectTasks.Where(p => p.status != "Выполнена").Where(p => p.date.Date > DateTime.Now.AddHours(-5).Date).OrderBy(p => p.date).ToList();
+            for (int j = 0; j < Taskss.Count(); j++)
+            {
+                if (j + 1 != Taskss.Count() && Taskss[j].date.Date == Taskss[j + 1].date.Date) continue;
+                //if (Model.staffNames.Contains(Taskss[j].supervisor) && Taskss[j].supervisor != ViewBag.RoleName && Taskss[j].recipient != null) continue;
+                if (Taskss[j].supervisor == ViewBag.RoleName && Taskss[j].recipient == null) continue;
+                <tr id="task">
+                    <th colspan="2">@Taskss[j].date.Date.ToString(@"dd\.MM\.yyyy")</th>
+                    @foreach (Project project in Model.filterResProj != "Все ответственные" ? Model.projects.Where(p => projCod.Contains(p.code)).OrderBy(p => p.code.Split('/')[0]).OrderBy(p => p.code.Split('/').Last().Split('-')[0]) : Model.projects.OrderBy(p => p.code.Split('/')[0]).OrderBy(p => p.code.Split('/').Last().Split('-')[0]))
+                    {
+                        if (Model.projectTasks.Where(p => p.projectCode == project.code).Where(p => p.date.Date == Taskss[j].date.Date).Where(p => p.status != "Выполнена").Count() == 0)
+                        {
+                            <td>-</td>
+                        }
+                        else
+                        {
+                            <td>
+                                @foreach (Task task1 in Model.projectTasks.Where(p => p.status != "Выполнена").Where(p => p.date.Date == Taskss[j].date.Date).Where(p => p.projectCode == project.code))
+                                {
+                                    <a asp-controller="Home" asp-action="TaskTable" asp-route-activTable="1" asp-route-Taskid="@task1.id"
+                                       asp-route-staffTableFilter="@Model.filterStaff"
+             asp-route-recipientProjectFilter="@Model.filterResProj"
+            asp-route-supervisorProjectFilter="@Model.filterSupProj"
+            asp-route-porjectFiltr="@Model.filterProj"
+                                       asp-route-filterTaskTable="@Model.filterTaskTable"
+                                       asp-route-filterStaffTable="@Model.filterStaffTable">
+                                        <button type="submit">@task1.desc</button>
+                                    </a>
+                                }
+                            </td>
+                        }
+                    }
+
+                </tr>
+            }
+        }
+    }
+
+</table>
