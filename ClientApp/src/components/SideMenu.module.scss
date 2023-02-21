@@ -1,0 +1,32 @@
+.aside {
+    margin-left: -24px;
+    position: sticky;
+    top: 80px;
+    left: 0;
+    width: 80px;
+    border-right: 1px solid #E1E1E1;
+    padding-top: 30px;
+}
+
+.link {
+    width: 56px;
+    height: 52px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 24px;
+
+    &:hover {
+        background-color: #E2E2EA;
+    }
+}
+
+.active {
+    background-color: #E2E2EA;
+}
+
+.icon {
+    width: 22px;
+    display: block;
+}
