@@ -29,51 +29,65 @@ namespace MVP.Date.Repository
             switch (SessionRole)
             {
                 case "Директор":
-                    foreach (var staffs in _appDB.DBStaff.Where(p => p.roleCod == "R02"))
-                    {
-                        StaffTable.Add(staffs);
-                    }
-                    foreach (var staffs in _appDB.DBStaff.Where(p => p.roleCod == "R04"))
-                    {
-                        StaffTable.Add(staffs);
-                    }
+                    StaffTable.AddRange(_appDB.DBStaff.Where(p => p.roleCod == "R02").ToList());
+                    StaffTable.AddRange(_appDB.DBStaff.Where(p => p.roleCod == "R04").ToList());
+
+                    //foreach (var staffs in _appDB.DBStaff.Where(p => p.roleCod == "R02"))
+                    //{
+                    //    StaffTable.Add(staffs);
+                    //}
+                    //foreach (var staffs in _appDB.DBStaff.Where(p => p.roleCod == "R04"))
+                    //{
+                    //    StaffTable.Add(staffs);
+                    //}
                     break;
                 case "ГИП":
-                    foreach (var staffs in _appDB.DBStaff.Where(p => p.roleCod == "R03"))
-                    {
-                        StaffTable.Add(staffs);
-                    }
-                    foreach (var staffs in _appDB.DBStaff.Where(p => p.roleCod == "R04"))
-                    {
-                        StaffTable.Add(staffs);
-                    }
+                    StaffTable.AddRange(_appDB.DBStaff.Where(p => p.roleCod == "R03").ToList());
+                    StaffTable.AddRange(_appDB.DBStaff.Where(p => p.roleCod == "R04").ToList());
+
+                    //foreach (var staffs in _appDB.DBStaff.Where(p => p.roleCod == "R03"))
+                    //{
+                    //    StaffTable.Add(staffs);
+                    //}
+                    //foreach (var staffs in _appDB.DBStaff.Where(p => p.roleCod == "R04"))
+                    //{
+                    //    StaffTable.Add(staffs);
+                    //}
                     break;
                 case "Помощник ГИПа":
-                    foreach (var staffs in _appDB.DBStaff.Where(p => p.roleCod == "R04"))
-                    {
-                        StaffTable.Add(staffs);
-                    }
+                    StaffTable.AddRange(_appDB.DBStaff.Where(p => p.roleCod == "R04").ToList());
+
+                    //foreach (var staffs in _appDB.DBStaff.Where(p => p.roleCod == "R04"))
+                    //{
+                    //    StaffTable.Add(staffs);
+                    //}
                     break;
                 case "НО":
-                    foreach (var staffs in _appDB.DBStaff.Where(p => p.roleCod == "R02"))
-                    {
-                        StaffTable.Add(staffs);
-                    }
+                    StaffTable.AddRange(_appDB.DBStaff.Where(p => p.roleCod == "R02").ToList());
+                    StaffTable.AddRange(_appDB.DBStaff.Where(p => p.supervisorCod == sessionCod && p.roleCod == "R05").ToList());
+                    StaffTable.AddRange(_appDB.DBStaff.Where(p => p.supervisorCod == sessionCod && p.roleCod == "R6").ToList());
 
-                    foreach (var staffs in _appDB.DBStaff.Where(p => p.supervisorCod == sessionCod && p.roleCod == "R05"))
-                    {
-                        StaffTable.Add(staffs);
-                    }
-                    foreach (var staff1 in _appDB.DBStaff.Where(p => p.supervisorCod == sessionCod && p.roleCod == "R06"))
-                    {
-                        StaffTable.Add(staff1);
-                    }
+                    //foreach (var staffs in _appDB.DBStaff.Where(p => p.roleCod == "R02"))
+                    //{
+                    //    StaffTable.Add(staffs);
+                    //}
+
+                    //foreach (var staffs in _appDB.DBStaff.Where(p => p.supervisorCod == sessionCod && p.roleCod == "R05"))
+                    //{
+                    //    StaffTable.Add(staffs);
+                    //}
+                    //foreach (var staff1 in _appDB.DBStaff.Where(p => p.supervisorCod == sessionCod && p.roleCod == "R06"))
+                    //{
+                    //    StaffTable.Add(staff1);
+                    //}
                     break;
                 case "РГ":
-                    foreach (var staffs in _appDB.DBStaff.Where(p => p.supervisorCod == sessionCod && p.roleCod == "R06"))
-                    {
-                        StaffTable.Add(staffs);
-                    }
+                    StaffTable.AddRange(_appDB.DBStaff.Where(p => p.supervisorCod == sessionCod && p.roleCod == "R06").ToList());
+
+                    //foreach (var staffs in _appDB.DBStaff.Where(p => p.supervisorCod == sessionCod && p.roleCod == "R06"))
+                    //{
+                    //    StaffTable.Add(staffs);
+                    //}
                     break;
             }
             return StaffTable;

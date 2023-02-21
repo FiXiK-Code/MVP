@@ -1,0 +1,43 @@
+﻿.wrapper {
+    display: flex;
+    align-items: center;
+    padding-left: 20px;
+}
+
+.profile {
+    padding-left: 32px;
+    display: flex;
+    align-items: center;
+}
+
+.photo {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.photoWrapper {
+    overflow: hidden;
+    width: 42px;
+    height: 42px;
+    border-radius: 42px;
+}
+
+.profileText {
+    padding-left: 16px;
+    
+}
+
+.name {
+    display: block;
+    font-size: 16px;
+    line-height: 1.2;
+    font-weight: 700;
+}
+
+.position {
+    display: block;
+    margin-top: 4px;
+    font-size: 12px;
+    color: var(--gray-color);
+}
