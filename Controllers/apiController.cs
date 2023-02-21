@@ -404,7 +404,7 @@ namespace MVP.Controllers
                     TaskId = TaskParam.id,
                     descTask = _appDB.DBTask.FirstOrDefault(p => p.id == TaskParam.id).desc,
                     supervisorId = _appDB.DBStaff.FirstOrDefault(p => p.name == supervisor).id,
-                    resipienId = TaskParam.supervisor != null ? _appDB.DBStaff.FirstOrDefault(p => p.name == supervisor).id : -1,
+                    resipienId = supervisor != null ? _appDB.DBStaff.FirstOrDefault(p => p.name == supervisor).id : -1,
                     dateRedaction = DateTime.Now.AddHours(-5),
                     planedTime = plannedTime,
                     actualTime = _appDB.DBTask.FirstOrDefault(p => p.id == TaskParam.id).actualTime,

@@ -65,7 +65,7 @@ namespace MVP.Date.Repository
                 case "НО":
                     StaffTable.AddRange(_appDB.DBStaff.Where(p => p.roleCod == "R02").ToList());
                     StaffTable.AddRange(_appDB.DBStaff.Where(p => p.supervisorCod == sessionCod && p.roleCod == "R05").ToList());
-                    StaffTable.AddRange(_appDB.DBStaff.Where(p => p.supervisorCod == sessionCod && p.roleCod == "R6").ToList());
+                    StaffTable.AddRange(_appDB.DBStaff.Where(p => p.supervisorCod == sessionCod && p.roleCod == "R06").ToList());
 
                     //foreach (var staffs in _appDB.DBStaff.Where(p => p.roleCod == "R02"))
                     //{
@@ -83,6 +83,14 @@ namespace MVP.Date.Repository
                     break;
                 case "РГ":
                     StaffTable.AddRange(_appDB.DBStaff.Where(p => p.supervisorCod == sessionCod && p.roleCod == "R06").ToList());
+
+                    //foreach (var staffs in _appDB.DBStaff.Where(p => p.supervisorCod == sessionCod && p.roleCod == "R06"))
+                    //{
+                    //    StaffTable.Add(staffs);
+                    //}
+                    break;
+                case "Сотрудник":
+                    StaffTable.Add(_appDB.DBStaff.FirstOrDefault(p => p.code == sessionCod));
 
                     //foreach (var staffs in _appDB.DBStaff.Where(p => p.supervisorCod == sessionCod && p.roleCod == "R06"))
                     //{
