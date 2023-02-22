@@ -281,7 +281,15 @@ namespace MVP.Controllers
             var supervisor = _appDB.DBStaff.FirstOrDefault(p => p.id == TaskParam.supervisor).name;
             var recipient = _appDB.DBStaff.FirstOrDefault(p => p.id == TaskParam.recipient).name;
             var date = new DateTime(Convert.ToInt32(TaskParam.date.Split('-')[0]), Convert.ToInt32(TaskParam.date.Split('-')[1]), Convert.ToInt32(TaskParam.date.Split('-')[2]));
-            var projectCode = _appDB.DBProject.FirstOrDefault(p => p.id == TaskParam.projectCode).code;
+            string projectCode = null;
+            try
+            {
+                projectCode = _appDB.DBProject.FirstOrDefault(p => p.id == TaskParam.projectCode).code;
+            }
+            catch (Exception)
+            {
+                return new JsonResult(new ObjectResult($"Проект c id {TaskParam.projectCode} - не найден!") { StatusCode = 404 });
+            }
             var plannedTime = new TimeSpan(Convert.ToInt32(TaskParam.plannedTime.Split(':')[0]), Convert.ToInt32(TaskParam.plannedTime.Split(':')[1]), Convert.ToInt32(TaskParam.plannedTime.Split(':')[2]));
             var dedline = new DateTime(Convert.ToInt32(TaskParam.dedline.Split('T')[0].Split('-')[0]), Convert.ToInt32(TaskParam.dedline.Split('T')[0].Split('-')[1]), Convert.ToInt32(TaskParam.dedline.Split('T')[0].Split('-')[2]),
                 Convert.ToInt32(TaskParam.dedline.Split('T')[1].Split(':')[0]), Convert.ToInt32(TaskParam.dedline.Split('T')[1].Split(':')[1]), Convert.ToInt32(TaskParam.dedline.Split('T')[1].Split(':')[2]));
@@ -371,7 +379,15 @@ namespace MVP.Controllers
             var supervisor = _appDB.DBStaff.FirstOrDefault(p => p.id == TaskParam.supervisor).name;
             var recipient = _appDB.DBStaff.FirstOrDefault(p => p.id == TaskParam.recipient).name;
             var date = new DateTime(Convert.ToInt32(TaskParam.date.Split('-')[0]), Convert.ToInt32(TaskParam.date.Split('-')[1]), Convert.ToInt32(TaskParam.date.Split('-')[2]));
-            var projectCode = _appDB.DBProject.FirstOrDefault(p => p.id == TaskParam.projectCode).code;
+            string projectCode = null;
+            try
+            {
+                projectCode = _appDB.DBProject.FirstOrDefault(p => p.id == TaskParam.projectCode).code;
+            }
+            catch (Exception)
+            {
+                return new JsonResult(new ObjectResult($"Проект c id {TaskParam.projectCode} - не найден!") { StatusCode = 404 });
+            }
             var plannedTime = new TimeSpan(Convert.ToInt32(TaskParam.plannedTime.Split(':')[0]), Convert.ToInt32(TaskParam.plannedTime.Split(':')[1]), Convert.ToInt32(TaskParam.plannedTime.Split(':')[2]));
             var start = new DateTime(Convert.ToInt32(TaskParam.start.Split('T')[0].Split('-')[0]), Convert.ToInt32(TaskParam.start.Split('T')[0].Split('-')[1]), Convert.ToInt32(TaskParam.start.Split('T')[0].Split('-')[2]),
                 Convert.ToInt32(TaskParam.start.Split('T')[1].Split(':')[0]), Convert.ToInt32(TaskParam.start.Split('T')[1].Split(':')[1]), Convert.ToInt32(TaskParam.start.Split('T')[1].Split(':')[2]));
@@ -392,7 +408,16 @@ namespace MVP.Controllers
             else // при успешном редактировании ->
             {
                 // проверка перехода проекта в следующую стадию
-                var projCod = _appDB.DBTask.FirstOrDefault(p => p.id == TaskParam.id).projectCode;
+
+                var projCod = "";
+                try
+                {
+                    projCod = _appDB.DBTask.FirstOrDefault(p => p.id == TaskParam.id).projectCode;
+                }
+                catch (Exception)
+                {
+                    return new JsonResult(new ObjectResult($"Проект, указанный в задаче, не найден!") { StatusCode = 404 });
+                }
                 var projId = _appDB.DBProject.FirstOrDefault(p => p.code == projCod) != null ? _appDB.DBProject.FirstOrDefault(p => p.code == projCod).id : -1;
                 _project.NextStage(projId);
 
@@ -597,7 +622,35 @@ namespace MVP.Controllers
             if (ProjParam.id != -1)
             {
                 // возвращает инфу по id проекта
-                return new JsonResult(new ObjectResult(_project.GetProject(ProjParam.id)) { StatusCode = 200 });
+                ProjectOut outt = new ProjectOut();
+                try
+                {
+                    var project = _project.GetProject(ProjParam.id);
+                    outt = new ProjectOut()
+                    {
+                        id = project.id,
+                        code = project.code,
+                        name = project.name,
+                        shortName = project.shortName,
+                        priority = project.priority,
+                        dateStart = project.dateStart.ToString(@"dd\.MM\.yyyy HH\:mm\:ss"),
+                        plannedFinishDate = project.plannedFinishDate.ToString(@"dd\.MM\.yyyy HH\:mm\:ss"),
+                        actualFinishDate = project.actualFinishDate.ToString(@"dd\.MM\.yyyy HH\:mm\:ss"),
+                        supervisor = project.supervisor,
+                        supervisorId = _appDB.DBStaff.FirstOrDefault(p => p.name == project.supervisor).id,
+                        link = project.link,
+                        history = project.history,
+                        archive = project.archive,
+                        nowStage = project.nowStage,
+                        allStages = project.allStages,
+                        timeWork = project.timeWork.ToString(@"hh\:mm")
+                    };
+                }
+                catch (Exception)
+                {
+                    return new JsonResult(new ObjectResult($"Проект c id {ProjParam.id} - не найден!") { StatusCode = 404 });
+                }
+                return new JsonResult(new ObjectResult(outt) { StatusCode = 200 });
             }
             else
             {
