@@ -242,35 +242,43 @@ namespace MVP.Date.Repository
             List <TasksOut> todayOut = new List<TasksOut>();
             foreach(var task in today)
             {
-                var outt = new TasksOut()
+                try
                 {
-                    id = task.id,
-                    code = task.code,
-                    desc = task.desc,
-                    TaskCodeParent = task.TaskCodeParent,
-                    projectCode = task.projectCode,
-                    projectId = _appDB.DBProject.FirstOrDefault(p => p.code == task.projectCode).id,
-                    supervisorId = _appDB.DBStaff.FirstOrDefault(p => p.name == task.supervisor).id,
-                    recipientId = _appDB.DBStaff.FirstOrDefault(p => p.name == task.recipient).id,
-                    supervisor = task.supervisor,
-                    recipient = task.recipient,
-                    priority =task.priority,
-                    comment = task.comment,
-                    plannedTime =task.plannedTime.ToString(@"hh\:mm"),
-                    actualTime = task.actualTime.ToString(@"hh\:mm"),
-                    start = task.start.ToString(@"dd\.MM\.yyyy HH\:mm\:ss"),
-                    finish =task.finish.ToString(@"dd\.MM\.yyyy HH\:mm\:ss"),
-                    date = task.date.ToString(@"dd\.MM\.yyyy"),
-                    Stage = task.Stage,
-                    liteTask =task.liteTask ,
-                    status =task.status ,
-                    startWork =task.startWork ,
-                    creator =task.creator ,
-                    historyWorc = task.historyWorc,
-                    dedline = task.dedline.ToString(@"dd\.MM\.yyyy HH\:mm\:ss")
+                    var outt = new TasksOut()
+                    {
+                        id = task.id,
+                        code = task.code,
+                        desc = task.desc,
+                        TaskCodeParent = task.TaskCodeParent,
+                        projectCode = task.projectCode,
+                        projectId = _appDB.DBProject.FirstOrDefault(p => p.code == task.projectCode).id,
+                        supervisorId = _appDB.DBStaff.FirstOrDefault(p => p.name == task.supervisor).id,
+                        recipientId = _appDB.DBStaff.FirstOrDefault(p => p.name == task.recipient).id,
+                        supervisor = task.supervisor,
+                        recipient = task.recipient,
+                        priority = task.priority,
+                        comment = task.comment,
+                        plannedTime = task.plannedTime.ToString(@"hh\:mm"),
+                        actualTime = task.actualTime.ToString(@"hh\:mm"),
+                        start = task.start.ToString(@"dd\.MM\.yyyy HH\:mm\:ss"),
+                        finish = task.finish.ToString(@"dd\.MM\.yyyy HH\:mm\:ss"),
+                        date = task.date.ToString(@"dd\.MM\.yyyy"),
+                        Stage = task.Stage,
+                        liteTask = task.liteTask,
+                        status = task.status,
+                        startWork = task.startWork,
+                        creator = task.creator,
+                        historyWorc = task.historyWorc,
+                        dedline = task.dedline.ToString(@"dd\.MM\.yyyy HH\:mm\:ss")
 
-                };
-                todayOut.Add(outt);
+                    };
+                    todayOut.Add(outt);
+                }
+                catch (Exception)
+                {
+                    continue;
+                }
+                
             }
 
 
@@ -281,35 +289,44 @@ namespace MVP.Date.Repository
             List<TasksOut> completedOut = new List<TasksOut>();
             foreach (var task in completed)
             {
-                var outt = new TasksOut()
+                try
                 {
-                    id = task.id,
-                    code = task.code,
-                    desc = task.desc,
-                    TaskCodeParent = task.TaskCodeParent,
-                    projectId = _appDB.DBProject.FirstOrDefault(p => p.code == task.projectCode).id,
-                    supervisorId = _appDB.DBStaff.FirstOrDefault(p => p.name == task.supervisor).id,
-                    recipientId = _appDB.DBStaff.FirstOrDefault(p => p.name == task.recipient).id,
-                    projectCode = task.projectCode,
-                    supervisor = task.supervisor,
-                    recipient = task.recipient,
-                    priority = task.priority,
-                    comment = task.comment,
-                    plannedTime = task.plannedTime.ToString(@"hh\:mm"),
-                    actualTime = task.actualTime.ToString(@"hh\:mm"),
-                    start = task.start.ToString(@"dd\.MM\.yyyy HH\:mm\:ss"),
-                    finish = task.finish.ToString(@"dd\.MM\.yyyy HH\:mm\:ss"),
-                    date = task.date.ToString(@"dd\.MM\.yyyy"),
-                    Stage = task.Stage,
-                    liteTask = task.liteTask,
-                    status = task.status,
-                    startWork = task.startWork,
-                    creator = task.creator,
-                    historyWorc = task.historyWorc,
-                    dedline = task.dedline.ToString(@"dd\.MM\.yyyy HH\:mm\:ss")
+                    var outt = new TasksOut()
+                    {
+                        id = task.id,
+                        code = task.code,
+                        desc = task.desc,
+                        TaskCodeParent = task.TaskCodeParent,
+                        projectId = _appDB.DBProject.FirstOrDefault(p => p.code == task.projectCode).id,
+                        supervisorId = _appDB.DBStaff.FirstOrDefault(p => p.name == task.supervisor).id,
+                        recipientId = _appDB.DBStaff.FirstOrDefault(p => p.name == task.recipient).id,
+                        projectCode = task.projectCode,
+                        supervisor = task.supervisor,
+                        recipient = task.recipient,
+                        priority = task.priority,
+                        comment = task.comment,
+                        plannedTime = task.plannedTime.ToString(@"hh\:mm"),
+                        actualTime = task.actualTime.ToString(@"hh\:mm"),
+                        start = task.start.ToString(@"dd\.MM\.yyyy HH\:mm\:ss"),
+                        finish = task.finish.ToString(@"dd\.MM\.yyyy HH\:mm\:ss"),
+                        date = task.date.ToString(@"dd\.MM\.yyyy"),
+                        Stage = task.Stage,
+                        liteTask = task.liteTask,
+                        status = task.status,
+                        startWork = task.startWork,
+                        creator = task.creator,
+                        historyWorc = task.historyWorc,
+                        dedline = task.dedline.ToString(@"dd\.MM\.yyyy HH\:mm\:ss")
 
-                };
-                completedOut.Add(outt);
+                    };
+                    completedOut.Add(outt);
+                }
+                catch (Exception)
+                {
+                    continue;
+                }
+               
+
             }
             // будущие задачи 
             var future = tasksTabbleFilter.Where(p => p.date.Date > DateTime.Now.Date).OrderBy(p => p.date.Date).OrderBy(p => p.priority).ToList();
@@ -317,34 +334,41 @@ namespace MVP.Date.Repository
             List<TasksOut> futureOut = new List<TasksOut>();
             foreach (var task in future)
             {
-                TasksOut outt = new TasksOut()
+                try
                 {
-                    id = task.id,
-                    code = task.code,
-                    desc = task.desc,
-                    TaskCodeParent = task.TaskCodeParent,
-                    projectId = _appDB.DBProject.FirstOrDefault(p => p.code == task.projectCode).id,
-                    supervisorId = _appDB.DBStaff.FirstOrDefault(p => p.name == task.supervisor).id,
-                    recipientId = _appDB.DBStaff.FirstOrDefault(p => p.name == task.recipient).id,
-                    projectCode = task.projectCode,
-                    supervisor = task.supervisor,
-                    recipient = task.recipient,
-                    priority = task.priority,
-                    comment = task.comment,
-                    plannedTime = task.plannedTime.ToString(@"hh\:mm"),
-                    actualTime = task.actualTime.ToString(@"hh\:mm"),
-                    start = task.start.ToString(@"dd\.MM\.yyyy HH\:mm\:ss"),
-                    finish = task.finish.ToString(@"dd\.MM\.yyyy HH\:mm\:ss"),
-                    date = task.date.ToString(@"dd\.MM\.yyyy"),
-                    Stage = task.Stage,
-                    liteTask = task.liteTask,
-                    status = task.status,
-                    startWork = task.startWork,
-                    creator = task.creator,
-                    historyWorc = task.historyWorc,
-                    dedline = task.dedline.ToString(@"dd\.MM\.yyyy HH\:mm\:ss")
-                };
-                futureOut.Add(outt);
+                    TasksOut outt = new TasksOut()
+                    {
+                        id = task.id,
+                        code = task.code,
+                        desc = task.desc,
+                        TaskCodeParent = task.TaskCodeParent,
+                        projectId = _appDB.DBProject.FirstOrDefault(p => p.code == task.projectCode).id,
+                        supervisorId = _appDB.DBStaff.FirstOrDefault(p => p.name == task.supervisor).id,
+                        recipientId = _appDB.DBStaff.FirstOrDefault(p => p.name == task.recipient).id,
+                        projectCode = task.projectCode,
+                        supervisor = task.supervisor,
+                        recipient = task.recipient,
+                        priority = task.priority,
+                        comment = task.comment,
+                        plannedTime = task.plannedTime.ToString(@"hh\:mm"),
+                        actualTime = task.actualTime.ToString(@"hh\:mm"),
+                        start = task.start.ToString(@"dd\.MM\.yyyy HH\:mm\:ss"),
+                        finish = task.finish.ToString(@"dd\.MM\.yyyy HH\:mm\:ss"),
+                        date = task.date.ToString(@"dd\.MM\.yyyy"),
+                        Stage = task.Stage,
+                        liteTask = task.liteTask,
+                        status = task.status,
+                        startWork = task.startWork,
+                        creator = task.creator,
+                        historyWorc = task.historyWorc,
+                        dedline = task.dedline.ToString(@"dd\.MM\.yyyy HH\:mm\:ss")
+                    };
+                    futureOut.Add(outt);
+                }
+                catch (Exception)
+                {
+                    continue;
+                }
             }
 
             TasksTableReturnModels output = new TasksTableReturnModels
