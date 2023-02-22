@@ -19,9 +19,19 @@ namespace MVP.Date.Repository
 
         public IEnumerable<Project> AllProjects => _appDB.DBProject;
 
-        
 
-        public Project GetProject(int projectId) => _appDB.DBProject.FirstOrDefault(p => p.id == projectId);
+
+        public Project GetProject(int projectId)
+        {
+            try 
+            {
+                return _appDB.DBProject.FirstOrDefault(p => p.id == projectId);
+            }
+            catch
+            {
+                return null;
+            }
+        }
 
         public void NextStage(int projectId)
         {
