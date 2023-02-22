@@ -26,6 +26,7 @@ namespace MVP.Date.Repository
         public List<Staff> StaffTable(string SessionRole, string sessionCod)
         {
             List<Staff> StaffTable = new List<Staff>();
+            StaffTable.Add(_appDB.DBStaff.FirstOrDefault(p => p.code == sessionCod));
             switch (SessionRole)
             {
                 case "Директор":
@@ -82,15 +83,8 @@ namespace MVP.Date.Repository
                     //}
                     break;
                 case "РГ":
-                    StaffTable.AddRange(_appDB.DBStaff.Where(p => p.supervisorCod == sessionCod && p.roleCod == "R06").ToList());
 
-                    //foreach (var staffs in _appDB.DBStaff.Where(p => p.supervisorCod == sessionCod && p.roleCod == "R06"))
-                    //{
-                    //    StaffTable.Add(staffs);
-                    //}
-                    break;
-                case "Сотрудник":
-                    StaffTable.Add(_appDB.DBStaff.FirstOrDefault(p => p.code == sessionCod));
+                    StaffTable.AddRange(_appDB.DBStaff.Where(p => p.supervisorCod == sessionCod && p.roleCod == "R06").ToList());
 
                     //foreach (var staffs in _appDB.DBStaff.Where(p => p.supervisorCod == sessionCod && p.roleCod == "R06"))
                     //{
