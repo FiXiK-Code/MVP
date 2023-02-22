@@ -35,7 +35,7 @@ export default function StatusSelect(props) {
     const sendTaskStatus = async (target) => {
         const response = await fetchWithAuth('/api/PutTasksStatus', 'put', {
             id: taskId,
-            status: status
+            status: target.value
         });
         console.log(response);
         if (response.statusCode >= 200 && response.statusCode < 400) {

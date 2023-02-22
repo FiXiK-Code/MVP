@@ -5,7 +5,7 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import TaskAddModal from './TaskAddModal';
-import { fetchWithAuth, Unauthorized } from '../utils';
+import { fetchWithAuth, Unauthorized, getHeaders } from '../utils';
 
 export class Tasks extends Component {
     static displayName = Tasks.name;
@@ -47,7 +47,7 @@ export class Tasks extends Component {
 
     renderTasksTable(headers, tasks, supervisor, projectCode ) {
         return (
-            <CollapsibleTable search={this.state.search} tasks={tasks} headers={headers} supervisor={supervisor} projectCode={ projectCode }  />
+            <CollapsibleTable search={this.state.search} tasks={tasks} headers={headers} supervisor={supervisor} projectCode={projectCode} recipient={supervisor }  />
         );
     }
 
@@ -109,7 +109,7 @@ export class Tasks extends Component {
                     paddingBottom: 2
                 }}>
                     <Stack spacing={2} direction="row">
-                        <TaskAddModal headers={this.state.headers} supervisor={this.state.supervisor} projectCode={this.state.projectCode }  />
+                        <TaskAddModal headers={this.state.headers} supervisor={this.state.supervisor} projectCode={this.state.projectCode} recipient={this.state.supervisor }  />
                         <Button variant="contained">Добавить проект</Button>
                     </Stack>
                 </Box>
@@ -154,97 +154,7 @@ export class Tasks extends Component {
         }
 
         const data = response.value;
-        const headers = [
-            {
-                "name": "date",
-                "type": "datefield",
-                "title": "Дата",
-                "show": true,
-                "createAvailability": true
-            },
-            {
-                "name": "projectCode",
-                "type": "select",
-                "title": "Шифр проекта",
-                "show": true,
-                "createAvailability": true,
-                "fieldToShow": "code",
-            },
-            {
-                "name": "desc",
-                "type": "textfield",
-                "title": "Задача",              
-                "show": true,
-                "createAvailability": true
-            },
-            {
-                "name": "status",
-                "title": "Статус",
-                "show": true,
-                "createAvailability": false
-            },
-            {
-                "name": "supervisor",
-                "type": "select",
-                "title": "Ответственный",
-                "show": true,
-                "createAvailability": true,
-                "fieldToShow": "name"
-            },
-            {
-                "name": "recipient",
-                "type": "select",
-                "title": "Переназначить",
-                "show": true,
-                "createAvailability": true,
-                "fieldToShow": "name"
-            },
-            {
-                "name": "priority",
-                "title": "Приоритет",
-                "show": true,
-                "createAvailability": false
-            },
-            {
-                "name": "comment",
-                "type": "textfield",
-                "title": "Комментарий",
-                "show": true,
-                "createAvailability": true
-            },
-            {
-                "name": "dedline",
-                "type": "datetime",
-                "title": "Дедлайн",
-                "show": true,
-                "createAvailability": true
-            },
-            {
-                "name": "plannedTime",
-                "type": "timefield",
-                "title": "План время",
-                "show": true,
-                "createAvailability": true
-            },
-            {
-                "name": "actualTime",
-                "title": "Факт время",
-                "show": true,
-                "createAvailability": false
-            },
-            {
-                "name": "start",
-                "title": "Начал",
-                "show": true,
-                "createAvailability": false
-            },
-            {
-                "name": "finish",
-                "title": "Завершил",
-                "show": true,
-                "createAvailability": false
-            },
-        ];
+        const headers = getHeaders();
         this.setState({ tasks: data, headers: headers, loading: false });
     }
 }
