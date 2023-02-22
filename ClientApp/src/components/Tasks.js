@@ -12,8 +12,6 @@ export class Tasks extends Component {
 
     constructor(props) {
         super(props);
-
-        this.kek = 'yes';
         this.state = {
             auth: true,
             tasks: {
@@ -21,6 +19,7 @@ export class Tasks extends Component {
                 today: [],
                 upcoming: [],
             },
+            searchTerm: "",
             search: false,
             headers: [],
             loading: true,
@@ -33,6 +32,13 @@ export class Tasks extends Component {
         this.searchHandleSubmit = this.searchHandleSubmit.bind(this);
     }
 
+    shouldComponentUpdate(nextProps, nextState) {
+        if (nextState.searchTerm !== this.state.searchTerm) {
+            return false;
+        }
+        return true;
+    }
+
     componentDidMount() {
         this.populateWeatherData();
         this.getEmployees();
@@ -40,8 +46,6 @@ export class Tasks extends Component {
     }
 
     renderTasksTable(headers, tasks, supervisor, projectCode ) {
-        console.log("Render tasks: ", tasks);
-
         return (
             <CollapsibleTable search={this.state.search} tasks={tasks} headers={headers} supervisor={supervisor} projectCode={ projectCode }  />
         );
@@ -49,7 +53,8 @@ export class Tasks extends Component {
 
     async searchHandleSubmit(e) {
         e.preventDefault();
-        let term = this.state.search;
+        
+        let term = this.state.searchTerm;
         if (term.length > 0) {
             const response = await fetchWithAuth(`/api/GetSearch?param=${encodeURIComponent(term)}`);
             if (response.statusCode === 200) {
@@ -58,13 +63,16 @@ export class Tasks extends Component {
                         done: response.value,
                         today: [],
                         upcoming: []
-                    }
+                    },
+                    search: this.state.searchTerm
                 })
                 console.log(response);
-                console.log("tasks state: ", this.state);
-                console.log(this.kek);
             }
         } else {
+            console.log('empty!');
+            this.setState({
+                    search: false
+            })
             this.populateWeatherData();
         }
 
@@ -72,9 +80,8 @@ export class Tasks extends Component {
     }
 
     searchHandleInput(e) {
-        console.log(e.target.value)
         this.setState({
-            search: e.target.value
+            searchTerm: e.target.value
         });
     }
 

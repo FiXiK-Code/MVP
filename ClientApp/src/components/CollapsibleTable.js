@@ -23,7 +23,7 @@ function CollapsedTasks(props) {
         console.log('CollapsedTasks: headers', props.headers);
         // setStateTasks(props.tasks);
         console.log('CollapsedTasks: tasks', props.tasks);
-    });
+    }, [props.headers, props.tasks]);
 
     const tableStyling = {
         padding: "6px 10px"
@@ -73,7 +73,7 @@ function TaskGroup(props) {
         setOpen(props.isOpen);
 
         // setStateTasks(props.tasks);
-    })
+    }, [props.headers, props.isOpen])
 
     return (
         <React.Fragment>
@@ -126,7 +126,7 @@ export default function CollapsibleTable(props) {
         console.log('update');
         // setStateTasks(props.tasks);
         // console.log('CollapsibleTable: tasks', props.tasks);
-    });
+    }, [props.headers]);
 
     let tableBody;
     if (search) {

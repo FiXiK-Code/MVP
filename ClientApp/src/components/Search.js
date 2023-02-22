@@ -13,17 +13,14 @@ export class Search extends Component {
         super(props);
 
         this.state = {
-            headers: [],
+            searchTerm: ""
         };
+
+        this.handleInput = this.handleInput.bind(this);
     }
 
-  
-    
-
-    componentWillReceiveProps() {
-        this.setState({
-            headers: this.props.headers
-        })
+    handleInput(e) {
+        this.props.handleInput(e);
     }
 
     static displayName = Search.name;
@@ -32,15 +29,15 @@ export class Search extends Component {
         return (
             <>
                 <Stack spacing={1} direction="row">
-                    <form onSubmit={this.props.handleSubmit}>
+                    <form onSubmit={this.props.handleSubmit} style={{ width: "100%" }}>
                         <FormGroup>
-                            <TextField onChange={ this.props.handleInput } className={styles.searchField} id="search-field" label="Поиск..." variant="filled" />
+                            <TextField onChange={this.handleInput} className={styles.searchField} id="search-field" label="Поиск..." variant="filled" />
                         </FormGroup>
                     </form>
                     <IconButton aria-label="more">
                         <FilterListIcon />
                     </IconButton>
-                    <TableSettingsModal tableSettingsHandler={this.props.tableSettingsHandler} headers={this.state.headers} />
+                    <TableSettingsModal tableSettingsHandler={this.props.tableSettingsHandler} headers={this.props.headers} />
                 </Stack>
             </>
         );
