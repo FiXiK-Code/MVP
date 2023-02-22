@@ -189,7 +189,8 @@ export class Tasks extends Component {
                 "type": "select",
                 "title": "Переназначить",
                 "show": true,
-                "createAvailability": false
+                "createAvailability": true,
+                "fieldToShow": "name"
             },
             {
                 "name": "priority",
