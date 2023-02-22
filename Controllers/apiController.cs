@@ -292,7 +292,7 @@ namespace MVP.Controllers
             }
             var plannedTime = new TimeSpan(Convert.ToInt32(TaskParam.plannedTime.Split(':')[0]), Convert.ToInt32(TaskParam.plannedTime.Split(':')[1]), Convert.ToInt32(TaskParam.plannedTime.Split(':')[2]));
             var dedline = new DateTime(Convert.ToInt32(TaskParam.dedline.Split('T')[0].Split('-')[0]), Convert.ToInt32(TaskParam.dedline.Split('T')[0].Split('-')[1]), Convert.ToInt32(TaskParam.dedline.Split('T')[0].Split('-')[2]),
-                Convert.ToInt32(TaskParam.dedline.Split('T')[1].Split(':')[0]), Convert.ToInt32(TaskParam.dedline.Split('T')[1].Split(':')[1]), Convert.ToInt32(TaskParam.dedline.Split('T')[1].Split(':')[2]));
+                Convert.ToInt32(TaskParam.dedline.Split('T')[1].Split(':')[0]), Convert.ToInt32(TaskParam.dedline.Split('T')[1].Split(':')[1]),0);
             date = redackPriorAndPerenos(supervisor, date, plannedTime, projectCode, TaskParam.liteTask);
 
             // добавление задачи в базу
@@ -390,11 +390,11 @@ namespace MVP.Controllers
             }
             var plannedTime = new TimeSpan(Convert.ToInt32(TaskParam.plannedTime.Split(':')[0]), Convert.ToInt32(TaskParam.plannedTime.Split(':')[1]), Convert.ToInt32(TaskParam.plannedTime.Split(':')[2]));
             var start = new DateTime(Convert.ToInt32(TaskParam.start.Split('T')[0].Split('-')[0]), Convert.ToInt32(TaskParam.start.Split('T')[0].Split('-')[1]), Convert.ToInt32(TaskParam.start.Split('T')[0].Split('-')[2]),
-                Convert.ToInt32(TaskParam.start.Split('T')[1].Split(':')[0]), Convert.ToInt32(TaskParam.start.Split('T')[1].Split(':')[1]), Convert.ToInt32(TaskParam.start.Split('T')[1].Split(':')[2]));
+                Convert.ToInt32(TaskParam.start.Split('T')[1].Split(':')[0]), Convert.ToInt32(TaskParam.start.Split('T')[1].Split(':')[1]), 0);
             var finish = new DateTime(Convert.ToInt32(TaskParam.finish.Split('T')[0].Split('-')[0]), Convert.ToInt32(TaskParam.finish.Split('T')[0].Split('-')[1]), Convert.ToInt32(TaskParam.finish.Split('T')[0].Split('-')[2]),
-                Convert.ToInt32(TaskParam.finish.Split('T')[1].Split(':')[0]), Convert.ToInt32(TaskParam.finish.Split('T')[1].Split(':')[1]), Convert.ToInt32(TaskParam.finish.Split('T')[1].Split(':')[2]));
+                Convert.ToInt32(TaskParam.finish.Split('T')[1].Split(':')[0]), Convert.ToInt32(TaskParam.finish.Split('T')[1].Split(':')[1]), 0);
             var dedline = new DateTime(Convert.ToInt32(TaskParam.dedline.Split('T')[0].Split('-')[0]), Convert.ToInt32(TaskParam.dedline.Split('T')[0].Split('-')[1]), Convert.ToInt32(TaskParam.dedline.Split(' ')[0].Split('-')[2]),
-                Convert.ToInt32(TaskParam.dedline.Split('T')[1].Split(':')[0]), Convert.ToInt32(TaskParam.dedline.Split('T')[1].Split(':')[1]), Convert.ToInt32(TaskParam.dedline.Split('T')[1].Split(':')[2]));
+                Convert.ToInt32(TaskParam.dedline.Split('T')[1].Split(':')[0]), Convert.ToInt32(TaskParam.dedline.Split('T')[1].Split(':')[1]), 0);
 
             // корректировка даты - автоперенос при заполненном дне
             date = redackPriorAndPerenos(supervisor, date, plannedTime, _appDB.DBTask.FirstOrDefault(p => p.id == TaskParam.id).projectCode, TaskParam.liteTask);
@@ -1040,7 +1040,7 @@ namespace MVP.Controllers
             var supervisor = _appDB.DBStaff.FirstOrDefault(p => p.id == ProjParam.supervisor).name;
 
             var plannedFinishDate = new DateTime(Convert.ToInt32(ProjParam.plannedFinishDate.Split('T')[0].Split('-')[0]), Convert.ToInt32(ProjParam.plannedFinishDate.Split('T')[0].Split('-')[1]), Convert.ToInt32(ProjParam.plannedFinishDate.Split('T')[0].Split('-')[2]),
-                Convert.ToInt32(ProjParam.plannedFinishDate.Split('T')[1].Split(':')[0]), Convert.ToInt32(ProjParam.plannedFinishDate.Split('T')[1].Split(':')[1]), Convert.ToInt32(ProjParam.plannedFinishDate.Split('T')[1].Split(':')[2]));
+                Convert.ToInt32(ProjParam.plannedFinishDate.Split('T')[1].Split(':')[0]), Convert.ToInt32(ProjParam.plannedFinishDate.Split('T')[1].Split(':')[1]), 0);
 
 
             var item = new Project
