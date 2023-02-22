@@ -52,7 +52,7 @@ namespace MVP.Controllers
                 new SymmetricSecurityKey(Encoding.UTF8.GetBytes(KEY));
         }
 
-        
+
         [HttpPost]
         public IActionResult Token([FromBody] IdentityPerson person)// генерация токена
         {
@@ -77,7 +77,7 @@ namespace MVP.Controllers
             var post = personbuf.post;
             var roleCod = _appDB.DBPost.FirstOrDefault(p => p.name == post).roleCod;
             var role = _appDB.DBRole.FirstOrDefault(p => p.code == roleCod).name;
-            
+
 
             var response = new
             {
@@ -230,7 +230,7 @@ namespace MVP.Controllers
             }
             else
             {
-                
+
 
                 // составление списка сотрудников в подчинениии у того кто вошел в сессию
                 List<string> staffNames = new List<string>();
@@ -241,7 +241,7 @@ namespace MVP.Controllers
                 }
 
                 // список задач сотрудников из вышеупомянутого списка
-                
+
 
                 // сборка модели для возвращения
                 TasksTableReturnModels output = _task.GetMoreTasks(staffNames, roleSession, TaskParam.filterTable, true);
@@ -284,8 +284,8 @@ namespace MVP.Controllers
             var date = new DateTime(Convert.ToInt32(TaskParam.date.Split('-')[0]), Convert.ToInt32(TaskParam.date.Split('-')[1]), Convert.ToInt32(TaskParam.date.Split('-')[2]));
             var projectCode = _appDB.DBProject.FirstOrDefault(p => p.id == TaskParam.projectCode).code;
             var plannedTime = new TimeSpan(Convert.ToInt32(TaskParam.plannedTime.Split(':')[0]), Convert.ToInt32(TaskParam.plannedTime.Split(':')[1]), Convert.ToInt32(TaskParam.plannedTime.Split(':')[2]));
-            var dedline = new DateTime(Convert.ToInt32(TaskParam.dedline.Split(' ')[0].Split('-')[0]), Convert.ToInt32(TaskParam.dedline.Split(' ')[0].Split('-')[1]), Convert.ToInt32(TaskParam.dedline.Split(' ')[0].Split('-')[2]),
-                Convert.ToInt32(TaskParam.dedline.Split(' ')[1].Split(':')[0]), Convert.ToInt32(TaskParam.dedline.Split(' ')[1].Split(':')[1]), Convert.ToInt32(TaskParam.dedline.Split(' ')[1].Split(':')[2]));
+            var dedline = new DateTime(Convert.ToInt32(TaskParam.dedline.Split('T')[0].Split('-')[0]), Convert.ToInt32(TaskParam.dedline.Split('T')[0].Split('-')[1]), Convert.ToInt32(TaskParam.dedline.Split('T')[0].Split('-')[2]),
+                Convert.ToInt32(TaskParam.dedline.Split('T')[1].Split(':')[0]), Convert.ToInt32(TaskParam.dedline.Split('T')[1].Split(':')[1]), Convert.ToInt32(TaskParam.dedline.Split('T')[1].Split(':')[2]));
             date = redackPriorAndPerenos(supervisor, date, plannedTime, projectCode, TaskParam.liteTask);
 
             // добавление задачи в базу
@@ -374,12 +374,12 @@ namespace MVP.Controllers
             var date = new DateTime(Convert.ToInt32(TaskParam.date.Split('-')[0]), Convert.ToInt32(TaskParam.date.Split('-')[1]), Convert.ToInt32(TaskParam.date.Split('-')[2]));
             var projectCode = _appDB.DBProject.FirstOrDefault(p => p.id == TaskParam.projectCode).code;
             var plannedTime = new TimeSpan(Convert.ToInt32(TaskParam.plannedTime.Split(':')[0]), Convert.ToInt32(TaskParam.plannedTime.Split(':')[1]), Convert.ToInt32(TaskParam.plannedTime.Split(':')[2]));
-            var start = new DateTime(Convert.ToInt32(TaskParam.start.Split(' ')[0].Split('-')[0]), Convert.ToInt32(TaskParam.start.Split(' ')[0].Split('-')[1]), Convert.ToInt32(TaskParam.start.Split(' ')[0].Split('-')[2]),
-                Convert.ToInt32(TaskParam.start.Split(' ')[1].Split(':')[0]), Convert.ToInt32(TaskParam.start.Split(' ')[1].Split(':')[1]), Convert.ToInt32(TaskParam.start.Split(' ')[1].Split(':')[2]));
-            var finish = new DateTime(Convert.ToInt32(TaskParam.finish.Split(' ')[0].Split('-')[0]), Convert.ToInt32(TaskParam.finish.Split(' ')[0].Split('-')[1]), Convert.ToInt32(TaskParam.finish.Split(' ')[0].Split('-')[2]),
-                Convert.ToInt32(TaskParam.finish.Split(' ')[1].Split(':')[0]), Convert.ToInt32(TaskParam.finish.Split(' ')[1].Split(':')[1]), Convert.ToInt32(TaskParam.finish.Split(' ')[1].Split(':')[2]));
-            var dedline = new DateTime(Convert.ToInt32(TaskParam.dedline.Split(' ')[0].Split('-')[0]), Convert.ToInt32(TaskParam.dedline.Split(' ')[0].Split('-')[1]), Convert.ToInt32(TaskParam.dedline.Split(' ')[0].Split('-')[2]),
-                Convert.ToInt32(TaskParam.dedline.Split(' ')[1].Split(':')[0]), Convert.ToInt32(TaskParam.dedline.Split(' ')[1].Split(':')[1]), Convert.ToInt32(TaskParam.dedline.Split(' ')[1].Split(':')[2]));
+            var start = new DateTime(Convert.ToInt32(TaskParam.start.Split('T')[0].Split('-')[0]), Convert.ToInt32(TaskParam.start.Split('T')[0].Split('-')[1]), Convert.ToInt32(TaskParam.start.Split('T')[0].Split('-')[2]),
+                Convert.ToInt32(TaskParam.start.Split('T')[1].Split(':')[0]), Convert.ToInt32(TaskParam.start.Split('T')[1].Split(':')[1]), Convert.ToInt32(TaskParam.start.Split('T')[1].Split(':')[2]));
+            var finish = new DateTime(Convert.ToInt32(TaskParam.finish.Split('T')[0].Split('-')[0]), Convert.ToInt32(TaskParam.finish.Split('T')[0].Split('-')[1]), Convert.ToInt32(TaskParam.finish.Split('T')[0].Split('-')[2]),
+                Convert.ToInt32(TaskParam.finish.Split('T')[1].Split(':')[0]), Convert.ToInt32(TaskParam.finish.Split('T')[1].Split(':')[1]), Convert.ToInt32(TaskParam.finish.Split('T')[1].Split(':')[2]));
+            var dedline = new DateTime(Convert.ToInt32(TaskParam.dedline.Split('T')[0].Split('-')[0]), Convert.ToInt32(TaskParam.dedline.Split('T')[0].Split('-')[1]), Convert.ToInt32(TaskParam.dedline.Split(' ')[0].Split('-')[2]),
+                Convert.ToInt32(TaskParam.dedline.Split('T')[1].Split(':')[0]), Convert.ToInt32(TaskParam.dedline.Split('T')[1].Split(':')[1]), Convert.ToInt32(TaskParam.dedline.Split('T')[1].Split(':')[2]));
 
             // корректировка даты - автоперенос при заполненном дне
             date = redackPriorAndPerenos(supervisor, date, plannedTime, _appDB.DBTask.FirstOrDefault(p => p.id == TaskParam.id).projectCode, TaskParam.liteTask);
@@ -524,10 +524,9 @@ namespace MVP.Controllers
             List<TasksOut> result = new List<TasksOut>();
             try
             {
-                List<Tasks> today = _appDB.DBTask.Where(p => p.desc.Contains(param)).ToList();
+                List<Tasks> tasks = _appDB.DBTask.Where(p => p.desc.Contains(param)).ToList();
 
-               
-                foreach (var task in today)
+                foreach (var task in tasks)
                 {
                     var outt = new TasksOut
                     {
@@ -535,6 +534,9 @@ namespace MVP.Controllers
                         code = task.code,
                         desc = task.desc,
                         TaskCodeParent = task.TaskCodeParent,
+                        projectId = _appDB.DBProject.FirstOrDefault(p => p.code == task.projectCode).id,
+                        supervisorId = _appDB.DBStaff.FirstOrDefault(p => p.name == task.supervisor).id,
+                        recipientId = _appDB.DBStaff.FirstOrDefault(p => p.name == task.recipient).id,
                         projectCode = task.projectCode,
                         supervisor = task.supervisor,
                         recipient = task.recipient,
@@ -561,8 +563,8 @@ namespace MVP.Controllers
             {
                 result = null;
             }
-            
-            if(result != null) return new JsonResult(new ObjectResult(result) { StatusCode = 200 });
+
+            if (result != null) return new JsonResult(new ObjectResult(result) { StatusCode = 200 });
             else return new JsonResult(new ObjectResult("no matches!") { StatusCode = 204 });
         }
 
@@ -624,18 +626,155 @@ namespace MVP.Controllers
                     }
                 }
 
+                var today = _task.AllTasks.Where(p => p.status != "Выполнена").Where(p => p.date.Date <= DateTime.Now.Date).OrderBy(p => p.date.Date).OrderBy(p => p.priority).ToList();
+
+                List<TasksOut> todayOut = new List<TasksOut>();
+                foreach (var task in today)
+                {
+                    var outt = new TasksOut()
+                    {
+                        id = task.id,
+                        code = task.code,
+                        desc = task.desc,
+                        TaskCodeParent = task.TaskCodeParent,
+                        projectCode = task.projectCode,
+                        projectId = _appDB.DBProject.FirstOrDefault(p => p.code == task.projectCode).id,
+                        supervisorId = _appDB.DBStaff.FirstOrDefault(p => p.name == task.supervisor).id,
+                        recipientId = _appDB.DBStaff.FirstOrDefault(p => p.name == task.recipient).id,
+                        supervisor = task.supervisor,
+                        recipient = task.recipient,
+                        priority = task.priority,
+                        comment = task.comment,
+                        plannedTime = task.plannedTime.ToString(@"hh\:mm"),
+                        actualTime = task.actualTime.ToString(@"hh\:mm"),
+                        start = task.start.ToString(@"dd\.MM\.yyyy HH\:mm\:ss"),
+                        finish = task.finish.ToString(@"dd\.MM\.yyyy HH\:mm\:ss"),
+                        date = task.date.ToString(@"dd\.MM\.yyyy"),
+                        Stage = task.Stage,
+                        liteTask = task.liteTask,
+                        status = task.status,
+                        startWork = task.startWork,
+                        creator = task.creator,
+                        historyWorc = task.historyWorc,
+                        dedline = task.dedline.ToString(@"dd\.MM\.yyyy HH\:mm\:ss")
+
+                    };
+                    todayOut.Add(outt);
+                }
+
+
+
+                // выполненные задачи
+                var completed = _task.AllTasks.Where(p => p.status == "Выполнена").OrderBy(p => p.finish).ToList();
+
+                List<TasksOut> completedOut = new List<TasksOut>();
+                foreach (var task in completed)
+                {
+                    var outt = new TasksOut()
+                    {
+                        id = task.id,
+                        code = task.code,
+                        desc = task.desc,
+                        TaskCodeParent = task.TaskCodeParent,
+                        projectId = _appDB.DBProject.FirstOrDefault(p => p.code == task.projectCode).id,
+                        supervisorId = _appDB.DBStaff.FirstOrDefault(p => p.name == task.supervisor).id,
+                        recipientId = _appDB.DBStaff.FirstOrDefault(p => p.name == task.recipient).id,
+                        projectCode = task.projectCode,
+                        supervisor = task.supervisor,
+                        recipient = task.recipient,
+                        priority = task.priority,
+                        comment = task.comment,
+                        plannedTime = task.plannedTime.ToString(@"hh\:mm"),
+                        actualTime = task.actualTime.ToString(@"hh\:mm"),
+                        start = task.start.ToString(@"dd\.MM\.yyyy HH\:mm\:ss"),
+                        finish = task.finish.ToString(@"dd\.MM\.yyyy HH\:mm\:ss"),
+                        date = task.date.ToString(@"dd\.MM\.yyyy"),
+                        Stage = task.Stage,
+                        liteTask = task.liteTask,
+                        status = task.status,
+                        startWork = task.startWork,
+                        creator = task.creator,
+                        historyWorc = task.historyWorc,
+                        dedline = task.dedline.ToString(@"dd\.MM\.yyyy HH\:mm\:ss")
+
+                    };
+                    completedOut.Add(outt);
+                }
+                // будущие задачи 
+                var future = _task.AllTasks.Where(p => p.date.Date > DateTime.Now.Date).OrderBy(p => p.date.Date).OrderBy(p => p.priority).ToList();
+
+                List<TasksOut> futureOut = new List<TasksOut>();
+                foreach (var task in future)
+                {
+                    TasksOut outt = new TasksOut()
+                    {
+                        id = task.id,
+                        code = task.code,
+                        desc = task.desc,
+                        TaskCodeParent = task.TaskCodeParent,
+                        projectId = _appDB.DBProject.FirstOrDefault(p => p.code == task.projectCode).id,
+                        supervisorId = _appDB.DBStaff.FirstOrDefault(p => p.name == task.supervisor).id,
+                        recipientId = _appDB.DBStaff.FirstOrDefault(p => p.name == task.recipient).id,
+                        projectCode = task.projectCode,
+                        supervisor = task.supervisor,
+                        recipient = task.recipient,
+                        priority = task.priority,
+                        comment = task.comment,
+                        plannedTime = task.plannedTime.ToString(@"hh\:mm"),
+                        actualTime = task.actualTime.ToString(@"hh\:mm"),
+                        start = task.start.ToString(@"dd\.MM\.yyyy HH\:mm\:ss"),
+                        finish = task.finish.ToString(@"dd\.MM\.yyyy HH\:mm\:ss"),
+                        date = task.date.ToString(@"dd\.MM\.yyyy"),
+                        Stage = task.Stage,
+                        liteTask = task.liteTask,
+                        status = task.status,
+                        startWork = task.startWork,
+                        creator = task.creator,
+                        historyWorc = task.historyWorc,
+                        dedline = task.dedline.ToString(@"dd\.MM\.yyyy HH\:mm\:ss")
+                    };
+                    futureOut.Add(outt);
+                }
+
+                var proj = projects.ToList();
+                List<ProjectOut> ProjOut = new List<ProjectOut>();
+                foreach (var project in proj)
+                {
+                    ProjectOut outt = new ProjectOut()
+                    {
+                        id = project.id,
+                        code = project.code,
+                        name = project.name,
+                        shortName = project.shortName,
+                        priority = project.priority,
+                        dateStart = project.dateStart.ToString(@"dd\.MM\.yyyy HH\:mm\:ss"),
+                        plannedFinishDate = project.plannedFinishDate.ToString(@"dd\.MM\.yyyy HH\:mm\:ss"),
+                        actualFinishDate = project.actualFinishDate.ToString(@"dd\.MM\.yyyy HH\:mm\:ss"),
+                        supervisor = project.supervisor,
+                        supervisorId = _appDB.DBStaff.FirstOrDefault(p => p.name == project.supervisor).id,
+                        link = project.link,
+                        history = project.history,
+                        archive = project.archive,
+                        nowStage = project.nowStage,
+                        allStages = project.allStages,
+                        timeWork = project.timeWork.ToString(@"hh\:mm")
+                    };
+                    ProjOut.Add(outt);
+                }
+
+
                 ProjectTableReturnModels output = new ProjectTableReturnModels
                 {
                     // проекты
-                    projects = projects.ToList(),
+                    projects = ProjOut,
                     // задачи на чегодня
-                    today = _task.AllTasks.Where(p => p.status != "Выполнена").Where(p => p.date.Date <= DateTime.Now.Date).OrderBy(p => p.date.Date).OrderBy(p => p.priority).ToList(),
+                    today = todayOut,
 
                     // выполненные задачи
-                    completed = _task.AllTasks.Where(p => p.status == "Выполнена").OrderBy(p => p.finish).ToList(),
+                    completed = completedOut,
 
                     // будущие задачи 
-                    future = _task.AllTasks.Where(p => p.date.Date > DateTime.Now.Date).OrderBy(p => p.date.Date).OrderBy(p => p.priority).ToList()
+                    future = futureOut
 
                 };
 
@@ -813,8 +952,8 @@ namespace MVP.Controllers
 
             var supervisor = _appDB.DBStaff.FirstOrDefault(p => p.id == ProjParam.supervisor).name;
 
-            var plannedFinishDate = new DateTime(Convert.ToInt32(ProjParam.plannedFinishDate.Split(' ')[0].Split('-')[0]), Convert.ToInt32(ProjParam.plannedFinishDate.Split(' ')[0].Split('-')[1]), Convert.ToInt32(ProjParam.plannedFinishDate.Split(' ')[0].Split('-')[2]),
-                Convert.ToInt32(ProjParam.plannedFinishDate.Split(' ')[1].Split(':')[0]), Convert.ToInt32(ProjParam.plannedFinishDate.Split(' ')[1].Split(':')[1]), Convert.ToInt32(ProjParam.plannedFinishDate.Split(' ')[1].Split(':')[2]));
+            var plannedFinishDate = new DateTime(Convert.ToInt32(ProjParam.plannedFinishDate.Split('T')[0].Split('-')[0]), Convert.ToInt32(ProjParam.plannedFinishDate.Split('T')[0].Split('-')[1]), Convert.ToInt32(ProjParam.plannedFinishDate.Split('T')[0].Split('-')[2]),
+                Convert.ToInt32(ProjParam.plannedFinishDate.Split('T')[1].Split(':')[0]), Convert.ToInt32(ProjParam.plannedFinishDate.Split('T')[1].Split(':')[1]), Convert.ToInt32(ProjParam.plannedFinishDate.Split('T')[1].Split(':')[2]));
 
 
             var item = new Project
@@ -851,5 +990,15 @@ namespace MVP.Controllers
 
             return new JsonResult(new ObjectResult("Проект успешно добавлен!") { StatusCode = 201 });
         }
-    }
+
+
+        [Authorize]
+        [HttpGet]
+        public JsonResult GetPosts()// список сотрудников
+        {
+            var posts = _post.AllPosts.ToList();
+            return new JsonResult(new ObjectResult(posts) { StatusCode = 200 });
+        }
+
+}
 }

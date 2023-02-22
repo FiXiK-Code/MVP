@@ -12,8 +12,11 @@ namespace MVP.Date.API
         public string desc { get; set; }
         public string TaskCodeParent { get; set; }
         public string projectCode { get; set; }
+        public int projectId { get; set; }
         public string supervisor { get; set; } // name
+        public int supervisorId { get; set; }
         public string recipient { get; set; } //name
+        public int recipientId { get; set; }
         public int priority { get; set; }
         public string comment { get; set; }
         public string plannedTime { get; set; } //time
