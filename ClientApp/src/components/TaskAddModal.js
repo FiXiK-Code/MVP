@@ -11,7 +11,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import { fetchWithAuth } from '../utils.js'
+import { fetchWithAuth, getCurrentDate } from '../utils.js'
 
 function AddSelect(props) {
     return (
@@ -32,17 +32,6 @@ function AddSelect(props) {
             </FormControl>
         </Box>
     );
-}
-
-
-function getCurrentDate(separator = '') {
-
-    let newDate = new Date()
-    let date = newDate.getDate();
-    let month = newDate.getMonth() + 1;
-    let year = newDate.getFullYear();
-
-    return `${year}${separator}${month < 10 ? `0${month}` : `${month}`}${separator}${date}`
 }
 
 function SimpleDialog(props) {
