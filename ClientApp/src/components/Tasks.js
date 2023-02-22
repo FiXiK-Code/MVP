@@ -206,6 +206,13 @@ export class Tasks extends Component {
                 "createAvailability": true
             },
             {
+                "name": "dedline",
+                "type": "datetime",
+                "title": "Дедлайн",
+                "show": true,
+                "createAvailability": true
+            },
+            {
                 "name": "plannedTime",
                 "type": "timefield",
                 "title": "План время",

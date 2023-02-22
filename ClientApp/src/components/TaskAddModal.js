@@ -162,6 +162,25 @@ function SimpleDialog(props) {
                                         }}
                                     />
                                 }
+                                {field.type === "datetime" &&
+                                    <TextField
+                                        id={field.name}
+                                        label={field.title}
+                                        type="datetime-local"
+                                        inputProps={{
+                                            step: 1,
+                                        }}
+                                        onChange={(e) => {
+                                            e.label = field.name
+                                            handleTextChange(e)
+                                        }}
+                                        defaultValue={getCurrentDate('-') + " 18:00:00"}
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                    />
+                                }
+                                
                                 {field.type === "textfield" &&
                                     <TextField id={field.name} label={field.title} variant="outlined" multiline onChange={(e) => {
                                         e.label = field.name;
@@ -174,7 +193,7 @@ function SimpleDialog(props) {
                                         handleChange={field.name === "recipient" ? handleSelectChange3 : (field.name === "supervisor" ? handleSelectChange1 : handleSelectChange2)}
                                         data={props[field.name]}
                                         header={field.fieldToShow}
-                                state={field.name === "recipient" ? selectState3 : (field.name === "supervisor" ? selectState1 : selectState2)}
+                                        state={field.name === "recipient" ? selectState3 : (field.name === "supervisor" ? selectState1 : selectState2)}
                                     />
                                 }
 
@@ -212,7 +231,7 @@ export default function TaskAddModal(props) {
                 headers={props.headers}
                 supervisor={props.supervisor}
                 projectCode={props.projectCode}
-                recipient={ props.supervisor }
+                recipient={props.supervisor}
             />
         </>
     );
