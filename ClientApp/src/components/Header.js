@@ -1,7 +1,7 @@
-﻿import React, { Component } from 'react';
+import React, { Component } from 'react';
 import { SideMenu } from './SideMenu';
 import { Logo } from "./Logo";
-import { HeaderProfile } from "./HeaderProfile";
+import HeaderProfile from "./HeaderProfile";
 import Container from "@mui/material/Container";
 import styles from './Header.module.scss';
 
