@@ -11,6 +11,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import { fetchWithAuth } from '../utils.js'
 
 function AddSelect(props) {
     return (
@@ -51,19 +52,21 @@ function SimpleDialog(props) {
         onClose(selectedValue);
     };
 
-    const [data, setData] = React.useState([]);
+    const [data, setData] = React.useState({});
 
     const [type, setType] = React.useState(1);
 
     const [selectState1, setSelectState1] = React.useState("");
     const [selectState2, setSelectState2] = React.useState("");
+    const [selectState3, setSelectState3] = React.useState("");
 
     const handleTextChange = (event) => {
         let label = event.label;
-        setData({
+        setData(prevState => ({
+            ...prevState,
             [label]: event.target.value
-        })
-        console.log(data);
+        }
+        ))
     };
 
     const handleSelectChange = (event) => {
@@ -72,16 +75,34 @@ function SimpleDialog(props) {
 
     const handleSelectChange1 = (event) => {
         setSelectState1(event.target.value)
+        setData(prevState => ({
+            ...prevState,
+            supervisor: event.target.value
+        }));
     };
 
 
     const handleSelectChange2 = (event) => {
         setSelectState2(event.target.value)
+        setData(prevState => ({
+            ...prevState,
+            projectCode: event.target.value
+        }));
+    };
+
+    const handleSelectChange3 = (event) => {
+        setSelectState3(event.target.value)
+        setData(prevState => ({
+            ...prevState,
+            recipient: event.target.value
+        }));
     };
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        if (type == 1) {
+        if (type === 1) {
+            fetchWithAuth('/api/PostTasks', 'post', data)
+        } else {
 
         }
     }
@@ -114,7 +135,7 @@ function SimpleDialog(props) {
                                         label={field.title}
                                         type="date"
                                         onChange={(e) => {
-                                            e.label = field.title
+                                            e.label = field.name
                                             handleTextChange(e)
                                         }}
                                         defaultValue={getCurrentDate('-')}
@@ -132,7 +153,7 @@ function SimpleDialog(props) {
                                             step: 1,
                                         }}
                                         onChange={(e) => {
-                                            e.label = field.title
+                                            e.label = field.name
                                             handleTextChange(e)
                                         }}
                                         defaultValue="00:00:00"
@@ -143,23 +164,23 @@ function SimpleDialog(props) {
                                 }
                                 {field.type === "textfield" &&
                                     <TextField id={field.name} label={field.title} variant="outlined" multiline onChange={(e) => {
-                                        e.label = field.title
-                                        handleTextChange(e)
+                                        e.label = field.name;
+                                        handleTextChange(e);
                                     }} />
                                 }
                                 {field.type === "select" &&
                                     <AddSelect
                                         label={field.title}
-                                        handleChange={field.fieldToShow === "name" ? handleSelectChange1 : handleSelectChange2}
+                                        handleChange={field.name === "recipient" ? handleSelectChange3 : (field.name === "supervisor" ? handleSelectChange1 : handleSelectChange2)}
                                         data={props[field.name]}
                                         header={field.fieldToShow}
-                                        state={field.fieldToShow === "name" ? selectState1 : selectState2}
+                                state={field.name === "recipient" ? selectState3 : (field.name === "supervisor" ? selectState1 : selectState2)}
                                     />
                                 }
 
                             </>
                         )}
-                        <Button variant="contained" onClick={handleClose}>Создать</Button>
+                        <Button variant="contained" type="submit">Создать</Button>
                     </Stack>
                 </FormGroup>
 
@@ -191,6 +212,7 @@ export default function TaskAddModal(props) {
                 headers={props.headers}
                 supervisor={props.supervisor}
                 projectCode={props.projectCode}
+                recipient={ props.supervisor }
             />
         </>
     );

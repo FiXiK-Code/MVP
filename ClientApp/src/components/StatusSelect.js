@@ -5,40 +5,72 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { fetchWithAuth } from '../utils.js';
+import CustomSnackbar from "./CustomSnackbar";
 
 export default function StatusSelect(props) {
     const { taskId } = props;
     const [status, setStatus] = React.useState('');
     const [color, setColor] = React.useState('#FFFFFF');
+    const [messageOpen, setMessageOpen] = React.useState(false);
+    const [message, setMessage] = React.useState("");
+    const [messageType, setMessageType] = React.useState("");
     const statuses = ["Создана", "В работе", "На паузе", "Выполнена"];
 
     React.useEffect(() => {
         console.log(props.status);
         if (typeof props.status !== 'undefined') {
             setStatus(props.status);
+            if (props.status === "В работе") {
+                setColor('#CEFDED')
+            }
+            if (props.status === "На паузе") {
+                setColor('#FFCCDD')
+            }
+            if (props.status === "Выполнена" || props.status === "Создана") {
+                setColor('#FFFFFF')
+            }
         }
     }, [props.status])
 
     const sendTaskStatus = async (target) => {
-        fetchWithAuth('/api/PutTasksStatus', 'put', {
+        const response = await fetchWithAuth('/api/PutTasksStatus', 'put', {
             id: taskId,
             status: status
         });
+        console.log(response);
+        if (response.statusCode >= 200 && response.statusCode < 400) {
+            // if success
+            setMessageOpen(true);
+            setMessage(response.value);
+            setMessageType("success");
+            return true;
+        } else {
+            // if error
+            setMessageOpen(true);
+            setMessage(response.value);
+            setMessageType("error");
+            return false;
+        }
     }
 
-    const handleChange = (event) => {
-        setStatus(event.target.value);
-        sendTaskStatus(event.target);
+    const handleChange = async (event) => {
+        console.log(event);
+        
+        if (await sendTaskStatus(event.target)) {
+            setStatus(event.target.value);
+            if (event.target.value === "В работе") {
+                setColor('#CEFDED')
+            }
+            if (event.target.value === "На паузе") {
+                setColor('#FFCCDD')
+            }
+            if (event.target.value === "Выполнена" || event.target.value === "Создана") {
+                setColor('#FFFFFF')
+            }
+        } else {
 
-        if (event.target.value === "В работе") {
-            setColor('#CEFDED')
         }
-        if (event.target.value === "На паузе") {
-            setColor('#FFCCDD')
-        }
-        if (event.target.value === "Выполнена" || event.target.value === "Создана") {
-            setColor('#FFFFFF')
-        }
+
     };
 
     return (
@@ -59,6 +91,7 @@ export default function StatusSelect(props) {
                     <MenuItem value={"Выполнена"}>Выполнена</MenuItem>
                 </Select>
             </FormControl>
+            <CustomSnackbar severity={ messageType } open={messageOpen} setOpen={ setMessageOpen } message={ message }  />
         </Box>
     );
 }
