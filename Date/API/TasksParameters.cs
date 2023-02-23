@@ -24,7 +24,7 @@ namespace MVP.Date.API
         public string start { get; set; }
         public string finish { get; set; }
         public string Stage { get; set; }
-        public string liteTask { get; set; }
+        public bool liteTask { get; set; }
 
 
     }

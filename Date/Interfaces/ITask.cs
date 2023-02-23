@@ -16,7 +16,7 @@ namespace MVP.Date.Interfaces
         Tasks GetTask(TasksParameters param);
         TasksTableReturnModels GetMoreTasks(List<string> staffNames, SessionRoles roleSession, string filterTable = "", bool TaskTable = false);
         void addToDB(Tasks task);
-        bool redactToDB(string liteTask,
+        bool redactToDB(bool liteTask,
             int iid,
             DateTime date,
             DateTime dedline,

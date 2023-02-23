@@ -117,7 +117,7 @@ namespace MVP.Controllers
         }
 
         // редактирование даты постановки задачи в зависимоти от загруженности для
-        public DateTime redackPriorAndPerenos(string supervisor, DateTime date, TimeSpan plannedTime, string projectCode, string liteTask)// перенос даты задачи в зависимотсти от загруженности дня и приоритета
+        public DateTime redackPriorAndPerenos(string supervisor, DateTime date, TimeSpan plannedTime, string projectCode, bool liteTask)// перенос даты задачи в зависимотсти от загруженности дня и приоритета
         {
             var tasksSuper = _appDB.DBTask.Where(p => (p.supervisor == supervisor && p.recipient == null) || p.recipient == supervisor)
                 .Where(p => p.status != "Выполнена").Where(p => p.date.Date == date.Date).OrderBy(p => p.plannedTime).ToList();
@@ -136,15 +136,15 @@ namespace MVP.Controllers
             // checking time
             if (SumTimeTaskToDay > timeWorkDay)
             {
-                if (_appDB.DBProject.FirstOrDefault(p => p.code == projectCode).priority <= maxPriority || liteTask != "Задача")
+                if (_appDB.DBProject.FirstOrDefault(p => p.code == projectCode).priority <= maxPriority || liteTask != false)
                 {
                     foreach (var task in tasksSuper.OrderBy(p => p.priority).Reverse().OrderBy(p => p.plannedTime))
                     {
-                        if ((SumTimeTaskToDay - task.plannedTime) >= timeWorkDay && (task.priority <= maxPriority || liteTask != "Задача"))
+                        if ((SumTimeTaskToDay - task.plannedTime) >= timeWorkDay && (task.priority <= maxPriority || liteTask != false))
                         {
                             _task.redactToDB(liteTask, task.id,
                                     redackPriorAndPerenos(task.supervisor, task.date.AddDays(1), task.plannedTime,
-                                        task.projectCode, task.liteTask == false ? "Задача" : "Вне очереди"), task.dedline,
+                                        task.projectCode, task.liteTask), task.dedline,
                                task.status, task.comment, task.supervisor, task.recipient, task.priority, task.plannedTime, task.start, task.finish, "");
 
                             var tasksSupernew = _appDB.DBTask.Where(p => (p.supervisor == supervisor && p.recipient == null) || p.recipient == supervisor)
@@ -162,7 +162,7 @@ namespace MVP.Controllers
                         if ((SumTimeTaskToDay - task.plannedTime) < timeWorkDay)
                         {
                             _task.redactToDB(liteTask, task.id, redackPriorAndPerenos(task.supervisor, task.date.AddDays(1), task.plannedTime,
-                                        task.projectCode, task.liteTask == false ? "Задача" : "Вне очереди"), task.dedline, task.status, task.comment,
+                                        task.projectCode, task.liteTask), task.dedline, task.status, task.comment,
                                task.supervisor, task.recipient, task.priority, task.plannedTime, task.start, task.finish, "");
 
                             var tasksSupernew = _appDB.DBTask.Where(p => (p.supervisor == supervisor && p.recipient == null) || p.recipient == supervisor)
@@ -223,7 +223,7 @@ namespace MVP.Controllers
                     result = null;
                 }
 
-                if (result != null) return new JsonResult(new ObjectResult("task not found") { StatusCode = 404 });
+                if (result == null) return new JsonResult(new ObjectResult("task not found") { StatusCode = 404 });
                 return new JsonResult(new ObjectResult(_task.GetTask(TaskParam)) { StatusCode = 200 });
                 //return new JsonResult(JsonConvert.SerializeObject(_task.GetTask(TaskParam)));
             }
@@ -304,14 +304,14 @@ namespace MVP.Controllers
                 projectCode = projectCode,
                 supervisor = supervisor,
                 recipient = recipient,
-                priority = TaskParam.liteTask == "Задача" ? _appDB.DBProject.FirstOrDefault(p => p.code == projectCode).priority : -1,
+                priority = TaskParam.liteTask == false ? _appDB.DBProject.FirstOrDefault(p => p.code == projectCode).priority : -1,
                 comment = TaskParam.comment != null ? $"{roleSession.SessionName}: {TaskParam.comment}\n" : null,
                 plannedTime = plannedTime,
                 date = date,
                 dedline = dedline,
                 Stage = TaskParam.Stage,
                 status = "Создана",
-                liteTask = TaskParam.liteTask == "Задача" ? false : true,
+                liteTask = TaskParam.liteTask,
                 creator = roleSession.SessionName
 
             };
@@ -354,7 +354,7 @@ namespace MVP.Controllers
                 result = null;
             }
 
-            if (result != null) return new JsonResult(new ObjectResult("task not found") { StatusCode = 404 });
+            if (result == null) return new JsonResult(new ObjectResult("task not found") { StatusCode = 404 });
 
             // проверка сессии - без входа в сессию нужно переходить на траницу авторизации
             var roleSession = new SessionRoles();

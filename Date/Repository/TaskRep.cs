@@ -37,7 +37,7 @@ namespace MVP.Date.Repository
         }
 
         public bool redactToDB(//про подзадачи
-            string liteTask,
+            bool liteTask,
             int iid,
             DateTime date,
             DateTime dedline,
@@ -103,14 +103,14 @@ namespace MVP.Date.Repository
                     task.finish = DateTime.Now;
                 }else task.finish = finish;
 
-                task.liteTask = liteTask == "Задача" ? false : true;
+                task.liteTask = liteTask;
                 try
                 {
-                    task.priority = liteTask == "Задача" ? _appDB.DBProject.FirstOrDefault(p => p.code == task.projectCode).priority : -1;
+                    task.priority = liteTask == false ? _appDB.DBProject.FirstOrDefault(p => p.code == task.projectCode).priority : -1;
                 }
                 catch (Exception)
                 {
-                    task.priority = liteTask == "Задача" ? pririty : -1;
+                    task.priority = liteTask == false ? pririty : -1;
                 }
                
 
