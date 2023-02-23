@@ -11,7 +11,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import { fetchWithAuth, getCurrentDate, getProjectHeaders } from '../utils.js'
+import { fetchWithAuth, getCurrentDate, getProjectHeaders, getServerTimeFromLocale } from '../utils.js'
 import CustomSnackbar from "./CustomSnackbar";
 
 function AddSelect(props) {
@@ -66,10 +66,18 @@ function SimpleDialog(props) {
         if (label == "priority") {
             value = parseInt(value);
         }
+
+        const dateTimeFields = ["dedline", "start", "finish", "plannedFinishDate"]
+
+        // если поле типа датавремя, то учтем часовой пояс
+        if (dateTimeFields.includes(label)) {
+            value = getServerTimeFromLocale(value);
+        } 
         setData(prevState => ({
             ...prevState,
             [label]: value
         }
+
         ))
     };
 
