@@ -280,7 +280,8 @@ namespace MVP.Controllers
             // корректировка даты - автоперенос при заполненном дне
             var supervisor = _appDB.DBStaff.FirstOrDefault(p => p.id == TaskParam.supervisor).name;
             var recipient = _appDB.DBStaff.FirstOrDefault(p => p.id == TaskParam.recipient).name;
-            var date = new DateTime(Convert.ToInt32(TaskParam.date.Split('-')[0]), Convert.ToInt32(TaskParam.date.Split('-')[1]), Convert.ToInt32(TaskParam.date.Split('-')[2]));
+            var date = DateTime.Parse(TaskParam.date);
+            //var date = new DateTime(Convert.ToInt32(TaskParam.date.Split('-')[0]), Convert.ToInt32(TaskParam.date.Split('-')[1]), Convert.ToInt32(TaskParam.date.Split('-')[2]));
             string projectCode = null;
             try
             {
@@ -290,10 +291,12 @@ namespace MVP.Controllers
             {
                 return new JsonResult(new ObjectResult($"Проект c id {TaskParam.projectCode} - не найден!") { StatusCode = 404 });
             }
-            var plannedTime = new TimeSpan(Convert.ToInt32(TaskParam.plannedTime.Split(':')[0]), Convert.ToInt32(TaskParam.plannedTime.Split(':')[1]), Convert.ToInt32(TaskParam.plannedTime.Split(':')[2]));
-            int sec = TaskParam.dedline.Split('T')[1].Length > 5 ? Convert.ToInt32(TaskParam.dedline.Split('T')[1].Split(':')[2].Split('.')[0]) : 0;
-            var dedline = new DateTime(Convert.ToInt32(TaskParam.dedline.Split('T')[0].Split('-')[0]), Convert.ToInt32(TaskParam.dedline.Split('T')[0].Split('-')[1]), Convert.ToInt32(TaskParam.dedline.Split('T')[0].Split('-')[2]),
-                Convert.ToInt32(TaskParam.dedline.Split('T')[1].Split(':')[0]), Convert.ToInt32(TaskParam.dedline.Split('T')[1].Split(':')[1]),sec);
+            var plannedTime = TimeSpan.Parse(TaskParam.plannedTime);
+            //var plannedTime = new TimeSpan(Convert.ToInt32(TaskParam.plannedTime.Split(':')[0]), Convert.ToInt32(TaskParam.plannedTime.Split(':')[1]), Convert.ToInt32(TaskParam.plannedTime.Split(':')[2]));
+            var dedline = DateTime.Parse(TaskParam.dedline);
+            //int sec = TaskParam.dedline.Split('T')[1].Length > 5 ? Convert.ToInt32(TaskParam.dedline.Split('T')[1].Split(':')[2].Split('.')[0]) : 0;
+            //var dedline = new DateTime(Convert.ToInt32(TaskParam.dedline.Split('T')[0].Split('-')[0]), Convert.ToInt32(TaskParam.dedline.Split('T')[0].Split('-')[1]), Convert.ToInt32(TaskParam.dedline.Split('T')[0].Split('-')[2]),
+            //    Convert.ToInt32(TaskParam.dedline.Split('T')[1].Split(':')[0]), Convert.ToInt32(TaskParam.dedline.Split('T')[1].Split(':')[1]),sec);
             date = redackPriorAndPerenos(supervisor, date, plannedTime, projectCode, TaskParam.liteTask);
 
             // добавление задачи в базу
@@ -379,7 +382,8 @@ namespace MVP.Controllers
             }
             var supervisor = _appDB.DBStaff.FirstOrDefault(p => p.id == TaskParam.supervisor).name;
             var recipient = _appDB.DBStaff.FirstOrDefault(p => p.id == TaskParam.recipient).name;
-            var date = new DateTime(Convert.ToInt32(TaskParam.date.Split('-')[0]), Convert.ToInt32(TaskParam.date.Split('-')[1]), Convert.ToInt32(TaskParam.date.Split('-')[2]));
+            var date = DateTime.Parse(TaskParam.date);
+            //var date = new DateTime(Convert.ToInt32(TaskParam.date.Split('-')[0]), Convert.ToInt32(TaskParam.date.Split('-')[1]), Convert.ToInt32(TaskParam.date.Split('-')[2]));
             string projectCode = null;
             try
             {
@@ -389,16 +393,20 @@ namespace MVP.Controllers
             {
                 return new JsonResult(new ObjectResult($"Проект c id {TaskParam.projectCode} - не найден!") { StatusCode = 404 });
             }
-            var plannedTime = new TimeSpan(Convert.ToInt32(TaskParam.plannedTime.Split(':')[0]), Convert.ToInt32(TaskParam.plannedTime.Split(':')[1]), Convert.ToInt32(TaskParam.plannedTime.Split(':')[2]));
-            int sec = TaskParam.start.Split('T')[1].Length > 5 ? Convert.ToInt32(TaskParam.start.Split('T')[1].Split(':')[2].Split('.')[0]) : 0;
-            var start = new DateTime(Convert.ToInt32(TaskParam.start.Split('T')[0].Split('-')[0]), Convert.ToInt32(TaskParam.start.Split('T')[0].Split('-')[1]), Convert.ToInt32(TaskParam.start.Split('T')[0].Split('-')[2]),
-                Convert.ToInt32(TaskParam.start.Split('T')[1].Split(':')[0]), Convert.ToInt32(TaskParam.start.Split('T')[1].Split(':')[1]), sec);
-            sec = TaskParam.finish.Split('T')[1].Length > 5 ? Convert.ToInt32(TaskParam.finish.Split('T')[1].Split(':')[2].Split('.')[0]) : 0;
-            var finish = new DateTime(Convert.ToInt32(TaskParam.finish.Split('T')[0].Split('-')[0]), Convert.ToInt32(TaskParam.finish.Split('T')[0].Split('-')[1]), Convert.ToInt32(TaskParam.finish.Split('T')[0].Split('-')[2]),
-                Convert.ToInt32(TaskParam.finish.Split('T')[1].Split(':')[0]), Convert.ToInt32(TaskParam.finish.Split('T')[1].Split(':')[1]), sec);
-            sec = TaskParam.dedline.Split('T')[1].Length > 5 ? Convert.ToInt32(TaskParam.dedline.Split('T')[1].Split(':')[2].Split('.')[0]) : 0;
-            var dedline = new DateTime(Convert.ToInt32(TaskParam.dedline.Split('T')[0].Split('-')[0]), Convert.ToInt32(TaskParam.dedline.Split('T')[0].Split('-')[1]), Convert.ToInt32(TaskParam.dedline.Split(' ')[0].Split('-')[2]),
-                Convert.ToInt32(TaskParam.dedline.Split('T')[1].Split(':')[0]), Convert.ToInt32(TaskParam.dedline.Split('T')[1].Split(':')[1]), sec);
+            var plannedTime = TimeSpan.Parse(TaskParam.plannedTime);
+            //var plannedTime = new TimeSpan(Convert.ToInt32(TaskParam.plannedTime.Split(':')[0]), Convert.ToInt32(TaskParam.plannedTime.Split(':')[1]), Convert.ToInt32(TaskParam.plannedTime.Split(':')[2]));
+            var start = DateTime.Parse(TaskParam.start);
+            //int sec = TaskParam.start.Split('T')[1].Length > 5 ? Convert.ToInt32(TaskParam.start.Split('T')[1].Split(':')[2].Split('.')[0]) : 0;
+            //var start = new DateTime(Convert.ToInt32(TaskParam.start.Split('T')[0].Split('-')[0]), Convert.ToInt32(TaskParam.start.Split('T')[0].Split('-')[1]), Convert.ToInt32(TaskParam.start.Split('T')[0].Split('-')[2]),
+            //    Convert.ToInt32(TaskParam.start.Split('T')[1].Split(':')[0]), Convert.ToInt32(TaskParam.start.Split('T')[1].Split(':')[1]), sec);
+            var finish = DateTime.Parse(TaskParam.finish);
+            //sec = TaskParam.finish.Split('T')[1].Length > 5 ? Convert.ToInt32(TaskParam.finish.Split('T')[1].Split(':')[2].Split('.')[0]) : 0;
+            //var finish = new DateTime(Convert.ToInt32(TaskParam.finish.Split('T')[0].Split('-')[0]), Convert.ToInt32(TaskParam.finish.Split('T')[0].Split('-')[1]), Convert.ToInt32(TaskParam.finish.Split('T')[0].Split('-')[2]),
+            //    Convert.ToInt32(TaskParam.finish.Split('T')[1].Split(':')[0]), Convert.ToInt32(TaskParam.finish.Split('T')[1].Split(':')[1]), sec);
+            var dedline = DateTime.Parse(TaskParam.dedline);
+            //sec = TaskParam.dedline.Split('T')[1].Length > 5 ? Convert.ToInt32(TaskParam.dedline.Split('T')[1].Split(':')[2].Split('.')[0]) : 0;
+            //var dedline = new DateTime(Convert.ToInt32(TaskParam.dedline.Split('T')[0].Split('-')[0]), Convert.ToInt32(TaskParam.dedline.Split('T')[0].Split('-')[1]), Convert.ToInt32(TaskParam.dedline.Split(' ')[0].Split('-')[2]),
+            //    Convert.ToInt32(TaskParam.dedline.Split('T')[1].Split(':')[0]), Convert.ToInt32(TaskParam.dedline.Split('T')[1].Split(':')[1]), sec);
             
             // корректировка даты - автоперенос при заполненном дне
             date = redackPriorAndPerenos(supervisor, date, plannedTime, _appDB.DBTask.FirstOrDefault(p => p.id == TaskParam.id).projectCode, TaskParam.liteTask);
@@ -1065,10 +1073,11 @@ namespace MVP.Controllers
             }
 
             var supervisor = _appDB.DBStaff.FirstOrDefault(p => p.id == ProjParam.supervisor).name;
-            int sec = ProjParam.plannedFinishDate.Split('T')[1].Length > 5 ? Convert.ToInt32(ProjParam.plannedFinishDate.Split('T')[1].Split(':')[2].Split('.')[0]) : 0;
-            var plannedFinishDate = new DateTime(Convert.ToInt32(ProjParam.plannedFinishDate.Split('T')[0].Split('-')[0]), Convert.ToInt32(ProjParam.plannedFinishDate.Split('T')[0].Split('-')[1]), Convert.ToInt32(ProjParam.plannedFinishDate.Split('T')[0].Split('-')[2]),
-                Convert.ToInt32(ProjParam.plannedFinishDate.Split('T')[1].Split(':')[0]), Convert.ToInt32(ProjParam.plannedFinishDate.Split('T')[1].Split(':')[1]),
-                sec);
+            var plannedFinishDate = DateTime.Parse(ProjParam.plannedFinishDate);
+            //int sec = ProjParam.plannedFinishDate.Split('T')[1].Length > 5 ? Convert.ToInt32(ProjParam.plannedFinishDate.Split('T')[1].Split(':')[2].Split('.')[0]) : 0;
+            //var plannedFinishDate = new DateTime(Convert.ToInt32(ProjParam.plannedFinishDate.Split('T')[0].Split('-')[0]), Convert.ToInt32(ProjParam.plannedFinishDate.Split('T')[0].Split('-')[1]), Convert.ToInt32(ProjParam.plannedFinishDate.Split('T')[0].Split('-')[2]),
+            //    Convert.ToInt32(ProjParam.plannedFinishDate.Split('T')[1].Split(':')[0]), Convert.ToInt32(ProjParam.plannedFinishDate.Split('T')[1].Split(':')[1]),
+            //    sec);
 
 
             var item = new Project
