@@ -21,8 +21,8 @@ namespace MVP.Date.API
         public string comment { get; set; }
         public string plannedTime { get; set; } //time
         public string actualTime { get; set; } //time
-        public string start { get; set; }//oll
-        public string finish { get; set; }//oll
+        public DateTime start { get; set; }//oll
+        public DateTime finish { get; set; }//oll
         public string date { get; set; }//date
         public string Stage { get; set; }
         public bool liteTask { get; set; }
@@ -32,6 +32,6 @@ namespace MVP.Date.API
         public int creatorId { get; set; }
         public string historyWorc { get; set; }
 
-        public string dedline { get; set; }//oll
+        public DateTime dedline { get; set; }//oll
     }
 }

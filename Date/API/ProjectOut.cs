@@ -12,9 +12,9 @@ namespace MVP.Date.API
         public string name { get; set; }
         public string shortName { get; set; }
         public int priority { get; set; }
-        public string dateStart { get; set; }
-        public string plannedFinishDate { get; set; }
-        public string actualFinishDate { get; set; }
+        public DateTime dateStart { get; set; }
+        public DateTime plannedFinishDate { get; set; }
+        public DateTime actualFinishDate { get; set; }
         public string supervisor { get; set; }
         public int supervisorId { get; set; }
         public string link { get; set; }

@@ -10,8 +10,8 @@ namespace MVP.ApiModels
     public class StaffTableReturnModels
     {
         public List<StaffOut> staffs { get; set; }
-        public List<Tasks> completed { get; set; }
-        public List<Tasks> today { get; set; }
-        public List<Tasks> future { get; set; }
+        public List<TasksOut> completed { get; set; }
+        public List<TasksOut> today { get; set; }
+        public List<TasksOut> future { get; set; }
     }
 }
