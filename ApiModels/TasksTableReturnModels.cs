@@ -9,8 +9,8 @@ namespace MVP.ApiModels
 {
     public class TasksTableReturnModels
     {
-        public List<TasksOut> completed { get; set; }
-        public List<TasksOut> today { get; set; }
-        public List<TasksOut> future { get; set; }
+        public List<Tasks> completed { get; set; }
+        public List<Tasks> today { get; set; }
+        public List<Tasks> future { get; set; }
     }
 }
