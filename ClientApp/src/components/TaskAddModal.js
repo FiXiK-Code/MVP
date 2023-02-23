@@ -11,7 +11,8 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import { fetchWithAuth, getCurrentDate } from '../utils.js'
+import { fetchWithAuth, getCurrentDate, getProjectHeaders } from '../utils.js'
+import CustomSnackbar from "./CustomSnackbar";
 
 function AddSelect(props) {
     return (
@@ -35,6 +36,12 @@ function AddSelect(props) {
 }
 
 function SimpleDialog(props) {
+    const projectHeaders = [
+
+    ];
+
+    let headers;
+
     const { onClose, selectedValue, open } = props;
 
     const handleClose = () => {
@@ -49,14 +56,26 @@ function SimpleDialog(props) {
     const [selectState2, setSelectState2] = React.useState("");
     const [selectState3, setSelectState3] = React.useState("");
 
+    const [messageOpen, setMessageOpen] = React.useState(false);
+    const [message, setMessage] = React.useState("");
+    const [messageType, setMessageType] = React.useState("");
+
     const handleTextChange = (event) => {
         let label = event.label;
+        let value = event.target.value;
+        if (label == "priority") {
+            value = parseInt(value);
+        }
         setData(prevState => ({
             ...prevState,
-            [label]: event.target.value
+            [label]: value
         }
         ))
     };
+
+    React.useEffect(() => {
+        setType(parseInt(props.type));
+    }, [props.type])
 
     const handleSelectChange = (event) => {
         setType(event.target.value)
@@ -87,23 +106,42 @@ function SimpleDialog(props) {
         }));
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
+        let url;
         if (type === 1) {
-            fetchWithAuth('/api/PostTasks', 'post', data)
+            url = '/api/PostTasks';
+        } else {      
+            url = '/api/PostProj';
+        }
+        const response = await fetchWithAuth(url, 'post', data);
+        if (response.statusCode >= 200 && response.statusCode < 400) {
+            // if success
+            setMessageOpen(true);
+            setMessage(response.value);
+            setMessageType("success");
+            setTimeout(() => {
+                setMessageOpen(false);
+                handleClose();
+            }, 2000)
+            return true;
         } else {
-
+            // if error
+            setMessageOpen(true);
+            setMessage(response.value);
+            setMessageType("error");
+            return false;
         }
     }
 
     let title;
     if (type == 1) {
         title = "Создание задачи";
+        headers = props.headers;
     } else {
         title = "Создание проекта";
+        headers = getProjectHeaders();
     }
-
-    console.log("props headers in add modal", props.headers)
 
     return (
         <Drawer anchor="right" onClose={handleClose} open={open}>
@@ -116,7 +154,7 @@ function SimpleDialog(props) {
                 <FormGroup>
                     <Stack spacing={2} component="form" onSubmit={handleSubmit}>
                         <BasicSelect handleChange={handleSelectChange} type={type} />
-                        {props.headers.map((field) => field.createAvailability &&
+                        {headers.map((field) => field.createAvailability &&
                             <>
                                 {field.type === "datefield" &&
                                     <TextField
@@ -169,9 +207,15 @@ function SimpleDialog(props) {
                                         }}
                                     />
                                 }
-                                
+
                                 {field.type === "textfield" &&
                                     <TextField id={field.name} label={field.title} variant="outlined" multiline onChange={(e) => {
+                                        e.label = field.name;
+                                        handleTextChange(e);
+                                    }} />
+                                }
+                                {field.type === "number" &&
+                                    <TextField id={field.name} type="number" label={field.title} variant="outlined" onChange={(e) => {
                                         e.label = field.name;
                                         handleTextChange(e);
                                     }} />
@@ -193,6 +237,7 @@ function SimpleDialog(props) {
                 </FormGroup>
 
             </Box>
+            <CustomSnackbar severity={messageType} open={messageOpen} setOpen={setMessageOpen} message={message} />
         </Drawer>
     );
 }
@@ -213,8 +258,9 @@ export default function TaskAddModal(props) {
 
     return (
         <>
-            <Button style={{ minWidth: 180 }} variant="contained" onClick={handleClickOpen}>Добавить&nbsp;задачу</Button>
+            <Button style={{ minWidth: 180 }} variant="contained" onClick={handleClickOpen}>{props.title}</Button>
             <SimpleDialog
+                type={props.type}
                 open={open}
                 onClose={handleClose}
                 headers={props.headers}

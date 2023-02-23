@@ -100,12 +100,28 @@ export class Employees extends Component {
                 staffs: []
             },
             headers: [],
-            loading: true
+            loading: true,
+            projectCode: [],
+            supervisor: []
         };
     }
 
     componentDidMount() {
         this.populateWeatherData();
+        this.getProjects();
+    }
+
+    async getProjects() {
+        const response = await fetchWithAuth("/api/GetProjects");
+        console.log(response);
+        if (response.status === 401) {
+            this.setState({
+                auth: false
+            })
+        }
+
+        const data = response.value.projects;
+        this.setState({ projectCode: data });
     }
 
     static renderTasksTable(headers, tasks) {
@@ -129,8 +145,8 @@ export class Employees extends Component {
                     paddingBottom: 2
                 }}>
                     <Stack spacing={2} direction="row">
-                        <TaskAddModal headers={this.state.headers} supervisor={this.state.supervisor} projectCode={this.state.projectCode} recipient={this.state.supervisor} />
-                        <Button style={{minWidth: 180}} variant="contained">Добавить&nbsp;проект</Button>
+                        <TaskAddModal type="1" title="Добавить&nbsp;задачу" headers={this.state.headers} supervisor={this.state.supervisor} projectCode={this.state.projectCode} recipient={this.state.supervisor} />
+                        <TaskAddModal type="2" title="Добавить&nbsp;проект" headers={this.state.headers} supervisor={this.state.supervisor} projectCode={this.state.projectCode} recipient={this.state.supervisor} />
                         <TaskSelect />
                         <PositionSelect />
                         <EmployeeSelect />
@@ -152,6 +168,6 @@ export class Employees extends Component {
 
         const data = response.value;
         const headers = getHeaders();
-        this.setState({ tasks: data, headers: headers, loading: false });
+        this.setState({ tasks: data, supervisor: data.staffs, headers: headers, loading: false });
     }
 }

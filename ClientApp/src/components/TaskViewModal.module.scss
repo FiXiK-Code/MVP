@@ -1,0 +1,20 @@
+.task {
+    display: inline-block;
+    font-size: 12px;
+    padding: 1px;
+    margin: 5px 2px;
+    border: 2px solid #000000;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 170px;
+    text-align: center;
+}
+
+.priority {
+    background-color: #71FACA;
+}
+
+.notMyTask {
+    opacity: 0.8;
+}

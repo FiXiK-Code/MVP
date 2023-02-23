@@ -14,7 +14,8 @@ export default function CollapsibleTable(props) {
     const { tasks, headers, search } = props;
 
     const tableStyling = {
-        padding: "6px 10px"
+        padding: "6px 10px",
+        textAlign: "center"
     };
 
     const [stateHeaders, setStateHeaders] = React.useState([]);
@@ -34,7 +35,7 @@ export default function CollapsibleTable(props) {
 
     React.useEffect(() => {
         if (props.tasks.staffs) {
-            setLength(props.tasks.staffs.length);
+            setLength(props.tasks.staffs.length + 1);
         }
         
         console.log('update');
@@ -50,7 +51,7 @@ export default function CollapsibleTable(props) {
             <TableBody>
                 <TaskGroup title="Выполненные задачи" tasks={tasks.completed} isOpen={false} colNum={length} headers={stateHeaders} supervisor={props.supervisor} projectCode={props.projectCode} recipient={props.supervisor} />
                 <TaskGroup title="Задачи на сегодня" tasks={tasks.today} isOpen={true} colNum={length} headers={stateHeaders} supervisor={props.supervisor} projectCode={props.projectCode} recipient={props.supervisor} />
-                <TaskGroup title="Предстоящие задачи" tasks={tasks.upcoming} isOpen={false} colNum={length} headers={stateHeaders} supervisor={props.supervisor} projectCode={props.projectCode} recipient={props.supervisor} />
+                <TaskGroup title="Предстоящие задачи" tasks={tasks.future} isOpen={false} colNum={length} headers={stateHeaders} supervisor={props.supervisor} projectCode={props.projectCode} recipient={props.supervisor} />
             </TableBody>
     }
 
@@ -61,6 +62,7 @@ export default function CollapsibleTable(props) {
         // если это вкладка сотрудники
         console.log('staffs!', tasks.staffs);
         tableHeader = <TableRow>
+            <TableCell sx={{ ...tableStyling }}>Дата</TableCell>
             {props.tasks.staffs.map((header) =>
                 <TableCell sx={{ ...tableStyling }} key={header.name}>{header.name}<br />{header.post}</TableCell>
             )}
@@ -69,7 +71,7 @@ export default function CollapsibleTable(props) {
         tableBody = <TableBody>
             <TaskGroupEmployee title="Выполненные задачи" tasks={tasks.completed} isOpen={false} colNum={length} headers={stateHeaders} supervisor={props.supervisor} projectCode={props.projectCode} recipient={props.supervisor} staffs={tasks.staffs} />
             <TaskGroupEmployee title="Задачи на сегодня" tasks={tasks.today} isOpen={true} colNum={length} headers={stateHeaders} supervisor={props.supervisor} projectCode={props.projectCode} recipient={props.supervisor} staffs={tasks.staffs} />
-            <TaskGroupEmployee title="Предстоящие задачи" tasks={tasks.upcoming} isOpen={false} colNum={length} headers={stateHeaders} supervisor={props.supervisor} projectCode={props.projectCode} recipient={props.supervisor} staffs={tasks.staffs} />
+            <TaskGroupEmployee title="Предстоящие задачи" tasks={tasks.future} isOpen={false} colNum={length} headers={stateHeaders} supervisor={props.supervisor} projectCode={props.projectCode} recipient={props.supervisor} staffs={tasks.staffs} />
         </TableBody>
     } else {
         tableHeader = <TableRow>

@@ -109,8 +109,8 @@ export class Tasks extends Component {
                     paddingBottom: 2
                 }}>
                     <Stack spacing={2} direction="row">
-                        <TaskAddModal headers={this.state.headers} supervisor={this.state.supervisor} projectCode={this.state.projectCode} recipient={this.state.supervisor }  />
-                        <Button variant="contained">Добавить проект</Button>
+                        <TaskAddModal type="1" title="Добавить&nbsp;задачу" headers={this.state.headers} supervisor={this.state.supervisor} projectCode={this.state.projectCode} recipient={this.state.supervisor} />
+                        <TaskAddModal type="2" title="Добавить&nbsp;проект" headers={this.state.headers} supervisor={this.state.supervisor} projectCode={this.state.projectCode} recipient={this.state.supervisor} />
                     </Stack>
                 </Box>
                 {contents}

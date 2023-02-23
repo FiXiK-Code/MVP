@@ -150,3 +150,65 @@ export function getHeaders() {
         },
     ];
 }
+
+export function getProjectHeaders() {
+    return [
+        {
+            "name": "plannedFinishDate",
+            "type": "datetime",
+            "title": "Планируемая дата завершения",
+            "show": true,
+            "createAvailability": true
+        },
+        {
+            "name": "link",
+            "type": "textfield",
+            "title": "Облако",
+            "show": true,
+            "createAvailability": true
+        },
+        {
+            "name": "code",
+            "type": "textfield",
+            "title": "Шифр проекта",
+            "show": true,
+            "createAvailability": true
+        },
+        {
+            "name": "supervisor",
+            "type": "select",
+            "title": "Ответственный",
+            "show": true,
+            "createAvailability": true,
+            "fieldToShow": "name"
+        },
+        {
+            "name": "priority",
+            "type": "number",
+            "title": "Приоритет",
+            "show": true,
+            "createAvailability": true
+        },
+        {
+            "name": "shortName",
+            "type": "textfield",
+            "title": "Краткое описание",
+            "show": true,
+            "createAvailability": true
+        },
+        {
+            "name": "name",
+            "type": "textfield",
+            "title": "Полное описание",
+            "show": true,
+            "createAvailability": true
+        },
+        {
+            "name": "allStages",
+            "type": "textfield",
+            "title": "Стадии проекта (через запятую)",
+            "show": true,
+            "createAvailability": true
+        },
+    ];
+}

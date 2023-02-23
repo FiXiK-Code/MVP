@@ -11,6 +11,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import TaskViewModal from './TaskViewModal';
 import StatusSelect from './StatusSelect';
+import styles from './TaskGroupEmployee.module.scss';
 
 function CollapsedTasks(props) {
     const { display, tasks, headers } = props;
@@ -26,29 +27,29 @@ function CollapsedTasks(props) {
     }, [props.headers, props.tasks]);
 
     const tableStyling = {
-        padding: "6px 10px"
+        padding: "6px 10px",
+        textAlign: "center"
     };
 
     let contents = (
         (typeof props.tasks !== 'undefined') && display
         &&
         <>
-            {props.tasks.map((task) =>
-                <TableRow sx={{ backgroundColor: task.priority == 0 ? "#71FACA" : "#FFFFFF" }}>
-                    {stateHeaders.map((header) =>
-                        header.show &&
-                        <>
-                            {header.name === "status" ?
-                                <TableCell sx={{ ...tableStyling }}>
-                                    <StatusSelect taskId={task.id} status={task.status} />
-                                </TableCell>
+            {Object.keys(tasks).map((key, i) =>
+                <TableRow key={i}>
+                    <TableCell>{key}</TableCell>
+                    {props.staffs.map((staff, index) =>
+                        <TableCell sx={{ ...tableStyling }} key={index}>
+                            <span className={styles.taskContainer}>
 
-                                :
-                                <TaskViewModal headers={props.headers} task={task} supervisor={props.supervisor} projectCode={props.projectCode} recipient={props.supervisor}  >
-                                    {task[header.name]}
-                                </TaskViewModal>}
-                        </>
-
+                                {tasks[key].hasOwnProperty([staff.name]) && tasks[key][staff.name].map((task, j) =>
+                                    <TaskViewModal key={j} from="employees" headers={props.headers} task={task} supervisor={props.supervisor} projectCode={props.projectCode} recipient={props.supervisor}>
+                                        {task.desc}
+                                    </TaskViewModal>
+                                )}
+                            </span>
+                            {!tasks[key].hasOwnProperty([staff.name]) && <>-</>}
+                        </TableCell>
                     )}
                 </TableRow>
             )}
@@ -89,8 +90,7 @@ export function TaskGroupEmployee(props) {
 
     console.log(tasks);
 
-    const data = [];
-    const meta = [];
+    let data = [];
 
     if (tasks && tasks.length) {
         console.log('tasks is', tasks);
@@ -99,13 +99,7 @@ export function TaskGroupEmployee(props) {
             result[key] = groupBySupervisor(result[key]);
         }
         console.log('result is', result);
-
-        for (let i = 0; i < tasks.length; i++) {
-            data[i] = [];
-            for (let j = 0; j < staffs.length; j++) {
-                data[i][j] = [];
-            }
-        }
+        data = result;
     }
 
     return (
@@ -129,7 +123,7 @@ export function TaskGroupEmployee(props) {
                 </TableCell>
 
             </TableRow>
-            <CollapsedTasks display={open} tasks={tasks} headers={stateHeaders} supervisor={props.supervisor} projectCode={props.projectCode} recipient={props.supervisor} />
+            <CollapsedTasks display={open} tasks={data} headers={stateHeaders} supervisor={props.supervisor} projectCode={props.projectCode} recipient={props.supervisor} staffs={props.staffs} />
         </React.Fragment>
     );
 }

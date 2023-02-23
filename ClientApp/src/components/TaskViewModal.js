@@ -11,6 +11,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { fetchWithAuth, getCurrentDate } from '../utils';
+import styles from './TaskViewModal.module.scss';
 
 function AddSelect(props) {
     console.log(props);
@@ -219,11 +220,20 @@ export default function TaskViewModal(props) {
         setOpen(false);
     };
 
+    const name = localStorage.getItem('full_name');
+
     return (
         <>
-            <TableCell sx={{ ...tableStyling }} onClick={handleClickOpen}>
-                {children}
-            </TableCell>
+            {props.from === 'employees' &&
+                <span onClick={handleClickOpen} className={styles.task + " " + (!props.task.priority ? styles.priority : "") + " " + (name != props.task.creator ? styles.notMyTask : "" )}>
+                    {children}
+                </span>
+            }
+            {props.from !== 'employees' &&
+                <TableCell sx={{ ...tableStyling }} onClick={handleClickOpen}>
+                    {children}
+                </TableCell>
+            }
             <SimpleDialog
                 open={open}
                 onClose={handleClose}
