@@ -291,7 +291,7 @@ namespace MVP.Controllers
                 return new JsonResult(new ObjectResult($"Проект c id {TaskParam.projectCode} - не найден!") { StatusCode = 404 });
             }
             var plannedTime = new TimeSpan(Convert.ToInt32(TaskParam.plannedTime.Split(':')[0]), Convert.ToInt32(TaskParam.plannedTime.Split(':')[1]), Convert.ToInt32(TaskParam.plannedTime.Split(':')[2]));
-            int sec = TaskParam.dedline.Split('T')[1].Length > 5 ? Convert.ToInt32(TaskParam.dedline.Split('T')[1].Split(':')[2]) : 0;
+            int sec = TaskParam.dedline.Split('T')[1].Length > 5 ? Convert.ToInt32(TaskParam.dedline.Split('T')[1].Split(':')[2].Split('.')[0]) : 0;
             var dedline = new DateTime(Convert.ToInt32(TaskParam.dedline.Split('T')[0].Split('-')[0]), Convert.ToInt32(TaskParam.dedline.Split('T')[0].Split('-')[1]), Convert.ToInt32(TaskParam.dedline.Split('T')[0].Split('-')[2]),
                 Convert.ToInt32(TaskParam.dedline.Split('T')[1].Split(':')[0]), Convert.ToInt32(TaskParam.dedline.Split('T')[1].Split(':')[1]),sec);
             date = redackPriorAndPerenos(supervisor, date, plannedTime, projectCode, TaskParam.liteTask);
@@ -390,13 +390,13 @@ namespace MVP.Controllers
                 return new JsonResult(new ObjectResult($"Проект c id {TaskParam.projectCode} - не найден!") { StatusCode = 404 });
             }
             var plannedTime = new TimeSpan(Convert.ToInt32(TaskParam.plannedTime.Split(':')[0]), Convert.ToInt32(TaskParam.plannedTime.Split(':')[1]), Convert.ToInt32(TaskParam.plannedTime.Split(':')[2]));
-            int sec = TaskParam.start.Split('T')[1].Length > 5 ? Convert.ToInt32(TaskParam.start.Split('T')[1].Split(':')[2]) : 0;
+            int sec = TaskParam.start.Split('T')[1].Length > 5 ? Convert.ToInt32(TaskParam.start.Split('T')[1].Split(':')[2].Split('.')[0]) : 0;
             var start = new DateTime(Convert.ToInt32(TaskParam.start.Split('T')[0].Split('-')[0]), Convert.ToInt32(TaskParam.start.Split('T')[0].Split('-')[1]), Convert.ToInt32(TaskParam.start.Split('T')[0].Split('-')[2]),
                 Convert.ToInt32(TaskParam.start.Split('T')[1].Split(':')[0]), Convert.ToInt32(TaskParam.start.Split('T')[1].Split(':')[1]), sec);
-            sec = TaskParam.finish.Split('T')[1].Length > 5 ? Convert.ToInt32(TaskParam.finish.Split('T')[1].Split(':')[2]) : 0;
+            sec = TaskParam.finish.Split('T')[1].Length > 5 ? Convert.ToInt32(TaskParam.finish.Split('T')[1].Split(':')[2].Split('.')[0]) : 0;
             var finish = new DateTime(Convert.ToInt32(TaskParam.finish.Split('T')[0].Split('-')[0]), Convert.ToInt32(TaskParam.finish.Split('T')[0].Split('-')[1]), Convert.ToInt32(TaskParam.finish.Split('T')[0].Split('-')[2]),
                 Convert.ToInt32(TaskParam.finish.Split('T')[1].Split(':')[0]), Convert.ToInt32(TaskParam.finish.Split('T')[1].Split(':')[1]), sec);
-            sec = TaskParam.dedline.Split('T')[1].Length > 5 ? Convert.ToInt32(TaskParam.dedline.Split('T')[1].Split(':')[2]) : 0;
+            sec = TaskParam.dedline.Split('T')[1].Length > 5 ? Convert.ToInt32(TaskParam.dedline.Split('T')[1].Split(':')[2].Split('.')[0]) : 0;
             var dedline = new DateTime(Convert.ToInt32(TaskParam.dedline.Split('T')[0].Split('-')[0]), Convert.ToInt32(TaskParam.dedline.Split('T')[0].Split('-')[1]), Convert.ToInt32(TaskParam.dedline.Split(' ')[0].Split('-')[2]),
                 Convert.ToInt32(TaskParam.dedline.Split('T')[1].Split(':')[0]), Convert.ToInt32(TaskParam.dedline.Split('T')[1].Split(':')[1]), sec);
 
@@ -1046,7 +1046,7 @@ namespace MVP.Controllers
             }
 
             var supervisor = _appDB.DBStaff.FirstOrDefault(p => p.id == ProjParam.supervisor).name;
-            int sec = ProjParam.plannedFinishDate.Split('T')[1].Length > 5 ? Convert.ToInt32(ProjParam.plannedFinishDate.Split('T')[1].Split(':')[2]) : 0;
+            int sec = ProjParam.plannedFinishDate.Split('T')[1].Length > 5 ? Convert.ToInt32(ProjParam.plannedFinishDate.Split('T')[1].Split(':')[2].Split('.')[0]) : 0;
             var plannedFinishDate = new DateTime(Convert.ToInt32(ProjParam.plannedFinishDate.Split('T')[0].Split('-')[0]), Convert.ToInt32(ProjParam.plannedFinishDate.Split('T')[0].Split('-')[1]), Convert.ToInt32(ProjParam.plannedFinishDate.Split('T')[0].Split('-')[2]),
                 Convert.ToInt32(ProjParam.plannedFinishDate.Split('T')[1].Split(':')[0]), Convert.ToInt32(ProjParam.plannedFinishDate.Split('T')[1].Split(':')[1]),
                 sec);
