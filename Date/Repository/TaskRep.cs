@@ -71,13 +71,13 @@ namespace MVP.Date.Repository
                 Tasks task = _appDB.DBTask.FirstOrDefault(p => p.id == iid);
                 if (task.status == "В работе" && (status == "Выполнена" || status == "На паузе"))
                 {
-                    task.actualTime += (TimeSpan)(DateTime.Now.AddHours(-5) - task.startWork);
-                    task.historyWorc += $"{DateTime.Now.AddHours(-5).Date.ToString(@"dd\.MM\.yyyy")} в работе: {(DateTime.Now.AddHours(-5) - task.startWork).ToString(@"hh\:mm")}\n";
+                    task.actualTime += (TimeSpan)(DateTime.Now - task.startWork);
+                    task.historyWorc += $"{DateTime.Now.AddHours(-5).Date.ToString(@"dd\.MM\.yyyy")} в работе: {(DateTime.Now - task.startWork).ToString(@"hh\:mm")}\n";
                     Project proj = new Project();
                     try
                     {
                         proj = _appDB.DBProject.FirstOrDefault(p => p.code == task.projectCode);
-                        proj.timeWork += (TimeSpan)(DateTime.Now.AddHours(-5) - task.startWork);
+                        proj.timeWork += (TimeSpan)(DateTime.Now - task.startWork);
                     }
                     catch (Exception)
                     {
@@ -87,7 +87,7 @@ namespace MVP.Date.Repository
                 }
                 if (status == "В работе")
                 {
-                    task.startWork = DateTime.Now.AddHours(-5);
+                    task.startWork = DateTime.Now;
                 }
                 task.supervisor = supervisor;
                 task.date = date;
@@ -96,11 +96,11 @@ namespace MVP.Date.Repository
                 task.comment += comment != null? comment+ "\n": null;
                 task.plannedTime = plannedTime;
                 if (task.status == "Создана" && status == "В работе")
-                    task.start = DateTime.Now.AddHours(-5);
+                    task.start = DateTime.Now;
                 task.status = status;
                 if(status == "Выполнена")
                 {
-                    task.finish = DateTime.Now.AddHours(-5);
+                    task.finish = DateTime.Now;
                 }else task.finish = finish;
 
                 task.liteTask = liteTask == "Задача" ? false : true;
@@ -145,13 +145,13 @@ namespace MVP.Date.Repository
                 Tasks task = _appDB.DBTask.FirstOrDefault(p => p.id == id);
                 if (task.status == "В работе" && (stat == "Выполнена" || stat == "На паузе"))
                 {
-                    task.actualTime += (TimeSpan)(DateTime.Now.AddHours(-5) - task.startWork);
-                    task.historyWorc += $"{DateTime.Now.AddHours(-5).Date.ToString(@"dd\.MM\.yyyy")} в работе: {(DateTime.Now.AddHours(-5) - task.startWork).ToString(@"hh\:mm")}\n";
+                    task.actualTime += (TimeSpan)(DateTime.Now - task.startWork);
+                    task.historyWorc += $"{DateTime.Now.AddHours(-5).Date.ToString(@"dd\.MM\.yyyy")} в работе: {(DateTime.Now - task.startWork).ToString(@"hh\:mm")}\n";
                     Project proj = new Project();
                     try
                     {
                         proj = _appDB.DBProject.FirstOrDefault(p => p.code == task.projectCode);
-                        proj.timeWork += (TimeSpan)(DateTime.Now.AddHours(-5) - task.startWork);
+                        proj.timeWork += (TimeSpan)(DateTime.Now - task.startWork);
                     }
                     catch (Exception)
                     {
@@ -161,10 +161,10 @@ namespace MVP.Date.Repository
                 }
                 if (stat == "В работе")
                 {
-                    task.startWork = DateTime.Now.AddHours(-5);
+                    task.startWork = DateTime.Now;
                 }
                 if (task.status == "Создана" && stat == "В работе")
-                    task.start = DateTime.Now.AddHours(-5);
+                    task.start = DateTime.Now;
                 task.recipient = resip;
                 task.status = stat;
                 try
@@ -176,7 +176,7 @@ namespace MVP.Date.Repository
                     task.priority = task.liteTask == false ? task.priority : -1;
                 }
 
-                if (stat == "Выполнена") task.finish = DateTime.Now.AddHours(-5);
+                if (stat == "Выполнена") task.finish = DateTime.Now;
                 _appDB.SaveChanges();
                 return true;
             }

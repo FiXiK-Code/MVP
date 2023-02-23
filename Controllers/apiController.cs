@@ -1058,7 +1058,7 @@ namespace MVP.Controllers
                 name = ProjParam.name,
                 shortName = ProjParam.shortName,
                 priority = ProjParam.priority,
-                dateStart = DateTime.Now.AddHours(-5),
+                dateStart = DateTime.Now,
                 plannedFinishDate = plannedFinishDate,
                 supervisor = supervisor,
                 link = ProjParam.link,
