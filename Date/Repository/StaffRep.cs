@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MVP.Date.API;
 using MVP.Date.Interfaces;
 using MVP.Date.Models;
 using System;
@@ -23,15 +24,59 @@ namespace MVP.Date.Repository
 
         public Staff GetStaff(int staffId) => _appDB.DBStaff.FirstOrDefault(p => p.id == staffId);
 
-        public List<Staff> StaffTable(string SessionRole, string sessionCod)
+        public List<StaffOut> StaffTable(string SessionRole, string sessionCod)
         {
-            List<Staff> StaffTable = new List<Staff>();
-            StaffTable.Add(_appDB.DBStaff.FirstOrDefault(p => p.code == sessionCod));
+            List<StaffOut> StaffTable = new List<StaffOut>();
+
+            var staff = _appDB.DBStaff.FirstOrDefault(p => p.code == sessionCod);
+            var obj = new StaffOut
+            {
+                id = staff.id,
+                code = staff.code,
+                name = staff.name,
+                divisionId = staff.divisionId,
+                post = staff.post,
+                roleCod = staff.roleCod,
+                supervisorCod = staff.supervisorCod,
+                login = staff.login,
+                mail = staff.mail
+            };
+            StaffTable.Add(obj);
             switch (SessionRole)
             {
                 case "Директор":
-                    StaffTable.AddRange(_appDB.DBStaff.Where(p => p.roleCod == "R02").ToList());
-                    StaffTable.AddRange(_appDB.DBStaff.Where(p => p.roleCod == "R04").ToList());
+                    foreach (var staffs in _appDB.DBStaff.Where(p => p.roleCod == "R02"))
+                    {
+                        var outStaff = new StaffOut
+                        {
+                            id = staffs.id,
+                            code = staffs.code,
+                            name = staffs.name,
+                            divisionId = staffs.divisionId,
+                            post = staffs.post,
+                            roleCod = staffs.roleCod,
+                            supervisorCod = staffs.supervisorCod,
+                            login = staffs.login,
+                            mail = staffs.mail
+                        };
+                        StaffTable.Add(outStaff);
+                    }
+                    foreach (var staffs in _appDB.DBStaff.Where(p => p.roleCod == "R04"))
+                    {
+                        var outStaff = new StaffOut
+                        {
+                            id = staffs.id,
+                            code = staffs.code,
+                            name = staffs.name,
+                            divisionId = staffs.divisionId,
+                            post = staffs.post,
+                            roleCod = staffs.roleCod,
+                            supervisorCod = staffs.supervisorCod,
+                            login = staffs.login,
+                            mail = staffs.mail
+                        };
+                        StaffTable.Add(outStaff);
+                    }
 
                     //foreach (var staffs in _appDB.DBStaff.Where(p => p.roleCod == "R02"))
                     //{
@@ -43,8 +88,39 @@ namespace MVP.Date.Repository
                     //}
                     break;
                 case "ГИП":
-                    StaffTable.AddRange(_appDB.DBStaff.Where(p => p.roleCod == "R03").ToList());
-                    StaffTable.AddRange(_appDB.DBStaff.Where(p => p.roleCod == "R04").ToList());
+                    foreach (var staffs in _appDB.DBStaff.Where(p => p.roleCod == "R03"))
+                    {
+                        var outStaff = new StaffOut
+                        {
+                            id = staffs.id,
+                            code = staffs.code,
+                            name = staffs.name,
+                            divisionId = staffs.divisionId,
+                            post = staffs.post,
+                            roleCod = staffs.roleCod,
+                            supervisorCod = staffs.supervisorCod,
+                            login = staffs.login,
+                            mail = staffs.mail
+                        };
+                        StaffTable.Add(outStaff);
+                    }
+                    foreach (var staffs in _appDB.DBStaff.Where(p => p.roleCod == "R04"))
+                    {
+                        var outStaff = new StaffOut
+                        {
+                            id = staffs.id,
+                            code = staffs.code,
+                            name = staffs.name,
+                            divisionId = staffs.divisionId,
+                            post = staffs.post,
+                            roleCod = staffs.roleCod,
+                            supervisorCod = staffs.supervisorCod,
+                            login = staffs.login,
+                            mail = staffs.mail
+                        };
+                        StaffTable.Add(outStaff);
+                    }
+
 
                     //foreach (var staffs in _appDB.DBStaff.Where(p => p.roleCod == "R03"))
                     //{
@@ -56,7 +132,22 @@ namespace MVP.Date.Repository
                     //}
                     break;
                 case "Помощник ГИПа":
-                    StaffTable.AddRange(_appDB.DBStaff.Where(p => p.roleCod == "R04").ToList());
+                    foreach (var staffs in _appDB.DBStaff.Where(p => p.roleCod == "R04"))
+                    {
+                        var outStaff = new StaffOut
+                        {
+                            id = staffs.id,
+                            code = staffs.code,
+                            name = staffs.name,
+                            divisionId = staffs.divisionId,
+                            post = staffs.post,
+                            roleCod = staffs.roleCod,
+                            supervisorCod = staffs.supervisorCod,
+                            login = staffs.login,
+                            mail = staffs.mail
+                        };
+                        StaffTable.Add(outStaff);
+                    }
 
                     //foreach (var staffs in _appDB.DBStaff.Where(p => p.roleCod == "R04"))
                     //{
@@ -64,9 +155,54 @@ namespace MVP.Date.Repository
                     //}
                     break;
                 case "НО":
-                    StaffTable.AddRange(_appDB.DBStaff.Where(p => p.roleCod == "R02").ToList());
-                    StaffTable.AddRange(_appDB.DBStaff.Where(p => p.supervisorCod == sessionCod && p.roleCod == "R05").ToList());
-                    StaffTable.AddRange(_appDB.DBStaff.Where(p => p.supervisorCod == sessionCod && p.roleCod == "R06").ToList());
+                    foreach (var staffs in _appDB.DBStaff.Where(p => p.roleCod == "R02"))
+                    {
+                        var outStaff = new StaffOut
+                        {
+                            id = staffs.id,
+                            code = staffs.code,
+                            name = staffs.name,
+                            divisionId = staffs.divisionId,
+                            post = staffs.post,
+                            roleCod = staffs.roleCod,
+                            supervisorCod = staffs.supervisorCod,
+                            login = staffs.login,
+                            mail = staffs.mail
+                        };
+                        StaffTable.Add(outStaff);
+                    }
+                    foreach (var staffs in _appDB.DBStaff.Where(p => p.supervisorCod == sessionCod && p.roleCod == "R05"))
+                    {
+                        var outStaff = new StaffOut
+                        {
+                            id = staffs.id,
+                            code = staffs.code,
+                            name = staffs.name,
+                            divisionId = staffs.divisionId,
+                            post = staffs.post,
+                            roleCod = staffs.roleCod,
+                            supervisorCod = staffs.supervisorCod,
+                            login = staffs.login,
+                            mail = staffs.mail
+                        };
+                        StaffTable.Add(outStaff);
+                    }
+                    foreach (var staffs in _appDB.DBStaff.Where(p => p.supervisorCod == sessionCod && p.roleCod == "R06"))
+                    {
+                        var outStaff = new StaffOut
+                        {
+                            id = staffs.id,
+                            code = staffs.code,
+                            name = staffs.name,
+                            divisionId = staffs.divisionId,
+                            post = staffs.post,
+                            roleCod = staffs.roleCod,
+                            supervisorCod = staffs.supervisorCod,
+                            login = staffs.login,
+                            mail = staffs.mail
+                        };
+                        StaffTable.Add(outStaff);
+                    }
 
                     //foreach (var staffs in _appDB.DBStaff.Where(p => p.roleCod == "R02"))
                     //{
@@ -83,9 +219,23 @@ namespace MVP.Date.Repository
                     //}
                     break;
                 case "РГ":
-
-                    StaffTable.AddRange(_appDB.DBStaff.Where(p => p.supervisorCod == sessionCod && p.roleCod == "R06").ToList());
-
+                    foreach (var staffs in _appDB.DBStaff.Where(p => p.supervisorCod == sessionCod && p.roleCod == "R06"))
+                    {
+                        var outStaff = new StaffOut
+                        {
+                            id = staffs.id,
+                            code = staffs.code,
+                            name = staffs.name,
+                            divisionId = staffs.divisionId,
+                            post = staffs.post,
+                            roleCod = staffs.roleCod,
+                            supervisorCod = staffs.supervisorCod,
+                            login = staffs.login,
+                            mail = staffs.mail
+                        };
+                        StaffTable.Add(outStaff);
+                    }
+                    
                     //foreach (var staffs in _appDB.DBStaff.Where(p => p.supervisorCod == sessionCod && p.roleCod == "R06"))
                     //{
                     //    StaffTable.Add(staffs);

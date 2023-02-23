@@ -29,6 +29,7 @@ namespace MVP.Date.API
         public string status { get; set; }
         public DateTime startWork { get; set; }//oll
         public string creator { get; set; }
+        public int creatorId { get; set; }
         public string historyWorc { get; set; }
 
         public string dedline { get; set; }//oll
