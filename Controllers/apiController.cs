@@ -399,7 +399,7 @@ namespace MVP.Controllers
             sec = TaskParam.dedline.Split('T')[1].Length > 5 ? Convert.ToInt32(TaskParam.dedline.Split('T')[1].Split(':')[2].Split('.')[0]) : 0;
             var dedline = new DateTime(Convert.ToInt32(TaskParam.dedline.Split('T')[0].Split('-')[0]), Convert.ToInt32(TaskParam.dedline.Split('T')[0].Split('-')[1]), Convert.ToInt32(TaskParam.dedline.Split(' ')[0].Split('-')[2]),
                 Convert.ToInt32(TaskParam.dedline.Split('T')[1].Split(':')[0]), Convert.ToInt32(TaskParam.dedline.Split('T')[1].Split(':')[1]), sec);
-
+            
             // корректировка даты - автоперенос при заполненном дне
             date = redackPriorAndPerenos(supervisor, date, plannedTime, _appDB.DBTask.FirstOrDefault(p => p.id == TaskParam.id).projectCode, TaskParam.liteTask);
 
@@ -851,7 +851,26 @@ namespace MVP.Controllers
                     }
                     catch (Exception)
                     {
-                        continue;
+                        ProjectOut outt = new ProjectOut()
+                        {
+                            id = project.id,
+                            code = project.code,
+                            name = project.name,
+                            shortName = project.shortName,
+                            priority = project.priority,
+                            dateStart = project.dateStart,
+                            plannedFinishDate = project.plannedFinishDate,
+                            actualFinishDate = project.actualFinishDate,
+                            supervisor = project.supervisor,
+                            supervisorId = -1,
+                            link = project.link,
+                            history = project.history,
+                            archive = project.archive,
+                            nowStage = project.nowStage,
+                            allStages = project.allStages,
+                            timeWork = project.timeWork.ToString(@"hh\:mm")
+                        };
+                        ProjOut.Add(outt);
                     }
 
 
