@@ -269,7 +269,8 @@ namespace MVP.Date.Repository
                         startWork = task.startWork,
                         creator = task.creator,
                         historyWorc = task.historyWorc,
-                        dedline = task.dedline.ToString(@"dd\.MM\.yyyy HH\:mm\:ss")
+                        dedline = task.dedline.ToString(@"dd\.MM\.yyyy HH\:mm\:ss"),
+                        creatorId = _appDB.DBStaff.FirstOrDefault(p => p.name == task.creator).id
 
                     };
                     todayOut.Add(outt);
@@ -316,7 +317,8 @@ namespace MVP.Date.Repository
                         startWork = task.startWork,
                         creator = task.creator,
                         historyWorc = task.historyWorc,
-                        dedline = task.dedline.ToString(@"dd\.MM\.yyyy HH\:mm\:ss")
+                        dedline = task.dedline.ToString(@"dd\.MM\.yyyy HH\:mm\:ss"),
+                        creatorId = _appDB.DBStaff.FirstOrDefault(p => p.name == task.creator).id
 
                     };
                     completedOut.Add(outt);
@@ -361,7 +363,8 @@ namespace MVP.Date.Repository
                         startWork = task.startWork,
                         creator = task.creator,
                         historyWorc = task.historyWorc,
-                        dedline = task.dedline.ToString(@"dd\.MM\.yyyy HH\:mm\:ss")
+                        dedline = task.dedline.ToString(@"dd\.MM\.yyyy HH\:mm\:ss"),
+                        creatorId = _appDB.DBStaff.FirstOrDefault(p => p.name == task.creator).id
                     };
                     futureOut.Add(outt);
                 }

@@ -1,4 +1,5 @@
-﻿using MVP.Date.Models;
+﻿using MVP.Date.API;
+using MVP.Date.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,8 +12,7 @@ namespace MVP.Date.Interfaces
         IEnumerable<Staff> AllStaffs { get; }
         IEnumerable<Staff> DivisoinStaff(int divisionId);
         Staff GetStaff(int staffId);
-
-        List<Staff> StaffTable(string SessionRole, string sessionCod);
+        List<StaffOut> StaffTable(string SessionRole, string sessionCod);
 
     }
 }
