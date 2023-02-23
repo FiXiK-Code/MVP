@@ -5,7 +5,7 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import TaskAddModal from './TaskAddModal';
-import { fetchWithAuth, Unauthorized, getHeaders } from '../utils';
+import { fetchWithAuth, Unauthorized, getHeaders, showLocaleDate, setLocaleDateInTasks } from '../utils';
 
 export class Tasks extends Component {
     static displayName = Tasks.name;
@@ -45,15 +45,15 @@ export class Tasks extends Component {
         this.getProjects();
     }
 
-    renderTasksTable(headers, tasks, supervisor, projectCode ) {
+    renderTasksTable(headers, tasks, supervisor, projectCode) {
         return (
-            <CollapsibleTable search={this.state.search} tasks={tasks} headers={headers} supervisor={supervisor} projectCode={projectCode} recipient={supervisor }  />
+            <CollapsibleTable search={this.state.search} tasks={tasks} headers={headers} supervisor={supervisor} projectCode={projectCode} recipient={supervisor} />
         );
     }
 
     async searchHandleSubmit(e) {
         e.preventDefault();
-        
+
         let term = this.state.searchTerm;
         if (term.length > 0) {
             const response = await fetchWithAuth(`/api/GetSearch?param=${encodeURIComponent(term)}`);
@@ -71,7 +71,7 @@ export class Tasks extends Component {
         } else {
             console.log('empty!');
             this.setState({
-                    search: false
+                search: false
             })
             this.populateWeatherData();
         }
@@ -153,7 +153,8 @@ export class Tasks extends Component {
             })
         }
 
-        const data = response.value;
+        let data = response.value;
+        data = setLocaleDateInTasks(data);
         const headers = getHeaders();
         this.setState({ tasks: data, headers: headers, loading: false });
     }

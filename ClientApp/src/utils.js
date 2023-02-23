@@ -132,18 +132,21 @@ export function getHeaders() {
         },
         {
             "name": "actualTime",
+            "type": "textfield",
             "title": "Факт время",
             "show": true,
             "createAvailability": false
         },
         {
             "name": "start",
+            "type": "datetime",
             "title": "Начал",
             "show": true,
             "createAvailability": false
         },
         {
             "name": "finish",
+            "type": "datetime",
             "title": "Завершил",
             "show": true,
             "createAvailability": false
@@ -211,4 +214,53 @@ export function getProjectHeaders() {
             "createAvailability": true
         },
     ];
+}
+
+export function showLocaleDate(dateString) {
+    let date;
+    if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+        date = new Date(dateString);
+    } else {
+        date = new Date(dateString + "Z");
+    }
+    return date.toLocaleDateString() + " " + date.toLocaleTimeString();
+}
+
+export function setLocaleDateInTasks(data) {
+    data.completed.map(task => {
+        console.log('time was ' + task.dedline);
+        task.dedline = showLocaleDate(task.dedline);
+        console.log('time now ' + task.dedline);
+        task.start = showLocaleDate(task.start);
+        task.finish = showLocaleDate(task.finish);
+        return task;
+    });
+    data.future.map(task => {
+        task.dedline = showLocaleDate(task.dedline);
+        task.start = showLocaleDate(task.start);
+        task.finish = showLocaleDate(task.finish);
+        return task;
+    });
+    data.today.map(task => {
+        task.dedline = showLocaleDate(task.dedline);
+        task.start = showLocaleDate(task.start);
+        task.finish = showLocaleDate(task.finish);
+        return task;
+    });
+    return data;
+}
+
+export function getServerTimeFromLocale(dateString) {
+    if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+        console.log(dateString);
+        let date = new Date(dateString);
+        date = date.getTime() - date.getTimezoneOffset() * 60 * 1000;
+        date = new Date(date);
+        console.log(date);
+        return date.toISOString();
+
+    } else {
+        let value = new Date(dateString);
+        return value.toISOString();
+    }
 }
