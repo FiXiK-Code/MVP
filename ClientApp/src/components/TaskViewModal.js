@@ -12,6 +12,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { fetchWithAuth, getCurrentDate } from '../utils';
 import styles from './TaskViewModal.module.scss';
+import CustomSnackbar from "./CustomSnackbar";
 
 function AddSelect(props) {
     console.log(props);
@@ -47,9 +48,29 @@ function SimpleDialog(props) {
 
     const [type, setType] = React.useState(1);
 
+    const handleEdit = () => {
+        setEdit(true);
+        props.headers.map(header => {
+            data[header.name] = props.task[header.rowData];
+            return header;
+        })
+        console.log('use effect ', data);
+        data.id = props.task.id;
+        data.liteTask = props.task.liteTask;
+        data.comment = "";
+        setData(data);
+        setSelectState1(props.task.supervisorId);
+        setSelectState2(props.task.projectId);
+        setSelectState3(props.task.recipientId);
+    }
+
     const [selectState1, setSelectState1] = React.useState("");
     const [selectState2, setSelectState2] = React.useState("");
     const [selectState3, setSelectState3] = React.useState("");
+
+    const [messageOpen, setMessageOpen] = React.useState(false);
+    const [message, setMessage] = React.useState("");
+    const [messageType, setMessageType] = React.useState("");
 
     const handleTextChange = (event) => {
         let label = event.label;
@@ -85,16 +106,38 @@ function SimpleDialog(props) {
         }));
     };
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        if (type === 1) {
-            fetchWithAuth('/api/PutTasks', 'put', data)
-        } else {
 
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        let url;
+        if (type === 1) {
+            url = '/api/PutTasks';
+        } else {
+            url = '/api/PutProj';
+        }
+        const response = await fetchWithAuth(url, 'put', data);
+        if (response.statusCode >= 200 && response.statusCode < 400) {
+            // if success
+            setMessageOpen(true);
+            setMessage(response.value);
+            setMessageType("success");
+            setTimeout(() => {
+                setMessageOpen(false);
+                handleClose();
+            }, 2000)
+            return true;
+        } else {
+            // if error
+            setMessageOpen(true);
+            setMessage(response.value);
+            setMessageType("error");
+            return false;
         }
     };
 
     const [edit, setEdit] = React.useState(false);
+
     let title, content;
     if (edit) {
         title = "Редактирование задачи";
@@ -111,7 +154,7 @@ function SimpleDialog(props) {
                                     e.label = field.name
                                     handleTextChange(e)
                                 }}
-                                defaultValue={getCurrentDate('-')}
+                                value={data[field.name]}
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
@@ -125,11 +168,11 @@ function SimpleDialog(props) {
                                 inputProps={{
                                     step: 1,
                                 }}
+                                value={data[field.name]}
                                 onChange={(e) => {
                                     e.label = field.name
                                     handleTextChange(e)
                                 }}
-                                defaultValue="00:00:00"
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
@@ -147,7 +190,7 @@ function SimpleDialog(props) {
                                     e.label = field.name
                                     handleTextChange(e)
                                 }}
-                                defaultValue={getCurrentDate('-') + " 18:00:00"}
+                                value={data[field.name]}
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
@@ -155,7 +198,7 @@ function SimpleDialog(props) {
                         }
 
                         {field.type === "textfield" &&
-                            <TextField id={field.name} label={field.title} variant="outlined" multiline onChange={(e) => {
+                        <TextField id={field.name} value={ data[field.name] } label={field.title} variant="outlined" multiline onChange={(e) => {
                                 e.label = field.name;
                                 handleTextChange(e);
                             }} />
@@ -178,7 +221,7 @@ function SimpleDialog(props) {
         title = "Просмотр задачи";
         content =
             <Stack spacing={2}>
-                <Button variant="contained" onClick={() => setEdit(true)}>Редактировать</Button>
+                <Button variant="contained" onClick={handleEdit}>Редактировать</Button>
                 {props.headers.map((field) =>
                     <>
                         <TextField id={field.name} label={field.title} variant="outlined" disabled value={task[field.name]} multiline />
@@ -198,6 +241,7 @@ function SimpleDialog(props) {
             }}>
                 {content}
             </Box>
+            <CustomSnackbar severity={messageType} open={messageOpen} setOpen={setMessageOpen} message={message} />
         </Drawer>
     );
 }
