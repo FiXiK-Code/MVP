@@ -241,6 +241,10 @@ export function showLocaleDate(dateString, onlyDate = false) {
 
 export function setLocaleDateInTasks(data) {
     data.completed.map(task => {
+        task.priorityRaw = task.priority;
+        if (task.priority === -1) {
+            task.priority = "Вне очереди";
+        }
         task.dateRaw = task.date;
         task.date = showLocaleDate(task.date, true);
         task.dedlineRaw = task.dedline;
@@ -252,6 +256,10 @@ export function setLocaleDateInTasks(data) {
         return task;
     });
     data.future.map(task => {
+        task.priorityRaw = task.priority;
+        if (task.priority === -1) {
+            task.priority = "Вне очереди";
+        }
         task.dateRaw = task.date;
         task.date = showLocaleDate(task.date, true);
         task.dedlineRaw = task.dedline;
@@ -263,6 +271,10 @@ export function setLocaleDateInTasks(data) {
         return task;
     });
     data.today.map(task => {
+        task.priorityRaw = task.priority;
+        if (task.priority === -1) {
+            task.priority = "Вне очереди";
+        }
         task.dateRaw = task.date;
         task.date = showLocaleDate(task.date, true);
         task.dedlineRaw = task.dedline;
@@ -273,6 +285,13 @@ export function setLocaleDateInTasks(data) {
         task.finish = showLocaleDate(task.finish);
         return task;
     });
+    if (data.projects) {
+        data.projects.map(project => {
+            project.plannedFinishDateRaw = project.plannedFinishDate;
+            project.plannedFinishDate = showLocaleDate(project.plannedFinishDate, true);
+            return project;
+        });
+    }
     return data;
 }
 

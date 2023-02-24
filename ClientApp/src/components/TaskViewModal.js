@@ -120,12 +120,13 @@ function SimpleDialog(props) {
         if (response.statusCode >= 200 && response.statusCode < 400) {
             // if success
             setMessageOpen(true);
-            setMessage(response.value);
+            setMessage(response.value.message);
             setMessageType("success");
             setTimeout(() => {
                 setMessageOpen(false);
                 handleClose();
-            }, 2000)
+            }, 2000);
+            props.editHandler(response.value.type, response.value.value);
             return true;
         } else {
             // if error
@@ -247,7 +248,6 @@ function SimpleDialog(props) {
 }
 
 export default function TaskViewModal(props) {
-
     const { children } = props;
 
     const tableStyling = {
@@ -266,19 +266,22 @@ export default function TaskViewModal(props) {
 
     const name = localStorage.getItem('full_name');
 
+    const typesWithSmallTask = ["employees", "projects"];
+
     return (
         <>
-            {props.from === 'employees' &&
-                <span onClick={handleClickOpen} className={styles.task + " " + (!props.task.priority ? styles.priority : "") + " " + (name != props.task.creator ? styles.notMyTask : "" )}>
+            {typesWithSmallTask.includes(props.from) &&
+                <span onClick={handleClickOpen} className={styles.task + " " + (props.task.priorityRaw < 0 ? styles.priority : "") + " " + (name != props.task.creator ? styles.notMyTask : "" )}>
                     {children}
                 </span>
             }
-            {props.from !== 'employees' &&
+            {!typesWithSmallTask.includes(props.from)  &&
                 <TableCell sx={{ ...tableStyling }} onClick={handleClickOpen}>
                     {children}
                 </TableCell>
             }
             <SimpleDialog
+                editHandler={props.editHandler}
                 open={open}
                 onClose={handleClose}
                 task={props.task}

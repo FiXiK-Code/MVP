@@ -34,7 +34,7 @@ function CollapsedTasks(props) {
         &&
         <>
             {props.tasks.map((task) =>
-                <TableRow sx={{ backgroundColor: task.priority == 0 ? "#71FACA" : "#FFFFFF" }}>
+                <TableRow sx={{ backgroundColor: task.priorityRaw === -1 ? "#71FACA" : "#FFFFFF" }}>
                     {stateHeaders.map((header) =>
                         header.show &&
                         <>
@@ -44,7 +44,7 @@ function CollapsedTasks(props) {
                                 </TableCell>
 
                                 :
-                                <TaskViewModal headers={props.headers} task={task} supervisor={props.supervisor} projectCode={props.projectCode} recipient={props.supervisor}  >
+                                <TaskViewModal editHandler={props.editHandler} headers={props.headers} task={task} supervisor={props.supervisor} projectCode={props.projectCode} recipient={props.supervisor}  >
                                     {task[header.name]}
                                 </TaskViewModal>}
                         </>
@@ -96,7 +96,7 @@ export function TaskGroup(props) {
                 </TableCell>
 
             </TableRow>
-            <CollapsedTasks display={open} tasks={tasks} headers={stateHeaders} supervisor={props.supervisor} projectCode={props.projectCode} recipient={props.supervisor} />
+            <CollapsedTasks editHandler={props.editHandler} display={open} tasks={tasks} headers={stateHeaders} supervisor={props.supervisor} projectCode={props.projectCode} recipient={props.supervisor} />
         </React.Fragment>
     );
 }

@@ -37,6 +37,10 @@ export default function CollapsibleTable(props) {
         if (props.tasks.staffs) {
             setLength(props.tasks.staffs.length + 1);
         }
+
+        if (props.tasks.projects) {
+            setLength(props.tasks.projects.length + 1);
+        }
         
         console.log('update');
     }, [props.tasks]);
@@ -44,14 +48,14 @@ export default function CollapsibleTable(props) {
     let tableBody;
     if (search) {
         tableBody = <TableBody>
-            <TaskGroup title={`Результаты поиска по запросу ${search}`} tasks={tasks.done} isOpen={true} colNum={length} headers={stateHeaders} />
+            <TaskGroup editHandler={props.editHandler} title={`Результаты поиска по запросу ${search}`} tasks={tasks.done} isOpen={true} colNum={length} headers={stateHeaders} />
         </TableBody>
     } else {
         tableBody =
             <TableBody>
-                <TaskGroup title="Выполненные задачи" tasks={tasks.completed} isOpen={false} colNum={length} headers={stateHeaders} supervisor={props.supervisor} projectCode={props.projectCode} recipient={props.supervisor} />
-                <TaskGroup title="Задачи на сегодня" tasks={tasks.today} isOpen={true} colNum={length} headers={stateHeaders} supervisor={props.supervisor} projectCode={props.projectCode} recipient={props.supervisor} />
-                <TaskGroup title="Предстоящие задачи" tasks={tasks.future} isOpen={false} colNum={length} headers={stateHeaders} supervisor={props.supervisor} projectCode={props.projectCode} recipient={props.supervisor} />
+                <TaskGroup editHandler={props.editHandler} title="Выполненные задачи" tasks={tasks.completed} isOpen={false} colNum={length} headers={stateHeaders} supervisor={props.supervisor} projectCode={props.projectCode} recipient={props.supervisor} />
+                <TaskGroup editHandler={props.editHandler} title="Задачи на сегодня" tasks={tasks.today} isOpen={true} colNum={length} headers={stateHeaders} supervisor={props.supervisor} projectCode={props.projectCode} recipient={props.supervisor} />
+                <TaskGroup editHandler={props.editHandler} title="Предстоящие задачи" tasks={tasks.future} isOpen={false} colNum={length} headers={stateHeaders} supervisor={props.supervisor} projectCode={props.projectCode} recipient={props.supervisor} />
             </TableBody>
     }
 
@@ -60,7 +64,6 @@ export default function CollapsibleTable(props) {
     let tableHeader;
     if (props.tasks.staffs) {
         // если это вкладка сотрудники
-        console.log('staffs!', tasks.staffs);
         tableHeader = <TableRow>
             <TableCell sx={{ ...tableStyling }}>Дата</TableCell>
             {props.tasks.staffs.map((header) =>
@@ -69,11 +72,26 @@ export default function CollapsibleTable(props) {
         </TableRow>
 
         tableBody = <TableBody>
-            <TaskGroupEmployee title="Выполненные задачи" tasks={tasks.completed} isOpen={false} colNum={length} headers={stateHeaders} supervisor={props.supervisor} projectCode={props.projectCode} recipient={props.supervisor} staffs={tasks.staffs} />
-            <TaskGroupEmployee title="Задачи на сегодня" tasks={tasks.today} isOpen={true} colNum={length} headers={stateHeaders} supervisor={props.supervisor} projectCode={props.projectCode} recipient={props.supervisor} staffs={tasks.staffs} />
-            <TaskGroupEmployee title="Предстоящие задачи" tasks={tasks.future} isOpen={false} colNum={length} headers={stateHeaders} supervisor={props.supervisor} projectCode={props.projectCode} recipient={props.supervisor} staffs={tasks.staffs} />
+            <TaskGroupEmployee editHandler={props.editHandler} title="Выполненные задачи" tasks={tasks.completed} isOpen={false} colNum={length} headers={stateHeaders} supervisor={props.supervisor} projectCode={props.projectCode} recipient={props.supervisor} staffs={tasks.staffs} />
+            <TaskGroupEmployee editHandler={props.editHandler} title="Задачи на сегодня" tasks={tasks.today} isOpen={true} colNum={length} headers={stateHeaders} supervisor={props.supervisor} projectCode={props.projectCode} recipient={props.supervisor} staffs={tasks.staffs} />
+            <TaskGroupEmployee editHandler={props.editHandler} title="Предстоящие задачи" tasks={tasks.future} isOpen={false} colNum={length} headers={stateHeaders} supervisor={props.supervisor} projectCode={props.projectCode} recipient={props.supervisor} staffs={tasks.staffs} />
+        </TableBody>
+    } else if (props.tasks.projects) {
+        // если это вкладка проекты
+        tableHeader = <TableRow>
+            <TableCell sx={{ ...tableStyling }}>Дата</TableCell>
+            {props.tasks.projects.map((header) =>
+                <TableCell sx={{ ...tableStyling }} key={header.code}>{header.code}<br />{header.plannedFinishDate}</TableCell>
+            )}
+        </TableRow>
+
+        tableBody = <TableBody>
+            <TaskGroupEmployee editHandler={props.editHandler} title="Выполненные задачи" tasks={tasks.completed} isOpen={false} colNum={length} headers={stateHeaders} supervisor={props.supervisor} projectCode={props.projectCode} recipient={props.supervisor} projects={tasks.projects} />
+            <TaskGroupEmployee editHandler={props.editHandler} title="Задачи на сегодня" tasks={tasks.today} isOpen={true} colNum={length} headers={stateHeaders} supervisor={props.supervisor} projectCode={props.projectCode} recipient={props.supervisor} projects={tasks.projects} />
+            <TaskGroupEmployee editHandler={props.editHandler} title="Предстоящие задачи" tasks={tasks.future} isOpen={false} colNum={length} headers={stateHeaders} supervisor={props.supervisor} projectCode={props.projectCode} recipient={props.supervisor} projects={tasks.projects} />
         </TableBody>
     } else {
+        // если это вкладка задач или другая вкладка
         tableHeader = <TableRow>
             {headers.map((header) =>
                 header.show &&

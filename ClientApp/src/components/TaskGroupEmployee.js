@@ -31,30 +31,61 @@ function CollapsedTasks(props) {
         textAlign: "center"
     };
 
-    let contents = (
-        (typeof props.tasks !== 'undefined') && display
-        &&
-        <>
-            {Object.keys(tasks).map((key, i) =>
-                <TableRow key={i}>
-                    <TableCell>{key}</TableCell>
-                    {props.staffs.map((staff, index) =>
-                        <TableCell sx={{ ...tableStyling }} key={index}>
-                            <span className={styles.taskContainer}>
+    let contents;
 
-                                {tasks[key].hasOwnProperty([staff.name]) && tasks[key][staff.name].map((task, j) =>
-                                    <TaskViewModal key={j} from="employees" headers={props.headers} task={task} supervisor={props.supervisor} projectCode={props.projectCode} recipient={props.supervisor}>
-                                        {task.desc}
-                                    </TaskViewModal>
-                                )}
-                            </span>
-                            {!tasks[key].hasOwnProperty([staff.name]) && <>-</>}
-                        </TableCell>
-                    )}
-                </TableRow>
-            )}
-        </>
-    );
+    if (props.projects) {
+        // вкладка проекты
+        contents = (
+            (typeof props.tasks !== 'undefined') && display
+            &&
+            <>
+                {Object.keys(tasks).map((key, i) =>
+                    <TableRow key={i}>
+                        <TableCell>{key}</TableCell>
+                        {props.projects.map((project, index) =>
+                            <TableCell sx={{ ...tableStyling }} key={index}>
+                                <span className={styles.taskContainer}>
+
+                                    {tasks[key].hasOwnProperty([project.code]) && tasks[key][project.code].map((task, j) =>
+                                        <TaskViewModal editHandler={props.editHandler} key={j} from="projects" headers={props.headers} task={task} supervisor={props.supervisor} projectCode={props.projectCode} recipient={props.supervisor}>
+                                            {task.desc}
+                                        </TaskViewModal>
+                                    )}
+                                </span>
+                                {!tasks[key].hasOwnProperty([project.code]) && <>-</>}
+                            </TableCell>
+                        )}
+                    </TableRow>
+                )}
+            </>
+        );
+    } else {
+        // вкладка сотрудники
+        contents = (
+            (typeof props.tasks !== 'undefined') && display
+            &&
+            <>
+                {Object.keys(tasks).map((key, i) =>
+                    <TableRow key={i}>
+                        <TableCell>{key}</TableCell>
+                        {props.staffs.map((staff, index) =>
+                            <TableCell sx={{ ...tableStyling }} key={index}>
+                                <span className={styles.taskContainer}>
+
+                                    {tasks[key].hasOwnProperty([staff.name]) && tasks[key][staff.name].map((task, j) =>
+                                        <TaskViewModal editHandler={props.editHandler} key={j} from="employees" headers={props.headers} task={task} supervisor={props.supervisor} projectCode={props.projectCode} recipient={props.supervisor}>
+                                            {task.desc}
+                                        </TaskViewModal>
+                                    )}
+                                </span>
+                                {!tasks[key].hasOwnProperty([staff.name]) && <>-</>}
+                            </TableCell>
+                        )}
+                    </TableRow>
+                )}
+            </>
+        );
+    }
 
     return (
         <>{contents}
@@ -75,6 +106,7 @@ function groupBy(key) {
 
 const groupByDate = groupBy("date");
 const groupBySupervisor = groupBy("supervisor");
+const groupByProject = groupBy("projectCode");
 
 export function TaskGroupEmployee(props) {
     const { title, tasks, colNum, headers, isOpen, staffs } = props;
@@ -96,7 +128,14 @@ export function TaskGroupEmployee(props) {
         console.log('tasks is', tasks);
         let result = groupByDate(tasks);
         for (let key in result) {
-            result[key] = groupBySupervisor(result[key]);
+            if (props.projects) {
+                // если проекты, то группируем по проектам
+                result[key] = groupByProject(result[key]);
+            } else {
+                // иначе: по ответственным сотрудникам
+                result[key] = groupBySupervisor(result[key]);
+            }
+            
         }
         console.log('result is', result);
         data = result;
@@ -123,7 +162,7 @@ export function TaskGroupEmployee(props) {
                 </TableCell>
 
             </TableRow>
-            <CollapsedTasks display={open} tasks={data} headers={stateHeaders} supervisor={props.supervisor} projectCode={props.projectCode} recipient={props.supervisor} staffs={props.staffs} />
+            <CollapsedTasks editHandler={props.editHandler} display={open} tasks={data} headers={stateHeaders} supervisor={props.supervisor} projectCode={props.projectCode} recipient={props.supervisor} staffs={props.staffs} projects={props.projects} />
         </React.Fragment>
     );
 }

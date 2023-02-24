@@ -126,8 +126,9 @@ function SimpleDialog(props) {
         if (response.statusCode >= 200 && response.statusCode < 400) {
             // if success
             setMessageOpen(true);
-            setMessage(response.value);
+            setMessage(response.value.message);
             setMessageType("success");
+            props.addHandler(response.value.type, response.value.value);
             setTimeout(() => {
                 setMessageOpen(false);
                 handleClose();
@@ -275,6 +276,7 @@ export default function TaskAddModal(props) {
                 supervisor={props.supervisor}
                 projectCode={props.projectCode}
                 recipient={props.supervisor}
+                addHandler={props.addHandler }
             />
         </>
     );

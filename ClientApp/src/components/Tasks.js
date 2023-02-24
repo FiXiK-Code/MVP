@@ -30,6 +30,8 @@ export class Tasks extends Component {
         this.renderTasksTable = this.renderTasksTable.bind(this);
         this.searchHandleInput = this.searchHandleInput.bind(this);
         this.searchHandleSubmit = this.searchHandleSubmit.bind(this);
+        this.addHandler = this.addHandler.bind(this);
+        this.editHandler = this.editHandler.bind(this);
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -47,8 +49,32 @@ export class Tasks extends Component {
 
     renderTasksTable(headers, tasks, supervisor, projectCode) {
         return (
-            <CollapsibleTable search={this.state.search} tasks={tasks} headers={headers} supervisor={supervisor} projectCode={projectCode} recipient={supervisor} />
+            <CollapsibleTable editHandler={ this.editHandler } search={this.state.search} tasks={tasks} headers={headers} supervisor={supervisor} projectCode={projectCode} recipient={supervisor} />
         );
+    }
+
+    addHandler(type, newTask) {
+        let tasks = this.state.tasks;
+        tasks[type] = [newTask, ...this.state.tasks[type]]
+        this.setState({tasks: tasks})
+    }
+
+    editHandler(type, newTask) {
+        console.log('edit handler yes');
+        let tasks = this.state.tasks;
+        // найти старую задачу и удалить её на всякий случай
+        let oldTaskNumber = -1; 
+        for (let i = 0; i < tasks[type].length; i++) {
+            if (tasks[type][i].id === newTask.id) {
+                oldTaskNumber = i;
+            }
+        }
+        if (oldTaskNumber >= 0) {
+            tasks[type].splice(oldTaskNumber, 1);
+        }
+
+        tasks[type] = [newTask, ...this.state.tasks[type]]
+        this.setState({ tasks: tasks });
     }
 
     async searchHandleSubmit(e) {
@@ -109,7 +135,7 @@ export class Tasks extends Component {
                     paddingBottom: 2
                 }}>
                     <Stack spacing={2} direction="row">
-                        <TaskAddModal type="1" title="Добавить&nbsp;задачу" headers={this.state.headers} supervisor={this.state.supervisor} projectCode={this.state.projectCode} recipient={this.state.supervisor} />
+                        <TaskAddModal addHandler={ this.addHandler } type="1" title="Добавить&nbsp;задачу" headers={this.state.headers} supervisor={this.state.supervisor} projectCode={this.state.projectCode} recipient={this.state.supervisor} />
                         <TaskAddModal type="2" title="Добавить&nbsp;проект" headers={this.state.headers} supervisor={this.state.supervisor} projectCode={this.state.projectCode} recipient={this.state.supervisor} />
                     </Stack>
                 </Box>

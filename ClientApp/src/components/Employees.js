@@ -9,7 +9,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { fetchWithAuth, Unauthorized, getHeaders } from '../utils';
+import { fetchWithAuth, Unauthorized, getHeaders, setLocaleDateInTasks } from '../utils';
 
 function TaskSelect() {
     const [task, setTask] = React.useState(0);
@@ -124,18 +124,18 @@ export class Employees extends Component {
         this.setState({ projectCode: data });
     }
 
-    static renderTasksTable(headers, tasks) {
+    static renderTasksTable(headers, tasks, supervisor, projectCode) {
         console.log(tasks);
 
         return (
-            <CollapsibleTable tasks={tasks} headers={headers} />
+            <CollapsibleTable tasks={tasks} headers={headers} supervisor={supervisor} projectCode={projectCode} recipient={supervisor} />
         );
     }
 
     render() {
         let contents = this.state.loading
             ? <p><em>Загрузка данных...</em></p>
-            : Employees.renderTasksTable(this.state.headers, this.state.tasks);
+            : Employees.renderTasksTable(this.state.headers, this.state.tasks, this.state.supervisor, this.state.projectCode);
 
         return (
             <div>
@@ -166,7 +166,8 @@ export class Employees extends Component {
             })
         }
 
-        const data = response.value;
+        let data = response.value;
+        data = setLocaleDateInTasks(data);
         const headers = getHeaders();
         this.setState({ tasks: data, supervisor: data.staffs, headers: headers, loading: false });
     }
