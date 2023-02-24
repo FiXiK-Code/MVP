@@ -338,8 +338,11 @@ namespace MVP.Controllers
             };
             _logistickTask.addToDB(log);
 
-
-            return new JsonResult(new ObjectResult("Задача добавлена!") { StatusCode = 201 });
+            var outt = new {
+            messeg = "Задача создана!",
+            value = item
+            };
+            return new JsonResult(new ObjectResult(outt) { StatusCode = 201 });
         }
 
         [Authorize]
@@ -450,8 +453,12 @@ namespace MVP.Controllers
                 };
                 _logistickTask.addToDB(item);
 
-
-                return new JsonResult(new ObjectResult("Задача успешно обновлена!") { StatusCode = 202 });
+                var outt = new
+                {
+                    messeg = "Задача успешно обновлена!",
+                    value = _appDB.DBTask.FirstOrDefault(p => p.id == TaskParam.id)
+                };
+                return new JsonResult(new ObjectResult(outt) { StatusCode = 202 });
             }
         }
 
@@ -1042,8 +1049,12 @@ namespace MVP.Controllers
             };
 
             _logistickProject.addToDB(item);
-
-            return new JsonResult(new ObjectResult("Проект успешно обновлен!") { StatusCode = 202 });
+            var outt = new
+            {
+                message = "Проект успешно обновлен!",
+                value = _appDB.DBProject.FirstOrDefault(p => p.id == ProjParam.id)
+            };
+            return new JsonResult(new ObjectResult(outt) { StatusCode = 202 });
         }
 
         [Authorize]
@@ -1077,7 +1088,7 @@ namespace MVP.Controllers
             }
             catch (Exception)
             {
-                return new JsonResult(new ObjectResult("Не авторизованный запрос!") { StatusCode = 400 });
+                return new JsonResult(new ObjectResult("Не авторизованный запрос!") { StatusCode = 401 });
                 //return new JsonResult("Не авторизованный запрос!");////////////////
             }
 
@@ -1121,7 +1132,13 @@ namespace MVP.Controllers
             _logistickProject.addToDB(log);
             _project.addToDB(item);
 
-            return new JsonResult(new ObjectResult("Проект успешно добавлен!") { StatusCode = 201 });
+            var outt = new
+            {
+                message = "Проект успешно добавлен!",
+                value = item
+            };
+
+            return new JsonResult(new ObjectResult(outt) { StatusCode = 201 });
         }
 
 
