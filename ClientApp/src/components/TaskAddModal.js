@@ -48,9 +48,21 @@ function SimpleDialog(props) {
         onClose(selectedValue);
     };
 
-    const [data, setData] = React.useState({});
-
     const [type, setType] = React.useState(1);
+
+    const [data, setData] = React.useState(type === 1 ?
+        {
+            date: getCurrentDate('-'),
+            planTime: "00:00:00",
+            dedline: getServerTimeFromLocale(getCurrentDate('-') + " 18:00:00")
+        }
+        :
+        {
+            plannedFinishDate: getServerTimeFromLocale(getCurrentDate('-') + " 18:00:00")
+        }
+    );
+
+
 
     const [selectState1, setSelectState1] = React.useState("");
     const [selectState2, setSelectState2] = React.useState("");
@@ -72,7 +84,7 @@ function SimpleDialog(props) {
         // если поле типа датавремя, то учтем часовой пояс
         if (dateTimeFields.includes(label)) {
             value = getServerTimeFromLocale(value);
-        } 
+        }
         setData(prevState => ({
             ...prevState,
             [label]: value
@@ -87,6 +99,16 @@ function SimpleDialog(props) {
 
     const handleSelectChange = (event) => {
         setType(event.target.value)
+        setData(event.target.value === 1 ?
+            {
+                date: getCurrentDate('-'),
+                planTime: "00:00:00",
+                dedline: getServerTimeFromLocale(getCurrentDate('-') + " 18:00:00")
+            }
+            :
+            {
+                plannedFinishDate: getServerTimeFromLocale(getCurrentDate('-') + " 18:00:00")
+            })
     };
 
     const handleSelectChange1 = (event) => {
@@ -119,7 +141,7 @@ function SimpleDialog(props) {
         let url;
         if (type === 1) {
             url = '/api/PostTasks';
-        } else {      
+        } else {
             url = '/api/PostProj';
         }
         const response = await fetchWithAuth(url, 'post', data);
@@ -174,10 +196,10 @@ function SimpleDialog(props) {
                                             e.label = field.name
                                             handleTextChange(e)
                                         }}
-                                        defaultValue={getCurrentDate('-')}
                                         InputLabelProps={{
                                             shrink: true,
                                         }}
+                                        defaultValue={getCurrentDate('-')}
                                     />
                                 }
                                 {field.type === "timefield" &&
@@ -192,10 +214,10 @@ function SimpleDialog(props) {
                                             e.label = field.name
                                             handleTextChange(e)
                                         }}
-                                        defaultValue="00:00:00"
                                         InputLabelProps={{
                                             shrink: true,
                                         }}
+                                        defaultValue={"00:00:00"}
                                     />
                                 }
                                 {field.type === "datetime" &&
@@ -210,10 +232,10 @@ function SimpleDialog(props) {
                                             e.label = field.name
                                             handleTextChange(e)
                                         }}
-                                        defaultValue={getCurrentDate('-') + " 18:00:00"}
                                         InputLabelProps={{
                                             shrink: true,
                                         }}
+                                        defaultValue={getCurrentDate('-') + " 18:00:00"}
                                     />
                                 }
 
@@ -276,7 +298,7 @@ export default function TaskAddModal(props) {
                 supervisor={props.supervisor}
                 projectCode={props.projectCode}
                 recipient={props.supervisor}
-                addHandler={props.addHandler }
+                addHandler={props.addHandler}
             />
         </>
     );
