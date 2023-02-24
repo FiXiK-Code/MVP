@@ -338,9 +338,41 @@ namespace MVP.Controllers
             };
             _logistickTask.addToDB(log);
 
+            var typeTasks = item.date.Date > DateTime.Now.Date ? "future" : "today";
+            typeTasks = item.status == "Выполнена" ? "completed" : typeTasks;
+            var taskOut = new TasksOut
+            {
+                id = task.id,
+                code = task.code,
+                desc = task.desc,
+                TaskCodeParent = task.TaskCodeParent,
+                projectCode = task.projectCode,
+                projectId = _appDB.DBProject.FirstOrDefault(p => p.code == task.projectCode).id,
+                supervisorId = _appDB.DBStaff.FirstOrDefault(p => p.name == task.supervisor).id,
+                recipientId = _appDB.DBStaff.FirstOrDefault(p => p.name == task.recipient).id,
+                supervisor = task.supervisor,
+                recipient = task.recipient,
+                priority = task.priority,
+                comment = task.comment,
+                plannedTime = task.plannedTime.ToString(@"hh\:mm"),
+                actualTime = task.actualTime.ToString(@"hh\:mm"),
+                start = task.start,
+                finish = task.finish,
+                date = task.date.ToString(@"yyyy\-MM\-dd"),
+                Stage = task.Stage,
+                liteTask = task.liteTask,
+                status = task.status,
+                startWork = task.startWork,
+                creator = task.creator,
+                historyWorc = task.historyWorc,
+                dedline = task.dedline,
+                creatorId = _appDB.DBStaff.FirstOrDefault(p => p.name == task.creator).id
+
+            };
             var outt = new {
-            messeg = "Задача создана!",
-            value = item
+            message = "Задача создана!",
+            value = taskOut,
+            type = typeTasks
             };
             return new JsonResult(new ObjectResult(outt) { StatusCode = 201 });
         }
@@ -452,11 +484,43 @@ namespace MVP.Controllers
                     comment = TaskParam.comment
                 };
                 _logistickTask.addToDB(item);
+                var task = _appDB.DBTask.FirstOrDefault(p => p.id == TaskParam.id);
+                var typeTasks = task.date.Date > DateTime.Now.Date ? "future" : "today";
+                typeTasks = task.status == "Выполнена" ? "completed" : typeTasks;
+                var taskOut = new TasksOut
+                {
+                    id = task.id,
+                    code = task.code,
+                    desc = task.desc,
+                    TaskCodeParent = task.TaskCodeParent,
+                    projectCode = task.projectCode,
+                    projectId = _appDB.DBProject.FirstOrDefault(p => p.code == task.projectCode).id,
+                    supervisorId = _appDB.DBStaff.FirstOrDefault(p => p.name == task.supervisor).id,
+                    recipientId = _appDB.DBStaff.FirstOrDefault(p => p.name == task.recipient).id,
+                    supervisor = task.supervisor,
+                    recipient = task.recipient,
+                    priority = task.priority,
+                    comment = task.comment,
+                    plannedTime = task.plannedTime.ToString(@"hh\:mm"),
+                    actualTime = task.actualTime.ToString(@"hh\:mm"),
+                    start = task.start,
+                    finish = task.finish,
+                    date = task.date.ToString(@"yyyy\-MM\-dd"),
+                    Stage = task.Stage,
+                    liteTask = task.liteTask,
+                    status = task.status,
+                    startWork = task.startWork,
+                    creator = task.creator,
+                    historyWorc = task.historyWorc,
+                    dedline = task.dedline,
+                    creatorId = _appDB.DBStaff.FirstOrDefault(p => p.name == task.creator).id
 
+                };
                 var outt = new
                 {
-                    messeg = "Задача успешно обновлена!",
-                    value = _appDB.DBTask.FirstOrDefault(p => p.id == TaskParam.id)
+                    message = "Задача успешно обновлена!",
+                    value = taskOut,
+                    type = typeTasks
                 };
                 return new JsonResult(new ObjectResult(outt) { StatusCode = 202 });
             }
