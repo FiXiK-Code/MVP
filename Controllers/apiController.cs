@@ -339,7 +339,7 @@ namespace MVP.Controllers
             _logistickTask.addToDB(log);
 
             var outt = new {
-            messeg = "Задача создана!",
+            message = "Задача создана!",
             value = item
             };
             return new JsonResult(new ObjectResult(outt) { StatusCode = 201 });
@@ -455,7 +455,7 @@ namespace MVP.Controllers
 
                 var outt = new
                 {
-                    messeg = "Задача успешно обновлена!",
+                    message = "Задача успешно обновлена!",
                     value = _appDB.DBTask.FirstOrDefault(p => p.id == TaskParam.id)
                 };
                 return new JsonResult(new ObjectResult(outt) { StatusCode = 202 });
