@@ -64,7 +64,8 @@ export function getHeaders() {
             "type": "datefield",
             "title": "Дата",
             "show": true,
-            "createAvailability": true
+            "createAvailability": true,
+            "rowData": "dateRaw"
         },
         {
             "name": "projectCode",
@@ -73,19 +74,22 @@ export function getHeaders() {
             "show": true,
             "createAvailability": true,
             "fieldToShow": "code",
+            "rowData": "projectId"
         },
         {
             "name": "desc",
             "type": "textfield",
             "title": "Задача",
             "show": true,
-            "createAvailability": true
+            "createAvailability": true,
+            "rowData": "desc"
         },
         {
             "name": "status",
             "title": "Статус",
             "show": true,
-            "createAvailability": false
+            "createAvailability": false,
+            "rowData": "status"
         },
         {
             "name": "supervisor",
@@ -93,7 +97,8 @@ export function getHeaders() {
             "title": "Ответственный",
             "show": true,
             "createAvailability": true,
-            "fieldToShow": "name"
+            "fieldToShow": "name",
+            "rowData": "supervisorId"
         },
         {
             "name": "recipient",
@@ -101,55 +106,63 @@ export function getHeaders() {
             "title": "Переназначить",
             "show": true,
             "createAvailability": true,
-            "fieldToShow": "name"
+            "fieldToShow": "name",
+            "rowData": "recipientId"
         },
         {
             "name": "priority",
             "title": "Приоритет",
             "show": true,
-            "createAvailability": false
+            "createAvailability": false,
+            "rowData": "priority"
         },
         {
             "name": "comment",
             "type": "textfield",
             "title": "Комментарий",
             "show": true,
-            "createAvailability": true
+            "createAvailability": true,
+            "rowData": "comment"
         },
         {
             "name": "dedline",
             "type": "datetime",
             "title": "Дедлайн",
             "show": true,
-            "createAvailability": true
+            "createAvailability": true,
+            "rowData": "dedlineRaw"
         },
         {
             "name": "plannedTime",
             "type": "timefield",
             "title": "План время",
             "show": true,
-            "createAvailability": true
+            "createAvailability": true,
+            "rowData": "plannedTime"
         },
         {
             "name": "actualTime",
             "type": "textfield",
             "title": "Факт время",
             "show": true,
-            "createAvailability": false
+            "createAvailability": false,
+            "rowData": "actualTime"
         },
         {
             "name": "start",
             "type": "datetime",
             "title": "Начал",
             "show": true,
-            "createAvailability": false
+            "createAvailability": false,
+            "rowData": "startRaw"
         },
         {
             "name": "finish",
             "type": "datetime",
             "title": "Завершил",
             "show": true,
-            "createAvailability": false
+            "createAvailability": false,
+            "rowData": "finishRaw"
         },
     ];
 }
@@ -216,34 +229,47 @@ export function getProjectHeaders() {
     ];
 }
 
-export function showLocaleDate(dateString) {
+export function showLocaleDate(dateString, onlyDate = false) {
     let date;
     if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
         date = new Date(dateString);
     } else {
         date = new Date(dateString + "Z");
     }
-    return date.toLocaleDateString() + " " + date.toLocaleTimeString();
+    return date.toLocaleDateString() + (!onlyDate ? (" " + date.toLocaleTimeString()) : "");
 }
 
 export function setLocaleDateInTasks(data) {
     data.completed.map(task => {
-        console.log('time was ' + task.dedline);
+        task.dateRaw = task.date;
+        task.date = showLocaleDate(task.date, true);
+        task.dedlineRaw = task.dedline;
         task.dedline = showLocaleDate(task.dedline);
-        console.log('time now ' + task.dedline);
+        task.startRaw = task.start;
         task.start = showLocaleDate(task.start);
+        task.finishRaw = task.finish;
         task.finish = showLocaleDate(task.finish);
         return task;
     });
     data.future.map(task => {
+        task.dateRaw = task.date;
+        task.date = showLocaleDate(task.date, true);
+        task.dedlineRaw = task.dedline;
         task.dedline = showLocaleDate(task.dedline);
+        task.startRaw = task.start;
         task.start = showLocaleDate(task.start);
+        task.finishRaw = task.finish;
         task.finish = showLocaleDate(task.finish);
         return task;
     });
     data.today.map(task => {
+        task.dateRaw = task.date;
+        task.date = showLocaleDate(task.date, true);
+        task.dedlineRaw = task.dedline;
         task.dedline = showLocaleDate(task.dedline);
+        task.startRaw = task.start;
         task.start = showLocaleDate(task.start);
+        task.finishRaw = task.finish;
         task.finish = showLocaleDate(task.finish);
         return task;
     });
