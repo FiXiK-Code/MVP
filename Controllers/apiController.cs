@@ -1051,6 +1051,15 @@ namespace MVP.Controllers
         public JsonResult PostProj
             ([FromBody] ProjectParameters ProjParam)//добавляет проект в базу
         {
+            try
+            {
+                var proj = _appDB.DBProject.FirstOrDefault(p => p.code == ProjParam.code);
+                return new JsonResult(new ObjectResult($"Проекст {proj.code} - уже существует!") { StatusCode = 400 });
+            }
+            catch (Exception)
+            {
+
+            }
             var roleSession = new SessionRoles();
             var sessionCod = "";
             try
@@ -1078,7 +1087,7 @@ namespace MVP.Controllers
             //var plannedFinishDate = new DateTime(Convert.ToInt32(ProjParam.plannedFinishDate.Split('T')[0].Split('-')[0]), Convert.ToInt32(ProjParam.plannedFinishDate.Split('T')[0].Split('-')[1]), Convert.ToInt32(ProjParam.plannedFinishDate.Split('T')[0].Split('-')[2]),
             //    Convert.ToInt32(ProjParam.plannedFinishDate.Split('T')[1].Split(':')[0]), Convert.ToInt32(ProjParam.plannedFinishDate.Split('T')[1].Split(':')[1]),
             //    sec);
-
+           
 
             var item = new Project
             {

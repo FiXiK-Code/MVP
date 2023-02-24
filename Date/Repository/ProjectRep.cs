@@ -100,7 +100,7 @@ namespace MVP.Date.Repository
             string allStages)
         {
             Project project = _appDB.DBProject.FirstOrDefault(p => p.id == id);
-            if (arhive == "Да") project.actualFinishDate = DateTime.Now.AddHours(-5);
+            if (arhive == "Да") project.actualFinishDate = DateTime.Now;
             project.archive = arhive;
             project.link = link;
             project.supervisor = supervisor;
