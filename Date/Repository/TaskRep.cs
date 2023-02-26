@@ -186,14 +186,12 @@ namespace MVP.Date.Repository
         
 
         // 8 hours
-        public async Task timeWork(int idTask)
+        public void timeWork()
         {
-
-            var timer = (new TimeSpan(1, 34, 0) - DateTime.Now.TimeOfDay);//.AddHours(-5)
-            await Task.Delay(timer);
-            await Task.Run(() => 
-                redactStatus(idTask, "На паузе")
-            );
+            foreach(var task in _appDB.DBTask.Where(p => p.status == "В работе"))
+            {
+                redactStatus(task.id,"На паузе");
+            }
         }
 
         public TasksTableReturnModels GetMoreTasks(List<string> staffNames, SessionRoles roleSession, string filterTable = "", bool TaskTable = false)

@@ -186,8 +186,15 @@ namespace MVP.Controllers
             return date;
         }
 
-        ////////// tasks
-        [Authorize]
+        [HttpGet]
+        public JsonResult EndWorkDay()// ставит все задачи на паузу в конце рабочего дня
+        {
+            _task.timeWork();
+            return new JsonResult(new ObjectResult("not authorized!") { StatusCode = 201 });
+        }
+
+            ////////// tasks
+            [Authorize]
         [HttpGet]
         public JsonResult GetTasks([FromQuery] TasksParameters TaskParam)// выдает все задачи определенного сотрудника, либо если есть - по фильтру; если есть id - выдает инф по задаче
         {
@@ -593,8 +600,45 @@ namespace MVP.Controllers
                 comment = $"Стату задачи изменен на: {TaskParam.status}"
             };
             _logistickTask.addToDB(item);
+            var task = _appDB.DBTask.FirstOrDefault(p => p.id == TaskParam.id);
+            var typeTasks = task.date.Date > DateTime.Now.Date ? "future" : "today";
+            typeTasks = task.status == "Выполнена" ? "completed" : typeTasks;
+            var taskOut = new TasksOut
+            {
+                id = task.id,
+                code = task.code,
+                desc = task.desc,
+                TaskCodeParent = task.TaskCodeParent,
+                projectCode = task.projectCode,
+                projectId = _appDB.DBProject.FirstOrDefault(p => p.code == task.projectCode).id,
+                supervisorId = _appDB.DBStaff.FirstOrDefault(p => p.name == task.supervisor).id,
+                recipientId = _appDB.DBStaff.FirstOrDefault(p => p.name == task.recipient).id,
+                supervisor = task.supervisor,
+                recipient = task.recipient,
+                priority = task.priority,
+                comment = task.comment,
+                plannedTime = task.plannedTime.ToString(@"hh\:mm"),
+                actualTime = task.actualTime.ToString(@"hh\:mm"),
+                start = task.start,
+                finish = task.finish,
+                date = task.date.ToString(@"yyyy\-MM\-dd"),
+                Stage = task.Stage,
+                liteTask = task.liteTask,
+                status = task.status,
+                startWork = task.startWork,
+                creator = task.creator,
+                historyWorc = task.historyWorc,
+                dedline = task.dedline,
+                creatorId = _appDB.DBStaff.FirstOrDefault(p => p.name == task.creator).id
 
-            return new JsonResult(new ObjectResult("Статус успешно обновлен!") { StatusCode = 202 });
+            };
+            var outt = new
+            {
+                message = "Задача успешно обновлена!",
+                value = taskOut,
+                type = typeTasks
+            };
+            return new JsonResult(new ObjectResult(outt) { StatusCode = 202 });
         }
         //////// ????
         //[Authorize]
