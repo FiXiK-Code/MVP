@@ -640,13 +640,70 @@ namespace MVP.Controllers
             };
             return new JsonResult(new ObjectResult(outt) { StatusCode = 202 });
         }
-        //////// ????
-        //[Authorize]
-        //[HttpDelete]
-        //public JsonResult DeleteTasks()// удаляет задачу???
-        //{
-        //    return new JsonResult("");
-        //}
+
+        [Authorize]
+        [HttpGet]
+        public JsonResult Getguide()// возвращает структура справочника
+        {
+            List <GuideStaff> managDep = new List<GuideStaff>();
+            var ennum = _appDB.DBStaff.Where(p => p.divisionId == 1).OrderBy(p => p.roleCod).ToList();
+            foreach (var staff in ennum)
+            {
+                managDep.Add(
+                    new GuideStaff
+                    {
+                        name = staff.name,
+                        post = staff.post,
+                        role = _appDB.DBRole.FirstOrDefault(p => p.code == staff.roleCod).name
+                    });
+            }
+
+            List<GuideStaff> disDep = new List<GuideStaff>();
+            ennum = _appDB.DBStaff.Where(p => p.divisionId == 2).OrderBy(p => p.roleCod).OrderBy(p => p.supervisorCod).ToList();
+            foreach (var staff in ennum)
+            {
+                disDep.Add(
+                    new GuideStaff
+                    {
+                        name = staff.name,
+                        post = staff.post,
+                        role = _appDB.DBRole.FirstOrDefault(p => p.code == staff.roleCod).name
+                    });
+            }
+
+            List<GuideStaff> researchDep = new List<GuideStaff>();
+            ennum = _appDB.DBStaff.Where(p => p.divisionId == 3).OrderBy(p => p.roleCod).OrderBy(p => p.supervisorCod).ToList();
+            foreach (var staff in ennum)
+            {
+                researchDep.Add(
+                    new GuideStaff
+                    {
+                        name = staff.name,
+                        post = staff.post,
+                        role = _appDB.DBRole.FirstOrDefault(p => p.code == staff.roleCod).name
+                    });
+            }
+
+            List<GuideRole> guideRoles = new List<GuideRole>();
+            foreach(var content in _appDB.DBRole.OrderBy(p => p.code))
+            {
+                guideRoles.Add(
+                    new GuideRole
+                    {role = content.name,
+                    supervisor = content.supervisor,
+                    resipient = content.recipient
+                    });
+            }
+            var outt = new
+            {
+                message = "Справочник получен!",
+                managementDepartment = managDep,
+                designDepartment = disDep,
+                researchDepartment = researchDep,
+                companyRoleSturct = guideRoles
+            };
+            return new JsonResult(new ObjectResult(outt) { StatusCode = 202 });
+        }
 
         [Authorize]
         [HttpGet]
