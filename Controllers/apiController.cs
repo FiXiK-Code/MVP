@@ -634,7 +634,7 @@ namespace MVP.Controllers
             };
             var outt = new
             {
-                message = "Задача успешно обновлена!",
+                message = "Статус успешно обновлен!",
                 value = taskOut,
                 type = typeTasks
             };
