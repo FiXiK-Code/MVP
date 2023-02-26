@@ -190,7 +190,7 @@ namespace MVP.Controllers
         public JsonResult EndWorkDay()// ставит все задачи на паузу в конце рабочего дня
         {
             _task.timeWork();
-            return new JsonResult(new ObjectResult("not authorized!") { StatusCode = 201 });
+            return new JsonResult(new ObjectResult("Задачи перенесены в статус \"На паузе\"!") { StatusCode = 201 });
         }
 
             ////////// tasks
