@@ -1054,11 +1054,12 @@ namespace MVP.Controllers
 
                     // будущие задачи 
                     future = futureOut,
-
-                    filterGip = filterGipContent,
-                    filterProj = new List<string>() { "Текущие проекты", "Проекты в архиве" },
-                    filterResipirnt = filterResipirntContent
-
+                    filters = new
+                    {
+                        filterGip = filterGipContent,
+                        filterProj = new List<string>() { "Текущие проекты", "Проекты в архиве" },
+                        filterResipirnt = filterResipirntContent
+                    }
                 };
 
                 return new JsonResult(new ObjectResult(output) { StatusCode = 200 });
@@ -1369,9 +1370,13 @@ namespace MVP.Controllers
                     completed = tasksTabbleFilter.completed,
                     // будущие задачи 
                     future = tasksTabbleFilter.future,
-                    filterTasks = new List<string>() { "Мои задачи" , "Все задачи" },
-                    filterPosts = filterPosts,
-                    filterStaffs = filterStaffs
+
+                    filters = new
+                    {
+                        filterTasks = new List<string>() { "Мои задачи", "Все задачи" },
+                        filterPosts = filterPosts,
+                        filterStaffs = filterStaffs
+                    }
                 };
 
                 // возвращает список сотрудников в подчинении у залогиненного пользователя

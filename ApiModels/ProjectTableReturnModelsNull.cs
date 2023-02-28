@@ -7,9 +7,7 @@ namespace MVP.ApiModels
 {
     public class ProjectTableReturnModelsNull : ProjectTableReturnModels
     {
-        public List<string> filterProj { get; set; }
-        public List<string> filterGip { get; set; }
-        public List<string> filterResipirnt { get; set; }
+        public object filters { get; set; }
 
     }
 }
