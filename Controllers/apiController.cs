@@ -837,6 +837,232 @@ namespace MVP.Controllers
                 }
                 return new JsonResult(new ObjectResult(outt) { StatusCode = 200 });
             }
+            if (ProjParam.filterGip == "" && ProjParam.filterProj == "" && ProjParam.filterResipirnt == "")
+            {
+                var projects = _project.AllProjects;
+
+                //задачи на сегодня
+                var today = _task.AllTasks.Where(p => p.status != "Выполнена").Where(p => p.date.Date <= DateTime.Now.Date).OrderBy(p => p.date.Date).OrderBy(p => p.priority).ToList();
+
+                // выполненные задачи
+                var completed = _task.AllTasks.Where(p => p.status == "Выполнена").OrderBy(p => p.finish).ToList();
+
+                // будущие задачи 
+                var future = _task.AllTasks.Where(p => p.date.Date > DateTime.Now.Date).OrderBy(p => p.date.Date).OrderBy(p => p.priority).ToList();
+
+                List<TasksOut> todayOut = new List<TasksOut>();
+                foreach (var task in today)
+                {
+                    try
+                    {
+                        var outt = new TasksOut()
+                        {
+                            id = task.id,
+                            code = task.code,
+                            desc = task.desc,
+                            TaskCodeParent = task.TaskCodeParent,
+                            projectCode = task.projectCode,
+                            projectId = _appDB.DBProject.FirstOrDefault(p => p.code == task.projectCode).id,
+                            supervisorId = _appDB.DBStaff.FirstOrDefault(p => p.name == task.supervisor).id,
+                            recipientId = _appDB.DBStaff.FirstOrDefault(p => p.name == task.recipient).id,
+                            supervisor = task.supervisor,
+                            recipient = task.recipient,
+                            priority = task.priority,
+                            comment = task.comment,
+                            plannedTime = task.plannedTime.ToString(@"hh\:mm"),
+                            actualTime = task.actualTime.ToString(@"hh\:mm"),
+                            start = task.start,
+                            finish = task.finish,
+                            date = task.date.ToString(@"yyyy\-MM\-dd"),
+                            Stage = task.Stage,
+                            liteTask = task.liteTask,
+                            status = task.status,
+                            startWork = task.startWork,
+                            creator = task.creator,
+                            historyWorc = task.historyWorc,
+                            dedline = task.dedline,
+                            creatorId = _appDB.DBStaff.FirstOrDefault(p => p.name == task.creator).id
+
+                        };
+                        todayOut.Add(outt);
+                    }
+                    catch (Exception)
+                    {
+                        continue;
+                    }
+                }
+
+                List<TasksOut> completedOut = new List<TasksOut>();
+                foreach (var task in completed)
+                {
+                    try
+                    {
+                        var outt = new TasksOut()
+                        {
+                            id = task.id,
+                            code = task.code,
+                            desc = task.desc,
+                            TaskCodeParent = task.TaskCodeParent,
+                            projectId = _appDB.DBProject.FirstOrDefault(p => p.code == task.projectCode).id,
+                            supervisorId = _appDB.DBStaff.FirstOrDefault(p => p.name == task.supervisor).id,
+                            recipientId = _appDB.DBStaff.FirstOrDefault(p => p.name == task.recipient).id,
+                            projectCode = task.projectCode,
+                            supervisor = task.supervisor,
+                            recipient = task.recipient,
+                            priority = task.priority,
+                            comment = task.comment,
+                            plannedTime = task.plannedTime.ToString(@"hh\:mm"),
+                            actualTime = task.actualTime.ToString(@"hh\:mm"),
+                            start = task.start,
+                            finish = task.finish,
+                            date = task.date.ToString(@"yyyy\-MM\-dd"),
+                            Stage = task.Stage,
+                            liteTask = task.liteTask,
+                            status = task.status,
+                            startWork = task.startWork,
+                            creator = task.creator,
+                            historyWorc = task.historyWorc,
+                            dedline = task.dedline,
+                            creatorId = _appDB.DBStaff.FirstOrDefault(p => p.name == task.creator).id
+
+                        };
+                        completedOut.Add(outt);
+                    }
+                    catch (Exception)
+                    {
+                        continue;
+                    }
+                }
+
+                List<TasksOut> futureOut = new List<TasksOut>();
+                foreach (var task in future)
+                {
+                    try
+                    {
+                        TasksOut outt = new TasksOut()
+                        {
+                            id = task.id,
+                            code = task.code,
+                            desc = task.desc,
+                            TaskCodeParent = task.TaskCodeParent,
+                            projectId = _appDB.DBProject.FirstOrDefault(p => p.code == task.projectCode).id,
+                            supervisorId = _appDB.DBStaff.FirstOrDefault(p => p.name == task.supervisor).id,
+                            recipientId = _appDB.DBStaff.FirstOrDefault(p => p.name == task.recipient).id,
+                            projectCode = task.projectCode,
+                            supervisor = task.supervisor,
+                            recipient = task.recipient,
+                            priority = task.priority,
+                            comment = task.comment,
+                            plannedTime = task.plannedTime.ToString(@"hh\:mm"),
+                            actualTime = task.actualTime.ToString(@"hh\:mm"),
+                            start = task.start,
+                            finish = task.finish,
+                            date = task.date.ToString(@"yyyy\-MM\-dd"),
+                            Stage = task.Stage,
+                            liteTask = task.liteTask,
+                            status = task.status,
+                            startWork = task.startWork,
+                            creator = task.creator,
+                            historyWorc = task.historyWorc,
+                            dedline = task.dedline,
+                            creatorId = _appDB.DBStaff.FirstOrDefault(p => p.name == task.creator).id
+                        };
+                        futureOut.Add(outt);
+                    }
+                    catch (Exception)
+                    {
+                        continue;
+                    }
+                }
+
+                var proj = projects.ToList();
+                List<ProjectOut> ProjOut = new List<ProjectOut>();
+                foreach (var project in proj)
+                {
+                    try
+                    {
+                        ProjectOut outt = new ProjectOut()
+                        {
+                            id = project.id,
+                            code = project.code,
+                            name = project.name,
+                            shortName = project.shortName,
+                            priority = project.priority,
+                            dateStart = project.dateStart,
+                            plannedFinishDate = project.plannedFinishDate,
+                            actualFinishDate = project.actualFinishDate,
+                            supervisor = project.supervisor,
+                            supervisorId = _appDB.DBStaff.FirstOrDefault(p => p.name == project.supervisor).id,
+                            link = project.link,
+                            history = project.history,
+                            archive = project.archive,
+                            nowStage = project.nowStage,
+                            allStages = project.allStages,
+                            timeWork = project.timeWork.ToString(@"hh\:mm")
+                        };
+                        ProjOut.Add(outt);
+                    }
+                    catch (Exception)
+                    {
+                        ProjectOut outt = new ProjectOut()
+                        {
+                            id = project.id,
+                            code = project.code,
+                            name = project.name,
+                            shortName = project.shortName,
+                            priority = project.priority,
+                            dateStart = project.dateStart,
+                            plannedFinishDate = project.plannedFinishDate,
+                            actualFinishDate = project.actualFinishDate,
+                            supervisor = project.supervisor,
+                            supervisorId = -1,
+                            link = project.link,
+                            history = project.history,
+                            archive = project.archive,
+                            nowStage = project.nowStage,
+                            allStages = project.allStages,
+                            timeWork = project.timeWork.ToString(@"hh\:mm")
+                        };
+                        ProjOut.Add(outt);
+                    }
+                }
+
+                
+                var filterGipContent = new List<string>();
+                foreach (var stafs in _appDB.DBStaff.Where(p => p.roleCod == "R02").ToList())
+                {
+                    filterGipContent.Add(stafs.name);
+                }
+
+                var filterResipirntContent = new List<string>();
+                var allTasks = today; allTasks.AddRange(completed); allTasks.AddRange(future);
+
+                foreach (var task in allTasks.OrderBy(p => p.supervisor))
+                {
+                    if (!filterResipirntContent.Contains(task.supervisor)) filterResipirntContent.Add(task.supervisor);
+                }
+                
+                ProjectTableReturnModelsNull output = new ProjectTableReturnModelsNull
+                {
+                    // проекты
+                    projects = ProjOut,
+                    // задачи на чегодня
+                    today = todayOut,
+
+                    // выполненные задачи
+                    completed = completedOut,
+
+                    // будущие задачи 
+                    future = futureOut,
+
+                    filterGip = filterGipContent,
+                    filterProj = new List<string>() { "Текущие проекты", "Проекты в архиве" },
+                    filterResipirnt = filterResipirntContent
+
+                };
+
+                return new JsonResult(new ObjectResult(output) { StatusCode = 200 });
+            }
             else
             {
                 var projects = _project.AllProjects;
@@ -1121,16 +1347,31 @@ namespace MVP.Controllers
 
                 TasksTableReturnModels tasksTabbleFilter = _task.GetMoreTasks(staffNames, roleSession);
 
-                StaffTableReturnModels output = new StaffTableReturnModels
+                var staffs = _staff.StaffTable(roleSession.SessionRole, sessionCod).ToList();
+                var filterPosts = new List<string>();
+                foreach(var staf in staffs)
+                {
+                    if (!filterPosts.Contains(staf.post)) filterPosts.Add(staf.post);
+                }
+                var filterStaffs = new List<string>();
+                foreach (var staf in staffs)
+                {
+                    if (!filterStaffs.Contains(staf.name)) filterStaffs.Add(staf.name);
+                }
+
+                StaffTableReturnModelsNull output = new StaffTableReturnModelsNull
                 {
                     // список сотрудников
-                    staffs = _staff.StaffTable(roleSession.SessionRole, sessionCod).ToList(),
+                    staffs = staffs,
                     // задачи на чегодня
                     today = tasksTabbleFilter.today,
                     // выполненные задачи
                     completed = tasksTabbleFilter.completed,
                     // будущие задачи 
-                    future = tasksTabbleFilter.future
+                    future = tasksTabbleFilter.future,
+                    filterTasks = new List<string>() { "Мои задачи" , "Все задачи" },
+                    filterPosts = filterPosts,
+                    filterStaffs = filterStaffs
                 };
 
                 // возвращает список сотрудников в подчинении у залогиненного пользователя
