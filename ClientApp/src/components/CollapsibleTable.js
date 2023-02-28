@@ -101,8 +101,8 @@ export default function CollapsibleTable(props) {
     }
 
     return (
-        <TableContainer component={Paper}>
-            <Table size="small" aria-label="collapsible table">
+        <TableContainer sx={{ maxHeight: 'calc(100vh - 290px)'}} component={Paper}>
+            <Table stickyHeader size="small" aria-label="sticky collapsible table">
                 <TableHead>
                     { tableHeader }
                 </TableHead>

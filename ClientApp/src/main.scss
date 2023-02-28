@@ -1,4 +1,4 @@
-﻿\:root {
+\:root {
     --purple-color: #E1E1FB;
     --light-green-color: #CEFDED;
     --green-color: #71FACA;
@@ -17,6 +17,7 @@ body {
     font-family: 'Mulish', 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     background-color: var(--bg-color);
     color: var(--text-color);
+    overflow-x: hidden;
 }
 
 h1, .h1 {
