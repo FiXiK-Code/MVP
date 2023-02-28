@@ -194,46 +194,22 @@ namespace MVP.Date.Repository
             }
         }
 
-        public TasksTableReturnModels GetMoreTasks(List<string> staffNames, SessionRoles roleSession, string filterTable = "", bool TaskTable = false)
+        public TasksTableReturnModels GetMoreTasks(List<string> staffNames, SessionRoles roleSession, string filterTable = "")
         {
-            List<Tasks> tasksTabbleFilter = new List<Tasks>();
-            if (!TaskTable) tasksTabbleFilter = AllTasks.Where(p => staffNames.Contains(p.supervisor) || staffNames.Contains(p.recipient)).ToList();
-
-            else tasksTabbleFilter = AllTasks.Where(p => (staffNames.Contains(p.supervisor) || staffNames.Contains(p.recipient))
-                                    || (p.supervisor == roleSession.SessionName || p.recipient == roleSession.SessionName)).ToList();
+            List<Tasks> tasksTabbleFilter =  AllTasks.Where(p => (staffNames.Contains(p.supervisor) || staffNames.Contains(p.recipient))).ToList();
 
             // редактирование возвращаемых задач в зависимости от фильтра (в перспективе передача нескольких фильтров через запятую)
             List<string> staffsDiv = new List<string>();
-            if (filterTable != null) foreach (var filter in filterTable.Split(','))///
+            if (filterTable != "")
+                foreach (var filter in filterTable.Split(','))///
                 {
                     switch (filter)
                     {
-                        case "Все задачи":
-                            tasksTabbleFilter = AllTasks.ToList();
-                            break;
-                        case "Задачи отдела управления":
-                            foreach (var staff1 in _staff.AllStaffs.Where(p => p.divisionId == 1).ToList())
-                            {
-                                if (!staffsDiv.Contains(staff1.name)) staffsDiv.Add(staff1.name);
-                            }
-                            tasksTabbleFilter = AllTasks.Where(p => staffsDiv.Contains(p.supervisor) || staffsDiv.Contains(p.recipient)).ToList();
-                            break;
-                        case "Задачи отдела проектирования":
-                            foreach (var staff1 in _staff.AllStaffs.Where(p => p.divisionId == 2).ToList())
-                            {
-                                if (!staffsDiv.Contains(staff1.name)) staffsDiv.Add(staff1.name);
-                            }
-                            tasksTabbleFilter = AllTasks.Where(p => staffsDiv.Contains(p.supervisor) || staffsDiv.Contains(p.recipient)).ToList();
-                            break;
-                        case "Задачи отдела изысканий":
-                            foreach (var staff1 in _staff.AllStaffs.Where(p => p.divisionId == 3).ToList())
-                            {
-                                if (!staffsDiv.Contains(staff1.name)) staffsDiv.Add(staff1.name);
-                            }
-                            tasksTabbleFilter = AllTasks.Where(p => staffsDiv.Contains(p.supervisor) || staffsDiv.Contains(p.recipient)).ToList();
+                        case "Мои задачи":
+                            tasksTabbleFilter = tasksTabbleFilter.Where(p => p.creator == roleSession.SessionName).ToList();
                             break;
                     }
-            }
+                }
 
             var today = tasksTabbleFilter.Where(p => p.status != "Выполнена").Where(p => p.date.Date <= DateTime.Now.Date).OrderBy(p => p.date.Date).OrderBy(p => p.priority).ToList();
 

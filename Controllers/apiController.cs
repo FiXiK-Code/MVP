@@ -193,8 +193,8 @@ namespace MVP.Controllers
             return new JsonResult(new ObjectResult("Задачи перенесены в статус \"На паузе\"!") { StatusCode = 201 });
         }
 
-            ////////// tasks
-            [Authorize]
+        ////////// tasks
+        [Authorize]
         [HttpGet]
         public JsonResult GetTasks([FromQuery] TasksParameters TaskParam)// выдает все задачи определенного сотрудника, либо если есть - по фильтру; если есть id - выдает инф по задаче
         {
@@ -250,7 +250,7 @@ namespace MVP.Controllers
 
 
                 // сборка модели для возвращения
-                TasksTableReturnModels output = _task.GetMoreTasks(staffNames, roleSession, TaskParam.filterTable, true);
+                TasksTableReturnModels output = _task.GetMoreTasks(staffNames, roleSession);
 
                 return new JsonResult(new ObjectResult(output) { StatusCode = 200 });
             }
@@ -855,7 +855,7 @@ namespace MVP.Controllers
                 }
 
                 // фильтрация по ответсвенному за проекты
-                foreach (var filter in ProjParam.supervisorFilter.Split(','))
+                foreach (var filter in ProjParam.filterGip.Split(','))
                 {
                     if (filter != "Все ГИПы" && filter != "")
                     {
@@ -864,9 +864,28 @@ namespace MVP.Controllers
                 }
 
                 var today = _task.AllTasks.Where(p => p.status != "Выполнена").Where(p => p.date.Date <= DateTime.Now.Date).OrderBy(p => p.date.Date).OrderBy(p => p.priority).ToList();
+                
+                // выполненные задачи
+                var completed = _task.AllTasks.Where(p => p.status == "Выполнена").OrderBy(p => p.finish).ToList();
+                
+                // будущие задачи 
+                var future = _task.AllTasks.Where(p => p.date.Date > DateTime.Now.Date).OrderBy(p => p.date.Date).OrderBy(p => p.priority).ToList();
+
+                List<Tasks> todays = new List<Tasks>();
+                List<Tasks> completeds = new List<Tasks>();
+                List<Tasks> futures = new List<Tasks>();
+                foreach (var filter in ProjParam.filterResipirnt.Split(','))
+                {
+                    if (filter != "Все ответственные" && filter != "")
+                    {
+                        todays.AddRange(today.Where(p => p.recipient == filter || (p.recipient == null && p.supervisor == filter)).ToList());
+                        completeds.AddRange(completed.Where(p => p.recipient == filter || (p.recipient == null && p.supervisor == filter)).ToList());
+                        futures.AddRange(future.Where(p => p.recipient == filter || (p.recipient == null && p.supervisor == filter)).ToList());
+                    }
+                }
 
                 List<TasksOut> todayOut = new List<TasksOut>();
-                foreach (var task in today)
+                foreach (var task in todays)
                 {
                     try
                     {
@@ -905,17 +924,10 @@ namespace MVP.Controllers
                     {
                         continue;
                     }
-
-
                 }
 
-
-
-                // выполненные задачи
-                var completed = _task.AllTasks.Where(p => p.status == "Выполнена").OrderBy(p => p.finish).ToList();
-
                 List<TasksOut> completedOut = new List<TasksOut>();
-                foreach (var task in completed)
+                foreach (var task in completeds)
                 {
                     try
                     {
@@ -954,14 +966,10 @@ namespace MVP.Controllers
                     {
                         continue;
                     }
-
-
                 }
-                // будущие задачи 
-                var future = _task.AllTasks.Where(p => p.date.Date > DateTime.Now.Date).OrderBy(p => p.date.Date).OrderBy(p => p.priority).ToList();
 
                 List<TasksOut> futureOut = new List<TasksOut>();
-                foreach (var task in future)
+                foreach (var task in futures)
                 {
                     try
                     {
@@ -999,7 +1007,6 @@ namespace MVP.Controllers
                     {
                         continue;
                     }
-
                 }
 
                 var proj = projects.ToList();
@@ -1103,7 +1110,7 @@ namespace MVP.Controllers
             }
 
             // списка сотрудников без фильтрации
-            if (StaffParam.filterStaff == "")
+            if (StaffParam.filterPosts == "" && StaffParam.filterTasks == "" && StaffParam.filterStaffs == "")
             {
                 List<string> staffNames = new List<string>();
                 staffNames.Add(roleSession.SessionName);
@@ -1112,7 +1119,7 @@ namespace MVP.Controllers
                     if (!staffNames.Contains(task.name)) staffNames.Add(task.name);
                 }
 
-                TasksTableReturnModels tasksTabbleFilter = _task.GetMoreTasks(staffNames, roleSession, "");
+                TasksTableReturnModels tasksTabbleFilter = _task.GetMoreTasks(staffNames, roleSession);
 
                 StaffTableReturnModels output = new StaffTableReturnModels
                 {
@@ -1134,14 +1141,36 @@ namespace MVP.Controllers
             {
                 var StaffTable = _staff.StaffTable(roleSession.SessionRole, sessionCod);
 
-                foreach (var filter in StaffParam.filterStaff.Split(','))
+                foreach (var filter in StaffParam.filterPosts.Split(','))
                 {
                     if (filter != "" && filter != "Все должности")
                     {
-                        StaffTable = StaffTable.Where(p => p.post == filter).ToList();
+                        try
+                        {
+                            StaffTable = StaffTable.Where(p => p.post == filter).ToList();
+                        }
+                        catch (Exception)
+                        {
+                            continue;
+                        }
+                    }
+                }
+                foreach (var filter in StaffParam.filterStaffs.Split(','))
+                {
+                    if (filter != "" && filter != "Все сотрудники")
+                    {
+                        try
+                        {
+                            StaffTable = StaffTable.Where(p => p.name == filter).ToList();
+                        }
+                        catch (Exception)
+                        {
+                            continue;
+                        }
                     }
                 }
 
+               
                 // составление списка сотрудников в подчинениии у того кто вошел в сессию
                 List<string> staffNames = new List<string>();
                 staffNames.Add(roleSession.SessionName);
@@ -1151,7 +1180,7 @@ namespace MVP.Controllers
                 }
 
                 // список задач сотрудников из вышеупомянутого списка
-                TasksTableReturnModels tasksTabbleFilter = _task.GetMoreTasks(staffNames, roleSession, "", true);
+                TasksTableReturnModels tasksTabbleFilter = _task.GetMoreTasks(staffNames, roleSession, StaffParam.filterTasks);
 
                 StaffTableReturnModels output = new StaffTableReturnModels
                 {
@@ -1309,7 +1338,7 @@ namespace MVP.Controllers
 
         [Authorize]
         [HttpGet]
-        public JsonResult GetPosts()// список сотрудников
+        public JsonResult GetPosts()// список должностей
         {
             var posts = _post.AllPosts.ToList();
             return new JsonResult(new ObjectResult(posts) { StatusCode = 200 });

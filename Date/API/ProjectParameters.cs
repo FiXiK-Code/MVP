@@ -9,7 +9,8 @@ namespace MVP.Date.API
     {
         public int id { get; set; } = -1;
         public string filterProj { get; set; } = "";
-        public string supervisorFilter { get; set; } = "";
+        public string filterGip { get; set; } = "";
+        public string filterResipirnt { get; set; } = "";
 
 
         public string link { get; set; }

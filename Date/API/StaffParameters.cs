@@ -7,6 +7,9 @@ namespace MVP.Date.API
 {
     public class StaffParameters
     {
-        public string filterStaff { get; set; } = "";
+        public string filterTasks { get; set; } = "";
+
+        public string filterPosts { get; set; } = "";
+        public string filterStaffs { get; set; } = "";
     }
 }
