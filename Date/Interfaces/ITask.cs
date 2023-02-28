@@ -31,6 +31,6 @@ namespace MVP.Date.Interfaces
             string session);
         bool redactStatus(int id, string stat, string session="");
 
-        Task timeWork(int idTask);
+        void timeWork();
     }
 }
