@@ -283,8 +283,29 @@ namespace MVP.Controllers
                 return new JsonResult(new ObjectResult("Не авторизованный запрос!") { StatusCode = 401 });
                 //return new JsonResult("Не авторизованный запрос!");////////////////
             }
+            if (TaskParam.desc == null ||
+                    TaskParam.projectCode == -1 ||
+                    TaskParam.supervisor == -1 ||
+                    TaskParam.plannedTime == null ||
+                    TaskParam.date == null ||
+                    TaskParam.dedline == null)
+            {
+                string contentError = "";
+                if (TaskParam.desc == null) contentError += "Описание задачи; ";
+                if (TaskParam.projectCode == -1) contentError += "Код проекта; ";
+                if (TaskParam.supervisor == -1) contentError += "Ответственный по задаче; ";
+                if (TaskParam.plannedTime == null) contentError += "Планируемое время исполнения; ";
+                if (TaskParam.date == null) contentError += "Дата; ";
+                if (TaskParam.dedline == null) contentError += "Дедлайн; ";
 
-            // корректировка даты - автоперенос при заполненном дне
+                var error = new
+                {
+                    messsage = "Не все поля заполнены!",
+                    content = "Не заполнены поля: " + contentError
+                };
+                return new JsonResult(new ObjectResult(error) { StatusCode = 400 });
+            }
+
             var supervisor = _appDB.DBStaff.FirstOrDefault(p => p.id == TaskParam.supervisor).name;
             var recipient = _appDB.DBStaff.FirstOrDefault(p => p.id == TaskParam.recipient).name;
             var date = DateTime.Parse(TaskParam.date);

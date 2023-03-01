@@ -9,10 +9,10 @@ namespace MVP.Date.API
     {
         public int id { get; set; } = -1;
         
-        public string status { get; set; }
+        public string status { get; set; } 
         public string desc { get; set; }
-        public int projectCode { get; set; }
-        public int supervisor { get; set; }
+        public int projectCode { get; set; } = -1;
+        public int supervisor { get; set; } = -1;
         public int recipient { get; set; }
         public string comment { get; set; }
         
