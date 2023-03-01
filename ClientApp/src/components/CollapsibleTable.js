@@ -8,6 +8,8 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { TaskGroup } from './TaskGroup';
 import { TaskGroupEmployee } from './TaskGroupEmployee';
+import ProjectViewModal from './ProjectViewModal';
+import { getProjectHeaders } from '../utils';
 
 
 export default function CollapsibleTable(props) {
@@ -59,7 +61,7 @@ export default function CollapsibleTable(props) {
             </TableBody>
     }
 
-    
+    const projectHeaders = getProjectHeaders();
 
     let tableHeader;
     if (props.tasks.staffs) {
@@ -81,7 +83,7 @@ export default function CollapsibleTable(props) {
         tableHeader = <TableRow>
             <TableCell sx={{ ...tableStyling }}>Дата</TableCell>
             {props.tasks.projects.map((header) =>
-                <TableCell sx={{ ...tableStyling }} key={header.code}>{header.code}<br />{header.plannedFinishDate}</TableCell>
+                <ProjectViewModal editHandler={props.editHandler} headers={projectHeaders} project={header} gips={ props.gips } key={header.code}>{header.code}<br />{header.plannedFinishDate}</ProjectViewModal>
             )}
         </TableRow>
 

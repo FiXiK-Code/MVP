@@ -174,21 +174,24 @@ export function getProjectHeaders() {
             "type": "datetime",
             "title": "Планируемая дата завершения",
             "show": true,
-            "createAvailability": true
+            "createAvailability": true,
+            "rowData": "plannedFinishDateRaw"
         },
         {
             "name": "link",
             "type": "textfield",
             "title": "Облако",
             "show": true,
-            "createAvailability": true
+            "createAvailability": true,
+            "rowData": "link"
         },
         {
             "name": "code",
             "type": "textfield",
             "title": "Шифр проекта",
             "show": true,
-            "createAvailability": true
+            "createAvailability": true,
+            "rowData": "code"
         },
         {
             "name": "supervisor",
@@ -196,35 +199,49 @@ export function getProjectHeaders() {
             "title": "Ответственный",
             "show": true,
             "createAvailability": true,
-            "fieldToShow": "name"
+            "fieldToShow": "name",
+            "rowData": "supervisorId"
         },
         {
             "name": "priority",
             "type": "number",
             "title": "Приоритет",
             "show": true,
-            "createAvailability": true
+            "createAvailability": true,
+            "rowData": "priority"
         },
         {
             "name": "shortName",
             "type": "textfield",
             "title": "Краткое описание",
             "show": true,
-            "createAvailability": true
+            "createAvailability": true,
+            "rowData": "shortName"
         },
         {
             "name": "name",
             "type": "textfield",
             "title": "Полное описание",
             "show": true,
-            "createAvailability": true
+            "createAvailability": true,
+            "rowData": "name"
         },
         {
             "name": "allStages",
             "type": "textfield",
             "title": "Стадии проекта (через запятую)",
             "show": true,
-            "createAvailability": true
+            "createAvailability": true,
+            "rowData": "allStages"
+        },
+        {
+            "name": "archive",
+            "type": "select",
+            "title": "Архив",
+            "show": true,
+            "createAvailability": true,
+            "rowData": "archive",
+            "fieldToShow": "name"
         },
     ];
 }

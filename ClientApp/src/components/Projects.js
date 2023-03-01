@@ -102,13 +102,15 @@ export class Projects extends Component {
             headers: [],
             loading: true,
             projectCode: [],
-            supervisor: []
+            supervisor: [],
+            gips: []
         };
     }
 
     componentDidMount() {
         this.populateWeatherData();
         this.getEmployees();
+        this.getGIPs();
     }
 
     async getEmployees() {
@@ -124,18 +126,31 @@ export class Projects extends Component {
         this.setState({ supervisor: data });
     }
 
-    static renderTasksTable(headers, tasks, supervisor, projectCode) {
+    async getGIPs() {
+        const response = await fetchWithAuth("/api/GetEmployees?filterStaff=GIP");
+        console.log(response);
+        if (response.status === 401) {
+            this.setState({
+                auth: false
+            })
+        }
+
+        const data = response.value.staffs;
+        this.setState({ gips: data });
+    }
+
+    static renderTasksTable(headers, tasks, supervisor, projectCode, gips) {
         console.log(tasks);
 
         return (
-            <CollapsibleTable tasks={tasks} headers={headers} supervisor={supervisor} projectCode={projectCode} recipient={supervisor} />
+            <CollapsibleTable gips={ gips } tasks={tasks} headers={headers} supervisor={supervisor} projectCode={projectCode} recipient={supervisor} />
         );
     }
 
     render() {
         let contents = this.state.loading
             ? <p><em>Загрузка данных...</em></p>
-            : Projects.renderTasksTable(this.state.headers, this.state.tasks, this.state.supervisor, this.state.projectCode);
+            : Projects.renderTasksTable(this.state.headers, this.state.tasks, this.state.supervisor, this.state.projectCode, this.state.gips);
 
         return (
             <div>
