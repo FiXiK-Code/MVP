@@ -18,8 +18,9 @@ function AddSelect(props) {
     return (
         <Box sx={{ minWidth: 120 }}>
             <FormControl fullWidth>
-                <InputLabel id={"select-label-" + props.header}>{props.label}</InputLabel>
+                <InputLabel error={props.error} id={"select-label-" + props.header}>{props.label}</InputLabel>
                 <Select
+                    error={props.error}
                     labelId={"select-label-" + props.header}
                     id={"select-" + props.header}
                     value={props.state}
@@ -50,17 +51,32 @@ function SimpleDialog(props) {
 
     const [type, setType] = React.useState(1);
 
-    const [data, setData] = React.useState(type === 1 ?
-        {
+    const getInitValues = (type) => {
+        console.log('get init values', type);
+        return type === 1 ? {
             date: getCurrentDate('-'),
-            planTime: "00:00:00",
-            dedline: getServerTimeFromLocale(getCurrentDate('-') + " 18:00:00")
+            plannedTime: "00:00:00",
+            dedline: getServerTimeFromLocale(getCurrentDate('-') + " 18:00:00"),
+            desc: "",
+            recipient: 0,
+            supervisor: 0,
+            comment: "",
+            projectCode: 0
         }
-        :
-        {
-            plannedFinishDate: getServerTimeFromLocale(getCurrentDate('-') + " 18:00:00")
-        }
-    );
+            :
+            {
+                plannedFinishDate: getServerTimeFromLocale(getCurrentDate('-') + " 18:00:00"),
+                link: "",
+                code: "",
+                supervisor: 0,
+                shortName: "",
+                priority: 0,
+                name: "",
+                allStages: ""
+            }
+    }
+
+    const [data, setData] = React.useState(getInitValues(type));
 
 
 
@@ -99,16 +115,7 @@ function SimpleDialog(props) {
 
     const handleSelectChange = (event) => {
         setType(event.target.value)
-        setData(event.target.value === 1 ?
-            {
-                date: getCurrentDate('-'),
-                planTime: "00:00:00",
-                dedline: getServerTimeFromLocale(getCurrentDate('-') + " 18:00:00")
-            }
-            :
-            {
-                plannedFinishDate: getServerTimeFromLocale(getCurrentDate('-') + " 18:00:00")
-            })
+        setData(getInitValues(event.target.value))
     };
 
     const handleSelectChange1 = (event) => {
@@ -139,6 +146,15 @@ function SimpleDialog(props) {
     const handleSubmit = async (event) => {
         event.preventDefault();
         let url;
+        for (let prop in data) {
+            console.log(prop);
+            if (data.hasOwnProperty(prop) && !data[prop] && prop !== "priority") {
+                setMessageOpen(true);
+                setMessage("Заполните все поля!");
+                setMessageType("error");
+                return false;
+            }
+        }
         if (type === 1) {
             url = '/api/PostTasks';
         } else {
@@ -199,6 +215,7 @@ function SimpleDialog(props) {
                                         InputLabelProps={{
                                             shrink: true,
                                         }}
+                                        error={data[field.name] ? undefined : true}
                                         defaultValue={getCurrentDate('-')}
                                     />
                                 }
@@ -217,6 +234,7 @@ function SimpleDialog(props) {
                                         InputLabelProps={{
                                             shrink: true,
                                         }}
+                                        error={data[field.name] ? undefined : true}
                                         defaultValue={"00:00:00"}
                                     />
                                 }
@@ -235,31 +253,33 @@ function SimpleDialog(props) {
                                         InputLabelProps={{
                                             shrink: true,
                                         }}
+                                        error={data[field.name] ? undefined : true}
                                         defaultValue={getCurrentDate('-') + " 18:00:00"}
                                     />
                                 }
 
                                 {field.type === "textfield" &&
-                                    <TextField id={field.name} label={field.title} variant="outlined" multiline onChange={(e) => {
+                                    <TextField error={data[field.name] ? undefined : true} id={field.name} label={field.title} variant="outlined" multiline onChange={(e) => {
                                         e.label = field.name;
                                         handleTextChange(e);
                                     }} />
                                 }
-                                {field.type === "number" &&
-                                    <TextField id={field.name} type="number" label={field.title} variant="outlined" onChange={(e) => {
+                            {field.type === "number" &&
+                                <TextField id={field.name} type="number" label={field.title} variant="outlined" defaultValue={0} onChange={(e) => {
                                         e.label = field.name;
                                         handleTextChange(e);
                                     }} />
                                 }
-                            {field.type === "select" &&
-                                <AddSelect
-                                    label={field.title}
-                                    handleChange={field.name === "recipient" ? handleSelectChange3 : (field.name === "supervisor" ? handleSelectChange1 : handleSelectChange2)}
-                                    data={props[field.name]}
-                                    header={field.fieldToShow}
-                                    state={field.name === "recipient" ? selectState3 : (field.name === "supervisor" ? selectState1 : selectState2)}
-                                />
-                            }
+                                {field.type === "select" &&
+                                    <AddSelect
+                                        error={data[field.name] ? undefined : true}
+                                        label={field.title}
+                                        handleChange={field.name === "recipient" ? handleSelectChange3 : (field.name === "supervisor" ? handleSelectChange1 : handleSelectChange2)}
+                                        data={props[field.name]}
+                                        header={field.fieldToShow}
+                                        state={field.name === "recipient" ? selectState3 : (field.name === "supervisor" ? selectState1 : selectState2)}
+                                    />
+                                }
 
                             </>
                         )}
