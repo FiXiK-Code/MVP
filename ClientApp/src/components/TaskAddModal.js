@@ -251,15 +251,15 @@ function SimpleDialog(props) {
                                         handleTextChange(e);
                                     }} />
                                 }
-                                {field.type === "select" &&
-                                    <AddSelect
-                                        label={field.title}
-                                        handleChange={field.name === "recipient" ? handleSelectChange3 : (field.name === "supervisor" ? handleSelectChange1 : handleSelectChange2)}
-                                        data={props[field.name]}
-                                        header={field.fieldToShow}
-                                        state={field.name === "recipient" ? selectState3 : (field.name === "supervisor" ? selectState1 : selectState2)}
-                                    />
-                                }
+                            {field.type === "select" &&
+                                <AddSelect
+                                    label={field.title}
+                                    handleChange={field.name === "recipient" ? handleSelectChange3 : (field.name === "supervisor" ? handleSelectChange1 : handleSelectChange2)}
+                                    data={props[field.name]}
+                                    header={field.fieldToShow}
+                                    state={field.name === "recipient" ? selectState3 : (field.name === "supervisor" ? selectState1 : selectState2)}
+                                />
+                            }
 
                             </>
                         )}

@@ -54,7 +54,7 @@ export function getCurrentDate(separator = '') {
     let month = newDate.getMonth() + 1;
     let year = newDate.getFullYear();
 
-    return `${year}${separator}${month < 10 ? `0${month}` : `${month}`}${separator}${date}`
+    return `${year}${separator}${month < 10 ? `0${month}` : `${month}`}${separator}${date < 10 ? `0${date}` : `${date}`}`
 }
 
 export function getHeaders() {
@@ -250,7 +250,7 @@ export function getProjectHeaders() {
             "type": "select",
             "title": "Архив",
             "show": true,
-            "createAvailability": true,
+            "createAvailability": false,
             "rowData": "archive",
             "fieldToShow": "name"
         },
