@@ -122,6 +122,7 @@ export class Tasks extends Component {
             console.log(event.target.name);
             let newState = this.state;
             newState.headers[event.target.name].show = event.target.checked;
+            localStorage.setItem('tableSettings', JSON.stringify(newState.headers))
             this.setState(newState);
         }
 

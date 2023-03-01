@@ -58,12 +58,23 @@ export function getCurrentDate(separator = '') {
 }
 
 export function getHeaders() {
+    let storage = JSON.parse(localStorage.getItem('tableSettings'));
+    console.log(storage);
+
+    if (!storage) {
+        storage = [];
+        for (let i = 0; i < 13; i++) {
+            storage[i] = {};
+            storage[i].show = true;
+        }
+    }
+
     return [
         {
             "name": "date",
             "type": "datefield",
             "title": "Дата",
-            "show": true,
+            "show": storage[0].show,
             "createAvailability": true,
             "rowData": "dateRaw"
         },
@@ -71,7 +82,7 @@ export function getHeaders() {
             "name": "projectCode",
             "type": "select",
             "title": "Шифр проекта",
-            "show": true,
+            "show": storage[1].show,
             "createAvailability": true,
             "fieldToShow": "code",
             "rowData": "projectId"
@@ -80,14 +91,14 @@ export function getHeaders() {
             "name": "desc",
             "type": "textfield",
             "title": "Задача",
-            "show": true,
+            "show": storage[2].show,
             "createAvailability": true,
             "rowData": "desc"
         },
         {
             "name": "status",
             "title": "Статус",
-            "show": true,
+            "show": storage[3].show,
             "createAvailability": false,
             "rowData": "status"
         },
@@ -95,7 +106,7 @@ export function getHeaders() {
             "name": "supervisor",
             "type": "select",
             "title": "Ответственный",
-            "show": true,
+            "show": storage[4].show,
             "createAvailability": true,
             "fieldToShow": "name",
             "rowData": "supervisorId"
@@ -104,7 +115,7 @@ export function getHeaders() {
             "name": "recipient",
             "type": "select",
             "title": "Переназначить",
-            "show": true,
+            "show": storage[5].show,
             "createAvailability": true,
             "fieldToShow": "name",
             "rowData": "recipientId"
@@ -112,7 +123,7 @@ export function getHeaders() {
         {
             "name": "priority",
             "title": "Приоритет",
-            "show": true,
+            "show": storage[6].show,
             "createAvailability": false,
             "rowData": "priority"
         },
@@ -120,7 +131,7 @@ export function getHeaders() {
             "name": "comment",
             "type": "textfield",
             "title": "Комментарий",
-            "show": true,
+            "show": storage[7].show,
             "createAvailability": true,
             "rowData": "comment"
         },
@@ -128,7 +139,7 @@ export function getHeaders() {
             "name": "dedline",
             "type": "datetime",
             "title": "Дедлайн",
-            "show": true,
+            "show": storage[8].show,
             "createAvailability": true,
             "rowData": "dedlineRaw"
         },
@@ -136,7 +147,7 @@ export function getHeaders() {
             "name": "plannedTime",
             "type": "timefield",
             "title": "План время",
-            "show": true,
+            "show": storage[9].show,
             "createAvailability": true,
             "rowData": "plannedTime"
         },
@@ -144,7 +155,7 @@ export function getHeaders() {
             "name": "actualTime",
             "type": "textfield",
             "title": "Факт время",
-            "show": true,
+            "show": storage[10].show,
             "createAvailability": false,
             "rowData": "actualTime"
         },
@@ -152,7 +163,7 @@ export function getHeaders() {
             "name": "start",
             "type": "datetime",
             "title": "Начал",
-            "show": true,
+            "show": storage[11].show,
             "createAvailability": false,
             "rowData": "startRaw"
         },
@@ -160,7 +171,7 @@ export function getHeaders() {
             "name": "finish",
             "type": "datetime",
             "title": "Завершил",
-            "show": true,
+            "show": storage[12].show,
             "createAvailability": false,
             "rowData": "finishRaw"
         },
