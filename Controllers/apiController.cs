@@ -7,6 +7,7 @@ using MVP.Date;
 using MVP.Date.API;
 using MVP.Date.Interfaces;
 using MVP.Date.Models;
+using MVP.SignalR;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -218,6 +219,7 @@ namespace MVP.Controllers
             {
                 return new JsonResult(new ObjectResult("not authorized!") { StatusCode = 401 });////////////////
             }
+            var hub = new MyHub(); hub.PullMassage();
             if (TaskParam.id != -1)
             {
                 Tasks result = new Tasks();
@@ -325,8 +327,9 @@ namespace MVP.Controllers
             //int sec = TaskParam.dedline.Split('T')[1].Length > 5 ? Convert.ToInt32(TaskParam.dedline.Split('T')[1].Split(':')[2].Split('.')[0]) : 0;
             //var dedline = new DateTime(Convert.ToInt32(TaskParam.dedline.Split('T')[0].Split('-')[0]), Convert.ToInt32(TaskParam.dedline.Split('T')[0].Split('-')[1]), Convert.ToInt32(TaskParam.dedline.Split('T')[0].Split('-')[2]),
             //    Convert.ToInt32(TaskParam.dedline.Split('T')[1].Split(':')[0]), Convert.ToInt32(TaskParam.dedline.Split('T')[1].Split(':')[1]),sec);
+            var date1 = date;
             date = redackPriorAndPerenos(supervisor, date, plannedTime, projectCode, TaskParam.liteTask);
-
+            //if (date1.Date != date.Date) { var hub = new MyHub(); hub.PullMassage();}
             // добавление задачи в базу
             var item = new Tasks
             {

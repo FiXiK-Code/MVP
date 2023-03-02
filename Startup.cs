@@ -21,7 +21,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Pomelo.EntityFrameworkCore.MySql.Storage;
-
+using Microsoft.Owin;
+using Owin;
+using MVP.SignalR;
+using Microsoft.AspNet.SignalR;
 
 namespace MVP
 {
@@ -50,8 +53,8 @@ namespace MVP
                 };
             });
 
+            services.AddSignalR();
 
-           
 
             var config = _config.GetSection("EmailConfiguration").Get<EmailConfig>();
             services.AddSingleton(config);
@@ -98,8 +101,11 @@ namespace MVP
         
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, AppDB context)
         {
-            
-
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<MyHub>("signalr");
+            });
+            //HubRouteBuilder
             app.UseSession();
 
             app.UseHttpsRedirection();
