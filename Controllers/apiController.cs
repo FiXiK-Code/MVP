@@ -1329,8 +1329,21 @@ namespace MVP.Controllers
 
                 }
 
+                var filterGipContent = new List<string>();
+                foreach (var stafs in _appDB.DBStaff.Where(p => p.roleCod == "R02").ToList())
+                {
+                    filterGipContent.Add(stafs.name);
+                }
 
-                ProjectTableReturnModels output = new ProjectTableReturnModels
+                var filterResipirntContent = new List<string>();
+                var allTasks = today; allTasks.AddRange(completed); allTasks.AddRange(future);
+
+                foreach (var task in allTasks.OrderBy(p => p.supervisor))
+                {
+                    if (!filterResipirntContent.Contains(task.supervisor)) filterResipirntContent.Add(task.supervisor);
+                }
+
+                ProjectTableReturnModelsNull output = new ProjectTableReturnModelsNull
                 {
                     // проекты
                     projects = ProjOut,
@@ -1341,8 +1354,13 @@ namespace MVP.Controllers
                     completed = completedOut,
 
                     // будущие задачи 
-                    future = futureOut
-
+                    future = futureOut,
+                    filters = new
+                    {
+                        filterGip = filterGipContent,
+                        filterProj = new List<string>() { "Текущие проекты", "Проекты в архиве" },
+                        filterResipirnt = filterResipirntContent
+                    }
                 };
 
                 return new JsonResult(new ObjectResult(output) { StatusCode = 200 });
@@ -1467,15 +1485,35 @@ namespace MVP.Controllers
                 // список задач сотрудников из вышеупомянутого списка
                 TasksTableReturnModels tasksTabbleFilter = _task.GetMoreTasks(staffNames, roleSession, StaffParam.filterTasks);
 
-                StaffTableReturnModels output = new StaffTableReturnModels
+                var staffs = _staff.StaffTable(roleSession.SessionRole, sessionCod).ToList();
+                var filterPosts = new List<string>();
+                foreach (var staf in staffs)
                 {
-                    staffs = StaffTable,
+                    if (!filterPosts.Contains(staf.post)) filterPosts.Add(staf.post);
+                }
+                var filterStaffs = new List<string>();
+                foreach (var staf in staffs)
+                {
+                    if (!filterStaffs.Contains(staf.name)) filterStaffs.Add(staf.name);
+                }
+
+                StaffTableReturnModelsNull output = new StaffTableReturnModelsNull
+                {
+                    // список сотрудников
+                    staffs = staffs,
                     // задачи на чегодня
                     today = tasksTabbleFilter.today,
                     // выполненные задачи
                     completed = tasksTabbleFilter.completed,
                     // будущие задачи 
-                    future = tasksTabbleFilter.future
+                    future = tasksTabbleFilter.future,
+
+                    filters = new
+                    {
+                        filterTasks = new List<string>() { "Мои задачи", "Все задачи" },
+                        filterPosts = filterPosts,
+                        filterStaffs = filterStaffs
+                    }
                 };
 
                 // возвращает список сотрудников в подчинении у залогиненного пользователя
