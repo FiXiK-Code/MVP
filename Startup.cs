@@ -103,7 +103,7 @@ namespace MVP
         {
             app.UseSignalR(routes =>
             {
-                routes.MapHub<MyHub>("signalr");
+                routes.MapHub<MyHub>("/signalr");
             });
             //HubRouteBuilder
             app.UseSession();
