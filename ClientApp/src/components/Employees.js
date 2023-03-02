@@ -11,76 +11,62 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { fetchWithAuth, Unauthorized, getHeaders, setLocaleDateInTasks } from '../utils';
 
-function TaskSelect() {
-    const [task, setTask] = React.useState(0);
 
-    const handleChange = (event: SelectChangeEvent) => {
-        setTask(event.target.value);
-    };
-
+function TaskSelect(props) {
     return (
         <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">Задачи</InputLabel>
+            <InputLabel id="task-simple-select-label">Задачи</InputLabel>
             <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={task}
+                labelId="task-simple-select-label"
+                id="task-simple-select"
+                value={props.value}
                 label="Задачи"
-                onChange={handleChange}
+                onChange={props.handleChange}
             >
-                <MenuItem value={0}>Все задачи</MenuItem>
-                <MenuItem value={10}>Задача 1</MenuItem>
-                <MenuItem value={20}>Задача 2</MenuItem>
+                <MenuItem value={"Мои задачи"}>Мои задачи</MenuItem>
+                <MenuItem value={"Все задачи"}>Все задачи</MenuItem>
             </Select>
         </FormControl>
     );
 }
 
-function PositionSelect() {
-    const [position, setPosition] = React.useState(0);
-
-    const handleChange = (event: SelectChangeEvent) => {
-        setPosition(event.target.value);
-    };
-
+function PositionSelect(props) {
     return (
         <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">Должности</InputLabel>
+            <InputLabel id="position-simple-select-label">Должности</InputLabel>
             <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={position}
+                labelId="position-simple-select-label"
+                id="position-simple-select"
+                value={props.value}
                 label="Должности"
-                onChange={handleChange}
+                onChange={props.handleChange}
             >
-                <MenuItem value={0}>Все должности</MenuItem>
-                <MenuItem value={10}>Все </MenuItem>
-                <MenuItem value={20}>Должность 2</MenuItem>
+                <MenuItem value={"Все должности"}>Все должности</MenuItem>
+                {props.data.map((post, index) =>
+                    <MenuItem key={index} value={post}>{post}</MenuItem>
+                )
+                }
             </Select>
         </FormControl>
     );
 }
 
-function EmployeeSelect() {
-    const [employee, setEmployee] = React.useState(0);
-
-    const handleChange = (event: SelectChangeEvent) => {
-        setEmployee(event.target.value);
-    };
-
+function EmployeeSelect(props) {
     return (
         <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">Сотрудники</InputLabel>
+            <InputLabel id="employees-simple-select-label">Сотрудники</InputLabel>
             <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={employee}
+                labelId="employees-simple-select-label"
+                id="employees-simple-select"
+                value={props.value}
                 label="Сотрудники"
-                onChange={handleChange}
+                onChange={props.handleChange}
             >
-                <MenuItem value={0}>Все сотрудники</MenuItem>
-                <MenuItem value={10}>Сотрудник 1</MenuItem>
-                <MenuItem value={20}>Сотрудник 2</MenuItem>
+                <MenuItem value={"Все сотрудники"}>Все сотрудники</MenuItem>
+                {props.data.map((role, index) =>
+                    <MenuItem key={index} value={role}>{role}</MenuItem>
+                )
+                }
             </Select>
         </FormControl>
     );
@@ -97,14 +83,44 @@ export class Employees extends Component {
                 done: [],
                 today: [],
                 upcoming: [],
-                staffs: []
+                staffs: [],
+                filters: {
+                    filterPosts: [],
+                    filterStaffs: [],
+                    filterTasks: []
+                }
             },
             headers: [],
             loading: true,
             projectCode: [],
-            supervisor: []
+            supervisor: [],
+            taskFilter: "Мои задачи",
+            positionFilter: "Все должности",
+            employeeFilter: "Все сотрудники"
         };
+
+        this.handleTaskFilterChange = this.handleTaskFilterChange.bind(this);
+        this.handlePositionFilterChange = this.handlePositionFilterChange.bind(this);
+        this.handleEmployeeFilterChange = this.handleEmployeeFilterChange.bind(this);
     }
+
+    handleTaskFilterChange(event) {
+        console.log('event is ', event.target.value);
+        this.setState({ taskFilter: event.target.value });
+        this.populateWeatherData(event.target.value);
+    };
+
+    handlePositionFilterChange(event) {
+        console.log('event is ', event.target.value);
+        this.setState({ positionFilter: event.target.value }); 
+        this.populateWeatherData(event.target.value);
+    };
+
+    handleEmployeeFilterChange(event) {
+        console.log('event is ', event.target.value);
+        this.setState({ employeeFilter: event.target.value });
+        this.populateWeatherData(event.target.value);
+    };
 
     componentDidMount() {
         this.populateWeatherData();
@@ -147,9 +163,9 @@ export class Employees extends Component {
                     <Stack spacing={2} direction="row">
                         <TaskAddModal type="1" title="Добавить&nbsp;задачу" headers={this.state.headers} supervisor={this.state.supervisor} projectCode={this.state.projectCode} recipient={this.state.supervisor} />
                         <TaskAddModal type="2" title="Добавить&nbsp;проект" headers={this.state.headers} supervisor={this.state.supervisor} projectCode={this.state.projectCode} recipient={this.state.supervisor} />
-                        <TaskSelect />
-                        <PositionSelect />
-                        <EmployeeSelect />
+                        <TaskSelect value={ this.state.taskFilter } handleChange={this.handleTaskFilterChange} data={this.state.tasks.filters.filterTasks} />
+                        <PositionSelect value={this.state.positionFilter} handleChange={this.handlePositionFilterChange} data={this.state.tasks.filters.filterPosts} />
+                        <EmployeeSelect value={this.state.employeeFilter} handleChange={this.handleEmployeeFilterChange} data={this.state.tasks.filters.filterStaffs} />
                     </Stack>
                 </Box>
                 {contents}
@@ -157,8 +173,8 @@ export class Employees extends Component {
         );
     }
 
-    async populateWeatherData() {
-        const response = await fetchWithAuth("/api/GetEmployees");
+    async populateWeatherData(filter = undefined) {
+        const response = await fetchWithAuth(filter ? "/api/GetEmployees?filterStaffs=" + encodeURIComponent(filter) : "/api/GetEmployees");
         console.log(response);
         if (response.status === 401) {
             this.setState({

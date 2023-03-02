@@ -6,6 +6,7 @@ import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import TaskAddModal from './TaskAddModal';
 import { fetchWithAuth, Unauthorized, getHeaders, showLocaleDate, setLocaleDateInTasks } from '../utils';
+import { HubConnectionBuilder } from '@microsoft/signalr';
 
 export class Tasks extends Component {
     static displayName = Tasks.name;
