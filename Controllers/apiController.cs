@@ -724,17 +724,17 @@ namespace MVP.Controllers
                 managementDepartment = new
                 {
                     name = "Отдел управления",
-                    managDep
+                    array = managDep
                 },
                 designDepartment = new 
                 {
                     name = "Отдел проектирования",
-                    disDep
+                    array = disDep
                 },
                 researchDepartment = new
                 {
                     name = "Отдел изысканий",
-                    researchDep,
+                    array = researchDep,
                 },
                 companyRoleStruct = guideRoles
             };
