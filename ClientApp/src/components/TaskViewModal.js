@@ -13,6 +13,82 @@ import Select from '@mui/material/Select';
 import { fetchWithAuth, getCurrentDate } from '../utils';
 import styles from './TaskViewModal.module.scss';
 import CustomSnackbar from "./CustomSnackbar";
+import ListSubheader from '@mui/material/ListSubheader';
+import InputAdornment from '@mui/material/InputAdornment';
+import SearchIcon from "@mui/icons-material/Search";
+
+const containsText = (text, searchText) =>
+    text.toLowerCase().indexOf(searchText.toLowerCase()) > -1;
+
+export function SelectWithSearch(props) {
+    const [searchText, setSearchText] = React.useState("");
+    const displayedOptions = React.useMemo(
+        () => props.data.filter((option) => {
+            if (typeof option.code !== 'undefined') {
+                console.log('option', option);
+                return containsText(option.code, searchText);
+            } else {
+                console.log('option', option);
+                return false;
+            }
+        }),
+        [searchText, props.data]
+    );
+
+    return (
+        <Box sx={{ m: 10 }}>
+            <FormControl fullWidth>
+                <InputLabel id="search-select-label">{props.label}</InputLabel>
+                <Select
+                    // Disables auto focus on MenuItems and allows TextField to be in focus
+                    MenuProps={{ autoFocus: false, PaperProps: { sx: { maxHeight: 300 } }  }}
+                    labelId="search-select-label"
+                    id="search-select"
+                    value={props.state}
+                    label={props.label}
+                    onChange={props.handleChange}
+                    onClose={() => setSearchText("")}
+                >
+                    {// This prevents rendering empty string in Select's value
+                        // if search text would exclude currently selected option.
+                        // renderValue={() => props.state}
+                    }
+                    {/* TextField is put into ListSubheader so that it doesn't
+              act as a selectable item in the menu
+              i.e. we can click the TextField without triggering any selection.*/}
+                    <ListSubheader>
+                        <TextField
+                            size="small"
+                            // Autofocus on textfield
+                            autoFocus
+                            placeholder="Type to search..."
+                            fullWidth
+                            InputProps={{
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <SearchIcon />
+                                    </InputAdornment>
+                                )
+                            }}
+                            onChange={(e) => setSearchText(e.target.value)}
+                            onKeyDown={(e) => {
+                                if (e.key !== "Escape") {
+                                    // Prevents autoselecting item while typing (default Select behaviour)
+                                    e.stopPropagation();
+                                }
+                            }}
+                        />
+                    </ListSubheader>
+                    {displayedOptions.map((item, i) => (
+                        <MenuItem key={i} value={item.id}>
+                            {item[props.header]}
+                        </MenuItem>
+                    ))}
+                </Select>
+            </FormControl>
+        </Box>
+    );
+}
 
 function AddSelect(props) {
     console.log(props);
@@ -199,7 +275,7 @@ function SimpleDialog(props) {
                         }
 
                         {field.type === "textfield" &&
-                        <TextField id={field.name} value={ data[field.name] } label={field.title} variant="outlined" multiline onChange={(e) => {
+                            <TextField id={field.name} value={data[field.name]} label={field.title} variant="outlined" multiline onChange={(e) => {
                                 e.label = field.name;
                                 handleTextChange(e);
                             }} />
@@ -211,6 +287,16 @@ function SimpleDialog(props) {
                                 data={props[field.name]}
                                 header={field.fieldToShow}
                                 state={field.name === "recipient" ? selectState3 : (field.name === "supervisor" ? selectState1 : selectState2)}
+                            />
+                        }
+
+                        {field.type === "selectWithSearch" &&
+                            <SelectWithSearch
+                                label={field.title}
+                                handleChange={handleSelectChange2}
+                                data={props[field.name]}
+                                header={field.fieldToShow}
+                                state={selectState2}
                             />
                         }
 
@@ -271,11 +357,11 @@ export default function TaskViewModal(props) {
     return (
         <>
             {typesWithSmallTask.includes(props.from) &&
-                <span onClick={handleClickOpen} className={styles.task + " " + (props.task.priorityRaw < 0 ? styles.priority : "") + " " + (name != props.task.creator ? styles.notMyTask : "" )}>
+                <span onClick={handleClickOpen} className={styles.task + " " + (props.task.priorityRaw < 0 ? styles.priority : "") + " " + (name != props.task.creator ? styles.notMyTask : "")}>
                     {children}
                 </span>
             }
-            {!typesWithSmallTask.includes(props.from)  &&
+            {!typesWithSmallTask.includes(props.from) &&
                 <TableCell sx={{ ...tableStyling }} onClick={handleClickOpen}>
                     {children}
                 </TableCell>

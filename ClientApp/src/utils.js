@@ -80,7 +80,7 @@ export function getHeaders() {
         },
         {
             "name": "projectCode",
-            "type": "select",
+            "type": "selectWithSearch",
             "title": "Шифр проекта",
             "show": storage[1].show,
             "createAvailability": true,

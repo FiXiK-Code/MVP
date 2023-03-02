@@ -13,6 +13,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { fetchWithAuth, getCurrentDate, getProjectHeaders, getServerTimeFromLocale } from '../utils.js'
 import CustomSnackbar from "./CustomSnackbar";
+import { SelectWithSearch } from './TaskViewModal';
 
 function AddSelect(props) {
     return (
@@ -264,8 +265,8 @@ function SimpleDialog(props) {
                                         handleTextChange(e);
                                     }} />
                                 }
-                            {field.type === "number" &&
-                                <TextField id={field.name} type="number" label={field.title} variant="outlined" defaultValue={0} onChange={(e) => {
+                                {field.type === "number" &&
+                                    <TextField id={field.name} type="number" label={field.title} variant="outlined" defaultValue={0} onChange={(e) => {
                                         e.label = field.name;
                                         handleTextChange(e);
                                     }} />
@@ -278,6 +279,15 @@ function SimpleDialog(props) {
                                         data={props[field.name]}
                                         header={field.fieldToShow}
                                         state={field.name === "recipient" ? selectState3 : (field.name === "supervisor" ? selectState1 : selectState2)}
+                                    />
+                                }
+                                {field.type === "selectWithSearch" &&
+                                    <SelectWithSearch
+                                        label={field.title}
+                                        handleChange={handleSelectChange2}
+                                        data={props[field.name]}
+                                        header={field.fieldToShow}
+                                        state={selectState2}
                                     />
                                 }
 
