@@ -721,9 +721,21 @@ namespace MVP.Controllers
             }
             var outt = new
             {
-                managementDepartment = managDep,
-                designDepartment = disDep,
-                researchDepartment = researchDep,
+                managementDepartment = new
+                {
+                    name = "Отдел управления",
+                    managDep
+                },
+                designDepartment = new 
+                {
+                    name = "Отдел проектирования",
+                    disDep
+                },
+                researchDepartment = new
+                {
+                    name = "Отдел изысканий",
+                    researchDep,
+                },
                 companyRoleStruct = guideRoles
             };
             return new JsonResult(new ObjectResult(outt) { StatusCode = 202 });
