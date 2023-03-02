@@ -196,7 +196,7 @@ namespace MVP.Date.Repository
 
         public TasksTableReturnModels GetMoreTasks(List<string> staffNames, SessionRoles roleSession, string filterTable = "")
         {
-            List<Tasks> tasksTabbleFilter =  AllTasks.Where(p => (staffNames.Contains(p.supervisor) || staffNames.Contains(p.recipient))).ToList();
+            List<Tasks> tasksTabbleFilter =  AllTasks.Where(p => ((staffNames.Contains(p.supervisor) && p.recipient == null) || staffNames.Contains(p.recipient))).ToList();
 
             // редактирование возвращаемых задач в зависимости от фильтра (в перспективе передача нескольких фильтров через запятую)
             List<string> staffsDiv = new List<string>();

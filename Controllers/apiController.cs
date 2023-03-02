@@ -1442,7 +1442,8 @@ namespace MVP.Controllers
             // список сотрудников с фильтром по должности
             else
             {
-                var StaffTable = _staff.StaffTable(roleSession.SessionRole, sessionCod);
+                var staffs = _staff.StaffTable(roleSession.SessionRole, sessionCod).ToList();
+                var StaffTable = new List<StaffOut>();
 
                 foreach (var filter in StaffParam.filterPosts.Split(','))
                 {
@@ -1450,7 +1451,7 @@ namespace MVP.Controllers
                     {
                         try
                         {
-                            StaffTable = StaffTable.Where(p => p.post == filter).ToList();
+                            StaffTable.AddRange(staffs.Where(p => p.post == filter).ToList());
                         }
                         catch (Exception)
                         {
@@ -1464,7 +1465,7 @@ namespace MVP.Controllers
                     {
                         try
                         {
-                            StaffTable = StaffTable.Where(p => p.name == filter).ToList();
+                            StaffTable.AddRange(staffs.Where(p => p.name == filter).ToList());
                         }
                         catch (Exception)
                         {
@@ -1476,7 +1477,6 @@ namespace MVP.Controllers
                
                 // составление списка сотрудников в подчинениии у того кто вошел в сессию
                 List<string> staffNames = new List<string>();
-                staffNames.Add(roleSession.SessionName);
                 foreach (var task in StaffTable)
                 {
                     if (!staffNames.Contains(task.name)) staffNames.Add(task.name);
@@ -1485,7 +1485,7 @@ namespace MVP.Controllers
                 // список задач сотрудников из вышеупомянутого списка
                 TasksTableReturnModels tasksTabbleFilter = _task.GetMoreTasks(staffNames, roleSession, StaffParam.filterTasks);
 
-                var staffs = _staff.StaffTable(roleSession.SessionRole, sessionCod).ToList();
+                
                 var filterPosts = new List<string>();
                 foreach (var staf in staffs)
                 {
