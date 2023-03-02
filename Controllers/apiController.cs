@@ -219,7 +219,7 @@ namespace MVP.Controllers
             {
                 return new JsonResult(new ObjectResult("not authorized!") { StatusCode = 401 });////////////////
             }
-            var hub = new MyHub(); hub.PullMassage();
+            /*var hub = new MyHub(); hub.PullMassage();*/
             if (TaskParam.id != -1)
             {
                 Tasks result = new Tasks();
