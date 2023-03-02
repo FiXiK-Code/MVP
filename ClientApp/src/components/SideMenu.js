@@ -1,4 +1,4 @@
-﻿import React, { Component } from 'react';
+import React, { Component } from 'react';
 import styles from './SideMenu.module.scss';
 import { NavLink } from 'react-router-dom';
 import TaskIcon from '../img/svg/tasks.svg';
@@ -46,7 +46,7 @@ export class SideMenu extends Component {
                                 <img className={styles.icon} src={PercentIcon} alt="" />
                             </NavLink>
                         </li>
-                        <li>
+                        {/*<li>
                             <NavLink className={({ isActive }) =>
                                 isActive ? activeClassName : passiveClassName
                             } to="/statistic">
@@ -59,7 +59,7 @@ export class SideMenu extends Component {
                             } to="/settings">
                                 <img className={styles.icon} src={SettingsIcon} alt="" />
                             </NavLink>
-                        </li>
+                        </li>*/}
                     </ul>
                 </nav>
             </aside>
