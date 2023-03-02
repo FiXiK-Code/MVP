@@ -11,76 +11,64 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { fetchWithAuth, Unauthorized, getHeaders, setLocaleDateInTasks } from '../utils';
 
-function TaskSelect() {
-    const [task, setTask] = React.useState(0);
-
-    const handleChange = (event: SelectChangeEvent) => {
-        setTask(event.target.value);
-    };
-
+function ProjSelect(props) {
     return (
         <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">Задачи</InputLabel>
+            <InputLabel id="task-simple-select-label">Проекты</InputLabel>
             <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={task}
-                label="Задачи"
-                onChange={handleChange}
+                labelId="task-simple-select-label"
+                id="task-simple-select"
+                value={props.value}
+                label="Проекты"
+                onChange={props.handleChange}
             >
-                <MenuItem value={0}>Все задачи</MenuItem>
-                <MenuItem value={10}>Задача 1</MenuItem>
-                <MenuItem value={20}>Задача 2</MenuItem>
+                <MenuItem value={0}>Все проекты</MenuItem>
+                {props.data.map((post, index) =>
+                    <MenuItem key={index} value={post}>{post}</MenuItem>
+                )
+                }
             </Select>
         </FormControl>
     );
 }
 
-function PositionSelect() {
-    const [position, setPosition] = React.useState(0);
-
-    const handleChange = (event: SelectChangeEvent) => {
-        setPosition(event.target.value);
-    };
-
+function GipSelect(props) {
     return (
         <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">Должности</InputLabel>
+            <InputLabel id="position-simple-select-label">ГИПы</InputLabel>
             <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={position}
-                label="Должности"
-                onChange={handleChange}
+                labelId="position-simple-select-label"
+                id="position-simple-select"
+                value={props.value}
+                label="ГИПы"
+                onChange={props.handleChange}
             >
-                <MenuItem value={0}>Все должности</MenuItem>
-                <MenuItem value={10}>Все </MenuItem>
-                <MenuItem value={20}>Должность 2</MenuItem>
+                <MenuItem value={0}>Все ГИПы</MenuItem>
+                {props.data.map((post, index) =>
+                    <MenuItem key={index} value={post}>{post}</MenuItem>
+                )
+                }
             </Select>
         </FormControl>
     );
 }
 
-function EmployeeSelect() {
-    const [employee, setEmployee] = React.useState(0);
-
-    const handleChange = (event: SelectChangeEvent) => {
-        setEmployee(event.target.value);
-    };
-
+function RecipientSelect(props) {
     return (
         <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">Сотрудники</InputLabel>
+            <InputLabel id="employees-simple-select-label">Ответственные</InputLabel>
             <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={employee}
-                label="Сотрудники"
-                onChange={handleChange}
+                labelId="employees-simple-select-label"
+                id="employees-simple-select"
+                value={props.value}
+                label="Ответственные"
+                onChange={props.handleChange}
             >
-                <MenuItem value={0}>Все сотрудники</MenuItem>
-                <MenuItem value={10}>Сотрудник 1</MenuItem>
-                <MenuItem value={20}>Сотрудник 2</MenuItem>
+                <MenuItem value={0}>Все ответственные</MenuItem>
+                {props.data.map((role, index) =>
+                    <MenuItem key={index} value={role}>{role}</MenuItem>
+                )
+                }
             </Select>
         </FormControl>
     );
@@ -97,15 +85,53 @@ export class Projects extends Component {
                 done: [],
                 today: [],
                 upcoming: [],
-                staffs: []
+                staffs: [],
+                filters: {
+                    filterProj: [],
+                    filterGip: [],
+                    filterResipirnt: []
+                }
             },
             headers: [],
             loading: true,
             projectCode: [],
             supervisor: [],
-            gips: []
+            gips: [],
+            filter: {
+                filterProj: 0,
+                filterGip: 0,
+                filterResipirnt: 0
+            },
         };
+
+        this.handleProjFilterChange = this.handleProjFilterChange.bind(this);
+        this.handleGipFilterChange = this.handleGipFilterChange.bind(this);
+        this.handleResipirntFilterChange = this.handleResipirntFilterChange.bind(this);
     }
+
+    handleProjFilterChange(event) {
+        console.log('event is ', event.target.value);
+        let newState = this.state.filter;
+        newState.filterProj = event.target.value;
+        this.setState({ filter: newState });
+        this.populateWeatherData(newState);
+    };
+
+    handleGipFilterChange(event) {
+        console.log('event is ', event.target.value);
+        let newState = this.state.filter;
+        newState.filterGip = event.target.value;
+        this.setState({ filter: newState });
+        this.populateWeatherData(newState);
+    };
+
+    handleResipirntFilterChange(event) {
+        console.log('event is ', event.target.value);
+        let newState = this.state.filter;
+        newState.filterResipirnt = event.target.value;
+        this.setState({ filter: newState });
+        this.populateWeatherData(newState);
+    };
 
     componentDidMount() {
         this.populateWeatherData();
@@ -143,7 +169,7 @@ export class Projects extends Component {
         console.log(tasks);
 
         return (
-            <CollapsibleTable gips={ gips } tasks={tasks} headers={headers} supervisor={supervisor} projectCode={projectCode} recipient={supervisor} />
+            <CollapsibleTable gips={gips} tasks={tasks} headers={headers} supervisor={supervisor} projectCode={projectCode} recipient={supervisor} />
         );
     }
 
@@ -162,9 +188,9 @@ export class Projects extends Component {
                     <Stack spacing={2} direction="row">
                         <TaskAddModal type="1" title="Добавить&nbsp;задачу" headers={this.state.headers} supervisor={this.state.supervisor} projectCode={this.state.projectCode} recipient={this.state.supervisor} />
                         <TaskAddModal type="2" title="Добавить&nbsp;проект" headers={this.state.headers} supervisor={this.state.supervisor} projectCode={this.state.projectCode} recipient={this.state.supervisor} />
-                        <TaskSelect />
-                        <PositionSelect />
-                        <EmployeeSelect />
+                        <ProjSelect value={this.state.filter.filterProj} handleChange={this.handleProjFilterChange} data={this.state.tasks.filters.filterProj} />
+                        <GipSelect value={this.state.filter.filterGip} handleChange={this.handleGipFilterChange} data={this.state.tasks.filters.filterGip} />
+                        <RecipientSelect value={this.state.filter.filterResipirnt} handleChange={this.handleResipirntFilterChange} data={this.state.tasks.filters.filterResipirnt} />
                     </Stack>
                 </Box>
                 {contents}
@@ -172,8 +198,18 @@ export class Projects extends Component {
         );
     }
 
-    async populateWeatherData() {
-        const response = await fetchWithAuth("/api/GetProjects");
+    async populateWeatherData(filter = undefined) {
+        let newFilter = {};
+        for (let prop in filter) {
+            if (filter.hasOwnProperty(prop) && filter[prop] !== 0) {
+                newFilter[prop] = filter[prop]
+            }
+        }
+        let url = "/api/GetProjects";
+        if (newFilter) {
+            url += "?" + new URLSearchParams(newFilter).toString();
+        }
+        const response = await fetchWithAuth(url);
         console.log(response);
         if (response.status === 401) {
             this.setState({
@@ -183,8 +219,7 @@ export class Projects extends Component {
 
         let data = response.value;
         data = setLocaleDateInTasks(data);
-        console.log('data is', data);
         const headers = getHeaders();
-        this.setState({ tasks: data, projectCode: data.projects, headers: headers, loading: false });
+        this.setState({ tasks: data, supervisor: data.staffs, headers: headers, loading: false });
     }
 }

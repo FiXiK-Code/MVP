@@ -41,7 +41,7 @@ function PositionSelect(props) {
                 label="Должности"
                 onChange={props.handleChange}
             >
-                <MenuItem value={"Все должности"}>Все должности</MenuItem>
+                <MenuItem value={0}>Все должности</MenuItem>
                 {props.data.map((post, index) =>
                     <MenuItem key={index} value={post}>{post}</MenuItem>
                 )
@@ -62,7 +62,7 @@ function EmployeeSelect(props) {
                 label="Сотрудники"
                 onChange={props.handleChange}
             >
-                <MenuItem value={"Все сотрудники"}>Все сотрудники</MenuItem>
+                <MenuItem value={0}>Все сотрудники</MenuItem>
                 {props.data.map((role, index) =>
                     <MenuItem key={index} value={role}>{role}</MenuItem>
                 )
@@ -94,9 +94,11 @@ export class Employees extends Component {
             loading: true,
             projectCode: [],
             supervisor: [],
-            taskFilter: "Мои задачи",
-            positionFilter: "Все должности",
-            employeeFilter: "Все сотрудники"
+            filter: {
+                filterTasks: "Мои задачи",
+                filterPosts: 0,
+                filterStaffs: 0
+            },
         };
 
         this.handleTaskFilterChange = this.handleTaskFilterChange.bind(this);
@@ -106,20 +108,26 @@ export class Employees extends Component {
 
     handleTaskFilterChange(event) {
         console.log('event is ', event.target.value);
-        this.setState({ taskFilter: event.target.value });
-        this.populateWeatherData(event.target.value);
+        let newState = this.state.filter;
+        newState.filterTasks = event.target.value;
+        this.setState({ filter: newState });
+        this.populateWeatherData(newState);
     };
 
     handlePositionFilterChange(event) {
         console.log('event is ', event.target.value);
-        this.setState({ positionFilter: event.target.value }); 
-        this.populateWeatherData(event.target.value);
+        let newState = this.state.filter;
+        newState.filterPosts = event.target.value;
+        this.setState({ filter: newState });
+        this.populateWeatherData(newState);
     };
 
     handleEmployeeFilterChange(event) {
         console.log('event is ', event.target.value);
-        this.setState({ employeeFilter: event.target.value });
-        this.populateWeatherData(event.target.value);
+        let newState = this.state.filter;
+        newState.filterStaffs = event.target.value;
+        this.setState({ filter: newState });
+        this.populateWeatherData(newState);
     };
 
     componentDidMount() {
@@ -163,9 +171,9 @@ export class Employees extends Component {
                     <Stack spacing={2} direction="row">
                         <TaskAddModal type="1" title="Добавить&nbsp;задачу" headers={this.state.headers} supervisor={this.state.supervisor} projectCode={this.state.projectCode} recipient={this.state.supervisor} />
                         <TaskAddModal type="2" title="Добавить&nbsp;проект" headers={this.state.headers} supervisor={this.state.supervisor} projectCode={this.state.projectCode} recipient={this.state.supervisor} />
-                        <TaskSelect value={ this.state.taskFilter } handleChange={this.handleTaskFilterChange} data={this.state.tasks.filters.filterTasks} />
-                        <PositionSelect value={this.state.positionFilter} handleChange={this.handlePositionFilterChange} data={this.state.tasks.filters.filterPosts} />
-                        <EmployeeSelect value={this.state.employeeFilter} handleChange={this.handleEmployeeFilterChange} data={this.state.tasks.filters.filterStaffs} />
+                        <TaskSelect value={this.state.filter.filterTasks} handleChange={this.handleTaskFilterChange} data={this.state.tasks.filters.filterTasks} />
+                        <PositionSelect value={this.state.filter.filterPosition} handleChange={this.handlePositionFilterChange} data={this.state.tasks.filters.filterPosts} />
+                        <EmployeeSelect value={this.state.filter.filterStaffs} handleChange={this.handleEmployeeFilterChange} data={this.state.tasks.filters.filterStaffs} />
                     </Stack>
                 </Box>
                 {contents}
@@ -174,7 +182,11 @@ export class Employees extends Component {
     }
 
     async populateWeatherData(filter = undefined) {
-        const response = await fetchWithAuth(filter ? "/api/GetEmployees?filterStaffs=" + encodeURIComponent(filter) : "/api/GetEmployees");
+        let url = "/api/GetEmployees";
+        if (filter) {
+            url += "?" + new URLSearchParams(filter).toString();
+        }
+        const response = await fetchWithAuth(url);
         console.log(response);
         if (response.status === 401) {
             this.setState({
