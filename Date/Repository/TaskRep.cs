@@ -206,7 +206,8 @@ namespace MVP.Date.Repository
                     switch (filter)
                     {
                         case "Мои задачи":
-                            tasksTabbleFilter = tasksTabbleFilter.Where(p => p.creator == roleSession.SessionName).ToList();
+                            tasksTabbleFilter = tasksTabbleFilter.Where(p => p.creator == roleSession.SessionName || p.recipient == roleSession.SessionName
+                            || (p.recipient == null && p.supervisor == roleSession.SessionName)).ToList();
                             break;
                     }
                 }
