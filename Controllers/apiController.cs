@@ -283,8 +283,29 @@ namespace MVP.Controllers
                 return new JsonResult(new ObjectResult("Не авторизованный запрос!") { StatusCode = 401 });
                 //return new JsonResult("Не авторизованный запрос!");////////////////
             }
+            if (TaskParam.desc == null ||
+                    TaskParam.projectCode == -1 ||
+                    TaskParam.supervisor == -1 ||
+                    TaskParam.plannedTime == null ||
+                    TaskParam.date == null ||
+                    TaskParam.dedline == null)
+            {
+                string contentError = "";
+                if (TaskParam.desc == null) contentError += "Описание задачи; ";
+                if (TaskParam.projectCode == -1) contentError += "Код проекта; ";
+                if (TaskParam.supervisor == -1) contentError += "Ответственный по задаче; ";
+                if (TaskParam.plannedTime == null) contentError += "Планируемое время исполнения; ";
+                if (TaskParam.date == null) contentError += "Дата; ";
+                if (TaskParam.dedline == null) contentError += "Дедлайн; ";
 
-            // корректировка даты - автоперенос при заполненном дне
+                var error = new
+                {
+                    messsage = "Не все поля заполнены!",
+                    content = "Не заполнены поля: " + contentError
+                };
+                return new JsonResult(new ObjectResult(error) { StatusCode = 400 });
+            }
+
             var supervisor = _appDB.DBStaff.FirstOrDefault(p => p.id == TaskParam.supervisor).name;
             var recipient = _appDB.DBStaff.FirstOrDefault(p => p.id == TaskParam.recipient).name;
             var date = DateTime.Parse(TaskParam.date);
@@ -400,7 +421,7 @@ namespace MVP.Controllers
             }
 
             if (result == null) return new JsonResult(new ObjectResult("task not found") { StatusCode = 404 });
-
+            
             // проверка сессии - без входа в сессию нужно переходить на траницу авторизации
             var roleSession = new SessionRoles();
             var sessionCod = "";
@@ -421,6 +442,10 @@ namespace MVP.Controllers
             {
                 return new JsonResult(new ObjectResult("Не авторизованный запрос!") { StatusCode = 401 });
                 //return new JsonResult("Не авторизованный запрос!");////////////////
+            }
+            if (result.date.Date != DateTime.Parse(TaskParam.date).Date && result.creator != roleSession.SessionName)
+            {
+                return new JsonResult(new ObjectResult($"Невозможно перенести дату! Перенести может только {result.creator}") { StatusCode = 403 });
             }
             var supervisor = _appDB.DBStaff.FirstOrDefault(p => p.id == TaskParam.supervisor).name;
             var recipient = _appDB.DBStaff.FirstOrDefault(p => p.id == TaskParam.recipient).name;
@@ -696,11 +721,22 @@ namespace MVP.Controllers
             }
             var outt = new
             {
-                message = "Справочник получен!",
-                managementDepartment = managDep,
-                designDepartment = disDep,
-                researchDepartment = researchDep,
-                companyRoleSturct = guideRoles
+                managementDepartment = new
+                {
+                    name = "Отдел управления",
+                    managDep
+                },
+                designDepartment = new 
+                {
+                    name = "Отдел проектирования",
+                    disDep
+                },
+                researchDepartment = new
+                {
+                    name = "Отдел изысканий",
+                    researchDep,
+                },
+                companyRoleStruct = guideRoles
             };
             return new JsonResult(new ObjectResult(outt) { StatusCode = 202 });
         }
