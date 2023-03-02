@@ -42,7 +42,7 @@ export class SideMenu extends Component {
                         <li>
                             <NavLink className={({ isActive }) =>
                                 isActive ? activeClassName : passiveClassName
-                            } to="/page1">
+                            } to="/guide">
                                 <img className={styles.icon} src={PercentIcon} alt="" />
                             </NavLink>
                         </li>

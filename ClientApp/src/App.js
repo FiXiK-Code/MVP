@@ -15,6 +15,7 @@ import SignIn from './components/SignIn';
 import { Tasks } from './components/Tasks';
 import { Employees } from './components/Employees';
 import { Projects } from './components/Projects';
+import { Guide } from './components/Guide';
 import './custom.css';
 import './main.scss';
 
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
             {
                 path: "/projects",
                 element: <Projects />,
+            },
+            {
+                path: "/guide",
+                element: <Guide />,
             },
         ],
     },
