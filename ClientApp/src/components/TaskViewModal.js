@@ -118,10 +118,6 @@ function AddSelect(props) {
                     {props.header !== "key" && props.data.map((item) =>
                         <MenuItem key={item.id} value={item.id}>{item[props.header]}</MenuItem>
                     )}
-                    {props.header === "key" && <>
-                        <MenuItem value={ false }>Задача</MenuItem>
-                        <MenuItem value={ true }>Вне очереди</MenuItem>
-                    </>
                     }
                 </Select>
             </FormControl>
