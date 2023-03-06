@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.IdentityModel.Tokens;
 using MVP.ApiModels;
 using MVP.Date;
@@ -23,6 +24,7 @@ namespace MVP.Controllers
     public class ApiController : Controller
     {
         private readonly AppDB _appDB;
+        private readonly IHubContext<MyHub> _hub;
         private readonly IPost _post;
         private readonly IRole _role;
         private readonly ITask _task;
@@ -31,8 +33,11 @@ namespace MVP.Controllers
         private readonly ILogisticProject _logistickProject;
         private readonly IStaff _staff;
 
-        public ApiController(IPost post, IRole role, ITask task, IProject project, AppDB appDB, ILogistickTask logistick, IStaff staff, ILogisticProject logistickProject)
+        public ApiController(IPost post, IRole role, ITask task, IProject project,
+            AppDB appDB, ILogistickTask logistick, IStaff staff, ILogisticProject logistickProject,
+            IHubContext<MyHub> hub)
         {
+            _hub = hub;
             _post = post;
             _role = role;
             _task = task;
@@ -219,7 +224,7 @@ namespace MVP.Controllers
             {
                 return new JsonResult(new ObjectResult("not authorized!") { StatusCode = 401 });////////////////
             }
-            /*var hub = new MyHub(); hub.PullMassage();*/
+            _hub.Clients.All.SendAsync("ResiveMassage", "Test");
             if (TaskParam.id != -1)
             {
                 Tasks result = new Tasks();
@@ -453,7 +458,6 @@ namespace MVP.Controllers
             var supervisor = _appDB.DBStaff.FirstOrDefault(p => p.id == TaskParam.supervisor).name;
             var recipient = _appDB.DBStaff.FirstOrDefault(p => p.id == TaskParam.recipient).name;
             var date = DateTime.Parse(TaskParam.date);
-            //var date = new DateTime(Convert.ToInt32(TaskParam.date.Split('-')[0]), Convert.ToInt32(TaskParam.date.Split('-')[1]), Convert.ToInt32(TaskParam.date.Split('-')[2]));
             string projectCode = null;
             try
             {
@@ -464,19 +468,9 @@ namespace MVP.Controllers
                 return new JsonResult(new ObjectResult($"Проект c id {TaskParam.projectCode} - не найден!") { StatusCode = 404 });
             }
             var plannedTime = TimeSpan.Parse(TaskParam.plannedTime);
-            //var plannedTime = new TimeSpan(Convert.ToInt32(TaskParam.plannedTime.Split(':')[0]), Convert.ToInt32(TaskParam.plannedTime.Split(':')[1]), Convert.ToInt32(TaskParam.plannedTime.Split(':')[2]));
             var start = DateTime.Parse(TaskParam.start);
-            //int sec = TaskParam.start.Split('T')[1].Length > 5 ? Convert.ToInt32(TaskParam.start.Split('T')[1].Split(':')[2].Split('.')[0]) : 0;
-            //var start = new DateTime(Convert.ToInt32(TaskParam.start.Split('T')[0].Split('-')[0]), Convert.ToInt32(TaskParam.start.Split('T')[0].Split('-')[1]), Convert.ToInt32(TaskParam.start.Split('T')[0].Split('-')[2]),
-            //    Convert.ToInt32(TaskParam.start.Split('T')[1].Split(':')[0]), Convert.ToInt32(TaskParam.start.Split('T')[1].Split(':')[1]), sec);
             var finish = DateTime.Parse(TaskParam.finish);
-            //sec = TaskParam.finish.Split('T')[1].Length > 5 ? Convert.ToInt32(TaskParam.finish.Split('T')[1].Split(':')[2].Split('.')[0]) : 0;
-            //var finish = new DateTime(Convert.ToInt32(TaskParam.finish.Split('T')[0].Split('-')[0]), Convert.ToInt32(TaskParam.finish.Split('T')[0].Split('-')[1]), Convert.ToInt32(TaskParam.finish.Split('T')[0].Split('-')[2]),
-            //    Convert.ToInt32(TaskParam.finish.Split('T')[1].Split(':')[0]), Convert.ToInt32(TaskParam.finish.Split('T')[1].Split(':')[1]), sec);
-            var dedline = DateTime.Parse(TaskParam.dedline);
-            //sec = TaskParam.dedline.Split('T')[1].Length > 5 ? Convert.ToInt32(TaskParam.dedline.Split('T')[1].Split(':')[2].Split('.')[0]) : 0;
-            //var dedline = new DateTime(Convert.ToInt32(TaskParam.dedline.Split('T')[0].Split('-')[0]), Convert.ToInt32(TaskParam.dedline.Split('T')[0].Split('-')[1]), Convert.ToInt32(TaskParam.dedline.Split(' ')[0].Split('-')[2]),
-            //    Convert.ToInt32(TaskParam.dedline.Split('T')[1].Split(':')[0]), Convert.ToInt32(TaskParam.dedline.Split('T')[1].Split(':')[1]), sec);
+             var dedline = DateTime.Parse(TaskParam.dedline);
             
             // корректировка даты - автоперенос при заполненном дне
             date = redackPriorAndPerenos(supervisor, date, plannedTime, _appDB.DBTask.FirstOrDefault(p => p.id == TaskParam.id).projectCode, TaskParam.liteTask);
