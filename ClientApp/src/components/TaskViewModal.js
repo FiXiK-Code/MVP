@@ -200,7 +200,7 @@ function SimpleDialog(props) {
         setSelectState4(event.target.value)
         setData(prevState => ({
             ...prevState,
-            recipient: event.target.value
+            liteTask: event.target.value
         }));
     };
 
