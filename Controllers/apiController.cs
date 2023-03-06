@@ -352,7 +352,7 @@ namespace MVP.Controllers
             _task.addToDB(item);
 
             // заполнение лога
-            var task = _appDB.DBTask.FirstOrDefault(p => p.desc == TaskParam.desc);
+            var task = item;
             LogistickTask log = new LogistickTask()
             {
                 ProjectCode = task.projectCode,
