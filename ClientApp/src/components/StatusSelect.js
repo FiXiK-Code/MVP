@@ -50,7 +50,7 @@ export default function StatusSelect(props) {
         } else {
             // if error
             setMessageOpen(true);
-            setMessage(response.value.message);
+            setMessage(response.value);
             setMessageType("error");
             return false;
         }
