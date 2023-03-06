@@ -36,11 +36,11 @@ function CollapsedTasks(props) {
             {props.tasks.map((task) =>
                 <TableRow sx={{ backgroundColor: task.priorityRaw === -1 ? "#71FACA" : "#FFFFFF" }}>
                     {stateHeaders.map((header) =>
-                        header.show &&
+                        header.show && header.header &&
                         <>
                             {header.name === "status" ?
                                 <TableCell sx={{ ...tableStyling }}>
-                                    <StatusSelect taskId={task.id} status={task.status} />
+                                    <StatusSelect setParentState={props.setParentState} taskId={task.id} status={task.status} />
                                 </TableCell>
 
                                 :
@@ -96,7 +96,7 @@ export function TaskGroup(props) {
                 </TableCell>
 
             </TableRow>
-            <CollapsedTasks editHandler={props.editHandler} display={open} tasks={tasks} headers={stateHeaders} supervisor={props.supervisor} projectCode={props.projectCode} recipient={props.supervisor} />
+            <CollapsedTasks setParentState={props.setParentState} editHandler={props.editHandler} display={open} tasks={tasks} headers={stateHeaders} supervisor={props.supervisor} projectCode={props.projectCode} recipient={props.supervisor} />
         </React.Fragment>
     );
 }

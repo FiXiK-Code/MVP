@@ -15,6 +15,17 @@ import { fetchWithAuth, getCurrentDate, getProjectHeaders, getServerTimeFromLoca
 import CustomSnackbar from "./CustomSnackbar";
 import { SelectWithSearch } from './TaskViewModal';
 
+const liteTask = [
+    {
+        id: true,
+        value: "Задача"
+    },
+    {
+        id: false,
+        value: "Задача вне очереди"
+    }
+]
+
 function AddSelect(props) {
     return (
         <Box sx={{ minWidth: 120 }}>
@@ -84,6 +95,7 @@ function SimpleDialog(props) {
     const [selectState1, setSelectState1] = React.useState("");
     const [selectState2, setSelectState2] = React.useState("");
     const [selectState3, setSelectState3] = React.useState("");
+    const [selectState4, setSelectState4] = React.useState(true);
 
     const [messageOpen, setMessageOpen] = React.useState(false);
     const [message, setMessage] = React.useState("");
@@ -144,12 +156,20 @@ function SimpleDialog(props) {
         }));
     };
 
+    const handleSelectChange4 = (event) => {
+        setSelectState4(event.target.value)
+        setData(prevState => ({
+            ...prevState,
+            liteTask: event.target.value
+        }));
+    };
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         let url;
         for (let prop in data) {
             console.log(prop);
-            if (data.hasOwnProperty(prop) && !data[prop] && prop !== "priority") {
+            if (data.hasOwnProperty(prop) && !data[prop] && prop !== "liteTask") {
                 setMessageOpen(true);
                 setMessage("Заполните все поля!");
                 setMessageType("error");
@@ -273,12 +293,12 @@ function SimpleDialog(props) {
                                 }
                                 {field.type === "select" &&
                                     <AddSelect
-                                        error={data[field.name] ? undefined : true}
+                                        error={(data[field.name] || field.name !== "liteTask") ? undefined : true}
                                         label={field.title}
-                                        handleChange={field.name === "recipient" ? handleSelectChange3 : (field.name === "supervisor" ? handleSelectChange1 : handleSelectChange2)}
-                                        data={props[field.name]}
+                                        handleChange={field.name === "recipient" ? handleSelectChange3 : (field.name === "supervisor" ? handleSelectChange1 : handleSelectChange4)}
+                                        data={field.name === "liteTask" ? liteTask : props[field.name]}
                                         header={field.fieldToShow}
-                                        state={field.name === "recipient" ? selectState3 : (field.name === "supervisor" ? selectState1 : selectState2)}
+                                        state={field.name === "recipient" ? selectState3 : (field.name === "supervisor" ? selectState1 : selectState4)}
                                     />
                                 }
                                 {field.type === "selectWithSearch" &&

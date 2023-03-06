@@ -27,7 +27,7 @@ export default function CollapsibleTable(props) {
         setStateHeaders(props.headers);
         let counter = 0;
         props.headers.map((header) => {
-            if (header.show) counter++;
+            if (header.show && header.header) counter++;
         })
         setLength(counter);
         console.log('update');
@@ -50,14 +50,14 @@ export default function CollapsibleTable(props) {
     let tableBody;
     if (search) {
         tableBody = <TableBody>
-            <TaskGroup editHandler={props.editHandler} title={`Результаты поиска по запросу ${search}`} tasks={tasks.done} isOpen={true} colNum={length} headers={stateHeaders} />
+            <TaskGroup setParentState={props.setParentState} editHandler={props.editHandler} title={`Результаты поиска по запросу ${search}`} tasks={tasks.done} isOpen={true} colNum={length} headers={stateHeaders} />
         </TableBody>
     } else {
         tableBody =
             <TableBody>
-                <TaskGroup editHandler={props.editHandler} title="Выполненные задачи" tasks={tasks.completed} isOpen={false} colNum={length} headers={stateHeaders} supervisor={props.supervisor} projectCode={props.projectCode} recipient={props.supervisor} />
-                <TaskGroup editHandler={props.editHandler} title="Задачи на сегодня" tasks={tasks.today} isOpen={true} colNum={length} headers={stateHeaders} supervisor={props.supervisor} projectCode={props.projectCode} recipient={props.supervisor} />
-                <TaskGroup editHandler={props.editHandler} title="Предстоящие задачи" tasks={tasks.future} isOpen={false} colNum={length} headers={stateHeaders} supervisor={props.supervisor} projectCode={props.projectCode} recipient={props.supervisor} />
+                <TaskGroup setParentState={props.setParentState} editHandler={props.editHandler} title="Выполненные задачи" tasks={tasks.completed} isOpen={false} colNum={length} headers={stateHeaders} supervisor={props.supervisor} projectCode={props.projectCode} recipient={props.supervisor} />
+                <TaskGroup setParentState={props.setParentState} editHandler={props.editHandler} title="Задачи на сегодня" tasks={tasks.today} isOpen={true} colNum={length} headers={stateHeaders} supervisor={props.supervisor} projectCode={props.projectCode} recipient={props.supervisor} />
+                <TaskGroup setParentState={props.setParentState} editHandler={props.editHandler} title="Предстоящие задачи" tasks={tasks.future} isOpen={false} colNum={length} headers={stateHeaders} supervisor={props.supervisor} projectCode={props.projectCode} recipient={props.supervisor} />
             </TableBody>
     }
 
@@ -96,7 +96,7 @@ export default function CollapsibleTable(props) {
         // если это вкладка задач или другая вкладка
         tableHeader = <TableRow>
             {headers.map((header) =>
-                header.show &&
+                header.show && header.header &&
                 <TableCell sx={{ ...tableStyling }} key={header.name}>{header.title}</TableCell>
             )}
         </TableRow>

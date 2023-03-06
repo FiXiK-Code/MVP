@@ -20,6 +20,17 @@ import SearchIcon from "@mui/icons-material/Search";
 const containsText = (text, searchText) =>
     text.toLowerCase().indexOf(searchText.toLowerCase()) > -1;
 
+const liteTask = [
+    {
+        id: true,
+        value: "Задача"
+    },
+    {
+        id: false,
+        value: "Задача вне очереди"
+    }
+]
+
 export function SelectWithSearch(props) {
     const [searchText, setSearchText] = React.useState("");
     const displayedOptions = React.useMemo(
@@ -41,7 +52,7 @@ export function SelectWithSearch(props) {
                 <InputLabel id="search-select-label">{props.label}</InputLabel>
                 <Select
                     // Disables auto focus on MenuItems and allows TextField to be in focus
-                    MenuProps={{ autoFocus: false, PaperProps: { sx: { maxHeight: 300 } }  }}
+                    MenuProps={{ autoFocus: false, PaperProps: { sx: { maxHeight: 300 } } }}
                     labelId="search-select-label"
                     id="search-select"
                     value={props.state}
@@ -104,9 +115,14 @@ function AddSelect(props) {
                     label={props.label}
                     onChange={props.handleChange}
                 >
-                    {props.data.map((item) =>
+                    {props.header !== "key" && props.data.map((item) =>
                         <MenuItem key={item.id} value={item.id}>{item[props.header]}</MenuItem>
                     )}
+                    {props.header === "key" && <>
+                        <MenuItem value={ false }>Задача</MenuItem>
+                        <MenuItem value={ true }>Вне очереди</MenuItem>
+                    </>
+                    }
                 </Select>
             </FormControl>
         </Box>
@@ -138,11 +154,13 @@ function SimpleDialog(props) {
         setSelectState1(props.task.supervisorId);
         setSelectState2(props.task.projectId);
         setSelectState3(props.task.recipientId);
+        setSelectState4(props.task.liteTask);
     }
 
     const [selectState1, setSelectState1] = React.useState("");
     const [selectState2, setSelectState2] = React.useState("");
     const [selectState3, setSelectState3] = React.useState("");
+    const [selectState4, setSelectState4] = React.useState("");
 
     const [messageOpen, setMessageOpen] = React.useState(false);
     const [message, setMessage] = React.useState("");
@@ -176,6 +194,14 @@ function SimpleDialog(props) {
 
     const handleSelectChange3 = (event) => {
         setSelectState3(event.target.value)
+        setData(prevState => ({
+            ...prevState,
+            recipient: event.target.value
+        }));
+    };
+
+    const handleSelectChange4 = (event) => {
+        setSelectState4(event.target.value)
         setData(prevState => ({
             ...prevState,
             recipient: event.target.value
@@ -283,10 +309,10 @@ function SimpleDialog(props) {
                         {field.type === "select" &&
                             <AddSelect
                                 label={field.title}
-                                handleChange={field.name === "recipient" ? handleSelectChange3 : (field.name === "supervisor" ? handleSelectChange1 : handleSelectChange2)}
-                                data={props[field.name]}
+                                handleChange={field.name === "recipient" ? handleSelectChange3 : (field.name === "supervisor" ? handleSelectChange1 : handleSelectChange4)}
+                        data={field.name === "liteTask" ? liteTask : props[field.name]}
                                 header={field.fieldToShow}
-                                state={field.name === "recipient" ? selectState3 : (field.name === "supervisor" ? selectState1 : selectState2)}
+                                state={field.name === "recipient" ? selectState3 : (field.name === "supervisor" ? selectState1 : selectState4)}
                             />
                         }
 
@@ -299,7 +325,6 @@ function SimpleDialog(props) {
                                 state={selectState2}
                             />
                         }
-
                     </>
                 )}
                 <Button variant="contained" type="submit">Сохранить</Button>

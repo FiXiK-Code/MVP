@@ -16,7 +16,7 @@ export class Tasks extends Component {
         this.state = {
             auth: true,
             tasks: {
-                done: [],
+                completed: [],
                 today: [],
                 upcoming: [],
             },
@@ -33,6 +33,27 @@ export class Tasks extends Component {
         this.searchHandleSubmit = this.searchHandleSubmit.bind(this);
         this.addHandler = this.addHandler.bind(this);
         this.editHandler = this.editHandler.bind(this);
+        this.changeStatus = this.changeStatus.bind(this);
+    }
+
+    changeStatus(taskId, to) {
+        console.log('change status ', taskId, to);
+        let newTasks = this.state.tasks;
+        let actualTask = false;
+        newTasks.today.map((task, index) => {       
+            if (task.id == taskId) {
+                actualTask = task;
+                if (to == "completed") {
+                    actualTask.status = "Выполнена";
+                }              
+                console.log('founded');
+                newTasks.today.splice(index, 1);
+            }
+        });
+        if (actualTask) {
+            newTasks[to].unshift(actualTask);
+        }
+        this.setState({ tasks: newTasks });
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -50,7 +71,7 @@ export class Tasks extends Component {
 
     renderTasksTable(headers, tasks, supervisor, projectCode) {
         return (
-            <CollapsibleTable editHandler={ this.editHandler } search={this.state.search} tasks={tasks} headers={headers} supervisor={supervisor} projectCode={projectCode} recipient={supervisor} />
+            <CollapsibleTable editHandler={this.editHandler} search={this.state.search} setParentState={this.changeStatus} tasks={tasks} headers={headers} supervisor={supervisor} projectCode={projectCode} recipient={supervisor} />
         );
     }
 

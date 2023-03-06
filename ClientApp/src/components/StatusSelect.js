@@ -41,13 +41,16 @@ export default function StatusSelect(props) {
         if (response.statusCode >= 200 && response.statusCode < 400) {
             // if success
             setMessageOpen(true);
-            setMessage(response.value);
+            setMessage(response.value.message);
             setMessageType("success");
+            if (target.value === "Выполнена") {
+                props.setParentState(taskId, response.value.type);
+            }
             return true;
         } else {
             // if error
             setMessageOpen(true);
-            setMessage(response.value);
+            setMessage(response.value.message);
             setMessageType("error");
             return false;
         }

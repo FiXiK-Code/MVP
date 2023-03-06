@@ -75,6 +75,7 @@ export function getHeaders() {
             "type": "datefield",
             "title": "Дата",
             "show": storage[0].show,
+            "header": true,
             "createAvailability": true,
             "rowData": "dateRaw"
         },
@@ -83,6 +84,7 @@ export function getHeaders() {
             "type": "selectWithSearch",
             "title": "Шифр проекта",
             "show": storage[1].show,
+            "header": true,
             "createAvailability": true,
             "fieldToShow": "code",
             "rowData": "projectId"
@@ -92,6 +94,7 @@ export function getHeaders() {
             "type": "textfield",
             "title": "Задача",
             "show": storage[2].show,
+            "header": true,
             "createAvailability": true,
             "rowData": "desc"
         },
@@ -99,6 +102,7 @@ export function getHeaders() {
             "name": "status",
             "title": "Статус",
             "show": storage[3].show,
+            "header": true,
             "createAvailability": false,
             "rowData": "status"
         },
@@ -107,6 +111,7 @@ export function getHeaders() {
             "type": "select",
             "title": "Ответственный",
             "show": storage[4].show,
+            "header": true,
             "createAvailability": true,
             "fieldToShow": "name",
             "rowData": "supervisorId"
@@ -116,6 +121,7 @@ export function getHeaders() {
             "type": "select",
             "title": "Переназначить",
             "show": storage[5].show,
+            "header": true,
             "createAvailability": true,
             "fieldToShow": "name",
             "rowData": "recipientId"
@@ -123,15 +129,25 @@ export function getHeaders() {
         {
             "name": "priority",
             "title": "Приоритет",
+            "type": "number",
             "show": storage[6].show,
+            "header": true,
             "createAvailability": false,
-            "rowData": "priority"
+        },
+        {
+            "name": "liteTask",
+            "title": "Приоритет",
+            "type": "select",
+            "header": false,
+            "createAvailability": true,
+            "fieldToShow": "value"
         },
         {
             "name": "comment",
             "type": "textfield",
             "title": "Комментарий",
             "show": storage[7].show,
+            "header": true,
             "createAvailability": true,
             "rowData": "comment"
         },
@@ -140,6 +156,7 @@ export function getHeaders() {
             "type": "datetime",
             "title": "Дедлайн",
             "show": storage[8].show,
+            "header": true,
             "createAvailability": true,
             "rowData": "dedlineRaw"
         },
@@ -148,6 +165,7 @@ export function getHeaders() {
             "type": "timefield",
             "title": "План время",
             "show": storage[9].show,
+            "header": true,
             "createAvailability": true,
             "rowData": "plannedTime"
         },
@@ -156,6 +174,7 @@ export function getHeaders() {
             "type": "textfield",
             "title": "Факт время",
             "show": storage[10].show,
+            "header": true,
             "createAvailability": false,
             "rowData": "actualTime"
         },
@@ -164,6 +183,7 @@ export function getHeaders() {
             "type": "datetime",
             "title": "Начал",
             "show": storage[11].show,
+            "header": true,
             "createAvailability": false,
             "rowData": "startRaw"
         },
@@ -172,6 +192,7 @@ export function getHeaders() {
             "type": "datetime",
             "title": "Завершил",
             "show": storage[12].show,
+            "header": true,
             "createAvailability": false,
             "rowData": "finishRaw"
         },
