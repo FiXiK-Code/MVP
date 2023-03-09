@@ -13,7 +13,7 @@ namespace MVP.Date.API
         public string desc { get; set; }
         public int projectCode { get; set; } = -1;
         public int supervisor { get; set; } = -1;
-        public int recipient { get; set; }
+        public int recipient { get; set; } = -1;
         public string comment { get; set; }
         
         public int pririty { get; set; }

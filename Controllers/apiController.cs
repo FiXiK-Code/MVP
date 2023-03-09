@@ -123,7 +123,7 @@ namespace MVP.Controllers
         }
 
         // редактирование даты постановки задачи в зависимоти от загруженности для
-        public DateTime redackPriorAndPerenos(string supervisor, DateTime date, TimeSpan plannedTime, string projectCode, bool liteTask)// перенос даты задачи в зависимотсти от загруженности дня и приоритета
+        public PerenosContext redackPriorAndPerenos(string supervisor, DateTime date, TimeSpan plannedTime, string projectCode, bool liteTask, List<Tasks> tasks = null)// перенос даты задачи в зависимотсти от загруженности дня и приоритета
         {
             var tasksSuper = _appDB.DBTask.Where(p => (p.supervisor == supervisor && p.recipient == null) || p.recipient == supervisor)
                 .Where(p => p.status != "Выполнена").Where(p => p.date.Date == date.Date).OrderBy(p => p.plannedTime).ToList();
@@ -138,7 +138,12 @@ namespace MVP.Controllers
                 SumTimeTaskToDay += task.plannedTime;
                 maxPriority = task.priority > maxPriority ? task.priority : maxPriority;
             }
-
+            var output = new PerenosContext
+            {
+                date = date,
+                tasks = new List<Tasks>()
+            };
+            if (tasks!= null) output.tasks.AddRange(tasks);
             // checking time
             if (SumTimeTaskToDay > timeWorkDay)
             {
@@ -148,10 +153,41 @@ namespace MVP.Controllers
                     {
                         if ((SumTimeTaskToDay - task.plannedTime) >= timeWorkDay && (task.priority <= maxPriority || liteTask != false))
                         {
+                            var buf = redackPriorAndPerenos(task.recipient == null ? task.supervisor : task.recipient, task.date.AddDays(1), task.plannedTime,
+                                        task.projectCode, task.liteTask, output.tasks);
+
+                            foreach(var buffTask in buf.tasks)
+                            {
+                                if (output.tasks.Count != 0)
+                                {
+                                    var mas = output.tasks.Where(p => p.id == buffTask.id).ToList();
+                                    foreach (var taskk in mas)
+                                    {
+                                        output.tasks.Remove(taskk);
+                                        if (output.tasks.Count == 0) break;
+                                    }
+                                }
+                                output.tasks.Add(buffTask);
+                            }
+
                             _task.redactToDB(liteTask, task.id,
-                                    redackPriorAndPerenos(task.supervisor, task.date.AddDays(1), task.plannedTime,
-                                        task.projectCode, task.liteTask), task.dedline,
-                               task.status, task.comment, task.supervisor, task.recipient, task.priority, task.plannedTime, task.start, task.finish, "");
+                                    buf.date,
+                                    task.dedline, task.status, task.comment, task.supervisor, task.recipient, task.priority,
+                                    task.plannedTime, task.start, task.finish, "");
+
+                            if (_appDB.DBTask.FirstOrDefault(p => p.id == task.id).date.Date != date)
+                            {
+                                if (output.tasks.Count != 0)
+                                {
+                                    var mas = output.tasks.Where(p => p.id == task.id).ToList();
+                                    foreach (var taskk in mas)
+                                    {
+                                        output.tasks.Remove(taskk);
+                                        if (output.tasks.Count == 0) break;
+                                    }
+                                }
+                                output.tasks.Add(task);
+                            }
 
                             var tasksSupernew = _appDB.DBTask.Where(p => (p.supervisor == supervisor && p.recipient == null) || p.recipient == supervisor)
                                 .Where(p => p.status != "Выполнена").Where(p => p.date.Date == date.Date).OrderBy(p => p.plannedTime).ToList();
@@ -167,9 +203,41 @@ namespace MVP.Controllers
                         if (SumTimeTaskToDay < timeWorkDay) break;
                         if ((SumTimeTaskToDay - task.plannedTime) < timeWorkDay)
                         {
-                            _task.redactToDB(liteTask, task.id, redackPriorAndPerenos(task.supervisor, task.date.AddDays(1), task.plannedTime,
-                                        task.projectCode, task.liteTask), task.dedline, task.status, task.comment,
-                               task.supervisor, task.recipient, task.priority, task.plannedTime, task.start, task.finish, "");
+                            var buf = redackPriorAndPerenos(task.recipient == null ? task.supervisor : task.recipient, task.date.AddDays(1), task.plannedTime,
+                                        task.projectCode, task.liteTask, output.tasks);
+
+                            foreach (var buffTask in buf.tasks)
+                            {
+                                if (output.tasks.Count != 0)
+                                {
+                                    var mas = output.tasks.Where(p => p.id == buffTask.id).ToList();
+                                    foreach (var taskk in mas)
+                                    {
+                                        output.tasks.Remove(taskk);
+                                        if (output.tasks.Count == 0) break;
+                                    }
+                                }
+                                output.tasks.Add(buffTask);
+                            }
+
+                            _task.redactToDB(liteTask, task.id,
+                                    buf.date,
+                                task.dedline, task.status, task.comment, task.supervisor, task.recipient, task.priority,
+                                task.plannedTime, task.start, task.finish, "");
+
+                            if (_appDB.DBTask.FirstOrDefault(p => p.id == task.id).date.Date != date)
+                            {
+                                if (output.tasks.Count != 0)
+                                {
+                                    var mas = output.tasks.Where(p => p.id == task.id).ToList();
+                                    foreach (var taskk in mas)
+                                    {
+                                        output.tasks.Remove(taskk);
+                                        if (output.tasks.Count == 0) break;
+                                    }
+                                }
+                                output.tasks.Add(task);
+                            }
 
                             var tasksSupernew = _appDB.DBTask.Where(p => (p.supervisor == supervisor && p.recipient == null) || p.recipient == supervisor)
                                 .Where(p => p.status != "Выполнена").Where(p => p.date.Date == date.Date).OrderBy(p => p.plannedTime).ToList();
@@ -186,10 +254,10 @@ namespace MVP.Controllers
                 else
                 {
                     return redackPriorAndPerenos(supervisor, date.AddDays(1), plannedTime,
-                                        projectCode, liteTask);
+                                        projectCode, liteTask, output.tasks);
                 }
             }
-            return date;
+            return output;
         }
 
         [HttpGet]
@@ -314,8 +382,16 @@ namespace MVP.Controllers
             }
 
             var supervisor = _appDB.DBStaff.FirstOrDefault(p => p.id == TaskParam.supervisor).name;
-            var recipient = _appDB.DBStaff.FirstOrDefault(p => p.id == TaskParam.recipient).name;
-            var date = DateTime.Parse(TaskParam.date);
+            string recipient = null;
+            try
+            {
+                recipient = _appDB.DBStaff.FirstOrDefault(p => p.id == TaskParam.recipient).name;
+            }
+            catch (Exception)
+            {
+
+            }
+                var date = DateTime.Parse(TaskParam.date);
             //var date = new DateTime(Convert.ToInt32(TaskParam.date.Split('-')[0]), Convert.ToInt32(TaskParam.date.Split('-')[1]), Convert.ToInt32(TaskParam.date.Split('-')[2]));
             string projectCode = null;
             try
@@ -332,8 +408,10 @@ namespace MVP.Controllers
             //int sec = TaskParam.dedline.Split('T')[1].Length > 5 ? Convert.ToInt32(TaskParam.dedline.Split('T')[1].Split(':')[2].Split('.')[0]) : 0;
             //var dedline = new DateTime(Convert.ToInt32(TaskParam.dedline.Split('T')[0].Split('-')[0]), Convert.ToInt32(TaskParam.dedline.Split('T')[0].Split('-')[1]), Convert.ToInt32(TaskParam.dedline.Split('T')[0].Split('-')[2]),
             //    Convert.ToInt32(TaskParam.dedline.Split('T')[1].Split(':')[0]), Convert.ToInt32(TaskParam.dedline.Split('T')[1].Split(':')[1]),sec);
-            var date1 = date;
-            date = redackPriorAndPerenos(supervisor, date, plannedTime, projectCode, TaskParam.liteTask);
+            //var date1 = date;
+            var test = redackPriorAndPerenos(recipient == null? supervisor : recipient, date, plannedTime, projectCode, TaskParam.liteTask);
+            date = test.date;
+            
             //if (date1.Date != date.Date) { var hub = new MyHub(); hub.PullMassage();}
             // добавление задачи в базу
             var item = new Tasks
@@ -473,8 +551,9 @@ namespace MVP.Controllers
              var dedline = DateTime.Parse(TaskParam.dedline);
             
             // корректировка даты - автоперенос при заполненном дне
-            date = redackPriorAndPerenos(supervisor, date, plannedTime, _appDB.DBTask.FirstOrDefault(p => p.id == TaskParam.id).projectCode, TaskParam.liteTask);
-
+            var test = redackPriorAndPerenos(supervisor, date, plannedTime, _appDB.DBTask.FirstOrDefault(p => p.id == TaskParam.id).projectCode, TaskParam.liteTask);
+            date = test.date;
+            
             // попытка редактирования задачи
             if (!_task.redactToDB(TaskParam.liteTask, TaskParam.id, date, dedline, TaskParam.status, TaskParam.comment != null ? $"{roleSession.SessionName}: {TaskParam.comment}\n" : null, supervisor, recipient, TaskParam.pririty, plannedTime, start, finish, roleSession.SessionName))
             {
