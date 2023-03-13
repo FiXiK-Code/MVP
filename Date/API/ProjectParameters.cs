@@ -17,7 +17,7 @@ namespace MVP.Date.API
         public  string arhive { get; set; }
         public string code {get; set; }
         public int supervisor {get; set; }
-        public int priority {get; set; }
+        public int priority { get; set; } = -2;
         public  string  comment { get; set; }
         public string plannedFinishDate {get; set; }
         public string shortName {get; set; }

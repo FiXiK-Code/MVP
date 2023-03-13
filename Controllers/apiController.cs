@@ -1046,16 +1046,16 @@ namespace MVP.Controllers
                 TasksTableReturnModels outputTask = _task.GetMoreTasks(staffNames, roleSession, "", projNames);
 
                 
-                List<TasksOut> todays = new List<TasksOut>();
-                List<TasksOut> completeds = new List<TasksOut>();
-                List<TasksOut> futures = new List<TasksOut>();
+                List<TasksOut> todays = outputTask.today;
+                List<TasksOut> completeds = outputTask.completed;
+                List<TasksOut> futures = outputTask.future;
                 foreach (var filter in ProjParam.filterResipirnt.Split(','))
                 {
                     if (filter != "Все ответственные" && filter != "")
                     {
-                        todays.AddRange(outputTask.today.Where(p => p.recipient == filter || (p.recipient == null && p.supervisor == filter)).ToList());
-                        completeds.AddRange(outputTask.completed.Where(p => p.recipient == filter || (p.recipient == null && p.supervisor == filter)).ToList());
-                        futures.AddRange(outputTask.future.Where(p => p.recipient == filter || (p.recipient == null && p.supervisor == filter)).ToList());
+                        todays = todays.Where(p => p.recipient == filter || (p.recipient == null && p.supervisor == filter)).ToList();
+                        completeds = completeds.Where(p => p.recipient == filter || (p.recipient == null && p.supervisor == filter)).ToList();
+                        futures = futures.Where(p => p.recipient == filter || (p.recipient == null && p.supervisor == filter)).ToList();
                     }
                 }
 
@@ -1261,17 +1261,13 @@ namespace MVP.Controllers
                 return new JsonResult(new ObjectResult("Не авторизованный запрос!") { StatusCode = 401 });
             }
 
-            if (ProjParam.id == -1 ||
-               ProjParam.code.Length < 1 ||
+            if (ProjParam.code.Length < 1 ||
                ProjParam.shortName.Length < 1 ||
-               ProjParam.arhive.Length < 1 ||
                ProjParam.priority == -2)
             {
                 string contentError = "";
-                if (ProjParam.id == -1) contentError += "Id проекта; ";
                 if (ProjParam.code.Length < 1) contentError += "Шифр; ";
                 if (ProjParam.shortName.Length < 1) contentError += "Краткое название; ";
-                if (ProjParam.arhive.Length < 1) contentError += "Архив (Да или Нет); ";
                 if (ProjParam.priority == -2) contentError += "Приоритет; ";
 
                 var error = new
@@ -1282,9 +1278,19 @@ namespace MVP.Controllers
                 return new JsonResult(new ObjectResult(error) { StatusCode = 400 });
             }
 
-            var supervisor = _appDB.DBStaff.FirstOrDefault(p => p.id == ProjParam.supervisor).name;
-            var plannedFinishDate = DateTime.Parse(ProjParam.plannedFinishDate);
-           
+            string supervisor = null;
+            try
+            {
+                supervisor = _appDB.DBStaff.FirstOrDefault(p => p.id == ProjParam.supervisor).name;
+            }
+            catch (Exception) { return new JsonResult(new ObjectResult("Указанный ответственный не найден!") { StatusCode = 404 }); }
+
+            var plannedFinishDate = new DateTime();
+            try
+            {
+                plannedFinishDate = DateTime.Parse(ProjParam.plannedFinishDate);
+            }
+            catch (Exception) { return new JsonResult(new ObjectResult("Неверный формат даты!") { StatusCode = 400 }); }
 
             var item = new Project
             {

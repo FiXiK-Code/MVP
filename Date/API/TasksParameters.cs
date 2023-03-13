@@ -18,7 +18,7 @@ namespace MVP.Date.API
         public string comment { get; set; }
 
 
-        public int pririty { get; set; } = -2;
+        public int pririty { get; set; }
         public string plannedTime { get; set; }
         public string date { get; set; }
         public string dedline { get; set; }
