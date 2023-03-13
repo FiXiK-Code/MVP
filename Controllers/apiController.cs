@@ -354,20 +354,20 @@ namespace MVP.Controllers
                 return new JsonResult(new ObjectResult("Не авторизованный запрос!") { StatusCode = 401 });
                 
             }
-            if (TaskParam.desc == null ||
+            if (TaskParam.desc.Length < 1 ||
                     TaskParam.projectCode == -1 ||
                     TaskParam.supervisor == -1 ||
-                    TaskParam.plannedTime == null ||
-                    TaskParam.date == null ||
-                    TaskParam.dedline == null)
+                    TaskParam.plannedTime.Length < 1 ||
+                    TaskParam.date.Length < 1 ||
+                    TaskParam.dedline.Length < 1)
             {
                 string contentError = "";
-                if (TaskParam.desc == null) contentError += "Описание задачи; ";
+                if (TaskParam.desc.Length < 1) contentError += "Описание задачи; ";
                 if (TaskParam.projectCode == -1) contentError += "Код проекта; ";
                 if (TaskParam.supervisor == -1) contentError += "Ответственный по задаче; ";
-                if (TaskParam.plannedTime == null) contentError += "Планируемое время исполнения; ";
-                if (TaskParam.date == null) contentError += "Дата; ";
-                if (TaskParam.dedline == null) contentError += "Дедлайн; ";
+                if (TaskParam.plannedTime.Length < 1) contentError += "Планируемое время исполнения; ";
+                if (TaskParam.date.Length < 1) contentError += "Дата; ";
+                if (TaskParam.dedline.Length < 1) contentError += "Дедлайн; ";
 
                 var error = new
                 {
@@ -399,7 +399,7 @@ namespace MVP.Controllers
                 projectCode = _appDB.DBProject.FirstOrDefault(p => p.id == TaskParam.projectCode).code;
             }catch (Exception) { return new JsonResult(new ObjectResult($"Проект c id {TaskParam.projectCode} - не найден!") { StatusCode = 404 });}
             
-            var redact = redackPriorAndPerenos("",recipient == null? supervisor : recipient, date, plannedTime, projectCode, TaskParam.liteTask);
+            var redact = redackPriorAndPerenos("", recipient == null? supervisor : recipient, date, plannedTime, projectCode, TaskParam.liteTask);
             date = redact.date;
 
             //_hub.Clients.All.SendAsync("ResiveMassage", "Test");
@@ -412,7 +412,7 @@ namespace MVP.Controllers
                 supervisor = supervisor,
                 recipient = recipient,
                 priority = TaskParam.liteTask == false ? _appDB.DBProject.FirstOrDefault(p => p.code == projectCode).priority : -1,
-                comment = TaskParam.comment != null ? $"{roleSession.SessionName}: {TaskParam.comment}\n" : null,
+                comment = TaskParam.comment.Length > 1 ? $"{roleSession.SessionName}: {TaskParam.comment}\n" : null,
                 plannedTime = plannedTime,
                 date = date,
                 dedline = dedline,
@@ -438,7 +438,7 @@ namespace MVP.Controllers
                 actualTime = new TimeSpan(),
                 CommitorId = _appDB.DBStaff.FirstOrDefault(p => p.name == roleSession.SessionName).id,
                 taskStatusId = _appDB.DBTaskStatus.FirstOrDefault(p => p.name == "Создана").id,
-                comment = "Задача создана. Комментарий: " + TaskParam.comment
+                comment = TaskParam.comment.Length > 1 ? "Задача создана. Комментарий: " + TaskParam.comment : "Задача создана"
             };
             _logistickTask.addToDB(log);
 
@@ -575,7 +575,7 @@ namespace MVP.Controllers
             //_hub.Clients.All.SendAsync("ResiveMassage", "Test");
 
             // попытка редактирования задачи
-            if (!_task.redactToDB(TaskParam.liteTask, TaskParam.id, date, dedline, TaskParam.status, TaskParam.comment != null ? $"{roleSession.SessionName}: {TaskParam.comment}\n" : null, supervisor, recipient, TaskParam.pririty, plannedTime, start, finish, roleSession.SessionName))
+            if (!_task.redactToDB(TaskParam.liteTask, TaskParam.id, date, dedline, TaskParam.status, TaskParam.comment.Length < 1 ? $"{roleSession.SessionName}: {TaskParam.comment}\n" : null, supervisor, recipient, TaskParam.pririty, plannedTime, start, finish, roleSession.SessionName))
             {
                 var msg = "Только одна задача может быть в работе! Проверьте статусы своих задачь!";
                 return new JsonResult(new ObjectResult(msg) { StatusCode = 403 });////////////////
@@ -1182,7 +1182,7 @@ namespace MVP.Controllers
                 allStages = ProjParam.allStages,
                 CommitorId = _appDB.DBStaff.FirstOrDefault(p => p.name == roleSession.SessionName).id,
                 dateRedaction = DateTime.Now.AddHours(-5),
-                comment = ProjParam.comment
+                comment = ProjParam.comment.Length > 1 ? ProjParam.comment : null
             };
 
             _logistickProject.addToDB(item);
