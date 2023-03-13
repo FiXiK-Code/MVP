@@ -22,6 +22,6 @@ namespace MVP.Date.API
         public string plannedFinishDate {get; set; }
         public string shortName {get; set; }
         public string name {get; set; }
-        public string allStages {get; set; }
+        public string allStages { get; set; } = null;
     }
 }

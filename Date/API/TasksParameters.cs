@@ -17,15 +17,15 @@ namespace MVP.Date.API
         public int recipient { get; set; } = -1;
         public string comment { get; set; }
 
-        
-        public int pririty { get; set; }
+
+        public int pririty { get; set; } = -2;
         public string plannedTime { get; set; }
         public string date { get; set; }
         public string dedline { get; set; }
         public string start { get; set; }
         public string finish { get; set; }
         public string Stage { get; set; }
-        public bool liteTask { get; set; }
+        public bool liteTask { get; set; } = false;
 
 
     }

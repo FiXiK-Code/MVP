@@ -494,25 +494,25 @@ namespace MVP.Controllers
 
             if (result == new Tasks()) return new JsonResult(new ObjectResult("task not found") { StatusCode = 404 });
 
-            //проверка на не переданные необходимые поля
-            //if (TaskParam.id == -1 ||
-            //       TaskParam.date == null ||
-            //       TaskParam.supervisor == -1 ||
-            //       TaskParam.date == null ||
-            //       TaskParam.plannedTime == null)
-            //{
-            //    string contentError = "";
-            //    if (TaskParam.id == -1) contentError += "Id задачи; ";
-            //    if (TaskParam.date == null) contentError += "Дата; ";
-            //    if (TaskParam.supervisor == -1) contentError += "Ответственный по задаче; ";
-            //    if (TaskParam.plannedTime == null) contentError += "Планируемое время исполнения; ";
-            //    var error = new
-            //    {
-            //        messsage = "Не все поля заполнены!",
-            //        content = "Не заполнены поля: " + contentError
-            //    };
-            //    return new JsonResult(new ObjectResult(error) { StatusCode = 400 });
-            //}
+            
+            if (TaskParam.id == -1 ||
+                   TaskParam.date.Length < 1 ||
+                   TaskParam.supervisor == -1 ||
+                   TaskParam.date.Length < 1 ||
+                   TaskParam.plannedTime.Length < 1)
+            {
+                string contentError = "";
+                if (TaskParam.id == -1) contentError += "Id задачи; ";
+                if (TaskParam.date.Length < 1) contentError += "Дата; ";
+                if (TaskParam.supervisor == -1) contentError += "Ответственный по задаче; ";
+                if (TaskParam.plannedTime.Length < 1) contentError += "Планируемое время исполнения; ";
+                var error = new
+                {
+                    messsage = "Не все поля заполнены!",
+                    content = "Не заполнены поля: " + contentError
+                };
+                return new JsonResult(new ObjectResult(error) { StatusCode = 400 });
+            }
 
             // проверка сессии - без входа в сессию нужно переходить на траницу авторизации
             var roleSession = new SessionRoles();
@@ -532,9 +532,9 @@ namespace MVP.Controllers
             }
             catch (Exception) { return new JsonResult(new ObjectResult("Не авторизованный запрос!") { StatusCode = 401 }); }
 
-            if (result.date.Date != DateTime.Parse(TaskParam.date).Date && result.creator != roleSession.SessionName)
+            if (result.date.Date != DateTime.Parse(TaskParam.date).Date && result.supervisor != roleSession.SessionName)
             {
-                return new JsonResult(new ObjectResult($"Невозможно перенести дату! Перенести может только {result.creator}") { StatusCode = 403 });
+                return new JsonResult(new ObjectResult($"Невозможно перенести дату! Перенести может только {result.supervisor}") { StatusCode = 403 });
             }
 
             string supervisor = null;
@@ -608,7 +608,7 @@ namespace MVP.Controllers
                     actualTime = _appDB.DBTask.FirstOrDefault(p => p.id == TaskParam.id).actualTime,
                     CommitorId = _appDB.DBStaff.FirstOrDefault(p => p.name == roleSession.SessionName).id,
                     taskStatusId = _appDB.DBTaskStatus.FirstOrDefault(p => p.name == TaskParam.status).id,
-                    comment = TaskParam.comment
+                    comment = TaskParam.comment.Length > 1 ? TaskParam.comment : null
                 };
                 _logistickTask.addToDB(item);
                 var task = _appDB.DBTask.FirstOrDefault(p => p.id == TaskParam.id);
@@ -669,6 +669,20 @@ namespace MVP.Controllers
             }
 
             if (result == null) return new JsonResult(new ObjectResult("task not found") { StatusCode = 404 });
+
+            if (TaskParam.id == -1 || TaskParam.status.Length < 1 )
+            {
+                string contentError = "";
+                if (TaskParam.id == -1) contentError += "Id задачи; ";
+                if (TaskParam.status.Length < 1) contentError += "Статус задачи; ";
+
+                var error = new
+                {
+                    messsage = "Не все поля заполнены!",
+                    content = "Не заполнены поля: " + contentError
+                };
+                return new JsonResult(new ObjectResult(error) { StatusCode = 400 });
+            }
 
             var roleSession = new SessionRoles();
             var sessionCod = "";
@@ -1164,6 +1178,25 @@ namespace MVP.Controllers
                 return new JsonResult(new ObjectResult("Не авторизованный запрос!") { StatusCode = 401 });
             }
 
+            if (ProjParam.id == -1 ||
+                ProjParam.code.Length < 1 ||
+                ProjParam.shortName.Length < 1 ||
+                ProjParam.arhive.Length < 1)
+            {
+                string contentError = "";
+                if (ProjParam.id == -1) contentError += "Id проекта; ";
+                if (ProjParam.code.Length < 1) contentError += "Шифр; ";
+                if (ProjParam.shortName.Length < 1) contentError += "Краткое название; ";
+                if (ProjParam.arhive.Length < 1) contentError += "Архив (Да или Нет); ";
+
+                var error = new
+                {
+                    messsage = "Не все поля заполнены!",
+                    content = "Не заполнены поля: " + contentError
+                };
+                return new JsonResult(new ObjectResult(error) { StatusCode = 400 });
+            }
+
             string supervisor = null;
             try
             {
@@ -1226,6 +1259,27 @@ namespace MVP.Controllers
             catch (Exception)
             {
                 return new JsonResult(new ObjectResult("Не авторизованный запрос!") { StatusCode = 401 });
+            }
+
+            if (ProjParam.id == -1 ||
+               ProjParam.code.Length < 1 ||
+               ProjParam.shortName.Length < 1 ||
+               ProjParam.arhive.Length < 1 ||
+               ProjParam.priority == -2)
+            {
+                string contentError = "";
+                if (ProjParam.id == -1) contentError += "Id проекта; ";
+                if (ProjParam.code.Length < 1) contentError += "Шифр; ";
+                if (ProjParam.shortName.Length < 1) contentError += "Краткое название; ";
+                if (ProjParam.arhive.Length < 1) contentError += "Архив (Да или Нет); ";
+                if (ProjParam.priority == -2) contentError += "Приоритет; ";
+
+                var error = new
+                {
+                    messsage = "Не все поля заполнены!",
+                    content = "Не заполнены поля: " + contentError
+                };
+                return new JsonResult(new ObjectResult(error) { StatusCode = 400 });
             }
 
             var supervisor = _appDB.DBStaff.FirstOrDefault(p => p.id == ProjParam.supervisor).name;
