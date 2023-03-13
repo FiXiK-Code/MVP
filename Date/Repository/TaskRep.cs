@@ -49,7 +49,7 @@ namespace MVP.Date.Repository
             TimeSpan plannedTime,
             DateTime start,
             DateTime finish,
-            string session)
+            string session = "")
         {
             bool red = false;
             if (recipient == null)
@@ -194,20 +194,21 @@ namespace MVP.Date.Repository
             }
         }
 
-        public TasksTableReturnModels GetMoreTasks(List<string> staffNames, SessionRoles roleSession, string filterTable = "")
+        public TasksTableReturnModels GetMoreTasks(List<string> staffNames, SessionRoles roleSession, string filterTable = "Мои задачи", List<string> projCode = null)
         {
-            List<Tasks> tasksTabbleFilter =  AllTasks.Where(p => ((staffNames.Contains(p.supervisor) && p.recipient == null) || staffNames.Contains(p.recipient))).ToList();
+            List<Tasks> tasksTabbleFilter = new List<Tasks>();
+            if (projCode != null) tasksTabbleFilter.AddRange(AllTasks.Where(p => projCode.Contains(p.projectCode)).ToList());
+            if (staffNames != null) tasksTabbleFilter = tasksTabbleFilter.Where(p => ((staffNames.Contains(p.supervisor) && p.recipient == null) || staffNames.Contains(p.recipient))).ToList();
 
             // редактирование возвращаемых задач в зависимости от фильтра (в перспективе передача нескольких фильтров через запятую)
-            List<string> staffsDiv = new List<string>();
             if (filterTable != "")
                 foreach (var filter in filterTable.Split(','))///
                 {
                     switch (filter)
                     {
                         case "Мои задачи":
-                            tasksTabbleFilter = tasksTabbleFilter.Where(p => p.creator == roleSession.SessionName || p.recipient == roleSession.SessionName
-                            || (p.recipient == null && p.supervisor == roleSession.SessionName)).ToList();
+                            tasksTabbleFilter.AddRange(AllTasks.Where(p => p.recipient == roleSession.SessionName
+                            || p.supervisor == roleSession.SessionName).ToList());
                             break;
                     }
                 }
@@ -248,7 +249,7 @@ namespace MVP.Date.Repository
                         creatorId = _appDB.DBStaff.FirstOrDefault(p => p.name == task.creator).id
 
                     };
-                    todayOut.Add(outt);
+                    if(!todayOut.Contains(outt))todayOut.Add(outt);
                 }
                 catch (Exception)
                 {
@@ -296,7 +297,7 @@ namespace MVP.Date.Repository
                         creatorId = _appDB.DBStaff.FirstOrDefault(p => p.name == task.creator).id
 
                     };
-                    completedOut.Add(outt);
+                    if(!completedOut.Contains(outt)) completedOut.Add(outt);
                 }
                 catch (Exception)
                 {
@@ -341,7 +342,7 @@ namespace MVP.Date.Repository
                         dedline = task.dedline,
                         creatorId = _appDB.DBStaff.FirstOrDefault(p => p.name == task.creator).id
                     };
-                    futureOut.Add(outt);
+                    if (!futureOut.Contains(outt)) futureOut.Add(outt);
                 }
                 catch (Exception)
                 {

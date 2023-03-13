@@ -15,6 +15,9 @@ namespace MVP.Date.Interfaces
         public void NextStage(int projectId);
         void addToDB(Project project);
         void redactToDB(int id,
+            string code,
+            string shortName,
+            string name,
             string arhive,
             string link,
             string supervisor,

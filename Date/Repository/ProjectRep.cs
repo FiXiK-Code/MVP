@@ -93,6 +93,9 @@ namespace MVP.Date.Repository
         }
 
         public void redactToDB(int id,
+            string code,
+            string shortName,
+            string name,
             string arhive,
             string link,
             string supervisor,
@@ -101,6 +104,9 @@ namespace MVP.Date.Repository
         {
             Project project = _appDB.DBProject.FirstOrDefault(p => p.id == id);
             if (arhive == "Да") project.actualFinishDate = DateTime.Now;
+            project.shortName = shortName;
+            project.name = name;
+            project.code = code;
             project.archive = arhive;
             project.link = link;
             project.supervisor = supervisor;

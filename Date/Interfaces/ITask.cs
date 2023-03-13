@@ -14,7 +14,7 @@ namespace MVP.Date.Interfaces
         IEnumerable<Tasks> AllTasks { get; }
         IEnumerable<Tasks> TasksProject(string _projentCode);
         Tasks GetTask(TasksParameters param);
-        TasksTableReturnModels GetMoreTasks(List<string> staffNames, SessionRoles roleSession, string filterTable = "");
+        TasksTableReturnModels GetMoreTasks(List<string> staffNames, SessionRoles roleSession, string filterTable = "", List<string> projectNames = null);
         void addToDB(Tasks task);
         bool redactToDB(bool liteTask,
             int iid,
