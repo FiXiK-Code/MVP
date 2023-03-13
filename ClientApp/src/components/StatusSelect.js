@@ -81,14 +81,17 @@ export default function StatusSelect(props) {
             <FormControl fullWidth>
                 <InputLabel id="demo-simple-select-label"></InputLabel>
                 <Select
-                    style={{backgroundColor: color} }
+                    style={{ backgroundColor: color }}
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
-                    value={ status } 
+                    value={status}
                     label=""
                     onChange={handleChange}
+                    renderValue={(selected) => {
+                        return selected;
+                    } }
                 >
-                    <MenuItem value={"Создана"}>Создана</MenuItem>
+
                     <MenuItem value={"В работе"}>В работе</MenuItem>
                     <MenuItem value={"На паузе"}>На паузе</MenuItem>
                     <MenuItem value={"Выполнена"}>Выполнена</MenuItem>
